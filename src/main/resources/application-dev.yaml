@@ -1,0 +1,6 @@
+spring: 
+    datasource: 
+        url: jdbc:mysql://localhost:3306/web-sample?useUnicode=true&amp;characterEncoding=UTF-8
+        username: root
+        password: root
+        

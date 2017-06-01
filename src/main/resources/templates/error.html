@@ -1,0 +1,25 @@
+<@extends parent="application.html">
+    
+    <@override name="charset">
+        <meta charset="UTF-8">
+    </@override>
+    
+    <@override name="title">
+                发生错误
+    </@override>
+    <@override name="main-content">
+        
+        <div class="absoluteCenter">
+        ${helper.requestUrl}
+        <hr/>
+        ${error}
+        ${message}
+        ${status}
+        ${exception}
+        ${errors}
+        ${trace}
+        ${path}
+        </div>
+        
+    </@override>
+</@extends>

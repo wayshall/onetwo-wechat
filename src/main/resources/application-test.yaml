@@ -1,0 +1,11 @@
+spring: 
+    datasource: 
+        url: jdbc:mysql://localhost:3306/web-sample?useUnicode=true&amp;characterEncoding=UTF-8
+        username: root
+        password: root
+        driver-class-name: com.mysql.jdbc.Driver
+        
+wechat: 
+    appid: wx282b94857c02f65f
+    appsecret: 425346593be0a278ad9725504dbe009c
+    at: rRqi4viqlolSRtywQLPe65G9U6CU8YOyK1JRU-kVSq2QkiXajODjQiO_UfAwXUwJXYiBgmpDmxdGeX_hnDv8abmYmpN4UzC26PHucDo6ebGR7ghA9NhXoJ76e8h-xQ3qUCAhAHAZHF
