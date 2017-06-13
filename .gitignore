@@ -30,3 +30,4 @@ application-product.yaml
 *-product.yaml
 *.externalToolBuilders
 *.iml
+/src/test/resources/conf/application-product.properties
