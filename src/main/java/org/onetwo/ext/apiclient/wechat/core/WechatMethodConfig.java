@@ -10,9 +10,8 @@ import java.lang.annotation.Target;
  * <br/>
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface WechatApiClient {
+@Target({ElementType.TYPE, ElementType.METHOD})
+public @interface WechatMethodConfig {
 
-	String name() default "";
-	String path() default "";
+	boolean accessToken() default true;
 }

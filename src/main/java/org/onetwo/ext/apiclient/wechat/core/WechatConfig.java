@@ -7,8 +7,6 @@ public interface WechatConfig {
 
 	public String getToken();
 
-	public void setToken(String token);
-
 	public String getGrantType();
 
 	public String getAppid();

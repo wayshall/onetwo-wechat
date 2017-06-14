@@ -16,7 +16,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(loader=AnnotationConfigContextLoader.class, classes=WechatBaseTestInnerContextConfig.class)
-@ActiveProfiles(Environment.PRODUCT)
+@ActiveProfiles(Environment.TEST)
 public class WechatBaseTests {
 	
 	@Autowired

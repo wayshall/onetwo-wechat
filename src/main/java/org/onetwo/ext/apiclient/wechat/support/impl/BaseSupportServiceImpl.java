@@ -7,17 +7,17 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.onetwo.common.md.Hashs;
 import org.onetwo.ext.apiclient.wechat.basic.api.WechatServer;
-import org.onetwo.ext.apiclient.wechat.basic.request.AccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.request.ServerAuthRequest;
-import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.support.BaseSupportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author wayshall
  * <br/>
  */
+@Service
 public class BaseSupportServiceImpl implements BaseSupportService {
 	
 	@Autowired
@@ -25,16 +25,6 @@ public class BaseSupportServiceImpl implements BaseSupportService {
 	@Autowired
 	private WechatServer wechatServer;
 	
-	@Override
-	public AccessTokenResponse getAccessToken(){
-		AccessTokenRequest request = AccessTokenRequest.builder()
-														.grantType(wechatConfig.getGrantType())
-														.appid(wechatConfig.getAppid())
-														.secret(wechatConfig.getAppsecret())
-														.build();
-		AccessTokenResponse response = this.wechatServer.getAccessToken(request);
-		return response;
-	}
 	
 	@Override
 	public String auth(ServerAuthRequest auth){

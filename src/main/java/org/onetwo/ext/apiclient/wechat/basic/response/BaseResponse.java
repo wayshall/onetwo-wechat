@@ -12,8 +12,6 @@ import lombok.ToString;
  * <br/>
  */
 @Data
-@EqualsAndHashCode
-@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

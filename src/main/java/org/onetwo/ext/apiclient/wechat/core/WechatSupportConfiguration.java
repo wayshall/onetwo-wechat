@@ -1,8 +1,8 @@
 package org.onetwo.ext.apiclient.wechat.core;
 
-import org.onetwo.ext.apiclient.wechat.support.BaseSupportService;
-import org.onetwo.ext.apiclient.wechat.support.impl.BaseSupportServiceImpl;
+import org.onetwo.ext.apiclient.wechat.support.impl.AccessTokenServiceImpl;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -10,12 +10,9 @@ import org.springframework.context.annotation.Configuration;
  * <br/>
  */
 @Configuration
+@ComponentScan(basePackageClasses=AccessTokenServiceImpl.class)
 public class WechatSupportConfiguration {
 
-	@Bean
-	public BaseSupportService baseSupportService(){
-		return new BaseSupportServiceImpl();
-	}
 	
 	@Bean
 	public WechatConfig wechatConfig(){

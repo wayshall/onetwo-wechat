@@ -14,6 +14,8 @@ import org.springframework.core.type.AnnotationMetadata;
  * <br/>
  */
 public class WechatApiClentRegistrar extends AbstractApiClentRegistrar {
+	
+	private WechatApiClientResponseHandler responseHandler = new WechatApiClientResponseHandler();
 
 	@Override
 	protected Class<? extends Annotation> getImportingAnnotationClass() {
@@ -34,6 +36,7 @@ public class WechatApiClentRegistrar extends AbstractApiClentRegistrar {
 		definition.addPropertyValue("path", resolvePath(attributes));
 //		definition.addPropertyValue("name", name);
 		definition.addPropertyValue("interfaceClass", className);
+		definition.addPropertyValue("responseHandler", responseHandler);
 //		definition.addPropertyValue("decode404", attributes.get("decode404"));
 //		definition.addPropertyValue("fallback", attributes.get("fallback"));
 		definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
