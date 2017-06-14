@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @EqualsAndHashCode(callSuper=false)
 @Data
 @ToString
-public class AccessTokenResponse extends BaseResponse {
+public class AccessTokenResponse extends WechatResponse {
 	@JsonProperty("access_token")
 	private String accessToken;
 	

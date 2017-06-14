@@ -3,9 +3,7 @@ package org.onetwo.ext.apiclient.wechat.basic.response;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 /**
  * @author wayshall
@@ -15,7 +13,7 @@ import lombok.ToString;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BaseResponse {
+public class WechatResponse {
 	
 	private Integer errcode;
 	private String errmsg;

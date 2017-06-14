@@ -6,7 +6,7 @@ import java.util.Map;
 import org.onetwo.common.apiclient.DefaultApiClientResponseHandler;
 import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.exception.ErrorTypes;
-import org.onetwo.ext.apiclient.wechat.basic.response.BaseResponse;
+import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClientFactoryBean.WechatMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
@@ -22,7 +22,7 @@ public class WechatApiClientResponseHandler extends DefaultApiClientResponseHand
 	@Override
 	public Class<?> getActualResponseType(WechatMethod invokeMethod){
 		Class<?> responseType = invokeMethod.getMethodReturnType();
-		if(!BaseResponse.class.isAssignableFrom(responseType)){
+		if(!WechatResponse.class.isAssignableFrom(responseType)){
 			responseType = HashMap.class;
 		}
 		return responseType;
@@ -34,11 +34,11 @@ public class WechatApiClientResponseHandler extends DefaultApiClientResponseHand
 	public Object handleResponse(WechatMethod invokeMethod, ResponseEntity<?> responseEntity, Class<?> actualResponseType){
 		if(responseEntity.getStatusCode().is2xxSuccessful()){
 			Object resposne = responseEntity.getBody();
-			BaseResponse baseResponse = null;
+			WechatResponse baseResponse = null;
 			if(Map.class.isAssignableFrom(actualResponseType)){
 				Map<String, ?> map = (Map<String, ?>) resposne;
 				if(map.containsKey(KEY_ERRCODE)){
-					baseResponse = BaseResponse.builder()
+					baseResponse = WechatResponse.builder()
 												.errcode(Integer.valueOf(map.get(KEY_ERRCODE).toString()))
 												.errmsg((String)map.get(KEY_ERRMSG))
 												.build();
@@ -46,7 +46,7 @@ public class WechatApiClientResponseHandler extends DefaultApiClientResponseHand
 					resposne = map2Bean(map, invokeMethod.getMethodReturnType());
 				}
 			}else{
-				baseResponse = (BaseResponse) resposne;
+				baseResponse = (WechatResponse) resposne;
 			}
 			if(baseResponse!=null && !baseResponse.isSuccess()){
 				throw new ApiClientException(ErrorTypes.of(baseResponse.getErrcode().toString(), baseResponse.getErrmsg(), responseEntity.getStatusCodeValue()));

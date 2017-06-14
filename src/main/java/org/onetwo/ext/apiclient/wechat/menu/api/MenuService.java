@@ -1,9 +1,10 @@
 package org.onetwo.ext.apiclient.wechat.menu.api;
 
-import org.onetwo.ext.apiclient.wechat.basic.response.BaseResponse;
+import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;
 import org.onetwo.ext.apiclient.wechat.core.WechatMethodConfig;
 import org.onetwo.ext.apiclient.wechat.menu.request.CreateMenuRequest;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -14,9 +15,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 @WechatApiClient(path="/menu")
 public interface MenuService {
 	
-//	@RequestMapping(value="create?access_token=ACCESS_TOKEN")
+	/***
+	 * <a href="https://mp.weixin.qq.com/wiki?action=doc&id=mp1421141013">view wechat api doc</a>
+	 * @author wayshall
+	 * @param createMenuRequest
+	 * @return
+	 */
 	@PostMapping(value="/create")
 	@WechatMethodConfig(accessToken=true)
-	BaseResponse create(@RequestBody CreateMenuRequest createMenuRequest);
+	WechatResponse create(@RequestBody CreateMenuRequest createMenuRequest);
 
+	/***
+	 * <a href="https://mp.weixin.qq.com/wiki?action=doc&id=mp1421141015">view wechat api doc</a>
+	 * @author wayshall
+	 * @return
+	 */
+	@GetMapping(value="/delete")
+	@WechatMethodConfig(accessToken=true)
+	WechatResponse delete();
 }
