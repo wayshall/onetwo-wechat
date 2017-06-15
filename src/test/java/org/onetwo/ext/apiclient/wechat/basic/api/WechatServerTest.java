@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 import org.onetwo.ext.apiclient.wechat.WechatBaseTests;
-import org.onetwo.ext.apiclient.wechat.basic.request.BaseRequest;
+import org.onetwo.ext.apiclient.wechat.basic.request.AccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.GetCallbackIpResponse;
 import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.support.BaseSupportService;
@@ -29,11 +29,16 @@ public class WechatServerTest extends WechatBaseTests {
 		assertThat(accessToken).isNotNull();
 		assertThat(accessToken).isNotEmpty();
 		
-		GetCallbackIpResponse response = wechatServer.getCallbackIp(BaseRequest.baseRequest()
+		GetCallbackIpResponse response = wechatServer.getCallbackIp(AccessTokenRequest.accessTokenRequest()
 																				.accessToken(accessToken)
 																				.build());
 		assertThat(response).isNotNull();
 //		assertThat(response.isSuccess()).isTrue();
+		assertThat(response.getIpList()).isNotEmpty();
+		
+		//不手动设置accessToken
+		response = wechatServer.getCallbackIp(AccessTokenRequest.accessTokenRequest().build());
+		assertThat(response).isNotNull();
 		assertThat(response.getIpList()).isNotEmpty();
 	}
 

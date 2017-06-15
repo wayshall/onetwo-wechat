@@ -1,4 +1,7 @@
 package org.onetwo.ext.apiclient.wechat.utils;
+
+import org.onetwo.common.exception.ErrorType;
+
 /**
  * @author wayshall
  * <br/>
@@ -9,13 +12,30 @@ public abstract class WechatConstants {
 	
 	//grantType
 	public static final String GT_CLIENT_CREDENTIAL = "client_credential";
+	public static final String GT_AUTHORIZATION_CODE = "authorization_code ";
+	
+	public static abstract class UrlConst {
+		public static final String API_BASE_URL = "https://api.weixin.qq.com/cgi-bin";
+		public static final String OAUTH2_AUTHORIZE = "https://open.weixin.qq.com/connect/oauth2/authorize";
+		public static final String OAUTH2_AUTHORIZE_TEMPLATE = OAUTH2_AUTHORIZE+
+																"?appid=${appid}&redirect_uri=${redirectUri}"
+																+ "&response_type=${responseType}&scope=${scope}"
+																+ "&state=${state}#wechat_redirect";
+		
+	}
+	public static abstract class Oauth2Keys {
+		public static final String SCOPE_SNSAPI_BASE = "snsapi_base";
+		public static final String SCOPE_SNSAPI_USERINFO = "snsapi_userinfo";
+		public static final String RESPONSE_TYPE_CODE = "code";
+		
+	}
 	
 	/***
 	 * 菜单按钮类型
 	 * @author wayshall
 	 *
 	 */
-	public abstract class ButtonTypes {
+	public static abstract class ButtonTypes {
 		public static final String CLICK = "click";
 		public static final String VIEW = "view";
 		public static final String SCANCODE_PUSH = "scancode_push";
@@ -29,4 +49,24 @@ public abstract class WechatConstants {
 	}
 	
 
+	public static enum WechatClientError implements ErrorType {
+		ACCESS_TOKEN_SERVICE_NOT_FOUND("AccessTokenService not found");
+		
+		private String errorMessage;
+
+		private WechatClientError(String errorMessage) {
+			this.errorMessage = errorMessage;
+		}
+
+		@Override
+		public String getErrorCode() {
+			return name();
+		}
+
+		@Override
+		public String getErrorMessage() {
+			return errorMessage;
+		}
+		
+	}
 }

@@ -39,8 +39,6 @@ public class BaseSupportServiceImpl implements BaseSupportService {
 		Collections.sort(authItems);
 		String source = StringUtils.join(authItems, "");
 		String sha1String = Hashs.SHA.hash(source);
-		System.out.println("sha1:"+sha1String);
-		System.out.println("signature:"+auth.getSignature());
 		return sha1String.equalsIgnoreCase(auth.getSignature());
 	}
 

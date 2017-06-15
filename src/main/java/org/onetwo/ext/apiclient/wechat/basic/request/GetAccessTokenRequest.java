@@ -3,9 +3,9 @@ package org.onetwo.ext.apiclient.wechat.basic.request;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.onetwo.common.utils.FieldName;
 
 /**
@@ -13,12 +13,20 @@ import org.onetwo.common.utils.FieldName;
  * <br/>
  */
 @Data
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(builderMethodName="baseRequest")
-public class BaseRequest {
-	@FieldName("access_token")
-	private String accessToken;
-
+@Builder
+public class GetAccessTokenRequest {
+	
+	/**
+	 * grant_type
+	 */
+	@NotBlank
+	@FieldName("grant_type")
+	private String grantType;
+	@NotBlank
+	private String appid;
+	@NotBlank
+	private String secret;
+	
 }

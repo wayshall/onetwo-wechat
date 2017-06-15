@@ -38,7 +38,7 @@ public class WechatApiClientResponseHandler extends DefaultApiClientResponseHand
 			if(Map.class.isAssignableFrom(actualResponseType)){
 				Map<String, ?> map = (Map<String, ?>) resposne;
 				if(map.containsKey(KEY_ERRCODE)){
-					baseResponse = WechatResponse.builder()
+					baseResponse = WechatResponse.baseBuilder()
 												.errcode(Integer.valueOf(map.get(KEY_ERRCODE).toString()))
 												.errmsg((String)map.get(KEY_ERRMSG))
 												.build();

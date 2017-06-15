@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClentRegistrar;
 import org.onetwo.ext.apiclient.wechat.core.WechatSupportConfiguration;
+import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.UrlConst;
 import org.springframework.context.annotation.Import;
 
 /**
@@ -21,6 +22,6 @@ public @interface EnableWechatClient {
 	String[] basePackages() default {};
 	Class<?>[] basePackageClasses() default {EnableWechatClient.class};
 	
-	String baseUrl() default "https://api.weixin.qq.com/cgi-bin";
+	String baseUrl() default UrlConst.API_BASE_URL;
 
 }

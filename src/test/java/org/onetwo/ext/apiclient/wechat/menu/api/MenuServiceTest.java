@@ -24,8 +24,8 @@ public class MenuServiceTest extends WechatBaseTests {
 		WechatResponse res = menuService.create(request);
 		assertThat(res.isSuccess()).isTrue();
 		
-		res = menuService.delete();
-		assertThat(res.isSuccess()).isTrue();
+		/*res = menuService.delete();
+		assertThat(res.isSuccess()).isTrue();*/
 	}
 
 }

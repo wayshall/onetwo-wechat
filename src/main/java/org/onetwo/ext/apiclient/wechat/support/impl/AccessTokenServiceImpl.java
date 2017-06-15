@@ -3,7 +3,7 @@ package org.onetwo.ext.apiclient.wechat.support.impl;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.onetwo.ext.apiclient.wechat.basic.api.WechatServer;
-import org.onetwo.ext.apiclient.wechat.basic.request.AccessTokenRequest;
+import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
@@ -40,7 +40,7 @@ public class AccessTokenServiceImpl implements AccessTokenService {
 			if(accessToken!=null && !accessToken.isExpired()){
 				return accessToken;
 			}
-			AccessTokenRequest request = AccessTokenRequest.builder()
+			GetAccessTokenRequest request = GetAccessTokenRequest.builder()
 															.grantType(wechatConfig.getGrantType())
 															.appid(wechatConfig.getAppid())
 															.secret(wechatConfig.getAppsecret())

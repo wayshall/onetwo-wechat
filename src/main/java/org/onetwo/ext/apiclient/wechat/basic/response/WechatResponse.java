@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
  * <br/>
  */
 @Data
-@Builder
+@Builder(builderMethodName="baseBuilder")
 @NoArgsConstructor
 @AllArgsConstructor
 public class WechatResponse {

@@ -2,7 +2,7 @@ package org.onetwo.ext.apiclient.wechat.menu.api;
 
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;
-import org.onetwo.ext.apiclient.wechat.core.WechatMethodConfig;
+import org.onetwo.ext.apiclient.wechat.core.WechatRequestConfig;
 import org.onetwo.ext.apiclient.wechat.menu.request.CreateMenuRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +22,7 @@ public interface MenuService {
 	 * @return
 	 */
 	@PostMapping(value="/create")
-	@WechatMethodConfig(accessToken=true)
+	@WechatRequestConfig(accessToken=true)
 	WechatResponse create(@RequestBody CreateMenuRequest createMenuRequest);
 
 	/***
@@ -31,6 +31,6 @@ public interface MenuService {
 	 * @return
 	 */
 	@GetMapping(value="/delete")
-	@WechatMethodConfig(accessToken=true)
+	@WechatRequestConfig(accessToken=true)
 	WechatResponse delete();
 }

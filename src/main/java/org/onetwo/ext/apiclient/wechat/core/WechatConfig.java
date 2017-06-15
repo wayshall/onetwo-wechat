@@ -5,12 +5,14 @@ package org.onetwo.ext.apiclient.wechat.core;
  */
 public interface WechatConfig {
 
-	public String getToken();
+	String getToken();
 
-	public String getGrantType();
+	String getGrantType();
 
-	public String getAppid();
+	String getAppid();
 
-	public String getAppsecret();
+	String getAppsecret();
+	
+	String getOauth2RedirectUri();
 	
 }

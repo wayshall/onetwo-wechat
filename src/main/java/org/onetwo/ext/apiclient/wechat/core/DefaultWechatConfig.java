@@ -23,4 +23,7 @@ public class DefaultWechatConfig implements WechatConfig{
 	
 	@Value("${wechat.appsecret}")
 	private String appsecret;
+	
+	@Value("${wechat.oauth2.redirectUri:''}")
+	private String oauth2RedirectUri;
 }

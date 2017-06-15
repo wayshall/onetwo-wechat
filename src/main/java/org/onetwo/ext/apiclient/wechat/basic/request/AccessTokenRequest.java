@@ -6,29 +6,20 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import org.hibernate.validator.constraints.NotBlank;
 import org.onetwo.common.utils.FieldName;
 
 /**
+ * 如果AccessTokenRequest没有设置过accessToken，则自动设置
  * @author wayshall
  * <br/>
  */
 @Data
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class AccessTokenRequest extends BaseRequest {
-	
-	/**
-	 * grant_type
-	 */
-	@NotBlank
-	@FieldName("grant_type")
-	private String grantType;
-	@NotBlank
-	private String appid;
-	@NotBlank
-	private String secret;
-	
+@Builder(builderMethodName="accessTokenRequest")
+public class AccessTokenRequest {
+	@FieldName("access_token")
+	private String accessToken;
+
 }
