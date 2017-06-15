@@ -1,13 +1,16 @@
 package org.onetwo.ext.apiclient.wechat.core;
 
 import java.lang.annotation.Annotation;
+import java.util.stream.Stream;
 
 import org.onetwo.common.apiclient.AbstractApiClentRegistrar;
 import org.onetwo.ext.apiclient.wechat.EnableWechatClient;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.util.ClassUtils;
 
 /**
  * @author wayshall
@@ -25,6 +28,12 @@ public class WechatApiClentRegistrar extends AbstractApiClentRegistrar {
 	@Override
 	protected Class<? extends Annotation> getApiClientTagAnnotationClass() {
 		return WechatApiClient.class;
+	}
+
+	@Override
+	protected Stream<BeanDefinition> scanBeanDefinitions(AnnotationMetadata importingClassMetadata) {
+		String extraPackage = ClassUtils.getPackageName(getImportingAnnotationClass());
+		return getAnnotationMetadataHelper(importingClassMetadata).scanBeanDefinitions(getApiClientTagAnnotationClass(), extraPackage);
 	}
 
 	@Override

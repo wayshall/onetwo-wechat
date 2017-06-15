@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Import;
 public @interface EnableWechatClient {
 	
 	String[] basePackages() default {};
-	Class<?>[] basePackageClasses() default {EnableWechatClient.class};
+	Class<?>[] basePackageClasses() default {};
 	
 	String baseUrl() default UrlConst.API_BASE_URL;
 
