@@ -32,8 +32,8 @@ public class WechatApiClientResponseHandler extends DefaultApiClientResponseHand
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object handleResponse(WechatMethod invokeMethod, ResponseEntity<?> responseEntity, Class<?> actualResponseType){
+		Object resposne = responseEntity.getBody();
 		if(responseEntity.getStatusCode().is2xxSuccessful()){
-			Object resposne = responseEntity.getBody();
 			WechatResponse baseResponse = null;
 			if(Map.class.isAssignableFrom(actualResponseType)){
 				Map<String, ?> map = (Map<String, ?>) resposne;
@@ -42,6 +42,9 @@ public class WechatApiClientResponseHandler extends DefaultApiClientResponseHand
 												.errcode(Integer.valueOf(map.get(KEY_ERRCODE).toString()))
 												.errmsg((String)map.get(KEY_ERRMSG))
 												.build();
+				}else if(invokeMethod.isReturnVoid()){
+					//返回值为void，并且请求没有返回错误，则返回null
+					return null;
 				}else{
 					resposne = map2Bean(map, invokeMethod.getMethodReturnType());
 				}
@@ -50,6 +53,9 @@ public class WechatApiClientResponseHandler extends DefaultApiClientResponseHand
 			}
 			if(baseResponse!=null && !baseResponse.isSuccess()){
 				throw new ApiClientException(ErrorTypes.of(baseResponse.getErrcode().toString(), baseResponse.getErrmsg(), responseEntity.getStatusCodeValue()));
+			}else if(invokeMethod.isReturnVoid()){
+				//返回值为void，并且请求没有返回错误，则返回null
+				return null;
 			}
 			return resposne;
 		}

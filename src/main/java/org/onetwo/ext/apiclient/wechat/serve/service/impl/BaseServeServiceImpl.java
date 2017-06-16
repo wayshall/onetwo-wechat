@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.wechat.support.impl;
+package org.onetwo.ext.apiclient.wechat.serve.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,9 +7,9 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.onetwo.common.md.Hashs;
 import org.onetwo.ext.apiclient.wechat.basic.api.WechatServer;
-import org.onetwo.ext.apiclient.wechat.basic.request.ServerAuthRequest;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
-import org.onetwo.ext.apiclient.wechat.support.BaseSupportService;
+import org.onetwo.ext.apiclient.wechat.serve.msg.ServeAuthParam;
+import org.onetwo.ext.apiclient.wechat.serve.service.BaseServeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  * <br/>
  */
 @Service
-public class BaseSupportServiceImpl implements BaseSupportService {
+public class BaseServeServiceImpl implements BaseServeService {
 	
 	@Autowired
 	private WechatConfig wechatConfig;
@@ -27,11 +27,11 @@ public class BaseSupportServiceImpl implements BaseSupportService {
 	
 	
 	@Override
-	public String auth(ServerAuthRequest auth){
+	public String auth(ServeAuthParam auth){
 		return isValidRequest(auth)?auth.getEchostr():null;
 	}
 	
-	private boolean isValidRequest(ServerAuthRequest auth){
+	private boolean isValidRequest(ServeAuthParam auth){
 		List<String> authItems = new ArrayList<>();
 		authItems.add(wechatConfig.getToken());
 		authItems.add(auth.getTimestamp());

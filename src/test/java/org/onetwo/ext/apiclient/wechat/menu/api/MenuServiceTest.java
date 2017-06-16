@@ -6,7 +6,8 @@ import org.junit.Test;
 import org.onetwo.common.spring.utils.ClassPathJsonDataBinder;
 import org.onetwo.ext.apiclient.wechat.WechatBaseTests;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
-import org.onetwo.ext.apiclient.wechat.menu.request.CreateMenuRequest;
+import org.onetwo.ext.apiclient.wechat.view.api.MenuService;
+import org.onetwo.ext.apiclient.wechat.view.request.CreateMenuRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -24,8 +25,7 @@ public class MenuServiceTest extends WechatBaseTests {
 		WechatResponse res = menuService.create(request);
 		assertThat(res.isSuccess()).isTrue();
 		
-		/*res = menuService.delete();
-		assertThat(res.isSuccess()).isTrue();*/
+		menuService.delete();
 	}
 
 }

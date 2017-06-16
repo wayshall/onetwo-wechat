@@ -1,9 +1,9 @@
-package org.onetwo.ext.apiclient.wechat.basic.request;
-
-import org.hibernate.validator.constraints.NotBlank;
+package org.onetwo.ext.apiclient.wechat.serve.msg;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * @author wayshall
@@ -11,13 +11,11 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode
-public class ServerAuthRequest {
+public class BaseServeParam {
 	@NotBlank
 	private String signature;
 	@NotBlank
 	private String timestamp;
 	@NotBlank
 	private String nonce;
-	@NotBlank
-	private String echostr;
 }

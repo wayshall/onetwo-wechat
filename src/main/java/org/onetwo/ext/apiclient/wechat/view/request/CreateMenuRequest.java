@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.wechat.menu.request;
+package org.onetwo.ext.apiclient.wechat.view.request;
 
 import java.util.List;
 
