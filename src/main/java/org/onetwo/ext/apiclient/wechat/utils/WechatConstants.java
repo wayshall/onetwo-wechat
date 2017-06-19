@@ -1,6 +1,7 @@
 package org.onetwo.ext.apiclient.wechat.utils;
 
 import org.onetwo.common.exception.ErrorType;
+import org.springframework.http.MediaType;
 
 /**
  * @author wayshall
@@ -48,6 +49,47 @@ public abstract class WechatConstants {
 		public static final String VIEW_LIMITED = "view_limited";
 	}
 	
+	public static class MessageTypeParams {
+		public static final String MSG_TYPE = "MsgType";
+		public static final String TEXT = "MsgType=text";
+		public static final String IMAGE = "MsgType=image";
+		public static final String VOICE = "MsgType=voice";
+		public static final String VIDEO = "MsgType=video";
+		public static final String SHORTVIDEO = "MsgType=shortvideo";
+		public static final String LOCATION = "MsgType=location";
+		public static final String LINK = "MsgType=link";
+		
+	}
+	public static enum MessageType {
+		TEXT("文本消息"),
+		IMAGE("图片消息"),
+		VOICE("语音消息"),
+		VIDEO("视频消息"),
+		SHORTVIDEO("小视频消息"),
+		LOCATION("地理位置消息"),
+		LINK("链接消息");
+		
+		private String label;
+
+		private MessageType(String label) {
+			this.label = label;
+		}
+		
+		public String getLabel() {
+			return label;
+		}
+
+//		@JsonCreator
+		public static MessageType of(String name){
+			return valueOf(name.toUpperCase());
+		}
+		
+	}
+	
+	public static class MediaTypeKeys {
+		public static final String APPLICATION_XML_VALUE_UTF8 = MediaType.APPLICATION_XML_VALUE + ";charset=UTF-8";
+		public static final String TEXT_XML_VALUE_UTF8 = MediaType.TEXT_XML_VALUE + ";charset=UTF-8";
+	}
 
 	public static enum WechatClientError implements ErrorType {
 		ACCESS_TOKEN_SERVICE_NOT_FOUND("AccessTokenService not found");

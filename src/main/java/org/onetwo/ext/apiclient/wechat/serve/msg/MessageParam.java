@@ -1,8 +1,10 @@
 package org.onetwo.ext.apiclient.wechat.serve.msg;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * @author wayshall
@@ -11,9 +13,11 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MessageParam extends BaseServeParam {
 	
-	private String encrypt_type;
-	private String msg_signature;
+	private String encryptType;
+	private String msgSignature;
 
 }
