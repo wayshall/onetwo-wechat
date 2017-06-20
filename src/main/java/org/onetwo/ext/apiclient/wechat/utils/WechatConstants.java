@@ -1,6 +1,21 @@
 package org.onetwo.ext.apiclient.wechat.utils;
 
 import org.onetwo.common.exception.ErrorType;
+import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage;
+import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage.ImageMessage;
+import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage.LinkMessage;
+import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage.LocationMessage;
+import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage.ShortvideoMessage;
+import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage.TextMessage;
+import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage.VideoMessage;
+import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage.VoiceMessage;
+import org.onetwo.ext.apiclient.wechat.serve.dto.ReplyMessage;
+import org.onetwo.ext.apiclient.wechat.serve.dto.ReplyMessage.ImageReplyMessage;
+import org.onetwo.ext.apiclient.wechat.serve.dto.ReplyMessage.MusicReplyMessage;
+import org.onetwo.ext.apiclient.wechat.serve.dto.ReplyMessage.NewsReplyMessage;
+import org.onetwo.ext.apiclient.wechat.serve.dto.ReplyMessage.TextReplyMessage;
+import org.onetwo.ext.apiclient.wechat.serve.dto.ReplyMessage.VideoReplyMessage;
+import org.onetwo.ext.apiclient.wechat.serve.dto.ReplyMessage.VoiceReplyMessage;
 import org.springframework.http.MediaType;
 
 /**
@@ -61,27 +76,83 @@ public abstract class WechatConstants {
 		
 	}
 	public static enum MessageType {
-		TEXT("文本消息"),
-		IMAGE("图片消息"),
-		VOICE("语音消息"),
-		VIDEO("视频消息"),
-		SHORTVIDEO("小视频消息"),
-		LOCATION("地理位置消息"),
-		LINK("链接消息");
+		TEXT("文本消息", TextMessage.class),
+		IMAGE("图片消息", ImageMessage.class),
+		VOICE("语音消息", VoiceMessage.class),
+		VIDEO("视频消息", VideoMessage.class),
+		SHORTVIDEO("小视频消息", ShortvideoMessage.class),
+		LOCATION("地理位置消息", LocationMessage.class),
+		LINK("链接消息", LinkMessage.class);
 		
 		private String label;
+		private Class<? extends ReceiveMessage> messageClass;
 
-		private MessageType(String label) {
+		private MessageType(String label, Class<? extends ReceiveMessage> messageClass) {
 			this.label = label;
+			this.messageClass = messageClass;
 		}
 		
 		public String getLabel() {
 			return label;
 		}
 
-//		@JsonCreator
+		public Class<? extends ReceiveMessage> getMessageClass() {
+			return messageClass;
+		}
+
+		//		@JsonCreator
 		public static MessageType of(String name){
 			return valueOf(name.toUpperCase());
+		}
+		
+		public static MessageType findByMessageClass(Class<? extends ReceiveMessage> messageClass){
+			for(MessageType mt : values()){
+				if(mt.messageClass==messageClass){
+					return mt;
+				}
+			}
+			throw new IllegalArgumentException("unknow message class: " + messageClass);
+		}
+		
+	}
+	
+
+	public static enum ReplyMessageType {
+		TEXT("文本消息", TextReplyMessage.class),
+		IMAGE("图片消息", ImageReplyMessage.class),
+		VOICE("语音消息", VoiceReplyMessage.class),
+		VIDEO("视频消息", VideoReplyMessage.class),
+		MUSIC("音乐消息", MusicReplyMessage.class),
+		NEWS("图文消息", NewsReplyMessage.class);
+		
+		private String label;
+		private Class<? extends ReplyMessage> messageClass;
+
+		private ReplyMessageType(String label, Class<? extends ReplyMessage> messageClass) {
+			this.label = label;
+			this.messageClass = messageClass;
+		}
+		
+		public String getLabel() {
+			return label;
+		}
+
+		public Class<? extends ReplyMessage> getMessageClass() {
+			return messageClass;
+		}
+
+		//		@JsonCreator
+		public static ReplyMessageType of(String name){
+			return valueOf(name.toUpperCase());
+		}
+		
+		public static ReplyMessageType findByMessageClass(Class<? extends ReplyMessage> messageClass){
+			for(ReplyMessageType mt : values()){
+				if(mt.messageClass==messageClass){
+					return mt;
+				}
+			}
+			throw new IllegalArgumentException("unknow message class: " + messageClass);
 		}
 		
 	}

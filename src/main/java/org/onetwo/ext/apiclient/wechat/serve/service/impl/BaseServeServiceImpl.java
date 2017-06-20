@@ -7,7 +7,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.onetwo.common.md.Hashs;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
-import org.onetwo.ext.apiclient.wechat.serve.msg.ServeAuthParam;
+import org.onetwo.ext.apiclient.wechat.serve.dto.ServeAuthParam;
 import org.onetwo.ext.apiclient.wechat.serve.service.BaseServeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package org.onetwo.ext.apiclient.wechat.serve.service;
 
-import org.onetwo.ext.apiclient.wechat.serve.msg.ServeAuthParam;
+import org.onetwo.ext.apiclient.wechat.serve.dto.ServeAuthParam;
 
 /**
  * @author wayshall

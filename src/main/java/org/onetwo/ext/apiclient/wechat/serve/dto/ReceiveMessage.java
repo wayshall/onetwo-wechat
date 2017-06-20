@@ -1,8 +1,10 @@
-package org.onetwo.ext.apiclient.wechat.serve.msg;
+package org.onetwo.ext.apiclient.wechat.serve.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import org.onetwo.common.utils.FieldName;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.MessageType;
@@ -35,6 +37,8 @@ public class ReceiveMessage {
 	@Data
 	@EqualsAndHashCode(callSuper=false)
 	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
 	public static class TextMessage extends ReceiveMessage {
 		@FieldName("Content")
 		private String content;
@@ -43,6 +47,8 @@ public class ReceiveMessage {
 	@Data
 	@EqualsAndHashCode(callSuper=false)
 	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
 	public static class ImageMessage extends MediaMessage {
 		@FieldName("PicUrl")
 		private String picUrl;
@@ -51,6 +57,8 @@ public class ReceiveMessage {
 	@Data
 	@EqualsAndHashCode(callSuper=false)
 	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
 	public static class VoiceMessage extends MediaMessage {
 		/***
 		 * 语音格式，如amr，speex等
@@ -64,6 +72,21 @@ public class ReceiveMessage {
 	@Data
 	@EqualsAndHashCode(callSuper=false)
 	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class VideoMessage extends MediaMessage {
+		/***
+		 * 视频消息缩略图的媒体id，可以调用多媒体文件下载接口拉取数据。
+		 */
+		@FieldName("ThumbMediaId")
+		private String thumbMediaId;
+	}
+
+	@Data
+	@EqualsAndHashCode(callSuper=false)
+	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
 	public static class ShortvideoMessage extends MediaMessage {
 		/***
 		 * 视频消息缩略图的媒体id，可以调用多媒体文件下载接口拉取数据。
@@ -75,6 +98,8 @@ public class ReceiveMessage {
 	@Data
 	@EqualsAndHashCode(callSuper=false)
 	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
 	public static class LocationMessage extends ReceiveMessage {
 		/**
 		 * 地理位置维度
@@ -102,6 +127,8 @@ public class ReceiveMessage {
 	@Data
 	@EqualsAndHashCode(callSuper=false)
 	@Builder
+	@NoArgsConstructor
+	@AllArgsConstructor
 	public static class LinkMessage extends ReceiveMessage {
 		@FieldName("Title")
 		private String title;

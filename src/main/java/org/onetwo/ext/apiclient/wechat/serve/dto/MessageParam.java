@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.wechat.serve.msg;
+package org.onetwo.ext.apiclient.wechat.serve.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
