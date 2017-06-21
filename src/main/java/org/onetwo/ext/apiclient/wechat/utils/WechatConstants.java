@@ -99,6 +99,9 @@ public abstract class WechatConstants {
 		public Class<? extends ReceiveMessage> getMessageClass() {
 			return messageClass;
 		}
+		public String getName(){
+			return name().toLowerCase();
+		}
 
 		//		@JsonCreator
 		public static MessageType of(String name){
@@ -139,6 +142,9 @@ public abstract class WechatConstants {
 
 		public Class<? extends ReplyMessage> getMessageClass() {
 			return messageClass;
+		}
+		public String getName(){
+			return name().toLowerCase();
 		}
 
 		//		@JsonCreator

@@ -7,14 +7,14 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import org.onetwo.common.utils.FieldName;
-import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.MessageType;
+import org.onetwo.ext.apiclient.wechat.serve.spi.Message;
 
 /**
  * @author wayshall
  * <br/>
  */
 @Data
-public class ReceiveMessage {
+public class ReceiveMessage implements Message {
 	
 	@FieldName("ToUserName")
 	private String toUserName;
@@ -25,7 +25,11 @@ public class ReceiveMessage {
 	@FieldName("MsgId")
 	private long msgId;
 	@FieldName("MsgType")
-	private MessageType msgType;
+	private String msgType;
+	
+	public FlowType getFlowType(){
+		return FlowType.RECEIVE;
+	}
 
 	@Data
 	@EqualsAndHashCode(callSuper=false)

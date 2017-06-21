@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.wechat.serve.service;
+package org.onetwo.ext.apiclient.wechat.serve.spi;
 
 import org.onetwo.ext.apiclient.wechat.serve.dto.ServeAuthParam;
 

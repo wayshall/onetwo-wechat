@@ -1,8 +1,8 @@
-package org.onetwo.ext.apiclient.wechat.serve.service.impl;
+package org.onetwo.ext.apiclient.wechat.serve.service;
 
 import org.onetwo.common.log.JFishLoggerFactory;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage.TextMessage;
-import org.onetwo.ext.apiclient.wechat.serve.service.MessageHandler;
+import org.onetwo.ext.apiclient.wechat.serve.spi.MessageHandler;
 import org.slf4j.Logger;
 
 /**
