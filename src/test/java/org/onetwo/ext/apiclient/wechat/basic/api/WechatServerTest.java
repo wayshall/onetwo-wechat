@@ -7,7 +7,6 @@ import org.onetwo.ext.apiclient.wechat.WechatBaseTests;
 import org.onetwo.ext.apiclient.wechat.basic.request.AccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.GetCallbackIpResponse;
 import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
-import org.onetwo.ext.apiclient.wechat.serve.spi.BaseServeService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -20,8 +19,6 @@ public class WechatServerTest extends WechatBaseTests {
 	WechatServer wechatServer;
 	@Autowired
 	AccessTokenService accessTokenService;
-	@Autowired
-	BaseServeService baseSupportService;
 	
 	@Test
 	public void testGetCallbackIp(){

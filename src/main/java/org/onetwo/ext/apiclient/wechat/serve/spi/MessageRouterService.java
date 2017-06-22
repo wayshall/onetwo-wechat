@@ -1,6 +1,7 @@
 package org.onetwo.ext.apiclient.wechat.serve.spi;
 
 import org.onetwo.ext.apiclient.wechat.serve.dto.MessageContext;
+import org.onetwo.ext.apiclient.wechat.serve.dto.ServeAuthParam;
 
 /**
  * @author wayshall
@@ -15,5 +16,8 @@ public interface MessageRouterService {
 	MessageRouterService clearHandlers(Class<? extends Message> messageType);
 	
 	MessageRouterService mappingReceive(String messageType, Class<? extends Message> messageClass);
+	
+	
+	String verifyUrl(ServeAuthParam auth);
 
 }

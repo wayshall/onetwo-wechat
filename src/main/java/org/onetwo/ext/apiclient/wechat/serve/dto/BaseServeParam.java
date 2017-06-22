@@ -13,8 +13,6 @@ import org.hibernate.validator.constraints.NotBlank;
 @EqualsAndHashCode
 public class BaseServeParam {
 	@NotBlank
-	private String signature;
-	@NotBlank
 	private String timestamp;
 	@NotBlank
 	private String nonce;

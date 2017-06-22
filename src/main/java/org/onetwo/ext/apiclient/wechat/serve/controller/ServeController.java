@@ -9,7 +9,6 @@ import org.onetwo.common.spring.copier.UnderlineInitBinder;
 import org.onetwo.ext.apiclient.wechat.serve.dto.MessageContext;
 import org.onetwo.ext.apiclient.wechat.serve.dto.MessageParam;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ServeAuthParam;
-import org.onetwo.ext.apiclient.wechat.serve.spi.BaseServeService;
 import org.onetwo.ext.apiclient.wechat.serve.spi.MessageRouterService;
 import org.onetwo.ext.apiclient.wechat.serve.spi.ServeEndpoint;
 import org.slf4j.Logger;
@@ -29,13 +28,12 @@ public class ServeController implements UnderlineInitBinder, ServeEndpoint {
 	protected Logger logger = JFishLoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
-	private BaseServeService serverService;
-	@Autowired
 	private MessageRouterService messageRouterService;
 
 	@Override
 	public String auth(@Valid ServeAuthParam authRequet){
-		return serverService.auth(authRequet);
+		logger.info("ServeAuthParam: {}", authRequet);
+		return messageRouterService.verifyUrl(authRequet);
 	}
 
 	@Override

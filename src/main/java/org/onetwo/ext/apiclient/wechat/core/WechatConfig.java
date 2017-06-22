@@ -13,6 +13,10 @@ public interface WechatConfig {
 
 	String getAppsecret();
 	
+	String getEncodingAESKey();
+	
+	boolean isEncryptByAes();
+	
 	String getOauth2RedirectUri();
 	
 }

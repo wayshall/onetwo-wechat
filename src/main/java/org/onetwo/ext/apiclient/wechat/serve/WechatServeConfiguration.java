@@ -2,7 +2,7 @@ package org.onetwo.ext.apiclient.wechat.serve;
 
 import org.onetwo.common.utils.LangUtils;
 import org.onetwo.ext.apiclient.wechat.serve.controller.ServeController;
-import org.onetwo.ext.apiclient.wechat.serve.service.BaseServeServiceImpl;
+import org.onetwo.ext.apiclient.wechat.serve.service.MessageRouterServiceImpl;
 import org.onetwo.ext.apiclient.wechat.serve.spi.ServeEndpoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,7 +17,7 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
  * <br/>
  */
 @Configuration
-@ComponentScan(basePackageClasses=BaseServeServiceImpl.class)
+@ComponentScan(basePackageClasses=MessageRouterServiceImpl.class)
 public class WechatServeConfiguration {
 	
 	@Bean

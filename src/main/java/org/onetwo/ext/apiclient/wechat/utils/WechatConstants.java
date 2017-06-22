@@ -25,6 +25,10 @@ import org.springframework.http.MediaType;
 public abstract class WechatConstants {
 	
 	public static final String PARAMS_ACCESS_TOKEN = "access_token";
+	public static final String BODY_TO_USER_NAME = "ToUserName";
+	public static final String BODY_ENCRYPT = "Encrypt";
+	
+	public static final String ENCRYPT_TYPE_AES = "aes";
 	
 	//grantType
 	public static final String GT_CLIENT_CREDENTIAL = "client_credential";
