@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.wechat.serve.controller;
+package org.onetwo.ext.apiclient.wechat.serve.web;
 
 import java.util.Map;
 

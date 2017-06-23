@@ -20,7 +20,7 @@ public class WechatOauth2ClientTest extends WechatBaseTests {
 	
 	@Test
 	public void testCreateAuthorize(){
-		AuthorizeData authorizeData = wechatOauth2Client.createAuthorize();
+		AuthorizeData authorizeData = wechatOauth2Client.createAuthorize("test");
 		System.out.println("authorizeData: " + authorizeData);
 		assertThat(authorizeData.getAppid()).isNotEmpty();
 		System.out.println("toAuthorizeUrl: " + authorizeData.toAuthorizeUrl());

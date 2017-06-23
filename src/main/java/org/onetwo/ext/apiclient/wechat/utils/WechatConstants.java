@@ -23,6 +23,8 @@ import org.springframework.http.MediaType;
  * <br/>
  */
 public abstract class WechatConstants {
+
+	public static final String WEB_USER_INFO_KEY = "userInfo";
 	
 	public static final String PARAMS_ACCESS_TOKEN = "access_token";
 	public static final String BODY_TO_USER_NAME = "ToUserName";
@@ -173,7 +175,8 @@ public abstract class WechatConstants {
 	}
 
 	public static enum WechatClientError implements ErrorType {
-		ACCESS_TOKEN_SERVICE_NOT_FOUND("AccessTokenService not found");
+		ACCESS_TOKEN_SERVICE_NOT_FOUND("AccessTokenService not found"),
+		OAUTH2_REDIRECT_URL_BLANK("redirect url must not be blank");
 		
 		private String errorMessage;
 

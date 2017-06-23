@@ -6,6 +6,8 @@ import lombok.EqualsAndHashCode;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
+ * snsapi_base
+ * 
  * @author wayshall
  * <br/>
  */

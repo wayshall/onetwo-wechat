@@ -3,7 +3,9 @@ package org.onetwo.ext.apiclient.wechat.basic.api;
 import org.onetwo.common.apiclient.annotation.InjectProperties;
 import org.onetwo.ext.apiclient.wechat.basic.request.Oauth2AccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.Oauth2AccessTokenResponse;
+import org.onetwo.ext.apiclient.wechat.basic.response.Oauth2UserInfoResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;
+import org.onetwo.ext.apiclient.wechat.core.WechatRequestConfig;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
@@ -24,7 +26,19 @@ public interface WechatOauth2Client extends WechatOauth2Custom {
 	 */
 	@GetMapping(value="/sns/oauth2/access_token")
 	Oauth2AccessTokenResponse getAccessToken(@InjectProperties Oauth2AccessTokenRequest request);
-	
+
 	void refreshToken();
+	
+	
+	/***
+	 * 第四步：拉取用户信息(需scope为 snsapi_userinfo)
+	 * @author wayshall
+	 * @param openid
+	 * @return
+	 */
+	@GetMapping(value="/sns/userinfo?lang=zh_CN")
+	@WechatRequestConfig(accessToken=true)
+	Oauth2UserInfoResponse getUserInfo(String openid);
+	
 
 }
