@@ -1,5 +1,6 @@
 package org.onetwo.ext.apiclient.wechat.basic.api;
 
+import org.onetwo.common.apiclient.annotation.InjectProperties;
 import org.onetwo.ext.apiclient.wechat.basic.request.Oauth2AccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.Oauth2AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;
@@ -22,7 +23,7 @@ public interface WechatOauth2Client extends WechatOauth2Custom {
 	 * @return
 	 */
 	@GetMapping(value="/sns/oauth2/access_token")
-	Oauth2AccessTokenResponse getAccessToken(Oauth2AccessTokenRequest request);
+	Oauth2AccessTokenResponse getAccessToken(@InjectProperties Oauth2AccessTokenRequest request);
 	
 	void refreshToken();
 

@@ -1,6 +1,5 @@
 package org.onetwo.ext.apiclient.wechat.basic.response;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,8 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * <br/>
  */
 @Data
-@EqualsAndHashCode(callSuper=false)
-@Builder
+@EqualsAndHashCode(callSuper=true)
 public class Oauth2AccessTokenResponse extends WechatResponse {
 	
 	@JsonProperty("access_token")

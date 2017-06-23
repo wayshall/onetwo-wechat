@@ -27,7 +27,7 @@ public interface MenuService {
 	WechatResponse create(@RequestBody CreateMenuRequest createMenuRequest);
 	
 
-	@PostMapping(value="/create")
+	@PostMapping(value="/create", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@WechatRequestConfig(accessToken=true)
 	WechatResponse create(@RequestBody String menuJson);
 
