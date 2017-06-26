@@ -12,11 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
+ * 基于内存
  * @author wayshall
  * <br/>
  */
 @Service
-public class AccessTokenServiceImpl implements AccessTokenService {
+public class MemoryAccessTokenService implements AccessTokenService {
 
 	@Autowired
 	private WechatServer wechatServer;
@@ -31,10 +32,10 @@ public class AccessTokenServiceImpl implements AccessTokenService {
 		if(at!=null && !at.isExpired()){
 			return at;
 		}
-		return obtainAccessToken();
+		return obtainAccessToken(wechatConfig);
 	}
 
-	protected AccessTokenInfo obtainAccessToken(){
+	protected AccessTokenInfo obtainAccessToken(WechatConfig wechatConfig){
 		try {
 			obtainAcessTokenLock.lock();
 			if(accessToken!=null && !accessToken.isExpired()){
@@ -54,6 +55,14 @@ public class AccessTokenServiceImpl implements AccessTokenService {
 		} finally{
 			obtainAcessTokenLock.unlock();
 		}
+	}
+
+	public WechatServer getWechatServer() {
+		return wechatServer;
+	}
+
+	public WechatConfig getWechatConfig() {
+		return wechatConfig;
 	}
 
 }

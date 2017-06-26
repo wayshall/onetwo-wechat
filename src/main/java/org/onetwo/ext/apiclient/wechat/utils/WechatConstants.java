@@ -24,7 +24,15 @@ import org.springframework.http.MediaType;
  */
 public abstract class WechatConstants {
 
-	public static final String WEB_USER_INFO_KEY = "userInfo";
+	
+
+	public static abstract class Oauth2ClientKeys {
+		public static final String STORE_USER_INFO_KEY = "wechat_oauth2_userInfo";
+		public static final String STORE_STATE_KEY = "wechat_oauth2_state";
+		
+		public static final String PARAMS_STATE = "state";
+		public static final String PARAMS_CODE = "code";
+	}
 	
 	public static final String PARAMS_ACCESS_TOKEN = "access_token";
 	public static final String BODY_TO_USER_NAME = "ToUserName";
@@ -33,11 +41,15 @@ public abstract class WechatConstants {
 	public static final String ENCRYPT_TYPE_AES = "aes";
 	
 	//grantType
-	public static final String GT_CLIENT_CREDENTIAL = "client_credential";
-	public static final String GT_AUTHORIZATION_CODE = "authorization_code ";
+	public static abstract class GrantTypeKeys {
+		public static final String CLIENT_CREDENTIAL = "client_credential";
+		public static final String AUTHORIZATION_CODE = "authorization_code";
+		public static final String REFRESH_TOKEN = "refresh_token";
+	}
 	
 	public static abstract class UrlConst {
-		public static final String API_BASE_URL = "https://api.weixin.qq.com/cgi-bin";
+		public static final String API_DOMAIN_URL = "https://api.weixin.qq.com";
+		public static final String API_BASE_URL = API_DOMAIN_URL + "/cgi-bin";
 		public static final String OAUTH2_AUTHORIZE = "https://open.weixin.qq.com/connect/oauth2/authorize";
 		public static final String OAUTH2_AUTHORIZE_TEMPLATE = OAUTH2_AUTHORIZE+
 																"?appid=${appid}&redirect_uri=${redirectUri}"
@@ -176,6 +188,7 @@ public abstract class WechatConstants {
 
 	public static enum WechatClientError implements ErrorType {
 		ACCESS_TOKEN_SERVICE_NOT_FOUND("AccessTokenService not found"),
+		OAUTH2_STATE_ERROR("state参数错误"),
 		OAUTH2_REDIRECT_URL_BLANK("redirect url must not be blank");
 		
 		private String errorMessage;

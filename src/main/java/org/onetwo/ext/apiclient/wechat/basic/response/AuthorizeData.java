@@ -20,8 +20,8 @@ public class AuthorizeData {
 	@FieldName("redirect_uri")
 	private String redirectUri;
 	@FieldName("response_type")
-	private String responseType = Oauth2Keys.RESPONSE_TYPE_CODE;
-	private String scope = Oauth2Keys.SCOPE_SNSAPI_USERINFO;
+	private String responseType;
+	private String scope;
 	private String state;
 	
 	public String toAuthorizeUrl(){

@@ -1,7 +1,7 @@
 package org.onetwo.ext.apiclient.wechat.core;
 
 import org.onetwo.common.spring.Springs;
-import org.onetwo.ext.apiclient.wechat.support.impl.AccessTokenServiceImpl;
+import org.onetwo.ext.apiclient.wechat.support.impl.MemoryAccessTokenService;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
  * <br/>
  */
 @Configuration
-@ComponentScan(basePackageClasses=AccessTokenServiceImpl.class)
+@ComponentScan(basePackageClasses=MemoryAccessTokenService.class)
 public class WechatSupportConfiguration implements ApplicationContextAware {
 
 	

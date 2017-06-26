@@ -13,13 +13,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @Data
 @EqualsAndHashCode(callSuper=true)
-public class Oauth2AccessTokenResponse extends WechatResponse {
+public class OAuth2AccessTokenResponse extends WechatResponse {
 	
 	@JsonProperty("access_token")
 	private String accessToken;
 	
 	@JsonProperty("expires_in")
-	private String expiresIn;
+	private Long expiresIn;
 	
 	@JsonProperty("refresh_token")
 	private String refreshToken;

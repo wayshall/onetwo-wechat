@@ -10,11 +10,17 @@ import lombok.Value;
  * <br/>
  */
 @Value
-@Builder
 public class AccessTokenInfo {
 	private String accessToken;
 	private int expiresIn;
 	private long updateAt = System.currentTimeMillis();
+
+	@Builder
+	public AccessTokenInfo(String accessToken, int expiresIn) {
+		super();
+		this.accessToken = accessToken;
+		this.expiresIn = expiresIn;
+	}
 	
 	public boolean isExpired(){
 		long duration = System.currentTimeMillis() - updateAt;

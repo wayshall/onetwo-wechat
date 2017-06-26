@@ -19,6 +19,6 @@ code说明 ： code作为换取access_token的票据，每次用户授权带上�
 	 * @author wayshall
 	 * @return
 	 */
-	AuthorizeData createAuthorize(String state);
+	AuthorizeData createAuthorize(String redirectUrl, String state);
 
 }

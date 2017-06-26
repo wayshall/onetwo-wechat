@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper=true)
-public class Oauth2UserInfoResponse extends WechatResponse {
+public class OAuth2UserInfoResponse extends WechatResponse {
 	
 	private String nickname;
 	

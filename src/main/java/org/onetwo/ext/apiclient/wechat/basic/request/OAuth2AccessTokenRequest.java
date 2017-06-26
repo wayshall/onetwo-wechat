@@ -6,7 +6,7 @@ import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.NotBlank;
 import org.onetwo.common.utils.FieldName;
-import org.onetwo.ext.apiclient.wechat.utils.WechatConstants;
+import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.GrantTypeKeys;
 import org.springframework.beans.factory.annotation.Value;
 
 /**
@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
  * <br/>
  */
 @Data
-public class Oauth2AccessTokenRequest {
+public class OAuth2AccessTokenRequest {
 	@Value("#{wechatConfig.appid}")
 	@NotBlank
 	private String appid;
@@ -31,13 +31,13 @@ public class Oauth2AccessTokenRequest {
 	private String grantType;
 
 	@Builder
-	public Oauth2AccessTokenRequest(String appid, String secret, String code, String grantType) {
+	public OAuth2AccessTokenRequest(String appid, String secret, String code, String grantType) {
 		super();
 		this.appid = appid;
 		this.secret = secret;
 		this.code = code;
 		if(StringUtils.isBlank(grantType)){
-			this.grantType = WechatConstants.GT_AUTHORIZATION_CODE;
+			this.grantType = GrantTypeKeys.AUTHORIZATION_CODE;
 		}else{
 			this.grantType = grantType;
 		}

@@ -18,5 +18,6 @@ public interface WechatConfig {
 	boolean isEncryptByAes();
 	
 	String getOauth2RedirectUri();
+	String getOauth2Scope();
 	
 }
