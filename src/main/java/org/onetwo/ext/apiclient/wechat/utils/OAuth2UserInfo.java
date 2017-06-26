@@ -9,6 +9,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import org.springframework.util.Assert;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -46,12 +49,23 @@ public class OAuth2UserInfo implements Serializable {
 	private String unionid;
 	
 
-	private Long accessAt = System.currentTimeMillis();
+	private Long accessAt;
 	private Long refreshAt;
-	
+
+	@JsonIgnore
 	public boolean isAccessTokenExpired(){
+		Assert.notNull(accessAt);
 		long duration = System.currentTimeMillis() - accessAt;
 		return TimeUnit.MILLISECONDS.toSeconds(duration) > expiresIn;
+	}
+	
+	@JsonIgnore
+	public boolean isRefreshTokenExpired(){
+		if(refreshAt==null){
+			return false;
+		}
+		long duration = System.currentTimeMillis() - refreshAt;
+		return TimeUnit.MILLISECONDS.toDays(duration) > 30;
 	}
 	
 }

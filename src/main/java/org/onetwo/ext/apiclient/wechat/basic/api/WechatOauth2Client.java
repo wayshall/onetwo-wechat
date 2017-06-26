@@ -28,7 +28,7 @@ public interface WechatOauth2Client extends WechatOauth2Custom {
 	 * @param request
 	 * @return
 	 */
-	@GetMapping(value="/sns/oauth2/access_token", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@GetMapping(value="/sns/oauth2/access_token")
 	OAuth2AccessTokenResponse getAccessToken(@InjectProperties OAuth2AccessTokenRequest request);
 
 	/***
@@ -38,6 +38,7 @@ public interface WechatOauth2Client extends WechatOauth2Custom {
 	 * @param request
 	 * @return
 	 */
+	@GetMapping(value="/sns/oauth2/refresh_token")
 	OAuth2RefreshTokenResponse refreshToken(OAuth2RefreshTokenRequest request);
 	
 	

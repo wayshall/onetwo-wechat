@@ -60,6 +60,7 @@ public class WechatOAuth2Interceptor extends MvcInterceptorAdapter {
 	protected OAuth2UserInfo processUserInfo(HttpServletRequest request, OAuth2AccessTokenResponse tokenRespose){
 		OAuth2UserInfo userInfo = CopyUtils.copy(OAuth2UserInfo.class, tokenRespose);
 		userInfo.setAccessAt(System.currentTimeMillis());
+		userInfo.setRefreshAt(userInfo.getAccessAt());
 		if(isSsnUserInfoScope()){
 			OAuth2UserInfoRequest userInfoRequest = OAuth2UserInfoRequest.builder()
 																		.accessToken(tokenRespose.getAccessToken())
@@ -67,21 +68,31 @@ public class WechatOAuth2Interceptor extends MvcInterceptorAdapter {
 																		.build();
 			
 			OAuth2UserInfoResponse userInfoResponse = this.wechatOauth2Client.getUserInfo(userInfoRequest);
-			userInfo = CopyUtils.copy(userInfo, userInfoResponse);
-			userInfo.setRefreshAt(System.currentTimeMillis());
+			CopyUtils.copier()
+					.ignoreNullValue()
+					.ignoreBlankString()
+					.from(userInfoResponse)
+					.to(userInfo);
 		}
 		return userInfo;
 	}
 	
-	protected void refreshToken(HttpServletRequest request, OAuth2UserInfo userInfo){
+	protected boolean refreshToken(HttpServletRequest request, OAuth2UserInfo userInfo){
+		if(userInfo.isRefreshTokenExpired()){
+			return false;
+		}
 		OAuth2RefreshTokenRequest refreshRequest = OAuth2RefreshTokenRequest.builder()
 																	.appid(wechatConfig.getAppid())
 																	.refreshToken(userInfo.getRefreshToken())
 																	.build();
-		OAuth2RefreshTokenResponse reponse = wechatOauth2Client.refreshToken(refreshRequest);
-		OAuth2AccessTokenResponse accessReponse = CopyUtils.copy(OAuth2AccessTokenResponse.class, reponse);
+		OAuth2RefreshTokenResponse response = wechatOauth2Client.refreshToken(refreshRequest);
+		if(logger.isInfoEnabled()){
+			logger.info("refresh token response: {}", response);
+		}
+		OAuth2AccessTokenResponse accessReponse = CopyUtils.copy(OAuth2AccessTokenResponse.class, response);
 		OAuth2UserInfo newUserInfo = processUserInfo(request, accessReponse);
 		this.sessionStoreService.saveCurrentUser(request, newUserInfo, true);
+		return true;
 	}
 	
 	@Override
@@ -91,10 +102,13 @@ public class WechatOAuth2Interceptor extends MvcInterceptorAdapter {
 		}
 		Optional<OAuth2UserInfo> userInfoOpt = sessionStoreService.getCurrentUser(request);
 		if(userInfoOpt.isPresent()){
-			if(userInfoOpt.get().isAccessTokenExpired()){
-				refreshToken(request, userInfoOpt.get());
+			OAuth2UserInfo userInfo = userInfoOpt.get();
+			//token尚未过时或者刷新成功，直接返回
+			if(!userInfo.isAccessTokenExpired()){
+				return ;
+			}else if(refreshToken(request, userInfo)){
+				return ;
 			}
-			return ;
 		}
 		
 		String code = request.getParameter(Oauth2ClientKeys.PARAMS_CODE);
