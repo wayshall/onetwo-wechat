@@ -226,21 +226,24 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 		MessageHandlerMeta meta = handlerMapper.get(message.getClass());
 		return Optional.ofNullable(meta);
 	}
+	
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public MessageRouterService register(MessageHandler<?, ?> handler) {
+		Class<?>[] paramClasses = TypeResolver.resolveRawArguments(MessageHandler.class, handler.getClass());
+		Class<? extends ReceiveMessage> messageClass = (Class<? extends ReceiveMessage>)paramClasses[0];
+		return register(messageClass, handler);
+	}
 
 	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public MessageRouterService register(MessageHandler handler) {
-		/*Method onMessageMethod = ReflectUtils.findMethod(handler.getClass(), method->{
-			return "onMessage".equals(method.getName());
-		})
-		.orElseThrow(()->new RuntimeException("onMessage method nout found on class: " + handler.getClass()));
-		Class<?>[] paramClasses = onMessageMethod.getParameterTypes();*/
-		
+	public MessageRouterService register(MessageType msgType, MessageHandler<?, ?> handler){
+		return register(msgType.getMessageClass(), handler);
+	}
 
-		Class<?>[] paramClasses = TypeResolver.resolveRawArguments(MessageHandler.class, handler.getClass());
-		
-		Class<? extends ReceiveMessage> messageClass = (Class<? extends ReceiveMessage>)paramClasses[0];
+
+	@SuppressWarnings({ "rawtypes" })
+	public MessageRouterService register(Class<? extends ReceiveMessage> messageClass, MessageHandler handler) {
 		if(logger.isInfoEnabled()){
 			logger.info("register message handler: {}, message class: {}", handler, messageClass);
 		}

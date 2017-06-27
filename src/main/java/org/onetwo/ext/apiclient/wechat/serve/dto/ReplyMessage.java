@@ -3,7 +3,6 @@ package org.onetwo.ext.apiclient.wechat.serve.dto;
 import java.util.Date;
 import java.util.List;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonRootName;
  * <br/>
  */
 @Data
-@AllArgsConstructor
 public class ReplyMessage implements Message {
 	
 	@JsonProperty("ToUserName")
@@ -29,15 +27,28 @@ public class ReplyMessage implements Message {
 	@JsonProperty("FromUserName")
 	private String fromUserName;
 	@JsonProperty("CreateTime")
-	private long createTime = new Date().getTime();
+	private Long createTime;
 	@JsonProperty("MsgType")
 	private String msgType;
 	
+
+	public ReplyMessage(String toUserName, String fromUserName, Long createTime, String msgType) {
+		super();
+		this.toUserName = toUserName;
+		this.fromUserName = fromUserName;
+		if(createTime==null){
+			this.createTime = new Date().getTime();
+		}else{
+			this.createTime = createTime;
+		}
+		this.msgType = msgType;
+	}
 	
 	@JsonIgnore
 	public FlowType getFlowType(){
 		return FlowType.REPLY;
 	}
+
 
 	@Data
 	@EqualsAndHashCode(callSuper=false)
@@ -47,7 +58,7 @@ public class ReplyMessage implements Message {
 		private String content;
 
 		@Builder
-		public TextReplyMessage(String toUserName, String fromUserName, long createTime, String msgType, String content) {
+		public TextReplyMessage(String toUserName, String fromUserName, Long createTime, String msgType, String content) {
 			super(toUserName, fromUserName, createTime, msgType);
 			this.content = content;
 			this.setMsgType(ReplyMessageType.findByMessageClass(getClass()).getName());
@@ -61,7 +72,7 @@ public class ReplyMessage implements Message {
 		private Image image;
 
 		@Builder
-		public ImageReplyMessage(String toUserName, String fromUserName, long createTime, String msgType, Image image) {
+		public ImageReplyMessage(String toUserName, String fromUserName, Long createTime, String msgType, Image image) {
 			super(toUserName, fromUserName, createTime, msgType);
 			this.image = image;
 			this.setMsgType(ReplyMessageType.findByMessageClass(getClass()).getName());
@@ -81,7 +92,7 @@ public class ReplyMessage implements Message {
 		private Voice voice;
 
 		@Builder
-		public VoiceReplyMessage(String toUserName, String fromUserName, long createTime, String msgType, Voice voice) {
+		public VoiceReplyMessage(String toUserName, String fromUserName, Long createTime, String msgType, Voice voice) {
 			super(toUserName, fromUserName, createTime, msgType);
 			this.voice = voice;
 			this.setMsgType(ReplyMessageType.findByMessageClass(getClass()).getName());
@@ -101,7 +112,7 @@ public class ReplyMessage implements Message {
 		private Video video;
 		
 		@Builder
-		public VideoReplyMessage(String toUserName, String fromUserName, long createTime, String msgType, Video video) {
+		public VideoReplyMessage(String toUserName, String fromUserName, Long createTime, String msgType, Video video) {
 			super(toUserName, fromUserName, createTime, msgType);
 			this.video = video;
 			this.setMsgType(ReplyMessageType.findByMessageClass(getClass()).getName());
@@ -125,7 +136,7 @@ public class ReplyMessage implements Message {
 		private Music music;
 		
 		@Builder
-		public MusicReplyMessage(String toUserName, String fromUserName, long createTime, String msgType, Music music) {
+		public MusicReplyMessage(String toUserName, String fromUserName, Long createTime, String msgType, Music music) {
 			super(toUserName, fromUserName, createTime, msgType);
 			this.music = music;
 			this.setMsgType(ReplyMessageType.findByMessageClass(getClass()).getName());
@@ -178,7 +189,7 @@ public class ReplyMessage implements Message {
 		
 		
 		@Builder
-		public NewsReplyMessage(String toUserName, String fromUserName, long createTime, String msgType, List<Item> articles) {
+		public NewsReplyMessage(String toUserName, String fromUserName, Long createTime, String msgType, List<Item> articles) {
 			super(toUserName, fromUserName, createTime, msgType);
 			this.articles = articles;
 			this.setMsgType(ReplyMessageType.findByMessageClass(getClass()).getName());

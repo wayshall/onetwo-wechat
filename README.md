@@ -1,6 +1,8 @@
 # onetwo-wechat
 
-
+一个简单的微信sdk
+   
+spring-boot技术交流群：  604158262
 
 ## 示例项目   
 示例项目，基于spring-boot
@@ -38,8 +40,17 @@
 spring的依赖请自行添加。
 
 
+## 配置
+在使用前需要在spring的下上文（properties或yaml文件）配置下面的属性:
+```Yaml   
+wechat: 
+    appid: 开发者ID
+    appsecret: 开发者密码
+    token: 令牌
+    encodingAESKey: 消息加解密密钥，如果不配置，请在微信后台配置使用明文的方式
 
-## 一行代码启用
+````
+## 注解启用
 onetwo-wechat把微信的rest客户端接口和消息接收处理服务端接口分开启用。
 如果只需要使用微信的客户端rest接口，只需要在spring配置类（即有@Configuration注解的类）上加上注解@EnableWechatClient 即可。
 ```java     
@@ -111,3 +122,40 @@ public class MenuServiceTest {
 ```
 
 ## 消息接收处理
+
+### 启用和配置微信服务器地址
+启用消息接收处理，需要在spring配置类（即有@Configuration注解的类）上加上注解@EnableWechatServe 。
+```java     
+  
+	@EnableWechatServe
+	public class SpringContextConfig {
+	}   
+   
+```
+onetwo-wechat会自动注册一系列服务，包括一个请求地址为“/serve”的Controller，所以你只需要在微信后台配置如下服务器地址：
+http://你的域名/serve
+
+### 注册消息处理器
+
+```Java
+@Component
+public class MessageHandlerRegister {
+
+	@Autowired
+	MessageRouterService messageRouterService;
+	
+	@PostConstruct
+	public void init(){
+		this.messageRouterService.register(MessageType.TEXT, (TextMessage text)->{
+			return TextReplyMessage.builder()
+									.fromUserName(text.getToUserName())
+									.toUserName(text.getFromUserName())
+									.content("我收到你的消息啦~")
+									.build();
+		});
+	}
+}   
+
+```
+只需要在spring启动的时候，注入onetwo-wechat的MessageRouterService服务，并通过MessageRouterService的api注册相关类型的消息监听即可。
+上面的示例会在收到消息后简单回复一条"我收到你的消息啦~"的信息。
