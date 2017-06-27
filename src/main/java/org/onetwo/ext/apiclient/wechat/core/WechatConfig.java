@@ -19,5 +19,6 @@ public interface WechatConfig {
 	
 	String getOauth2RedirectUri();
 	String getOauth2Scope();
+	String[] getOauth2InterceptUrls();
 	
 }

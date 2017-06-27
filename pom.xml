@@ -39,6 +39,13 @@
 
 	
     <dependencies>
+	<!-- for test
+		<dependency>
+		    <groupId>net.openhft</groupId>
+		    <artifactId>chronicle-map</artifactId>
+		    <version>3.13.0</version>
+		</dependency>
+		         -->
 		        
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -71,6 +78,10 @@
         <dependency>
           <groupId>org.onetwo4j</groupId>
           <artifactId>onetwo-spring</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.onetwo4j</groupId>
+          <artifactId>onetwo-web</artifactId>
         </dependency>
         <dependency>
           <groupId>org.onetwo4j</groupId>

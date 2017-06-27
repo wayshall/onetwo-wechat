@@ -1,12 +1,12 @@
 package org.onetwo.ext.apiclient.wechat.serve;
 
 import org.onetwo.common.spring.condition.OnMissingBean;
-import org.onetwo.ext.apiclient.wechat.serve.service.MessageRouterServiceImpl;
 import org.onetwo.ext.apiclient.wechat.serve.service.HtppSessionStoreService;
+import org.onetwo.ext.apiclient.wechat.serve.service.MessageRouterServiceImpl;
 import org.onetwo.ext.apiclient.wechat.serve.spi.ServeEndpoint;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatUserStoreService;
 import org.onetwo.ext.apiclient.wechat.serve.web.ServeController;
-import org.onetwo.ext.apiclient.wechat.serve.web.WechatOAuth2Interceptor;
+import org.onetwo.ext.apiclient.wechat.serve.web.WechatOAuth2Hanlder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,8 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ComponentScan(basePackageClasses=MessageRouterServiceImpl.class)
-public class WechatServeConfiguration {
+public class WechatServeConfiguration  {
+	
 	
 	@Bean
 //	@Conditional(MissingServeEndpointCondition.class)
@@ -26,10 +27,11 @@ public class WechatServeConfiguration {
 		return new ServeController();
 	}
 	
+
 	@Bean
-	@OnMissingBean(WechatOAuth2Interceptor.class)
-	public WechatOAuth2Interceptor wechatOAuth2Interceptor(){
-		return new WechatOAuth2Interceptor();
+	@OnMissingBean(WechatOAuth2Hanlder.class)
+	public WechatOAuth2Hanlder wechatOAuth2Hanlder(){
+		return new WechatOAuth2Hanlder();
 	}
 	
 	@Bean
@@ -37,5 +39,5 @@ public class WechatServeConfiguration {
 	public WechatUserStoreService sessionStoreService(){
 		return new HtppSessionStoreService();
 	}
-
+	
 }

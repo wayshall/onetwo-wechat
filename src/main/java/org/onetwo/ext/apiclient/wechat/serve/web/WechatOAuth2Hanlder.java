@@ -34,7 +34,7 @@ import org.springframework.web.method.HandlerMethod;
  * @author wayshall
  * <br/>
  */
-public class WechatOAuth2Interceptor extends MvcInterceptorAdapter {
+public class WechatOAuth2Hanlder {
 	
 	
 	private final Logger logger = JFishLoggerFactory.getLogger(this.getClass());
@@ -95,7 +95,6 @@ public class WechatOAuth2Interceptor extends MvcInterceptorAdapter {
 		return true;
 	}
 	
-	@Override
 	public void preHandle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handler) {
 		if(!RequestUtils.getBrowerMetaByAgent(request).isWechat()){
 			return ;
