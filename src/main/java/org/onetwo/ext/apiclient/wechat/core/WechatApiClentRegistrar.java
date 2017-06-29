@@ -2,7 +2,7 @@ package org.onetwo.ext.apiclient.wechat.core;
 
 import java.util.stream.Stream;
 
-import org.onetwo.common.apiclient.AbstractApiClentRegistrar;
+import org.onetwo.common.apiclient.impl.AbstractApiClentRegistrar;
 import org.onetwo.ext.apiclient.wechat.EnableWechatClient;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
@@ -35,6 +35,7 @@ public class WechatApiClentRegistrar extends AbstractApiClentRegistrar<EnableWec
 //		definition.addPropertyValue("name", name);
 		definition.addPropertyValue("interfaceClass", className);
 		definition.addPropertyValue("responseHandler", responseHandler);
+		definition.addPropertyValue("restExecutor", getRestExecutor());
 //		definition.addPropertyValue("decode404", attributes.get("decode404"));
 //		definition.addPropertyValue("fallback", attributes.get("fallback"));
 		definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);

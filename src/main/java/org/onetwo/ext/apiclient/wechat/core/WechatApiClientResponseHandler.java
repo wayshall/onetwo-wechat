@@ -3,7 +3,7 @@ package org.onetwo.ext.apiclient.wechat.core;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.onetwo.common.apiclient.DefaultApiClientResponseHandler;
+import org.onetwo.common.apiclient.impl.DefaultApiClientResponseHandler;
 import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.exception.ErrorTypes;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;

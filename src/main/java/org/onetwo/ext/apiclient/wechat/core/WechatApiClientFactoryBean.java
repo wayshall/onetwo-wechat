@@ -1,7 +1,6 @@
 package org.onetwo.ext.apiclient.wechat.core;
 
 import java.lang.reflect.Method;
-import java.util.Map;
 import java.util.Optional;
 
 import lombok.Data;
@@ -9,8 +8,9 @@ import lombok.EqualsAndHashCode;
 
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.lang3.StringUtils;
-import org.onetwo.common.apiclient.AbstractApiClientFactoryBean;
 import org.onetwo.common.apiclient.ApiClientMethod;
+import org.onetwo.common.apiclient.RequestContextData;
+import org.onetwo.common.apiclient.impl.AbstractApiClientFactoryBean;
 import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.spring.SpringUtils;
 import org.onetwo.common.utils.ParamUtils;
@@ -96,13 +96,13 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 		 * @return
 		 */
 		@Override
-		public String processUrlBeforeRequest(final String actualUrl, WechatMethod method, Map<String, Object> uriVariables){
+		public String processUrlBeforeRequest(final String actualUrl, WechatMethod method, RequestContextData context){
 			String newUrl = actualUrl;
 			if(method.isAutoAppendAccessToken()){
 				String accessToken = getAccessToken();
 				newUrl = ParamUtils.appendParam(newUrl, WechatConstants.PARAMS_ACCESS_TOKEN, accessToken);
 			}
-			newUrl = super.processUrlBeforeRequest(newUrl, method, uriVariables);
+			newUrl = super.processUrlBeforeRequest(newUrl, method, context);
 			return newUrl;
 		}
 	}
