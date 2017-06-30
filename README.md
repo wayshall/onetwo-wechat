@@ -1,6 +1,6 @@
 # onetwo-wechat
 
-一个简单的微信sdk
+一个简单的基于Spring RestTemplate封装的微信sdk
    
 spring-boot技术交流群：  604158262
 

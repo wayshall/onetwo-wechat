@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.onetwo.boot.core.web.mvc.interceptor.MvcInterceptorAdapter;
 import org.onetwo.common.log.JFishLoggerFactory;
 import org.onetwo.common.spring.copier.CopyUtils;
 import org.onetwo.common.web.utils.RequestUtils;
