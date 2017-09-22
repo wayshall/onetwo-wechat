@@ -1,6 +1,5 @@
 package org.onetwo.ext.apiclient.wechat.utils;
 
-import org.onetwo.common.exception.ErrorType;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage.ImageMessage;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage.LinkMessage;
@@ -186,26 +185,4 @@ public abstract class WechatConstants {
 		public static final String TEXT_XML_VALUE_UTF8 = MediaType.TEXT_XML_VALUE + ";charset=UTF-8";
 	}
 
-	public static enum WechatClientError implements ErrorType {
-		ACCESS_TOKEN_SERVICE_NOT_FOUND("AccessTokenService not found"),
-		OAUTH2_STATE_ERROR("state参数错误"),
-		OAUTH2_REDIRECT_URL_BLANK("redirect url must not be blank");
-		
-		private String errorMessage;
-
-		private WechatClientError(String errorMessage) {
-			this.errorMessage = errorMessage;
-		}
-
-		@Override
-		public String getErrorCode() {
-			return name();
-		}
-
-		@Override
-		public String getErrorMessage() {
-			return errorMessage;
-		}
-		
-	}
 }

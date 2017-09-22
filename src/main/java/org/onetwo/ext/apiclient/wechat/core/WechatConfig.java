@@ -21,4 +21,7 @@ public interface WechatConfig {
 	String getOauth2Scope();
 	String[] getOauth2InterceptUrls();
 	
+	
+	boolean isOauth2ErrorInBrowser();
+	
 }

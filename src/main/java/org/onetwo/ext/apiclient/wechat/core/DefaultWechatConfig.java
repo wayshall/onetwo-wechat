@@ -35,8 +35,13 @@ public class DefaultWechatConfig implements WechatConfig{
 	private String oauth2Scope;
 	@Value("${wechat.oauth2.intercept.urls:}")
 	private String[] oauth2InterceptUrls;
+	
+
+	@Value("${wechat.oauth2.errorInBrowser:true}")
+	private boolean oauth2ErrorInBrowser;
 
 	public boolean isEncryptByAes(){
 		return StringUtils.isNotBlank(encodingAESKey);
 	}
+	
 }

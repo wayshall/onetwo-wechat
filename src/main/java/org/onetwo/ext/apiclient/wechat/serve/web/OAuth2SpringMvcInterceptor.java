@@ -22,8 +22,7 @@ public class OAuth2SpringMvcInterceptor extends HandlerInterceptorAdapter {
 		if(method==null){
 			return false;
 		}
-		wechatOAuth2Hanlder.preHandle(request, response, method);
-		return true;
+		return wechatOAuth2Hanlder.preHandle(request, response, method);
 	}
 	
 

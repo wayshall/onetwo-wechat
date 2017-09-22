@@ -2,6 +2,7 @@ package org.onetwo.ext.apiclient.wechat.core;
 
 import org.onetwo.common.spring.Springs;
 import org.onetwo.ext.apiclient.wechat.support.impl.MemoryAccessTokenService;
+import org.onetwo.ext.apiclient.wechat.utils.OAuth2UserInfoArgumentResolver;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -21,6 +22,11 @@ public class WechatSupportConfiguration implements ApplicationContextAware {
 	@Bean
 	public WechatConfig wechatConfig(){
 		return new DefaultWechatConfig();
+	}
+	
+	@Bean
+	public OAuth2UserInfoArgumentResolver oauth2UserInfoArgumentResolver(){
+		return new OAuth2UserInfoArgumentResolver();
 	}
 
 	@Override

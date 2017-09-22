@@ -7,9 +7,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.onetwo.common.data.AbstractDataResult.SimpleDataResult;
+import org.onetwo.common.exception.BaseException;
 import org.onetwo.common.log.JFishLoggerFactory;
 import org.onetwo.common.spring.copier.CopyUtils;
+import org.onetwo.common.spring.mvc.utils.WebResultCreator;
 import org.onetwo.common.web.utils.RequestUtils;
+import org.onetwo.common.web.utils.ResponseUtils;
 import org.onetwo.ext.apiclient.wechat.basic.api.WechatOauth2Client;
 import org.onetwo.ext.apiclient.wechat.basic.request.OAuth2AccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.request.OAuth2RefreshTokenRequest;
@@ -19,11 +23,12 @@ import org.onetwo.ext.apiclient.wechat.basic.response.OAuth2AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.basic.response.OAuth2RefreshTokenResponse;
 import org.onetwo.ext.apiclient.wechat.basic.response.OAuth2UserInfoResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
-import org.onetwo.ext.apiclient.wechat.serve.spi.WechatUserStoreService;
+import org.onetwo.ext.apiclient.wechat.serve.dto.RequestHoder;
+import org.onetwo.ext.apiclient.wechat.serve.spi.WechatSessionRepository;
 import org.onetwo.ext.apiclient.wechat.utils.OAuth2UserInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.Oauth2ClientKeys;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.Oauth2Keys;
-import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.WechatClientError;
+import org.onetwo.ext.apiclient.wechat.utils.WechatErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatException;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +46,7 @@ public class WechatOAuth2Hanlder {
 	@Autowired
 	private WechatOauth2Client wechatOauth2Client;
 	@Autowired
-	private WechatUserStoreService sessionStoreService;
+	private WechatSessionRepository sessionStoreService;
 	@Autowired
 	private WechatConfig wechatConfig;
 	
@@ -90,30 +95,35 @@ public class WechatOAuth2Hanlder {
 		}
 		OAuth2AccessTokenResponse accessReponse = CopyUtils.copy(OAuth2AccessTokenResponse.class, response);
 		OAuth2UserInfo newUserInfo = processUserInfo(request, accessReponse);
-		this.sessionStoreService.saveCurrentUser(request, newUserInfo, true);
+		this.sessionStoreService.saveCurrentUser(RequestHoder.builder().request(request).build(), newUserInfo, true);
 		return true;
 	}
 	
-	public void preHandle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handler) {
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handler) {
 		if(!RequestUtils.getBrowerMetaByAgent(request).isWechat()){
-			return ;
+			if(wechatConfig.isOauth2ErrorInBrowser()){
+				throw new BaseException(WechatErrors.OAUTH2_ERROR_IN_BROWSER);
+			}/*else{
+				return ;
+			}*/
 		}
-		Optional<OAuth2UserInfo> userInfoOpt = sessionStoreService.getCurrentUser(request);
+		RequestHoder holder = RequestHoder.builder().request(request).build();
+		Optional<OAuth2UserInfo> userInfoOpt = sessionStoreService.getCurrentUser(holder);
 		if(userInfoOpt.isPresent()){
 			OAuth2UserInfo userInfo = userInfoOpt.get();
 			//token尚未过时或者刷新成功，直接返回
 			if(!userInfo.isAccessTokenExpired()){
-				return ;
+				return true;
 			}else if(refreshToken(request, userInfo)){
-				return ;
+				return true;
 			}
 		}
 		
 		String code = request.getParameter(Oauth2ClientKeys.PARAMS_CODE);
 		if(StringUtils.isNotBlank(code)){
 			String state = request.getParameter(Oauth2ClientKeys.PARAMS_STATE);
-			if(!sessionStoreService.checkOauth2State(request, state)){
-				throw new WechatException(WechatClientError.OAUTH2_STATE_ERROR);
+			if(!sessionStoreService.checkOauth2State(holder, state)){
+				throw new WechatException(WechatErrors.OAUTH2_STATE_ERROR);
 			}
 			
 			OAuth2AccessTokenRequest tokenRequest = OAuth2AccessTokenRequest.builder()
@@ -125,8 +135,16 @@ public class WechatOAuth2Hanlder {
 			}
 			
 			OAuth2UserInfo userInfo = this.processUserInfo(request, tokenRespose);
-			this.sessionStoreService.saveCurrentUser(request, userInfo, false);
+			this.sessionStoreService.saveCurrentUser(holder, userInfo, false);
 		}else{
+			//如果是ajax请求，不跳转，返回错误信息
+			if(RequestUtils.isAjaxRequest(request) || RequestUtils.isAjaxHandlerMethod(handler)){
+				SimpleDataResult<?> result = WebResultCreator.creator()
+								.error(WechatErrors.OAUTH2_NOT_AUTHORIZE)
+								.buildResult();
+				ResponseUtils.renderObjectAsJson(response, result);
+				return false;
+			}
 			try {
 				AuthorizeData authorizeData = getWechatAuthorizeData(request);
 				String authorizeUrl = authorizeData.toAuthorizeUrl();
@@ -138,11 +156,13 @@ public class WechatOAuth2Hanlder {
 				throw new RuntimeException("redirect error: " + e.getMessage(), e);
 			}
 		}
+		return true;
 	}
 	
 	protected AuthorizeData getWechatAuthorizeData(HttpServletRequest request){
+		RequestHoder holder = RequestHoder.builder().request(request).build();
 		String redirectUrl = buildRedirectUrl(request);
-		String state = sessionStoreService.generateAndStoreOauth2State(request);
+		String state = sessionStoreService.generateAndStoreOauth2State(holder);
 		AuthorizeData authorize = wechatOauth2Client.createAuthorize(redirectUrl, state);
 		return authorize;
 	}
