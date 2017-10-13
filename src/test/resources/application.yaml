@@ -1,0 +1,23 @@
+spring:
+    datasource:
+        driver-class-name: com.mysql.jdbc.Driver
+        validation-query: SELECT 1
+        test-on-borrow: true
+        test-on-return: true
+    freemarker:
+        suffix: .html
+    jackson:
+        serialization:
+            indent_output: true
+jfish: 
+    redis:
+        enabled: true
+        hostName: 127.0.0.1
+        lockRegistry:
+            key: defaultLock
+wechat: 
+    accessToken: 
+        storer: redis
+    task: 
+        refreshToken: 
+            ignoreIntervalInMinutes: -1

@@ -3,22 +3,25 @@ package org.onetwo.ext.apiclient.wechat.basic.api;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
-import org.onetwo.ext.apiclient.wechat.WechatBaseTests;
+import org.onetwo.ext.apiclient.wechat.WechatBaseTestsAdapter;
 import org.onetwo.ext.apiclient.wechat.basic.request.AccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.GetCallbackIpResponse;
 import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
+import org.onetwo.ext.apiclient.wechat.support.impl.RedisRefreshAccessTokenTask;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author wayshall
  * <br/>
  */
-public class WechatServerTest extends WechatBaseTests {
+public class WechatServerTest extends WechatBaseTestsAdapter {
 	
 	@Autowired
 	WechatServer wechatServer;
 	@Autowired
 	AccessTokenService accessTokenService;
+	@Autowired
+	RedisRefreshAccessTokenTask redisRefreshAccessTokenTask;
 	
 	@Test
 	public void testGetCallbackIp(){
@@ -31,6 +34,15 @@ public class WechatServerTest extends WechatBaseTests {
 																				.build());
 		assertThat(response).isNotNull();
 //		assertThat(response.isSuccess()).isTrue();
+		assertThat(response.getIpList()).isNotEmpty();
+		
+		//test for refresh token
+		redisRefreshAccessTokenTask.schedule();
+		response = wechatServer.getCallbackIp(AccessTokenRequest.accessTokenRequest()
+								.accessToken(accessToken)
+								.build());
+		assertThat(response).isNotNull();
+		//assertThat(response.isSuccess()).isTrue();
 		assertThat(response.getIpList()).isNotEmpty();
 		
 		//不手动设置accessToken

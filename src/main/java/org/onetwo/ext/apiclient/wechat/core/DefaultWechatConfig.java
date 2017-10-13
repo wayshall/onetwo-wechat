@@ -3,45 +3,75 @@ package org.onetwo.ext.apiclient.wechat.core;
 import lombok.Data;
 
 import org.apache.commons.lang3.StringUtils;
+import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.AccessTokenStorers;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.GrantTypeKeys;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.Oauth2Keys;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * @author wayshall
  * <br/>
  */
-//@ConfigurationProperties("wechat")
+@ConfigurationProperties("wechat")
 @Data
 public class DefaultWechatConfig implements WechatConfig{
-	@Value("${wechat.token}")
+//	@Value("${wechat.token}")
 	private String token;
 	
-	@Value("${wechat.grantType:"+GrantTypeKeys.CLIENT_CREDENTIAL+"}")
-	private String grantType;
+//	@Value("${wechat.grantType:"+GrantTypeKeys.CLIENT_CREDENTIAL+"}")
+	private String grantType = GrantTypeKeys.CLIENT_CREDENTIAL;
 	
-	@Value("${wechat.appid}")
+//	@Value("${wechat.appid}")
 	private String appid;
 	
-	@Value("${wechat.appsecret}")
+//	@Value("${wechat.appsecret}")
 	private String appsecret;
 	
-	@Value("${wechat.encodingAESKey:}")
-	private String encodingAESKey;
+//	@Value("${wechat.encodingAESKey:}")
+	private String encodingAESKey = "";
 	
-	@Value("${wechat.oauth2.redirectUri:}")
-	private String oauth2RedirectUri;
-	@Value("${wechat.oauth2.scope:"+Oauth2Keys.SCOPE_SNSAPI_USERINFO+"}")
-	private String oauth2Scope;
-	@Value("${wechat.oauth2.intercept.urls:}")
-	private String[] oauth2InterceptUrls;
-	
-
-	@Value("${wechat.oauth2.errorInBrowser:true}")
-	private boolean oauth2ErrorInBrowser;
+	private Oauth2Properties oauth2 = new Oauth2Properties();
+	private AccessTokenProperties accessToken = new AccessTokenProperties();
 
 	public boolean isEncryptByAes(){
 		return StringUtils.isNotBlank(encodingAESKey);
+	}
+
+	@Override
+	public String getOauth2RedirectUri() {
+		return oauth2.getRedirectUri();
+	}
+
+	@Override
+	public String getOauth2Scope() {
+		return oauth2.getScope();
+	}
+
+	@Override
+	public String[] getOauth2InterceptUrls() {
+		return oauth2.getInterceptUrls();
+	}
+
+	@Override
+	public boolean isOauth2ErrorInBrowser() {
+		return oauth2.isErrorInBrowser();
+	}
+
+	@Data
+	public static class Oauth2Properties {
+//		@Value("${wechat.oauth2.redirectUri:}")
+		private String redirectUri = "";
+//		@Value("${wechat.oauth2.scope:"+Oauth2Keys.SCOPE_SNSAPI_USERINFO+"}")
+		private String scope = Oauth2Keys.SCOPE_SNSAPI_USERINFO;
+//		@Value("${wechat.oauth2.intercept.urls:}")
+		private String[] interceptUrls;
+//		@Value("${wechat.oauth2.errorInBrowser:true}")
+		private boolean errorInBrowser = true;
+	}
+	
+	@Data
+	public static class AccessTokenProperties {
+		AccessTokenStorers storer = AccessTokenStorers.MEMORY;
 	}
 	
 }

@@ -62,6 +62,11 @@ public abstract class WechatConstants {
 		public static final String RESPONSE_TYPE_CODE = "code";
 		
 	}
+	public static abstract class AccessTokenKeys {
+		public static final String STORER_KEY = "wechat.accessToken.storer";
+		public static final String STORER_REDIS_KEY = "redis";
+		public static final String STORER_MEMORY_KEY = "memory";
+	}
 	
 	/***
 	 * 菜单按钮类型
@@ -183,6 +188,12 @@ public abstract class WechatConstants {
 	public static class MediaTypeKeys {
 		public static final String APPLICATION_XML_VALUE_UTF8 = MediaType.APPLICATION_XML_VALUE + ";charset=UTF-8";
 		public static final String TEXT_XML_VALUE_UTF8 = MediaType.TEXT_XML_VALUE + ";charset=UTF-8";
+	}
+	
+
+	public static enum AccessTokenStorers {
+		MEMORY,
+		REDIS
 	}
 
 }

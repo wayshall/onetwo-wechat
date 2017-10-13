@@ -23,8 +23,8 @@ public class EnableWechatClientSelector extends AbstractImportSelector<EnableWec
 		List<String> classNames = new ArrayList<String>();
 		classNames.add(WechatApiClentRegistrar.class.getName());
 		classNames.add(WechatSupportConfiguration.class.getName());
-		boolean enableDbmRepository = attributes.getBoolean("enableMessageServe");
-		if(enableDbmRepository){
+		boolean enableMessageServe = attributes.getBoolean("enableMessageServe");
+		if(enableMessageServe){
 			classNames.add(WechatServeConfiguration.class.getName());
 		}
 		if(attributes.getBoolean("enableOAuth2Interceptor")){

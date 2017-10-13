@@ -3,20 +3,17 @@ package org.onetwo.ext.apiclient.wechat.support.impl;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.onetwo.ext.apiclient.wechat.basic.api.WechatServer;
-import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
-import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
+import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  * 基于内存
  * @author wayshall
  * <br/>
  */
-@Service
 public class MemoryAccessTokenService implements AccessTokenService {
 
 	@Autowired
@@ -41,16 +38,7 @@ public class MemoryAccessTokenService implements AccessTokenService {
 			if(accessToken!=null && !accessToken.isExpired()){
 				return accessToken;
 			}
-			GetAccessTokenRequest request = GetAccessTokenRequest.builder()
-															.grantType(wechatConfig.getGrantType())
-															.appid(wechatConfig.getAppid())
-															.secret(wechatConfig.getAppsecret())
-															.build();
-			AccessTokenResponse response = this.wechatServer.getAccessToken(request);
-			accessToken = AccessTokenInfo.builder()
-										.accessToken(response.getAccessToken())
-										.expiresIn(response.getExpiresIn())
-										.build();
+			accessToken = WechatUtils.getAccessToken(wechatServer, wechatConfig);
 			return accessToken;
 		} finally{
 			obtainAcessTokenLock.unlock();

@@ -6,9 +6,8 @@ import java.io.IOException;
 
 import org.junit.Test;
 import org.onetwo.common.file.FileUtils;
-import org.onetwo.common.jackson.JsonMapper;
 import org.onetwo.common.spring.utils.ClassPathJsonDataBinder;
-import org.onetwo.ext.apiclient.wechat.WechatBaseTests;
+import org.onetwo.ext.apiclient.wechat.WechatBaseTestsAdapter;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.view.api.MenuService;
 import org.onetwo.ext.apiclient.wechat.view.request.CreateMenuRequest;
@@ -19,7 +18,7 @@ import org.springframework.core.io.ClassPathResource;
  * @author wayshall
  * <br/>
  */
-public class MenuServiceTest extends WechatBaseTests {
+public class MenuServiceTest extends WechatBaseTestsAdapter {
 	
 	@Autowired
 	MenuService menuService;

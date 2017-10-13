@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	
     <groupId>org.onetwo4j</groupId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <artifactId>onetwo-wechat</artifactId>
     <packaging>jar</packaging>
 
@@ -81,7 +81,12 @@
         </dependency>
         <dependency>
           <groupId>org.onetwo4j</groupId>
-          <artifactId>onetwo-web</artifactId>
+          <artifactId>onetwo-boot</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-redis</artifactId>
         </dependency>
     
 	    <dependency>
@@ -145,6 +150,11 @@
           <groupId>org.springframework</groupId>
           <artifactId>spring-test</artifactId>
           <scope>test</scope> 
+        </dependency>
+        <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-test</artifactId>
+          <scope>test</scope>
         </dependency>
         
     </dependencies>

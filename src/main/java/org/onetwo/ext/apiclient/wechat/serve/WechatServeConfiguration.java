@@ -1,12 +1,14 @@
 package org.onetwo.ext.apiclient.wechat.serve;
 
 import org.onetwo.common.spring.condition.OnMissingBean;
+import org.onetwo.ext.apiclient.wechat.core.DefaultWechatConfig;
 import org.onetwo.ext.apiclient.wechat.serve.service.HtppSessionStoreService;
 import org.onetwo.ext.apiclient.wechat.serve.service.MessageRouterServiceImpl;
 import org.onetwo.ext.apiclient.wechat.serve.spi.ServeEndpoint;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatSessionRepository;
 import org.onetwo.ext.apiclient.wechat.serve.web.ServeController;
 import org.onetwo.ext.apiclient.wechat.serve.web.WechatOAuth2Hanlder;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +19,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ComponentScan(basePackageClasses=MessageRouterServiceImpl.class)
+@EnableConfigurationProperties(DefaultWechatConfig.class)
 public class WechatServeConfiguration  {
 	
 	
