@@ -11,6 +11,7 @@ import org.onetwo.ext.apiclient.wechat.support.impl.RedisStoreAccessTokenService
 import org.onetwo.ext.apiclient.wechat.utils.OAuth2UserInfoArgumentResolver;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.AccessTokenKeys;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -31,11 +32,13 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class WechatSupportConfiguration implements ApplicationContextAware {
 
+	@Autowired
+	private DefaultWechatConfig wechatConfig;
 	
-	/*@Bean
+	@Bean
 	public WechatConfig wechatConfig(){
-		return new DefaultWechatConfig();
-	}*/
+		return wechatConfig;
+	}
 
 	/****
 	 * 拦截器
