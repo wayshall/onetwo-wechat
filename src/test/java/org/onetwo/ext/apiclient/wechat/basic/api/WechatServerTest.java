@@ -20,7 +20,7 @@ public class WechatServerTest extends WechatBaseTestsAdapter {
 	WechatServer wechatServer;
 	@Autowired
 	AccessTokenService accessTokenService;
-	@Autowired
+	@Autowired(required=false)
 	RedisRefreshAccessTokenTask redisRefreshAccessTokenTask;
 	
 	@Test
@@ -37,7 +37,9 @@ public class WechatServerTest extends WechatBaseTestsAdapter {
 		assertThat(response.getIpList()).isNotEmpty();
 		
 		//test for refresh token
-		redisRefreshAccessTokenTask.schedule();
+		if(redisRefreshAccessTokenTask!=null){
+			redisRefreshAccessTokenTask.scheduleRefreshTask();
+		}
 		response = wechatServer.getCallbackIp(AccessTokenRequest.accessTokenRequest()
 								.accessToken(accessToken)
 								.build());

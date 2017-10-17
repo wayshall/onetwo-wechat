@@ -6,8 +6,13 @@ import java.util.Map;
 import org.onetwo.common.apiclient.impl.DefaultApiClientResponseHandler;
 import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.exception.ErrorTypes;
+import org.onetwo.common.reflect.Intro;
+import org.onetwo.common.reflect.ReflectUtils;
+import org.onetwo.common.spring.SpringUtils;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClientFactoryBean.WechatMethod;
+import org.onetwo.ext.apiclient.wechat.utils.WechatErrors;
+import org.springframework.beans.BeanWrapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 
@@ -23,7 +28,12 @@ public class WechatApiClientResponseHandler extends DefaultApiClientResponseHand
 	public Class<?> getActualResponseType(WechatMethod invokeMethod){
 		Class<?> responseType = invokeMethod.getMethodReturnType();
 		if(!WechatResponse.class.isAssignableFrom(responseType)){
-			responseType = HashMap.class;
+			Intro<?> intro = ReflectUtils.getIntro(responseType);
+			if(!intro.hasProperty("errcode") || !intro.hasProperty("errmsg")){
+				responseType = HashMap.class;
+			}
+//			ReflectUtils.getIntro(responseType).checkField("errcode", true);
+//			ReflectUtils.getIntro(responseType).checkField("errmsg", true);
 		}
 		return responseType;
 	}
@@ -35,13 +45,17 @@ public class WechatApiClientResponseHandler extends DefaultApiClientResponseHand
 		Object resposne = responseEntity.getBody();
 		if(responseEntity.getStatusCode().is2xxSuccessful()){
 			WechatResponse baseResponse = null;
-			if(Map.class.isAssignableFrom(actualResponseType)){
+			if(WechatResponse.class.isInstance(resposne)){
+				baseResponse = (WechatResponse) resposne;
+			}else if(Map.class.isAssignableFrom(actualResponseType)){
+				//reponseType have not define errcode and errmsg
 				Map<String, ?> map = (Map<String, ?>) resposne;
 				if(map.containsKey(KEY_ERRCODE)){
 					baseResponse = WechatResponse.baseBuilder()
 												.errcode(Integer.valueOf(map.get(KEY_ERRCODE).toString()))
 												.errmsg((String)map.get(KEY_ERRMSG))
 												.build();
+					resposne = map2Bean(map, invokeMethod.getMethodReturnType());
 				}else if(invokeMethod.isReturnVoid()){
 					//返回值为void，并且请求没有返回错误，则返回null
 					return null;
@@ -49,16 +63,34 @@ public class WechatApiClientResponseHandler extends DefaultApiClientResponseHand
 					resposne = map2Bean(map, invokeMethod.getMethodReturnType());
 				}
 			}else{
-				baseResponse = (WechatResponse) resposne;
+				BeanWrapper bw = SpringUtils.newBeanWrapper(resposne);
+				if(!bw.isWritableProperty("errcode")){
+					throw new RestClientException("field[errcode] not found in rest client api response type: " + actualResponseType);
+				}
+				if(!bw.isWritableProperty("errmsg")){
+					throw new RestClientException("field[errmsg] not found in rest client api response type: " + actualResponseType);
+				}
 			}
+			
 			if(baseResponse!=null && !baseResponse.isSuccess()){
-				throw new ApiClientException(ErrorTypes.of(baseResponse.getErrcode().toString(), baseResponse.getErrmsg(), responseEntity.getStatusCodeValue()));
-			}else if(invokeMethod.isReturnVoid()){
+				logger.error("error response: {}", baseResponse);
+				throw WechatErrors.byErrcode(baseResponse.getErrcode())
+				 			 .map(err->new ApiClientException(err))
+				 			 .orElse(new ApiClientException(ErrorTypes.of(baseResponse.getErrcode().toString(), 
+				 					 										baseResponse.getErrmsg(), 
+				 					 										responseEntity.getStatusCodeValue())
+				 					 									));
+//				throw new ApiClientException(ErrorTypes.of(baseResponse.getErrcode().toString(), baseResponse.getErrmsg(), responseEntity.getStatusCodeValue()));
+			}
+			
+			if(invokeMethod.isReturnVoid()){
 				//返回值为void，并且请求没有返回错误，则返回null
 				return null;
 			}
+			
 			return resposne;
 		}
 		throw new RestClientException("error response: " + responseEntity.getStatusCodeValue());
 	}
+
 }

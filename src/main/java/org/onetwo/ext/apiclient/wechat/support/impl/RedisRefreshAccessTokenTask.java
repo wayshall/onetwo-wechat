@@ -62,7 +62,7 @@ public class RedisRefreshAccessTokenTask implements InitializingBean {
 	 * @author wayshall
 	 */
 	@Scheduled(cron="${wechat.task.refreshToken.cron:0 0/50 * * * *}")
-	public void schedule(){
+	public void scheduleRefreshTask(){
 		log.info("start to refresh access token...");
 		redisLockRunner.tryLock(()->refreshAccessToken(wechatConfig));
 		log.info("refresh task finished!");

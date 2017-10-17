@@ -28,7 +28,7 @@ import org.onetwo.ext.apiclient.wechat.serve.spi.WechatSessionRepository;
 import org.onetwo.ext.apiclient.wechat.utils.OAuth2UserInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.Oauth2ClientKeys;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.Oauth2Keys;
-import org.onetwo.ext.apiclient.wechat.utils.WechatErrors;
+import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatException;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,7 +102,7 @@ public class WechatOAuth2Hanlder {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handler) {
 		if(!RequestUtils.getBrowerMetaByAgent(request).isWechat()){
 			if(wechatConfig.isOauth2ErrorInBrowser()){
-				throw new BaseException(WechatErrors.OAUTH2_ERROR_IN_BROWSER);
+				throw new BaseException(WechatClientErrors.OAUTH2_ERROR_IN_BROWSER);
 			}/*else{
 				return ;
 			}*/
@@ -123,7 +123,7 @@ public class WechatOAuth2Hanlder {
 		if(StringUtils.isNotBlank(code)){
 			String state = request.getParameter(Oauth2ClientKeys.PARAMS_STATE);
 			if(!sessionStoreService.checkOauth2State(holder, state)){
-				throw new WechatException(WechatErrors.OAUTH2_STATE_ERROR);
+				throw new WechatException(WechatClientErrors.OAUTH2_STATE_ERROR);
 			}
 			
 			OAuth2AccessTokenRequest tokenRequest = OAuth2AccessTokenRequest.builder()
@@ -140,7 +140,7 @@ public class WechatOAuth2Hanlder {
 			//如果是ajax请求，不跳转，返回错误信息
 			if(RequestUtils.isAjaxRequest(request) || RequestUtils.isAjaxHandlerMethod(handler)){
 				SimpleDataResult<?> result = WebResultCreator.creator()
-								.error(WechatErrors.OAUTH2_NOT_AUTHORIZE)
+								.error(WechatClientErrors.OAUTH2_NOT_AUTHORIZE)
 								.buildResult();
 				ResponseUtils.renderObjectAsJson(response, result);
 				return false;

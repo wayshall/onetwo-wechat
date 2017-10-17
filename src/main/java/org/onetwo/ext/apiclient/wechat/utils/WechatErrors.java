@@ -1,32 +1,51 @@
 package org.onetwo.ext.apiclient.wechat.utils;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.Optional;
+
 import org.onetwo.common.exception.ErrorType;
+
+import com.google.common.collect.Maps;
 
 /**
  * @author wayshall
  * <br/>
  */
 public enum WechatErrors implements ErrorType {
-	ACCESS_TOKEN_SERVICE_NOT_FOUND("AccessTokenService not found"),
-	OAUTH2_NOT_AUTHORIZE("请先通过微信授权！"),
-	OAUTH2_ERROR_IN_BROWSER("请使用微信！"),
-	OAUTH2_STATE_ERROR("state参数错误"),
-	OAUTH2_REDIRECT_URL_BLANK("redirect url must not be blank");
-	
-	private String errorMessage;
+	API_UNAUTHORIZED(48001, "api功能未授权，请确认公众号已获得该接口，可以在公众平台官网-开发者中心页中查看接口权限"),
+	FORMAT_PARSE_ERROR(47001, "解析JSON/XML内容错误"),
+	USER_NOT_EXIST(46004, "不存在的用户");
 
-	private WechatErrors(String errorMessage) {
-		this.errorMessage = errorMessage;
+	private static final Map<Integer, WechatErrors> ERROR_MAP;
+	
+	static {
+		Map<Integer, WechatErrors> temp = Maps.newHashMapWithExpectedSize(WechatErrors.values().length);
+		for(WechatErrors err : WechatErrors.values()){
+			temp.put(err.errcode, err);
+		}
+		ERROR_MAP = Collections.unmodifiableMap(temp);
+	}
+	
+	private Integer errcode;
+	private String errmsg;
+
+	private WechatErrors(int errcode, String errmsg) {
+		this.errcode = errcode;
+		this.errmsg = errmsg;
 	}
 
 	@Override
 	public String getErrorCode() {
-		return name();
+		return errcode.toString();
 	}
 
 	@Override
 	public String getErrorMessage() {
-		return errorMessage;
+		return errmsg;
 	}
 	
+	public static Optional<WechatErrors> byErrcode(int errcode){
+		return Optional.ofNullable(ERROR_MAP.get(errcode));
+	}
 }

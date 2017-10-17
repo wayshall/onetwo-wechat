@@ -17,7 +17,7 @@ import org.onetwo.common.utils.ParamUtils;
 import org.onetwo.ext.apiclient.wechat.basic.request.AccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClientFactoryBean.WechatMethod;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants;
-import org.onetwo.ext.apiclient.wechat.utils.WechatErrors;
+import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.springframework.core.annotation.AnnotationAttributes;
 
 import com.google.common.cache.CacheBuilder;
@@ -51,7 +51,7 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 	protected String getAccessToken(){
 		AccessTokenService accessTokenService = SpringUtils.getBean(applicationContext, AccessTokenService.class);
 		if(accessTokenService==null){
-			throw new ApiClientException(WechatErrors.ACCESS_TOKEN_SERVICE_NOT_FOUND);
+			throw new ApiClientException(WechatClientErrors.ACCESS_TOKEN_SERVICE_NOT_FOUND);
 		}
 		String accessToken = accessTokenService.getAccessToken().getAccessToken();
 		return accessToken;
