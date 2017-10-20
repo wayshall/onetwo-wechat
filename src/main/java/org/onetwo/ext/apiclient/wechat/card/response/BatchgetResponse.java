@@ -1,7 +1,10 @@
-package org.onetwo.ext.apiclient.wechat.wxa.auth.response;
+package org.onetwo.ext.apiclient.wechat.card.response;
+
+import java.util.List;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 
@@ -13,11 +16,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @Data
 @EqualsAndHashCode(callSuper=true)
-public class JscodeAuthResponse extends WechatResponse {
+@ToString(callSuper=true)
+public class BatchgetResponse extends WechatResponse {
 	
-	String openid;
-	@JsonProperty("session_key")
-	String sessionKey;
-	String unionid;
+	@JsonProperty("card_id_list")
+	List<String> cardIdList;
+	int total_num;
 
 }

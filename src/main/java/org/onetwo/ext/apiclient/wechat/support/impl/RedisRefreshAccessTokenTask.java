@@ -6,10 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.onetwo.boot.module.redis.RedisLockRunner;
 import org.onetwo.common.exception.BaseException;
+import org.onetwo.common.log.JFishLoggerFactory;
 import org.onetwo.ext.apiclient.wechat.basic.api.WechatServer;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +27,7 @@ import org.springframework.util.Assert;
  */
 @Slf4j
 public class RedisRefreshAccessTokenTask implements InitializingBean {
+	private final Logger logger = JFishLoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private WechatServer wechatServer;
@@ -78,6 +81,9 @@ public class RedisRefreshAccessTokenTask implements InitializingBean {
 			log.info("ignore refresh access token...");
 			return at;
 		}*/
+		if(logger.isInfoEnabled()){
+			logger.info("==========>>> refresh access token from wechat server...");
+		}
 		AccessTokenInfo token = WechatUtils.getAccessToken(wechatServer, wechatConfig);
 		redisTemplate.boundValueOps(WechatUtils.REDIS_ACCESS_TOKEN_KEY).set(token, token.getExpiresIn(), TimeUnit.SECONDS);
 		return token;

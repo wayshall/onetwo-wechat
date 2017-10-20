@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @WechatApiClient
 public interface ImageClient {
 	
-	@PostMapping(path="/media/uploadimg", produces=MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping(path="/media/uploadimg", consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
 	@WechatRequestConfig(accessToken=true)
 	UploadResponse upload(Resource buffer);
 

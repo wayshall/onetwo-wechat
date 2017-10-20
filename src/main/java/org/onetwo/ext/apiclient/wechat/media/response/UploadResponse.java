@@ -10,7 +10,7 @@ import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
  * <br/>
  */
 @Data
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper=true)
 public class UploadResponse extends WechatResponse {
 	
 	String url;

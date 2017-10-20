@@ -1,0 +1,23 @@
+package org.onetwo.ext.apiclient.wechat.card.api;
+
+import org.onetwo.ext.apiclient.wechat.card.request.BatchgetRequest;
+import org.onetwo.ext.apiclient.wechat.card.response.BatchgetResponse;
+import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;
+import org.onetwo.ext.apiclient.wechat.core.WechatRequestConfig;
+import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.UrlConst;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+/**
+ * @author wayshall
+ * <br/>
+ */
+@WechatApiClient(url=UrlConst.API_DOMAIN_URL)
+public interface CardClient {
+	
+	@PostMapping(path="/card/batchget", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@WechatRequestConfig(accessToken=true)
+	BatchgetResponse batchget(@RequestBody BatchgetRequest request);
+
+}

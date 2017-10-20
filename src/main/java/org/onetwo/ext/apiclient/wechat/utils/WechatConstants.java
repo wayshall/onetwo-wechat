@@ -17,6 +17,8 @@ import org.onetwo.ext.apiclient.wechat.serve.dto.ReplyMessage.VideoReplyMessage;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ReplyMessage.VoiceReplyMessage;
 import org.springframework.http.MediaType;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * @author wayshall
  * <br/>
@@ -188,6 +190,29 @@ public abstract class WechatConstants {
 	public static class MediaTypeKeys {
 		public static final String APPLICATION_XML_VALUE_UTF8 = MediaType.APPLICATION_XML_VALUE + ";charset=UTF-8";
 		public static final String TEXT_XML_VALUE_UTF8 = MediaType.TEXT_XML_VALUE + ";charset=UTF-8";
+	}
+	
+	public static enum CardStatus {
+		CARD_STATUS_NOT_VERIFY("待审核"),
+		CARD_STATUS_VERIFY_FAIL("审核失败"),
+		CARD_STATUS_VERIFY_OK("通过审核"),
+		CARD_STATUS_DELETE("卡券被商户删除"),
+		CARD_STATUS_DISPATCH("在公众平台投放过的卡券");
+		
+		private final String label;
+
+		private CardStatus(String label) {
+			this.label = label;
+		}
+
+		public String getLabel() {
+			return label;
+		}
+		//@JsonCreator
+		@JsonValue
+		public String getValue(){
+			return name();
+		}
 	}
 	
 
