@@ -5,7 +5,7 @@
 ## 示例项目   
 示例项目，基于spring-boot
 [boot-dbm-sample](https://github.com/wayshall/boot-dbm-sample)
-示例项目，基于onetwo
+示例项目，基于jfish
 [onetwo-wechat-sample](https://github.com/wayshall/onetwo-wechat-sample)
 
 ## 要求
