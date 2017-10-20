@@ -38,10 +38,10 @@ public class RedisRefreshAccessTokenTask implements InitializingBean {
 
 	private RedisLockRunner redisLockRunner;
 	/****
-	 * 当前时间距离上次更新时间的间隔，小于配置的时间间隔，则忽略任务
+	 * token有效时间，当前时间减去上次更新时间少于token有效时间时，忽略更新
 	 */
-	@Value("${wechat.task.refreshToken.ignoreIntervalInMinutes:30}")
-	private int ignoreIntervalInMinutes;
+	@Value("${wechat.task.refreshToken.tokenEffectiveTimeInMinutes:110}")
+	private int tokenEffectiveTimeInMinutes;
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -58,22 +58,26 @@ public class RedisRefreshAccessTokenTask implements InitializingBean {
 	}
 
 	/***
-	 * 默认50分钟检查一次
 	 * @author wayshall
 	 */
-	@Scheduled(cron="${wechat.task.refreshToken.cron:0 0/50 * * * *}")
+	@Scheduled(cron="${wechat.task.refreshToken.cron:0 0/20 * * * *}")
 	public void scheduleRefreshTask(){
 		log.info("start to refresh access token...");
+		AccessTokenInfo at = (AccessTokenInfo)redisTemplate.boundValueOps(WechatUtils.REDIS_ACCESS_TOKEN_KEY).get();
+		if(at!=null && getIntervalInMinutesFromLastUpdate(at.getUpdateAt())<this.tokenEffectiveTimeInMinutes){
+			log.info("ignore refresh access token...");
+			return ;
+		}
 		redisLockRunner.tryLock(()->refreshAccessToken(wechatConfig));
 		log.info("refresh task finished!");
 	}
 
 	protected AccessTokenInfo refreshAccessToken(WechatConfig wechatConfig){
-		AccessTokenInfo at = (AccessTokenInfo)redisTemplate.boundValueOps(WechatUtils.REDIS_ACCESS_TOKEN_KEY).get();
+		/*AccessTokenInfo at = (AccessTokenInfo)redisTemplate.boundValueOps(WechatUtils.REDIS_ACCESS_TOKEN_KEY).get();
 		if(at!=null && getIntervalInMinutesFromLastUpdate(at.getUpdateAt())<this.ignoreIntervalInMinutes){
 			log.info("ignore refresh access token...");
 			return at;
-		}
+		}*/
 		AccessTokenInfo token = WechatUtils.getAccessToken(wechatServer, wechatConfig);
 		redisTemplate.boundValueOps(WechatUtils.REDIS_ACCESS_TOKEN_KEY).set(token, token.getExpiresIn(), TimeUnit.SECONDS);
 		return token;

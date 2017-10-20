@@ -2,8 +2,6 @@
 
 一个简单的基于Spring RestTemplate封装的微信sdk
    
-spring-boot技术交流群：  604158262
-
 ## 示例项目   
 示例项目，基于spring-boot
 [boot-dbm-sample](https://github.com/wayshall/boot-dbm-sample)
