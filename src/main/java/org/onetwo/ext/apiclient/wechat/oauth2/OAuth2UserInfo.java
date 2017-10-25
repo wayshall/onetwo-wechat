@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.wechat.utils;
+package org.onetwo.ext.apiclient.wechat.oauth2;
 
 import java.io.Serializable;
 import java.util.List;

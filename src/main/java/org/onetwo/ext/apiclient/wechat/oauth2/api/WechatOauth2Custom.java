@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.wechat.basic.api;
+package org.onetwo.ext.apiclient.wechat.oauth2.api;
 
 import org.onetwo.ext.apiclient.wechat.basic.response.AuthorizeData;
 

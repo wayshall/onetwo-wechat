@@ -9,9 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
 import org.onetwo.common.web.utils.RequestUtils;
+import org.onetwo.ext.apiclient.wechat.oauth2.OAuth2UserInfo;
 import org.onetwo.ext.apiclient.wechat.serve.dto.RequestHoder;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatSessionRepository;
-import org.onetwo.ext.apiclient.wechat.utils.OAuth2UserInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.Oauth2ClientKeys;
 import org.springframework.stereotype.Service;
 

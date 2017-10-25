@@ -2,8 +2,8 @@ package org.onetwo.ext.apiclient.wechat.serve.spi;
 
 import java.util.Optional;
 
+import org.onetwo.ext.apiclient.wechat.oauth2.OAuth2UserInfo;
 import org.onetwo.ext.apiclient.wechat.serve.dto.RequestHoder;
-import org.onetwo.ext.apiclient.wechat.utils.OAuth2UserInfo;
 
 /**
  * @author wayshall

@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.wechat.utils;
+package org.onetwo.ext.apiclient.wechat.oauth2;
 
 import java.util.Optional;
 
@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.onetwo.common.spring.mvc.annotation.BootMvcArgumentResolver;
 import org.onetwo.ext.apiclient.wechat.serve.dto.RequestHoder;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatSessionRepository;
-import org.onetwo.ext.apiclient.wechat.serve.web.WechatOAuth2Hanlder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;

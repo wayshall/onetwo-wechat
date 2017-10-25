@@ -1,4 +1,9 @@
 package org.onetwo.ext.apiclient.wechat.core;
+
+import java.util.Map;
+
+import org.onetwo.ext.apiclient.wechat.utils.WechatAppInfo;
+
 /**
  * @author wayshall
  * <br/>
@@ -23,5 +28,7 @@ public interface WechatConfig {
 	
 	
 	boolean isOauth2ErrorInBrowser();
+	
+	Map<String, WechatAppInfo> getApps();
 	
 }

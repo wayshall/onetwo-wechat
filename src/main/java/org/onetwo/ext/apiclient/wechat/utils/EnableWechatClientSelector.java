@@ -7,6 +7,7 @@ import org.onetwo.common.spring.context.AbstractImportSelector;
 import org.onetwo.ext.apiclient.wechat.EnableWechatClient;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClentRegistrar;
 import org.onetwo.ext.apiclient.wechat.core.WechatSupportConfiguration;
+import org.onetwo.ext.apiclient.wechat.oauth2.WechatOAuth2Configuration;
 import org.onetwo.ext.apiclient.wechat.serve.WechatServeConfiguration;
 import org.onetwo.ext.apiclient.wechat.serve.web.WechatMvcConfigurerAdapter;
 import org.springframework.core.annotation.AnnotationAttributes;
@@ -23,6 +24,8 @@ public class EnableWechatClientSelector extends AbstractImportSelector<EnableWec
 		List<String> classNames = new ArrayList<String>();
 		classNames.add(WechatApiClentRegistrar.class.getName());
 		classNames.add(WechatSupportConfiguration.class.getName());
+		//oauth2 support
+		classNames.add(WechatOAuth2Configuration.class.getName());
 		boolean enableMessageServe = attributes.getBoolean("enableMessageServe");
 		if(enableMessageServe){
 			classNames.add(WechatServeConfiguration.class.getName());

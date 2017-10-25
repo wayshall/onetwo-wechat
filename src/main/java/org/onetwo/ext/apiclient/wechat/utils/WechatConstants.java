@@ -64,7 +64,12 @@ public abstract class WechatConstants {
 		public static final String RESPONSE_TYPE_CODE = "code";
 		
 	}
-	public static abstract class AccessTokenKeys {
+	public static abstract class WechatConfigKeys {
+		public static final String ENABLED_OAUTH2_KEY = "wechat.oauth2.enabled";
+		public static final String ENABLED_TASK_REFRESHTOKEN_KEY = "wechat.task.refreshToken.enabled";
+		
+		public static final String TASK_REFRESHTOKEN_TOKEN_EFFECTIVE_TIME = "${wechat.task.refreshToken.tokenEffectiveTimeInMinutes:110}";
+		
 		public static final String STORER_KEY = "wechat.accessToken.storer";
 		public static final String STORER_REDIS_KEY = "redis";
 		public static final String STORER_MEMORY_KEY = "memory";

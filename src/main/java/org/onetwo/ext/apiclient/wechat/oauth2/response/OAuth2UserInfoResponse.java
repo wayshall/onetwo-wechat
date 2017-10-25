@@ -1,6 +1,8 @@
-package org.onetwo.ext.apiclient.wechat.basic.response;
+package org.onetwo.ext.apiclient.wechat.oauth2.response;
 
 import java.util.List;
+
+import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

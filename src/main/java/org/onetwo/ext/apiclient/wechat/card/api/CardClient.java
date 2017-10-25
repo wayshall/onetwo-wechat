@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
+ * 批量查询卡券
+ * https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1451025272
  * @author wayshall
  * <br/>
  */

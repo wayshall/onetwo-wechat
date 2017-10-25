@@ -55,7 +55,9 @@ public class WechatApiClientResponseHandler extends DefaultApiClientResponseHand
 												.errcode(Integer.valueOf(map.get(KEY_ERRCODE).toString()))
 												.errmsg((String)map.get(KEY_ERRMSG))
 												.build();
-					resposne = map2Bean(map, invokeMethod.getMethodReturnType());
+					if(!invokeMethod.isReturnVoid()){
+						resposne = map2Bean(map, invokeMethod.getMethodReturnType());
+					}
 				}else if(invokeMethod.isReturnVoid()){
 					//返回值为void，并且请求没有返回错误，则返回null
 					return null;

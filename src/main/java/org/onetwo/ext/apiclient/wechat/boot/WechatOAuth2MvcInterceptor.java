@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.onetwo.boot.core.web.mvc.interceptor.MvcInterceptorAdapter;
-import org.onetwo.ext.apiclient.wechat.serve.web.WechatOAuth2Hanlder;
+import org.onetwo.ext.apiclient.wechat.oauth2.WechatOAuth2Hanlder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 

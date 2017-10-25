@@ -1,5 +1,6 @@
 package org.onetwo.ext.apiclient.wechat.core;
 
+import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 
 /**
@@ -9,4 +10,6 @@ import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 public interface AccessTokenService {
 
 	AccessTokenInfo getAccessToken();
+	AccessTokenInfo getAccessToken(GetAccessTokenRequest request);
+	AccessTokenInfo refreshAccessToken(GetAccessTokenRequest request, boolean checkAgain);
 }

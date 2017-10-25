@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.wechat.serve.web;
+package org.onetwo.ext.apiclient.wechat.oauth2;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -1,13 +1,13 @@
-package org.onetwo.ext.apiclient.wechat.basic.api;
+package org.onetwo.ext.apiclient.wechat.oauth2.api;
 
 import org.onetwo.common.apiclient.annotation.InjectProperties;
-import org.onetwo.ext.apiclient.wechat.basic.request.OAuth2AccessTokenRequest;
-import org.onetwo.ext.apiclient.wechat.basic.request.OAuth2RefreshTokenRequest;
-import org.onetwo.ext.apiclient.wechat.basic.request.OAuth2UserInfoRequest;
-import org.onetwo.ext.apiclient.wechat.basic.response.OAuth2AccessTokenResponse;
-import org.onetwo.ext.apiclient.wechat.basic.response.OAuth2RefreshTokenResponse;
-import org.onetwo.ext.apiclient.wechat.basic.response.OAuth2UserInfoResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;
+import org.onetwo.ext.apiclient.wechat.oauth2.request.OAuth2AccessTokenRequest;
+import org.onetwo.ext.apiclient.wechat.oauth2.request.OAuth2RefreshTokenRequest;
+import org.onetwo.ext.apiclient.wechat.oauth2.request.OAuth2UserInfoRequest;
+import org.onetwo.ext.apiclient.wechat.oauth2.response.OAuth2AccessTokenResponse;
+import org.onetwo.ext.apiclient.wechat.oauth2.response.OAuth2RefreshTokenResponse;
+import org.onetwo.ext.apiclient.wechat.oauth2.response.OAuth2UserInfoResponse;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.UrlConst;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;

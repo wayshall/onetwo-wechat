@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.wechat.basic.api;
+package org.onetwo.ext.apiclient.wechat.oauth2.api;
 
 import org.onetwo.common.spring.Springs;
 import org.onetwo.common.utils.LangUtils;
@@ -17,7 +17,7 @@ public class WechatOauth2CustomImpl implements WechatOauth2Custom {
 	
 	@Override
 	public AuthorizeData createAuthorize(String redirectUrl, String state){
-		WechatConfig wechatConfig = Springs.getInstance().getBean(WechatConfig.class);
+		WechatConfig wechatConfig = Springs.getInstance().getBean(WechatConfig.class, true);
 		String configRedirectUrl = wechatConfig.getOauth2RedirectUri();
 		//check redirectUri?
 		if(StringUtils.isBlank(configRedirectUrl)){

@@ -17,7 +17,7 @@ jfish:
             key: defaultLock
 wechat: 
     accessToken: 
-        storer: redis
+        storer: memory #redis
     task: 
         refreshToken: 
             ignoreIntervalInMinutes: -1

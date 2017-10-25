@@ -1,12 +1,18 @@
 package org.onetwo.ext.apiclient.wechat.core;
 
+import java.util.Map;
+
 import lombok.Data;
 
 import org.apache.commons.lang3.StringUtils;
+import org.onetwo.ext.apiclient.wechat.utils.WechatAppInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.AccessTokenStorers;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.GrantTypeKeys;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.Oauth2Keys;
+import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.WechatConfigKeys;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import com.google.common.collect.Maps;
 
 /**
  * @author wayshall
@@ -32,6 +38,8 @@ public class DefaultWechatConfig implements WechatConfig{
 	
 	private Oauth2Properties oauth2 = new Oauth2Properties();
 	private AccessTokenProperties accessToken = new AccessTokenProperties();
+	
+	private Map<String, WechatAppInfo> apps = Maps.newHashMap();
 
 	public boolean isEncryptByAes(){
 		return StringUtils.isNotBlank(encodingAESKey);
@@ -59,6 +67,8 @@ public class DefaultWechatConfig implements WechatConfig{
 
 	@Data
 	public static class Oauth2Properties {
+		public static final String ENABLED_KEY = WechatConfigKeys.ENABLED_OAUTH2_KEY;
+		
 //		@Value("${wechat.oauth2.redirectUri:}")
 		private String redirectUri = "";
 //		@Value("${wechat.oauth2.scope:"+Oauth2Keys.SCOPE_SNSAPI_USERINFO+"}")

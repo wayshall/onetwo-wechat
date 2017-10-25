@@ -1,13 +1,25 @@
 package org.onetwo.ext.apiclient.wechat.support.impl;
 
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.onetwo.common.log.JFishLoggerFactory;
 import org.onetwo.ext.apiclient.wechat.basic.api.WechatServer;
+import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
+import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
+import org.onetwo.ext.apiclient.wechat.utils.WechatException;
 import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Maps;
 
 /**
  * 基于内存
@@ -15,35 +27,100 @@ import org.springframework.beans.factory.annotation.Autowired;
  * <br/>
  */
 public class MemoryAccessTokenService implements AccessTokenService {
+	private final Logger logger = JFishLoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private WechatServer wechatServer;
 	@Autowired
 	private WechatConfig wechatConfig;
 	
-	private volatile AccessTokenInfo accessToken;
-	private ReentrantLock obtainAcessTokenLock = new ReentrantLock();
+//	private volatile AccessTokenInfo accessToken;
+//	private ReentrantLock obtainAcessTokenLock = new ReentrantLock();
+	private Cache<String, AccessTokenInfo> accessTokenCaches = CacheBuilder.newBuilder()
+																		.expireAfterWrite(120, TimeUnit.MINUTES)
+																		.build();
+	private Map<String, ReentrantLock> lockMap = Maps.newConcurrentMap();
 	
 	public AccessTokenInfo getAccessToken() {
-		AccessTokenInfo at = this.accessToken;
+		return getAccessToken(WechatUtils.createGetAccessTokenRequest(wechatConfig));
+	}
+	
+	@Override
+	public AccessTokenInfo getAccessToken(GetAccessTokenRequest request) {
+		AccessTokenInfo at = this.getAccessTokenFromCache(request);
 		if(at!=null && !at.isExpired()){
 			return at;
 		}
-		return obtainAccessToken(wechatConfig);
+		at = refreshAccessToken(request, true);
+		return at;
 	}
 
-	protected AccessTokenInfo obtainAccessToken(WechatConfig wechatConfig){
+	/*protected AccessTokenInfo obtainAccessToken(GetAccessTokenRequest request){
+		ReentrantLock appidLock = getLockByAppId(request.getAppid());
 		try {
-			obtainAcessTokenLock.lock();
+			appidLock.lock();
+			AccessTokenInfo accessToken = this.getAccessTokenInfoByAppId(request.getAppid());
 			if(accessToken!=null && !accessToken.isExpired()){
 				return accessToken;
 			}
-			accessToken = WechatUtils.getAccessToken(wechatServer, wechatConfig);
+			accessToken = WechatUtils.getAccessToken(wechatServer, request);
+			this.accessTokenCaches.put(request.getAppid(), accessToken);
 			return accessToken;
 		} finally{
-			obtainAcessTokenLock.unlock();
+			appidLock.unlock();
+		}
+	}*/
+	
+	private ReentrantLock getLockByAppId(String appid){
+		ReentrantLock obtainAcessTokenLock = lockMap.get(appid);
+		if(obtainAcessTokenLock==null){
+			final ReentrantLock newLock = new ReentrantLock();
+			obtainAcessTokenLock = this.lockMap.putIfAbsent(appid, newLock);
+			if(obtainAcessTokenLock==null){//put成功，否则，put失败
+				obtainAcessTokenLock = newLock;
+			}
+		}
+		return obtainAcessTokenLock;
+	}
+	
+	@Override
+	public AccessTokenInfo refreshAccessToken(GetAccessTokenRequest request, boolean checkAgain) {
+		AccessTokenInfo token = null;
+		ReentrantLock appidLock = getLockByAppId(request.getAppid());
+		try {
+			appidLock.lock();
+			String key = WechatUtils.getAccessTokenKey(request.getAppid());
+			if(checkAgain){
+				token = this.accessTokenCaches.getIfPresent(key);
+				if(token!=null && !token.isExpired()){
+					return token;
+				}
+			}
+			if(logger.isInfoEnabled()){
+				logger.info("==========>>> get access token from wechat server...");
+			}
+			this.accessTokenCaches.invalidate(key);
+			token = getAccessTokenFromCache(request);
+		} finally{
+			appidLock.unlock();
+		}
+		
+		return token;
+	}
+
+	private AccessTokenInfo getAccessTokenFromCache(GetAccessTokenRequest request){
+		String key = WechatUtils.getAccessTokenKey(request.getAppid());
+		try {
+			return this.accessTokenCaches.get(key, ()->{
+				AccessTokenInfo accessToken = WechatUtils.getAccessToken(wechatServer, request);
+				return accessToken;
+			});
+		} catch (ExecutionException e) {
+			throw new WechatException(WechatClientErrors.ACCESS_TOKEN_OBTAIN_ERROR);
 		}
 	}
+	
+	
 
 	public WechatServer getWechatServer() {
 		return wechatServer;

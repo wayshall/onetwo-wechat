@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.wechat.basic.request;
+package org.onetwo.ext.apiclient.wechat.oauth2.request;
 
 import lombok.Builder;
 import lombok.Data;
