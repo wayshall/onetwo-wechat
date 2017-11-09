@@ -1,10 +1,23 @@
 package org.onetwo.ext.apiclient.wechat.utils;
 
+import java.security.AlgorithmParameters;
+import java.security.Security;
+
+import javax.crypto.spec.IvParameterSpec;
+
+import org.apache.commons.codec.binary.Base64;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.onetwo.common.encrypt.AESCoder;
+import org.onetwo.common.encrypt.Crypts;
+import org.onetwo.common.encrypt.PKCS7Encoder;
+import org.onetwo.common.jackson.JsonMapper;
+import org.onetwo.common.utils.LangUtils;
 import org.onetwo.ext.apiclient.wechat.basic.api.WechatServer;
 import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.GrantTypeKeys;
+import org.onetwo.ext.apiclient.wechat.wxa.auth.response.WxappUserInfo;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -16,6 +29,21 @@ public class WechatUtils {
 
 	public static final String ACCESS_TOKEN_PREFIX = "wechat_accesstoken_";
 	public static final String LOCK_KEY = "lock_wechat_acesstoken_";
+	static {
+		Security.addProvider(new BouncyCastleProvider());
+	}
+	public static WxappUserInfo decrypt(String sessionKey, String iv, String encryptedData){
+		AESCoder aes = AESCoder.pkcs7Padding(Base64.decodeBase64(sessionKey))
+								.initer((cipher, mode, keySpec)->{
+									AlgorithmParameters params = AlgorithmParameters.getInstance(Crypts.AES_KEY);  
+							        params.init(new IvParameterSpec(Base64.decodeBase64(iv)));
+							        cipher.init(mode, keySpec, params);
+								});
+		byte[] decryptData = aes.decrypt(Base64.decodeBase64(encryptedData));
+		String userInfo = LangUtils.newString(PKCS7Encoder.decode(decryptData));
+		WxappUserInfo wxUser = JsonMapper.defaultMapper().fromJson(userInfo, WxappUserInfo.class);
+		return wxUser;
+	}
 	
 	public static GetAccessTokenRequest createGetAccessTokenRequest(WechatAppInfo wechatAppInfo){
 		GetAccessTokenRequest request = GetAccessTokenRequest.builder()

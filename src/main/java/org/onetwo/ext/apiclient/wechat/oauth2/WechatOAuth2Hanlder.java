@@ -7,11 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.onetwo.common.data.AbstractDataResult.SimpleDataResult;
+import org.onetwo.common.data.DataResult;
 import org.onetwo.common.exception.BaseException;
 import org.onetwo.common.log.JFishLoggerFactory;
 import org.onetwo.common.spring.copier.CopyUtils;
-import org.onetwo.common.spring.mvc.utils.WebResultCreator;
+import org.onetwo.common.spring.mvc.utils.DataResults;
 import org.onetwo.common.web.utils.RequestUtils;
 import org.onetwo.common.web.utils.ResponseUtils;
 import org.onetwo.ext.apiclient.wechat.basic.response.AuthorizeData;
@@ -25,9 +25,9 @@ import org.onetwo.ext.apiclient.wechat.oauth2.response.OAuth2RefreshTokenRespons
 import org.onetwo.ext.apiclient.wechat.oauth2.response.OAuth2UserInfoResponse;
 import org.onetwo.ext.apiclient.wechat.serve.dto.RequestHoder;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatSessionRepository;
+import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.Oauth2ClientKeys;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.Oauth2Keys;
-import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatException;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,9 +138,7 @@ public class WechatOAuth2Hanlder {
 		}else{
 			//如果是ajax请求，不跳转，返回错误信息
 			if(RequestUtils.isAjaxRequest(request) || RequestUtils.isAjaxHandlerMethod(handler)){
-				SimpleDataResult<?> result = WebResultCreator.creator()
-								.error(WechatClientErrors.OAUTH2_NOT_AUTHORIZE)
-								.buildResult();
+				DataResult<?> result = DataResults.error(WechatClientErrors.OAUTH2_NOT_AUTHORIZE).build();
 				ResponseUtils.renderObjectAsJson(response, result);
 				return false;
 			}
