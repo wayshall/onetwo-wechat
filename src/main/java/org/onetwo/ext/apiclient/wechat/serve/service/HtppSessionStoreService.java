@@ -13,13 +13,11 @@ import org.onetwo.ext.apiclient.wechat.oauth2.OAuth2UserInfo;
 import org.onetwo.ext.apiclient.wechat.serve.dto.RequestHoder;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatSessionRepository;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.Oauth2ClientKeys;
-import org.springframework.stereotype.Service;
 
 /**
  * @author wayshall
  * <br/>
  */
-@Service
 @Slf4j
 public class HtppSessionStoreService implements WechatSessionRepository {
 

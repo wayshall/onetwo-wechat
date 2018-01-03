@@ -30,7 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,7 +42,6 @@ import com.google.common.collect.Maps;
  * @author wayshall
  * <br/>
  */
-@Service
 public class MessageRouterServiceImpl implements InitializingBean, MessageRouterService {
 	
 	private Logger logger = JFishLoggerFactory.getLogger(this.getClass());
