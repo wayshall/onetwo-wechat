@@ -17,5 +17,14 @@ public interface AuthClient {
 
 	@GetMapping(value="/sns/jscode2session")
 	JscodeAuthResponse jscode2session(@InjectProperties JscodeAuthRequest request);
+	
+	/***
+	 * 不自动注入参数
+	 * @author wayshall
+	 * @param request
+	 * @return
+	 */
+	@GetMapping(value="/sns/jscode2session")
+	JscodeAuthResponse jscode2sessionNotInject(JscodeAuthRequest request);
 
 }

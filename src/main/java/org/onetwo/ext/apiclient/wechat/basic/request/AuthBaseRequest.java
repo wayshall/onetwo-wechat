@@ -23,12 +23,12 @@ public class AuthBaseRequest implements Serializable {
 	private static final long serialVersionUID = 7208934747952443024L;
 
 	@NotNull
-	@Value("#{wechatConfig.appid}")
 	@NotBlank
+	@Value("#{wechatConfig.appid}")
 	private String appid;
 	@NotNull
-	@Value("#{wechatConfig.appsecret}")
 	@NotBlank
+	@Value("#{wechatConfig.appsecret}")
 	private String secret;
 	
 	public AuthBaseRequest(String appid, String secret) {
