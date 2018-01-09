@@ -39,7 +39,7 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 	private RedisLockRegistry redisLockRegistry;
 //	private RedisLockRunner redisLockRunner;
 	@Autowired
-	private RedisTemplate<String, ?> redisTemplate;
+	private RedisTemplate<String, Object> redisTemplate;
 	
 	
 	@Override
@@ -81,6 +81,9 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 			}
 			token = WechatUtils.getAccessToken(wechatServer, request);
 			opt.set(token, getExpiresIn(token), TimeUnit.SECONDS);
+			if(logger.isInfoEnabled()){
+				logger.info("==========>>> access token : {}", token);
+			}
 			return token;
 		});
 		return at;

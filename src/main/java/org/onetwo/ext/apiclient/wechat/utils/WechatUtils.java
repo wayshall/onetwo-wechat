@@ -12,7 +12,7 @@ import org.onetwo.common.encrypt.Crypts;
 import org.onetwo.common.encrypt.PKCS7Encoder;
 import org.onetwo.common.jackson.JsonMapper;
 import org.onetwo.common.utils.LangUtils;
-import org.onetwo.ext.apiclient.wechat.basic.api.WechatServer;
+import org.onetwo.ext.apiclient.wechat.basic.api.TokenApi;
 import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
@@ -63,7 +63,7 @@ public class WechatUtils {
 		return request;
 	}
 	
-	public static AccessTokenInfo getAccessToken(WechatServer wechatServer, GetAccessTokenRequest request){
+	public static AccessTokenInfo getAccessToken(TokenApi wechatServer, GetAccessTokenRequest request){
 		
 		AccessTokenResponse response = wechatServer.getAccessToken(request);
 		AccessTokenInfo accessToken = AccessTokenInfo.builder()
