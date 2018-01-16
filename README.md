@@ -192,3 +192,41 @@ public class TestController extends AbstractBaseController{
    
 ```
 激活此属性后，onetwo-wechat会自动注册拦截器，拦截器url可通过配置文件wechat.oauth2.intercept.urls属性配置，默认为空，即拦截所有请求。
+
+
+## 腾讯云直播支持
+配置wechat.qcloud.live.enabled=true激活腾讯云的直播支持
+```yaml
+wechat: 
+    qcloud: 
+        live: 
+            enabled: true
+            bizId: 
+            pushSafeKey: 
+            callback: 
+				enabled: true
+                path: # 默认为：callback
+```
+
+### 监听事件消息通知
+使用注解@LiveMessageListener 和@Subscribe 可以监听腾讯云的事件消息通知，详细事件见：
+[https://cloud.tencent.com/document/api/267/5957](https://cloud.tencent.com/document/api/267/5957)
+目前一共有三种消息：
+- PushMessage ：推流 断流
+- RecordingMessage ：新录制文件
+- ScreenShotMessage：新截图文件
+```Java
+@LiveMessageListener
+public class PushMessageListener {
+
+	@Subscribe
+	public void onMessage(PushMessage message) {
+		if(message.isPushEvent()){
+			System.out.println("有人来直播了！！！");
+		}else{
+			System.out.println("有人关闭了直播");
+		}
+	}
+
+}
+```
