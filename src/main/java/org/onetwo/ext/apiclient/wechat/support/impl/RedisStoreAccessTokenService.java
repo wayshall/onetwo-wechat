@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import org.onetwo.boot.module.redis.RedisLockRunner;
 import org.onetwo.common.exception.BaseException;
 import org.onetwo.common.log.JFishLoggerFactory;
+import org.onetwo.common.utils.LangUtils;
 import org.onetwo.ext.apiclient.wechat.basic.api.WechatServer;
 import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
@@ -85,6 +86,10 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 				logger.info("==========>>> access token : {}", token);
 			}
 			return token;
+		}, ()->{
+			//如果锁定失败，则休息1秒，然后递归……
+			LangUtils.await(1);
+			return refreshAccessToken(request, doubleCheck);
 		});
 		return at;
 	}
