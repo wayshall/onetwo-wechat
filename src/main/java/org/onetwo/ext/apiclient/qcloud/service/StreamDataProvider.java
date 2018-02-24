@@ -20,6 +20,11 @@ public interface StreamDataProvider {
 	public class StreamData {
 		String streamId;
 		Date expiredAt;
+		/****
+		 * 是否录制
+		 * record=mp4|hls|flv 分隔符格式用于指定同时录制一种以上的视频格式（只有 MP4 和 HLS 支持手机浏览器播放）；
+		 * https://cloud.tencent.com/document/product/267/13373
+		 */
 		String record;
 	}
 	
