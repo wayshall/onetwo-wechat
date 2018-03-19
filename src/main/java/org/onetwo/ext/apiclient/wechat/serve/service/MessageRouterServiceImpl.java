@@ -6,10 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import net.jodah.typetools.TypeResolver;
+
 import org.onetwo.common.exception.BaseException;
 import org.onetwo.common.log.JFishLoggerFactory;
 import org.onetwo.common.md.Hashs;
-import org.onetwo.common.reflect.TypeResolver;
 import org.onetwo.common.spring.utils.MapToBeanConvertor;
 import org.onetwo.common.utils.StringUtils;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
