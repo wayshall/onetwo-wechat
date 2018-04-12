@@ -25,6 +25,8 @@ public class EnableWechatClientSelector extends AbstractImportSelector<EnableWec
 		List<String> classNames = new ArrayList<String>();
 		classNames.add(WechatApiClentRegistrar.class.getName());
 		classNames.add(WechatSupportConfiguration.class.getName());
+		
+		
 		//oauth2 support
 		classNames.add(WechatOAuth2Configuration.class.getName());
 		boolean enableMessageServe = attributes.getBoolean("enableMessageServe");
@@ -37,6 +39,7 @@ public class EnableWechatClientSelector extends AbstractImportSelector<EnableWec
 		
 
 		classNames.add(QCloudLiveConfiguration.class.getName());
+//		classNames.add(WechatSecurityOAuth2Configuration.class.getName());
 		
 		return classNames;
 	}

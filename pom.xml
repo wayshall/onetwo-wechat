@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	
     <groupId>org.onetwo4j</groupId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.4-SNAPSHOT</version>
     <artifactId>onetwo-wechat</artifactId>
     <packaging>jar</packaging>
 
@@ -13,7 +13,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <onetwo.version>4.6.1-SNAPSHOT</onetwo.version>
+    <onetwo.version>4.7.0-SNAPSHOT</onetwo.version>
     <java.version>1.8</java.version>
   </properties>
   
@@ -50,14 +50,12 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
-            <version>1.2.3</version>
             <optional>true</optional>
         </dependency>
         
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.3</version>
               <exclusions>
                 <exclusion>
                     <groupId>ch.qos.logback</groupId>
@@ -98,7 +96,7 @@
         
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-redis</artifactId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
         
         <dependency>
@@ -145,6 +143,12 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>compile</scope>
+        </dependency>
+        
+        <dependency>
+          <groupId>org.springframework.security.oauth</groupId>
+          <artifactId>spring-security-oauth2</artifactId>
+          <optional>true</optional>
         </dependency>
         
         <!-- for test -->
