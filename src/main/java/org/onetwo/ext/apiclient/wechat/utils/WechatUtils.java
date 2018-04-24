@@ -27,8 +27,8 @@ import org.springframework.data.redis.core.RedisTemplate;
  */
 public class WechatUtils {
 
-	public static final String ACCESS_TOKEN_PREFIX = "wechat_accesstoken_";
-	public static final String LOCK_KEY = "lock_wechat_acesstoken_";
+	public static final String ACCESS_TOKEN_PREFIX = "wechat_accesstoken:";
+	public static final String LOCK_KEY = "lock_wechat_acesstoken:";
 	static {
 		Security.addProvider(new BouncyCastleProvider());
 	}

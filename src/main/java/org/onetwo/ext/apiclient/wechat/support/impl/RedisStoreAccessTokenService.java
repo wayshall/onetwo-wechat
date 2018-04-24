@@ -41,13 +41,14 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 //	private RedisLockRunner redisLockRunner;
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
+	private int retryLockInSeconds = 1;
 	
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		Assert.notNull(redisTemplate, "redisTemplate not found");
 		Assert.notNull(redisLockRegistry, "redisLockRegistry not found");
-		Assert.notNull(wechatConfig);
+		Assert.notNull(wechatConfig, "wechat config can not be null");
 	}
 
 	public AccessTokenInfo getAccessToken() {
@@ -78,17 +79,20 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 				}
 			}
 			if(logger.isInfoEnabled()){
-				logger.info("==========>>> get access token from wechat server...");
+				logger.info("get access token from wechat server...");
 			}
 			token = WechatUtils.getAccessToken(wechatServer, request);
 			opt.set(token, getExpiresIn(token), TimeUnit.SECONDS);
 			if(logger.isInfoEnabled()){
-				logger.info("==========>>> access token : {}", token);
+				logger.info("access token : {}", token);
 			}
 			return token;
 		}, ()->{
 			//如果锁定失败，则休息1秒，然后递归……
-			LangUtils.await(1);
+			if(logger.isWarnEnabled()){
+				logger.warn("obtain redisd lock error, sleep {} seconds and retry...", retryLockInSeconds);
+			}
+			LangUtils.await(retryLockInSeconds);
 			return refreshAccessToken(request, doubleCheck);
 		});
 		return at;
@@ -124,6 +128,10 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 
 	public WechatConfig getWechatConfig() {
 		return wechatConfig;
+	}
+
+	public void setRetryLockInSeconds(int retryLockInSeconds) {
+		this.retryLockInSeconds = retryLockInSeconds;
 	}
 
 }
