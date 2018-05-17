@@ -51,7 +51,7 @@ public class MemoryAccessTokenService implements AccessTokenService {
 		if(at!=null && !at.isExpired()){
 			return at;
 		}
-		at = refreshAccessToken(request, true);
+		at = refreshAccessToken(request);
 		return at;
 	}
 
@@ -84,18 +84,18 @@ public class MemoryAccessTokenService implements AccessTokenService {
 	}
 	
 	@Override
-	public AccessTokenInfo refreshAccessToken(GetAccessTokenRequest request, boolean checkAgain) {
+	public AccessTokenInfo refreshAccessToken(GetAccessTokenRequest request) {
 		AccessTokenInfo token = null;
 		ReentrantLock appidLock = getLockByAppId(request.getAppid());
 		try {
 			appidLock.lock();
 			String key = WechatUtils.getAccessTokenKey(request.getAppid());
-			if(checkAgain){
+			/*if(checkAgain){
 				token = this.accessTokenCaches.getIfPresent(key);
 				if(token!=null && !token.isExpired()){
 					return token;
 				}
-			}
+			}*/
 			if(logger.isInfoEnabled()){
 				logger.info("==========>>> get access token from wechat server...");
 			}

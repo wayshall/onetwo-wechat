@@ -63,21 +63,21 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 		if(at!=null && !at.isExpired()){
 			return at;
 		}
-		at = refreshAccessToken(request, true);
+		at = refreshAccessToken(request);
 		return at;
 	}
 
 
-	public AccessTokenInfo refreshAccessToken(GetAccessTokenRequest request, boolean doubleCheck){
+	public AccessTokenInfo refreshAccessToken(GetAccessTokenRequest request){
 		AccessTokenInfo at = getRedisLockRunnerByAppId(request.getAppid()).tryLock(()->{
 			BoundValueOperations<String, AccessTokenInfo> opt = boundValueOperationsByAppId(request.getAppid());
 			AccessTokenInfo token = null;
-			if(doubleCheck){
+			/*if(doubleCheck){
 				token = opt.get();
 				if(token!=null && !token.isExpired()){
 					return token;
 				}
-			}
+			}*/
 			if(logger.isInfoEnabled()){
 				logger.info("get access token from wechat server...");
 			}
@@ -93,19 +93,20 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 				logger.warn("obtain redisd lock error, sleep {} seconds and retry...", retryLockInSeconds);
 			}
 			LangUtils.await(retryLockInSeconds);
-			return refreshAccessToken(request, doubleCheck);
+			return refreshAccessToken(request);
 		});
 		return at;
 	}
 	
 	/***
+	 * 获取设置redis的过期时间，比token有效时间稍短，避免过期
 	 * @author wayshall
 	 * @param token
 	 * @return
 	 */
 	private long getExpiresIn(AccessTokenInfo token){
-		return token.getExpiresIn();
-//		return token.getExpiresIn() - TimeUnit.MINUTES.toSeconds(10);
+//		return token.getExpiresIn();
+		return token.getExpiresIn() - AccessTokenInfo.SHORTER_EXPIRE_TIME_IN_SECONDS;
 	}
 	
 

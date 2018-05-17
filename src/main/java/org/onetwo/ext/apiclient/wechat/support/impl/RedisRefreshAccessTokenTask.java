@@ -81,7 +81,7 @@ public class RedisRefreshAccessTokenTask implements InitializingBean {
 		if(logger.isInfoEnabled()){
 			logger.info("==========>>> refresh access token from wechat server...");
 		}
-		at = accessTokenService.refreshAccessToken(request, false);
+		at = accessTokenService.refreshAccessToken(request);
 		return at;
 	}
 	

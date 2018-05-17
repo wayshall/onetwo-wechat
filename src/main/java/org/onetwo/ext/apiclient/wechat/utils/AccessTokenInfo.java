@@ -13,8 +13,11 @@ import lombok.Value;
 @SuppressWarnings("serial")
 @Value
 public class AccessTokenInfo implements Serializable {
+	public static int SHORTER_EXPIRE_TIME_IN_SECONDS = 60;
+	
 	private String accessToken;
 	private int expiresIn;
+	
 	private long updateAt = System.currentTimeMillis();
 
 	@Builder
@@ -25,8 +28,9 @@ public class AccessTokenInfo implements Serializable {
 	}
 	
 	public boolean isExpired(){
-		long duration = System.currentTimeMillis() - updateAt;
-		return TimeUnit.MILLISECONDS.toSeconds(duration) > expiresIn;
+		long current = System.currentTimeMillis();
+		long expiresAt = updateAt + TimeUnit.SECONDS.toMillis(expiresIn - SHORTER_EXPIRE_TIME_IN_SECONDS);
+		return current > expiresAt;
 	}
 	
 }

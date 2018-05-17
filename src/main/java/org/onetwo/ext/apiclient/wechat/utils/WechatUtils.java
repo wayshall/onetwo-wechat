@@ -45,6 +45,19 @@ public class WechatUtils {
 		return wxUser;
 	}
 	
+	public static <T> T decrypt(String sessionKey, String iv, String encryptedData, Class<T> messageType){
+		AESCoder aes = AESCoder.pkcs7Padding(Base64.decodeBase64(sessionKey))
+								.initer((cipher, mode, keySpec)->{
+									AlgorithmParameters params = AlgorithmParameters.getInstance(Crypts.AES_KEY);  
+							        params.init(new IvParameterSpec(Base64.decodeBase64(iv)));
+							        cipher.init(mode, keySpec, params);
+								});
+		byte[] decryptData = aes.decrypt(Base64.decodeBase64(encryptedData));
+		String rawMessage = LangUtils.newString(PKCS7Encoder.decode(decryptData));
+		T message = JsonMapper.defaultMapper().fromJson(rawMessage, messageType);
+		return message;
+	}
+	
 	public static GetAccessTokenRequest createGetAccessTokenRequest(WechatAppInfo wechatAppInfo){
 		GetAccessTokenRequest request = GetAccessTokenRequest.builder()
 															.grantType(GrantTypeKeys.CLIENT_CREDENTIAL)

@@ -11,5 +11,5 @@ public interface AccessTokenService {
 
 	AccessTokenInfo getAccessToken();
 	AccessTokenInfo getAccessToken(GetAccessTokenRequest request);
-	AccessTokenInfo refreshAccessToken(GetAccessTokenRequest request, boolean checkAgain);
+	AccessTokenInfo refreshAccessToken(GetAccessTokenRequest request);
 }
