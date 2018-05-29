@@ -13,7 +13,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <onetwo.version>4.7.0-SNAPSHOT</onetwo.version>
+    <onetwo.version>4.7.1-SNAPSHOT</onetwo.version>
     <java.version>1.8</java.version>
   </properties>
   
