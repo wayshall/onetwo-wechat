@@ -31,9 +31,9 @@ public class MessageTemplateClientTest extends WechatBaseTestsAdapter {
 		System.out.println("accesstoken:"+accessToken);
 		MessageTemplateRequest msg = MessageTemplateRequest.builder()
 																.formId("1527732808820")
-																.templateId("g0IlnnG7RlbphVT1vzPis2KSPJ6lb0EXZ1fsHHZrRVo")
+																.templateId("")
 																.page("pages/schedule/schedule")
-																.touser("oznnx5A2oI-_qzZIeZ90yuzy6k_U")
+																.touser("")
 																.build()
 																.addData("keyword1", "测试1")
 																.addData("keyword2", "2018-055-31")
