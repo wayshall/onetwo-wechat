@@ -7,6 +7,7 @@ import org.onetwo.common.exception.ErrorType;
  * <br/>
  */
 public enum WechatClientErrors implements ErrorType {
+	ACCESS_TOKEN_REFRESH_ERROR("refresh token error"),
 	ACCESS_TOKEN_SERVICE_NOT_FOUND("AccessTokenService not found"),
 	ACCESS_TOKEN_OBTAIN_ERROR("获取AccessToken错误！"),
 	OAUTH2_NOT_AUTHORIZE("请先通过微信授权！"),

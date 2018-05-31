@@ -3,7 +3,7 @@ package org.onetwo.ext.apiclient.wechat.support.impl;
 import java.util.concurrent.TimeUnit;
 
 import org.onetwo.boot.module.redis.RedisLockRunner;
-import org.onetwo.common.exception.BaseException;
+import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.log.JFishLoggerFactory;
 import org.onetwo.common.utils.LangUtils;
 import org.onetwo.ext.apiclient.wechat.basic.api.WechatServer;
@@ -11,6 +11,7 @@ import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
+import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
@@ -113,7 +114,9 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 	private RedisLockRunner getRedisLockRunnerByAppId(String appid){
 		RedisLockRunner redisLockRunner = RedisLockRunner.builder()
 														 .lockKey(WechatUtils.LOCK_KEY+appid)
-														 .errorHandler(e->new BaseException("refresh token error!", e))
+														 .errorHandler(e->{
+															 throw new ApiClientException(WechatClientErrors.ACCESS_TOKEN_REFRESH_ERROR, e);
+														 })
 														 .redisLockRegistry(redisLockRegistry)
 														 .build();
 		return redisLockRunner;

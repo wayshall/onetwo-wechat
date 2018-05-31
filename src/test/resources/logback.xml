@@ -27,6 +27,13 @@
   </appender>
   
   
+   <logger name="org.onetwo.common.spring.rest.ExtRestTemplate" level="INFO">  
+       <appender-ref ref="logFile" />   
+   </logger>  
+   <logger name="JFishRestApiClient" level="INFO">  
+       <appender-ref ref="logFile" />   
+   </logger>  
+   
    <logger name="accessLogger" level="INFO">  
        <appender-ref ref="accessAppender" />   
    </logger>  
