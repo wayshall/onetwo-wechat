@@ -25,7 +25,7 @@ public class MessageTemplateClientTest extends WechatBaseTestsAdapter {
 																.appid("")
 																.secret("")
 															.build();
-		AccessTokenInfo tokenInfo = accessTokenService.getAccessToken(request);
+		AccessTokenInfo tokenInfo = accessTokenService.getOrRefreshAccessToken(request);
 		System.out.println("tokenInfo:"+tokenInfo);
 		String accessToken = tokenInfo.getAccessToken();
 		System.out.println("accesstoken:"+accessToken);

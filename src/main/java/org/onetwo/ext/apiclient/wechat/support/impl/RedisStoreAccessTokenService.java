@@ -56,18 +56,26 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 
 	public AccessTokenInfo getAccessToken() {
 		GetAccessTokenRequest request = WechatUtils.createGetAccessTokenRequest(wechatConfig);
-		return getAccessToken(request);
+		return getOrRefreshAccessToken(request);
 	}
 	
-	@Override
-	public AccessTokenInfo getAccessToken(GetAccessTokenRequest request) {
-		BoundValueOperations<String, AccessTokenInfo> opt = boundValueOperationsByAppId(request.getAppid());
+	public AccessTokenInfo getAccessToken(String appid) {
+		Assert.hasText(appid, "appid must have length; it must not be null or empty");
+		BoundValueOperations<String, AccessTokenInfo> opt = boundValueOperationsByAppId(appid);
 		AccessTokenInfo at = null;
+		if(logger.isDebugEnabled()){
+			logger.debug("get accessToken from redis server...");
+		}
 		try {
 			at = opt.get();
 		} catch (SerializationException e) {
 			logger.error("getAccessToken error: " + e.getMessage());
 		}
+		return at;
+	}
+	@Override
+	public AccessTokenInfo getOrRefreshAccessToken(GetAccessTokenRequest request) {
+		AccessTokenInfo at = getAccessToken(request.getAppid());
 		if(at!=null && !at.isExpired()){
 			return at;
 		}
@@ -78,8 +86,15 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 
 	public void removeAccessToken(String appid) {
 		try {
-			String key = WechatUtils.getAccessTokenKey(appid);
-			this.redisTemplate.delete(key);
+			//使用锁，防止正在更新的时候，同时又删除
+			getRedisLockRunnerByAppId(appid).tryLock(()->{
+				if(logger.isDebugEnabled()){
+					logger.debug("remove accessToken from redis server...");
+				}
+				String key = WechatUtils.getAccessTokenKey(appid);
+				this.redisTemplate.delete(key);
+				return null;
+			});
 		} catch (Exception e) {
 			logger.error("remove appid[" + appid + "] AccessToken error: " + e.getMessage());
 		}
@@ -96,8 +111,8 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 					return token;
 				}
 			}*/
-			if(logger.isInfoEnabled()){
-				logger.info("get access token from wechat server...");
+			if(logger.isDebugEnabled()){
+				logger.debug("get access token from wechat server...");
 			}
 //			token = WechatUtils.getAccessToken(wechatServer, request);
 			AccessTokenResponse tokenRes = wechatServer.getAccessToken(request);
@@ -108,8 +123,8 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 														.expiresIn(expired)
 														.build();
 			opt.set(newToken, expired, TimeUnit.SECONDS);
-			if(logger.isInfoEnabled()){
-				logger.info("access token : {}", newToken);
+			if(logger.isDebugEnabled()){
+				logger.debug("access token : {}", newToken);
 			}
 			return newToken;
 		}, ()->{

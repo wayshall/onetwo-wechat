@@ -78,10 +78,11 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 				if(WechatErrors.ACCESS_TOKEN_INVALID.getErrorCode().equals(e.getCode()) && 
 						invokeMethod.getAccessTokenParameter().isPresent()){
 					Optional<AccessTokenInfo> at = invokeMethod.getAccessToken(invocation.getArguments());
-					if(at.isPresent()){
-						logger.info("remove accesstoken and retry...");
-						getAccessTokenService().removeAccessToken(at.get().getAppid());
-						return super.doInvoke(invocation, invokeMethod);
+					if(at.isPresent() && StringUtils.isNotBlank(at.get().getAppid())){
+						String appid = at.get().getAppid();
+						logger.info("accesstoken is invalid, try to remove  ...");
+						getAccessTokenService().removeAccessToken(appid);
+//						return super.doInvoke(invocation, invokeMethod);
 					}
 				}
 				throw e;

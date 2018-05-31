@@ -16,6 +16,7 @@ import org.onetwo.ext.apiclient.wechat.utils.WechatException;
 import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -42,11 +43,17 @@ public class MemoryAccessTokenService implements AccessTokenService {
 	private Map<String, ReentrantLock> lockMap = Maps.newConcurrentMap();
 	
 	public AccessTokenInfo getAccessToken() {
-		return getAccessToken(WechatUtils.createGetAccessTokenRequest(wechatConfig));
+		return getOrRefreshAccessToken(WechatUtils.createGetAccessTokenRequest(wechatConfig));
 	}
 	
 	@Override
-	public AccessTokenInfo getAccessToken(GetAccessTokenRequest request) {
+	public AccessTokenInfo getAccessToken(String appid) {
+		Assert.hasText(appid, "appid must have length; it must not be null or empty");
+		return accessTokenCaches.getIfPresent(appid);
+	}
+
+	@Override
+	public AccessTokenInfo getOrRefreshAccessToken(GetAccessTokenRequest request) {
 		AccessTokenInfo at = this.getAccessTokenFromCache(request);
 		if(at!=null && !at.isExpired()){
 			return at;

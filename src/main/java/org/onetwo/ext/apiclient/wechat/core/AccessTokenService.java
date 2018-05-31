@@ -10,7 +10,8 @@ import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 public interface AccessTokenService {
 
 	AccessTokenInfo getAccessToken();
-	AccessTokenInfo getAccessToken(GetAccessTokenRequest request);
+	AccessTokenInfo getOrRefreshAccessToken(GetAccessTokenRequest request);
 	AccessTokenInfo refreshAccessToken(GetAccessTokenRequest request);
 	void removeAccessToken(String appid);
+	AccessTokenInfo getAccessToken(String appid);
 }
