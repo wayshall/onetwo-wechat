@@ -8,6 +8,7 @@ import org.onetwo.common.log.JFishLoggerFactory;
 import org.onetwo.common.utils.LangUtils;
 import org.onetwo.ext.apiclient.wechat.basic.api.WechatServer;
 import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
+import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.SerializationException;
 import org.springframework.integration.redis.util.RedisLockRegistry;
 import org.springframework.util.Assert;
 
@@ -60,19 +62,34 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 	@Override
 	public AccessTokenInfo getAccessToken(GetAccessTokenRequest request) {
 		BoundValueOperations<String, AccessTokenInfo> opt = boundValueOperationsByAppId(request.getAppid());
-		AccessTokenInfo at = opt.get();
+		AccessTokenInfo at = null;
+		try {
+			at = opt.get();
+		} catch (SerializationException e) {
+			logger.error("getAccessToken error: " + e.getMessage());
+		}
 		if(at!=null && !at.isExpired()){
 			return at;
 		}
 		at = refreshAccessToken(request);
 		return at;
 	}
+	
+
+	public void removeAccessToken(String appid) {
+		try {
+			String key = WechatUtils.getAccessTokenKey(appid);
+			this.redisTemplate.delete(key);
+		} catch (Exception e) {
+			logger.error("remove appid[" + appid + "] AccessToken error: " + e.getMessage());
+		}
+	}
 
 
 	public AccessTokenInfo refreshAccessToken(GetAccessTokenRequest request){
 		AccessTokenInfo at = getRedisLockRunnerByAppId(request.getAppid()).tryLock(()->{
 			BoundValueOperations<String, AccessTokenInfo> opt = boundValueOperationsByAppId(request.getAppid());
-			AccessTokenInfo token = null;
+//			AccessTokenInfo token = null;
 			/*if(doubleCheck){
 				token = opt.get();
 				if(token!=null && !token.isExpired()){
@@ -82,12 +99,19 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 			if(logger.isInfoEnabled()){
 				logger.info("get access token from wechat server...");
 			}
-			token = WechatUtils.getAccessToken(wechatServer, request);
-			opt.set(token, getExpiresIn(token), TimeUnit.SECONDS);
+//			token = WechatUtils.getAccessToken(wechatServer, request);
+			AccessTokenResponse tokenRes = wechatServer.getAccessToken(request);
+			int expired = getExpiresIn(tokenRes);
+			AccessTokenInfo newToken = AccessTokenInfo.builder()
+														.appid(request.getAppid())
+														.accessToken(tokenRes.getAccessToken())
+														.expiresIn(expired)
+														.build();
+			opt.set(newToken, expired, TimeUnit.SECONDS);
 			if(logger.isInfoEnabled()){
-				logger.info("access token : {}", token);
+				logger.info("access token : {}", newToken);
 			}
-			return token;
+			return newToken;
 		}, ()->{
 			//如果锁定失败，则休息1秒，然后递归……
 			if(logger.isWarnEnabled()){
@@ -105,7 +129,7 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 	 * @param token
 	 * @return
 	 */
-	private long getExpiresIn(AccessTokenInfo token){
+	private int getExpiresIn(AccessTokenResponse token){
 //		return token.getExpiresIn();
 		return token.getExpiresIn() - AccessTokenInfo.SHORTER_EXPIRE_TIME_IN_SECONDS;
 	}

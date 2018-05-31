@@ -66,7 +66,7 @@ public abstract class WechatConstants {
 	}
 	public static abstract class WechatConfigKeys {
 		public static final String ENABLED_OAUTH2_KEY = "wechat.oauth2.enabled";
-		public static final String ENABLED_TASK_REFRESHTOKEN_KEY = "wechat.task.refreshToken.enabled";
+//		public static final String ENABLED_TASK_REFRESHTOKEN_KEY = "wechat.task.refreshToken.enabled";
 		
 		public static final String TASK_REFRESHTOKEN_TOKEN_EFFECTIVE_TIME = "${wechat.task.refreshToken.tokenEffectiveTimeInMinutes:110}";
 		

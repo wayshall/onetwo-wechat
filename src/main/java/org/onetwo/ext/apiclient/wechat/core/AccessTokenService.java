@@ -12,4 +12,5 @@ public interface AccessTokenService {
 	AccessTokenInfo getAccessToken();
 	AccessTokenInfo getAccessToken(GetAccessTokenRequest request);
 	AccessTokenInfo refreshAccessToken(GetAccessTokenRequest request);
+	void removeAccessToken(String appid);
 }

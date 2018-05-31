@@ -82,6 +82,7 @@ public class WechatUtils {
 		AccessTokenInfo accessToken = AccessTokenInfo.builder()
 													.accessToken(response.getAccessToken())
 													.expiresIn(response.getExpiresIn())
+													.appid(request.getAppid())
 													.build();
 		return accessToken;
 	}

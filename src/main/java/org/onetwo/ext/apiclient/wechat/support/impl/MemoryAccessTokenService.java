@@ -122,6 +122,16 @@ public class MemoryAccessTokenService implements AccessTokenService {
 	
 	
 
+	@Override
+	public void removeAccessToken(String appid) {
+		try {
+			String key = WechatUtils.getAccessTokenKey(appid);
+			this.accessTokenCaches.invalidate(key);
+		} catch (Exception e) {
+			logger.error("remove appid[" + appid + "] AccessToken error: " + e.getMessage());
+		}
+	}
+
 	public WechatServer getWechatServer() {
 		return wechatServer;
 	}

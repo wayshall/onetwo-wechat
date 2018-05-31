@@ -2,12 +2,10 @@ package org.onetwo.ext.apiclient.wechat.core;
 
 import org.onetwo.common.spring.Springs;
 import org.onetwo.ext.apiclient.wechat.support.impl.MemoryAccessTokenService;
-import org.onetwo.ext.apiclient.wechat.support.impl.RedisRefreshAccessTokenTask;
 import org.onetwo.ext.apiclient.wechat.support.impl.RedisStoreAccessTokenService;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.WechatConfigKeys;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
@@ -54,11 +52,11 @@ public class WechatSupportConfiguration implements ApplicationContextAware {
 		return new RedisStoreAccessTokenService();
 	}
 	
-	@Bean
+	/*@Bean
 	@ConditionalOnMissingBean(RedisRefreshAccessTokenTask.class)
 	@ConditionalOnProperty(name=WechatConfigKeys.ENABLED_TASK_REFRESHTOKEN_KEY, havingValue="true", matchIfMissing=false)
 	public RedisRefreshAccessTokenTask redisRefreshAccessTokenTask(){
 		return new RedisRefreshAccessTokenTask();
-	}
+	}*/
 	
 }

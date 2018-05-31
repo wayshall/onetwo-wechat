@@ -22,7 +22,7 @@ public class MessageTemplateClientTest extends WechatBaseTestsAdapter {
 	@Test
 	public void testSend(){
 		GetAccessTokenRequest request = GetAccessTokenRequest.builder()
-																.appid("wx421786e4507fbbff")
+																.appid("")
 																.secret("")
 															.build();
 		AccessTokenInfo tokenInfo = accessTokenService.getAccessToken(request);
@@ -33,13 +33,13 @@ public class MessageTemplateClientTest extends WechatBaseTestsAdapter {
 																.formId("1527732808820")
 																.templateId("")
 																.page("pages/schedule/schedule")
-																.touser("")
+																.touser("oznnx5A2oI-_qzZIeZ90yuzy6k_U")
 																.build()
 																.addData("keyword1", "测试1")
 																.addData("keyword2", "2018-055-31")
 																.addData("keyword3", "别忘了用我们的小程序组织你的小伙伴们一起看球哦~~~");
 																
-		WechatResponse res = wessageTemplateClient.send(accessToken, msg);
+		WechatResponse res = wessageTemplateClient.send(tokenInfo, msg);
 		System.out.println("res:"+res);
 	}
 

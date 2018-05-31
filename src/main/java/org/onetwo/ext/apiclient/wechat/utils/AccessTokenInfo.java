@@ -4,33 +4,51 @@ import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 import lombok.Builder;
-import lombok.Value;
 
 /**
  * @author wayshall
  * <br/>
  */
 @SuppressWarnings("serial")
-@Value
 public class AccessTokenInfo implements Serializable {
 	public static int SHORTER_EXPIRE_TIME_IN_SECONDS = 60;
+
+	final private String appid;
+	final private String accessToken;
 	
-	private String accessToken;
-	private int expiresIn;
+	private long expireAt = -1;
+
+	public AccessTokenInfo(String accessToken) {
+		this(null, accessToken, -1);
+	}
 	
-	private long updateAt = System.currentTimeMillis();
 
 	@Builder
-	public AccessTokenInfo(String accessToken, int expiresIn) {
+	public AccessTokenInfo(String appid, String accessToken, int expiresIn) {
 		super();
 		this.accessToken = accessToken;
-		this.expiresIn = expiresIn;
+//		this.expireAt = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(expiresIn-SHORTER_EXPIRE_TIME_IN_SECONDS);
+		//expiresIn 调用方已减
+		this.expireAt = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(expiresIn);
+		this.appid = appid;
 	}
 	
 	public boolean isExpired(){
+		if(expireAt==-1){
+			//没有设置则不过期
+			return false;
+		}
 		long current = System.currentTimeMillis();
-		long expiresAt = updateAt + TimeUnit.SECONDS.toMillis(expiresIn - SHORTER_EXPIRE_TIME_IN_SECONDS);
-		return current > expiresAt;
+		return current > expireAt;
 	}
-	
+
+
+	public String getAppid() {
+		return appid;
+	}
+
+
+	public String getAccessToken() {
+		return accessToken;
+	}
 }

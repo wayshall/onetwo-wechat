@@ -7,7 +7,6 @@ import org.onetwo.ext.apiclient.wechat.WechatBaseTestsAdapter;
 import org.onetwo.ext.apiclient.wechat.basic.request.AccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.GetCallbackIpResponse;
 import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
-import org.onetwo.ext.apiclient.wechat.support.impl.RedisRefreshAccessTokenTask;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -21,7 +20,7 @@ public class WechatServerTest extends WechatBaseTestsAdapter {
 	@Autowired
 	AccessTokenService accessTokenService;
 	@Autowired(required=false)
-	RedisRefreshAccessTokenTask redisRefreshAccessTokenTask;
+//	RedisRefreshAccessTokenTask redisRefreshAccessTokenTask;
 	
 	@Test
 	public void testGetCallbackIp(){
@@ -37,9 +36,6 @@ public class WechatServerTest extends WechatBaseTestsAdapter {
 		assertThat(response.getIpList()).isNotEmpty();
 		
 		//test for refresh token
-		if(redisRefreshAccessTokenTask!=null){
-			redisRefreshAccessTokenTask.scheduleRefreshTask();
-		}
 		response = wechatServer.getCallbackIp(AccessTokenRequest.accessTokenRequest()
 								.accessToken(accessToken)
 								.build());
