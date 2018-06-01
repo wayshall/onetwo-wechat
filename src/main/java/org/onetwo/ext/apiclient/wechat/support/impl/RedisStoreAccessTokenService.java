@@ -69,7 +69,10 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 		try {
 			at = opt.get();
 		} catch (SerializationException e) {
+			//序列化错误的时候直接移除
 			logger.error("getAccessToken error: " + e.getMessage());
+			logger.error("clear for SerializationException accessToen...");
+			removeAccessToken(appid);
 		}
 		return at;
 	}
