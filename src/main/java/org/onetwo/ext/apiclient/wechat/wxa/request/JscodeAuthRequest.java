@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.wechat.wxa.auth.request;
+package org.onetwo.ext.apiclient.wechat.wxa.request;
 
 import javax.validation.constraints.NotNull;
 

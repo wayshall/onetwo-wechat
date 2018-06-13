@@ -1,6 +1,7 @@
 package org.onetwo.ext.apiclient.wechat.support.impl;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
@@ -47,9 +48,10 @@ public class MemoryAccessTokenService implements AccessTokenService {
 	}
 	
 	@Override
-	public AccessTokenInfo getAccessToken(String appid) {
+	public Optional<AccessTokenInfo> getAccessToken(String appid) {
 		Assert.hasText(appid, "appid must have length; it must not be null or empty");
-		return accessTokenCaches.getIfPresent(appid);
+		AccessTokenInfo at = accessTokenCaches.getIfPresent(appid);
+		return Optional.ofNullable(at);
 	}
 
 	@Override

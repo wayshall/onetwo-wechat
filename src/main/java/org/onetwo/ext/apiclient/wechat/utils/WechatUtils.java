@@ -17,7 +17,7 @@ import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.GrantTypeKeys;
-import org.onetwo.ext.apiclient.wechat.wxa.auth.response.WxappUserInfo;
+import org.onetwo.ext.apiclient.wechat.wxa.response.WxappUserInfo;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 

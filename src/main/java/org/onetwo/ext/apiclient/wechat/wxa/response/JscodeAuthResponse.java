@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.wechat.wxa.auth.response;
+package org.onetwo.ext.apiclient.wechat.wxa.response;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

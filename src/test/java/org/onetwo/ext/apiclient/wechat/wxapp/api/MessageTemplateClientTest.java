@@ -6,7 +6,8 @@ import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
-import org.onetwo.ext.apiclient.wechat.wxapp.request.MessageTemplateRequest;
+import org.onetwo.ext.apiclient.wechat.wxa.api.MessageTemplateClient;
+import org.onetwo.ext.apiclient.wechat.wxa.request.MessageTemplateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

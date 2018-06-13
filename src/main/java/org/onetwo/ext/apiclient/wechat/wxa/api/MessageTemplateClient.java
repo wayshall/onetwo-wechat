@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.wechat.wxapp.api;
+package org.onetwo.ext.apiclient.wechat.wxa.api;
 
 import javax.validation.Valid;
 
@@ -6,7 +6,7 @@ import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.UrlConst;
-import org.onetwo.ext.apiclient.wechat.wxapp.request.MessageTemplateRequest;
+import org.onetwo.ext.apiclient.wechat.wxa.request.MessageTemplateRequest;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

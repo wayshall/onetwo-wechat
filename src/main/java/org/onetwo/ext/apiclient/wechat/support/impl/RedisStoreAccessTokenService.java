@@ -1,5 +1,6 @@
 package org.onetwo.ext.apiclient.wechat.support.impl;
 
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import org.onetwo.boot.module.redis.RedisLockRunner;
@@ -59,7 +60,7 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 		return getOrRefreshAccessToken(request);
 	}
 	
-	public AccessTokenInfo getAccessToken(String appid) {
+	public Optional<AccessTokenInfo> getAccessToken(String appid) {
 		Assert.hasText(appid, "appid must have length; it must not be null or empty");
 		BoundValueOperations<String, AccessTokenInfo> opt = boundValueOperationsByAppId(appid);
 		AccessTokenInfo at = null;
@@ -74,15 +75,15 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 			logger.error("clear for SerializationException accessToen...");
 			removeAccessToken(appid);
 		}
-		return at;
+		return Optional.ofNullable(at);
 	}
 	@Override
 	public AccessTokenInfo getOrRefreshAccessToken(GetAccessTokenRequest request) {
-		AccessTokenInfo at = getAccessToken(request.getAppid());
-		if(at!=null && !at.isExpired()){
-			return at;
+		Optional<AccessTokenInfo> atOpt = getAccessToken(request.getAppid());
+		if(atOpt.isPresent() && !atOpt.get().isExpired()){
+			return atOpt.get();
 		}
-		at = refreshAccessToken(request);
+		AccessTokenInfo at = refreshAccessToken(request);
 		return at;
 	}
 	

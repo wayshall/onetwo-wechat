@@ -27,14 +27,14 @@ public class WechatApiClientResponseHandler extends DefaultApiClientResponseHand
 	@Override
 	public Class<?> getActualResponseType(WechatMethod invokeMethod){
 		Class<?> responseType = invokeMethod.getMethodReturnType();
-		if(!WechatResponse.class.isAssignableFrom(responseType)){
+		/*if(!WechatResponse.class.isAssignableFrom(responseType)){
 			Intro<?> intro = ReflectUtils.getIntro(responseType);
 			if(!intro.hasProperty("errcode") || !intro.hasProperty("errmsg")){
 				responseType = HashMap.class;
 			}
 //			ReflectUtils.getIntro(responseType).checkField("errcode", true);
 //			ReflectUtils.getIntro(responseType).checkField("errmsg", true);
-		}
+		}*/
 		return responseType;
 	}
 	
@@ -65,12 +65,15 @@ public class WechatApiClientResponseHandler extends DefaultApiClientResponseHand
 					resposne = map2Bean(map, invokeMethod.getMethodReturnType());
 				}
 			}else{
-				BeanWrapper bw = SpringUtils.newBeanWrapper(resposne);
+				/*BeanWrapper bw = SpringUtils.newBeanWrapper(resposne);
 				if(!bw.isWritableProperty("errcode")){
 					throw new RestClientException("field[errcode] not found in rest client api response type: " + actualResponseType);
 				}
 				if(!bw.isWritableProperty("errmsg")){
 					throw new RestClientException("field[errmsg] not found in rest client api response type: " + actualResponseType);
+				}*/
+				if(logger.isDebugEnabled()){
+					logger.debug("Non-WechatResponse type: {}", resposne.getClass());
 				}
 			}
 			

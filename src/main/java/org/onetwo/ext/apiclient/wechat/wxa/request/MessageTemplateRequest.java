@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.wechat.wxapp.request;
+package org.onetwo.ext.apiclient.wechat.wxa.request;
 
 import java.io.Serializable;
 import java.util.LinkedHashMap;

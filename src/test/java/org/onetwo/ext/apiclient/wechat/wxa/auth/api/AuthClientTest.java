@@ -2,8 +2,9 @@ package org.onetwo.ext.apiclient.wechat.wxa.auth.api;
 
 import org.junit.Test;
 import org.onetwo.ext.apiclient.wechat.WechatBaseTestsAdapter;
-import org.onetwo.ext.apiclient.wechat.wxa.auth.request.JscodeAuthRequest;
-import org.onetwo.ext.apiclient.wechat.wxa.auth.response.JscodeAuthResponse;
+import org.onetwo.ext.apiclient.wechat.wxa.api.AuthClient;
+import org.onetwo.ext.apiclient.wechat.wxa.request.JscodeAuthRequest;
+import org.onetwo.ext.apiclient.wechat.wxa.response.JscodeAuthResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

@@ -1,10 +1,10 @@
-package org.onetwo.ext.apiclient.wechat.wxa.auth.api;
+package org.onetwo.ext.apiclient.wechat.wxa.api;
 
 import org.onetwo.common.apiclient.annotation.InjectProperties;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.UrlConst;
-import org.onetwo.ext.apiclient.wechat.wxa.auth.request.JscodeAuthRequest;
-import org.onetwo.ext.apiclient.wechat.wxa.auth.response.JscodeAuthResponse;
+import org.onetwo.ext.apiclient.wechat.wxa.request.JscodeAuthRequest;
+import org.onetwo.ext.apiclient.wechat.wxa.response.JscodeAuthResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
