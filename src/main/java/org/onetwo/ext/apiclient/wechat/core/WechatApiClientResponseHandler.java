@@ -1,18 +1,11 @@
 package org.onetwo.ext.apiclient.wechat.core;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.onetwo.common.apiclient.impl.DefaultApiClientResponseHandler;
-import org.onetwo.common.exception.ApiClientException;
-import org.onetwo.common.exception.ErrorTypes;
-import org.onetwo.common.reflect.Intro;
-import org.onetwo.common.reflect.ReflectUtils;
-import org.onetwo.common.spring.SpringUtils;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClientFactoryBean.WechatMethod;
-import org.onetwo.ext.apiclient.wechat.utils.WechatErrors;
-import org.springframework.beans.BeanWrapper;
+import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 
@@ -79,12 +72,13 @@ public class WechatApiClientResponseHandler extends DefaultApiClientResponseHand
 			
 			if(baseResponse!=null && !baseResponse.isSuccess()){
 				logger.error("api[{}] error response: {}", invokeMethod.getMethod().getName(), baseResponse);
-				throw WechatErrors.byErrcode(baseResponse.getErrcode())
+				/*throw WechatErrors.byErrcode(baseResponse.getErrcode())
 				 			 .map(err->new ApiClientException(err, invokeMethod.getMethod(), null))
 				 			 .orElse(new ApiClientException(ErrorTypes.of(baseResponse.getErrcode().toString(), 
 				 					 										baseResponse.getErrmsg(), 
 				 					 										responseEntity.getStatusCodeValue())
-				 					 									));
+				 					 									));*/
+				throw WechatUtils.translateToApiClientException(invokeMethod, baseResponse, responseEntity);
 //				throw new ApiClientException(ErrorTypes.of(baseResponse.getErrcode().toString(), baseResponse.getErrmsg(), responseEntity.getStatusCodeValue()));
 			}
 			

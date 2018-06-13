@@ -2,14 +2,21 @@ package org.onetwo.ext.apiclient.wechat.wxa.api;
 
 import javax.validation.Valid;
 
+import org.onetwo.common.apiclient.ApiClientMethod;
+import org.onetwo.common.apiclient.CustomResponseHandler;
+import org.onetwo.common.apiclient.annotation.ResponseHandler;
+import org.onetwo.common.jackson.JsonMapper;
+import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.UrlConst;
+import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
 import org.onetwo.ext.apiclient.wechat.wxa.request.BaseQrcodeRequest.CreatewxaqrcodeRequest;
 import org.onetwo.ext.apiclient.wechat.wxa.request.BaseQrcodeRequest.GetwxacodeRequest;
 import org.onetwo.ext.apiclient.wechat.wxa.request.BaseQrcodeRequest.GetwxacodeunlimitRequest;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -34,6 +41,7 @@ public interface QrcodeClient {
 	 * @return
 	 */
 	@PostMapping(value="/wxa/getwxacode", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseHandler(QrcodeResponseHandler.class)
 	ByteArrayResource getwxacode(AccessTokenInfo accessToken, @Valid @RequestBody GetwxacodeRequest request);
 
 	/***
@@ -48,18 +56,42 @@ public interface QrcodeClient {
 	 * @return
 	 */
 	@PostMapping(value="/wxa/getwxacodeunlimit", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseHandler(QrcodeResponseHandler.class)
 	ByteArrayResource getwxacodeunlimit(AccessTokenInfo accessToken, @Valid @RequestBody GetwxacodeunlimitRequest request);
 	
 	/***
 	 * 接口C：适用于需要的码数量较少的业务场景
 	 * 注意：通过该接口生成的小程序二维码，永久有效，数量限制见文末说明，请谨慎使用。用户扫描该码进入小程序后，将直接进入 path 对应的页面。
+	 * https://api.weixin.qq.com/cgi-bin/wxaapp/createwxaqrcode
 	 * @author wayshall
 	 * @param accessToken
 	 * @param request
 	 * @return
 	 */
 	@PostMapping(value="/cgi-bin/wxaapp/createwxaqrcode", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseHandler(QrcodeResponseHandler.class)
 	ByteArrayResource createwxaqrcode(AccessTokenInfo accessToken, @Valid @RequestBody CreatewxaqrcodeRequest request);
+	
+	class QrcodeResponseHandler implements CustomResponseHandler<ByteArrayResource> {
+
+		@Override
+		public Class<ByteArrayResource> getResponseType() {
+			return ByteArrayResource.class;
+		}
+
+		@Override
+		public Object handleResponse(ApiClientMethod apiMethod, ResponseEntity<ByteArrayResource> responseEntity) {
+			MediaType mediaType = responseEntity.getHeaders().getContentType();
+			if(mediaType!=null && mediaType.isCompatibleWith(MediaType.APPLICATION_JSON)){
+				WechatResponse response = JsonMapper.IGNORE_NULL.fromJson(responseEntity.getBody().getByteArray(), WechatResponse.class);
+				if(!response.isSuccess()){
+					throw WechatUtils.translateToApiClientException(apiMethod, response, responseEntity);
+				}
+			}
+			return responseEntity.getBody();
+		}
+		
+	}
 	
 
 }

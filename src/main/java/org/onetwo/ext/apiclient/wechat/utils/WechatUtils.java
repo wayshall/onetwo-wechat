@@ -7,19 +7,24 @@ import javax.crypto.spec.IvParameterSpec;
 
 import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.onetwo.common.apiclient.ApiClientMethod;
 import org.onetwo.common.encrypt.AESCoder;
 import org.onetwo.common.encrypt.Crypts;
 import org.onetwo.common.encrypt.PKCS7Encoder;
+import org.onetwo.common.exception.ApiClientException;
+import org.onetwo.common.exception.ErrorTypes;
 import org.onetwo.common.jackson.JsonMapper;
 import org.onetwo.common.utils.LangUtils;
 import org.onetwo.ext.apiclient.wechat.basic.api.TokenApi;
 import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
+import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.GrantTypeKeys;
 import org.onetwo.ext.apiclient.wechat.wxa.response.WxappUserInfo;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.ResponseEntity;
 
 /**
  * @author wayshall
@@ -96,6 +101,15 @@ public class WechatUtils {
 
 	public static String getAccessTokenKey(String appid){
 		return WechatUtils.ACCESS_TOKEN_PREFIX + appid;
+	}
+	
+	public static ApiClientException translateToApiClientException(ApiClientMethod invokeMethod, WechatResponse baseResponse, ResponseEntity<?> responseEntity){
+		return WechatErrors.byErrcode(baseResponse.getErrcode())
+						 .map(err->new ApiClientException(err, invokeMethod.getMethod(), null))
+						 .orElse(new ApiClientException(ErrorTypes.of(baseResponse.getErrcode().toString(), 
+								 										baseResponse.getErrmsg(), 
+								 										responseEntity.getStatusCodeValue())
+								 									));
 	}
 	
 	private WechatUtils(){
