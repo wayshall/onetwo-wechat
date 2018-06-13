@@ -4,25 +4,26 @@ import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 import lombok.Builder;
+import lombok.Data;
 
 /**
+ * 必须有默认构造函数，json反序列化时需要
  * @author wayshall
  * <br/>
  */
 @SuppressWarnings("serial")
+@Data
 public class AccessTokenInfo implements Serializable {
 	public static int SHORTER_EXPIRE_TIME_IN_SECONDS = 60;
 
-	final private String appid;
-	final private String accessToken;
-	
+	private String appid;
+	private String accessToken;
 	private long expireAt = -1;
 
 	public AccessTokenInfo(String accessToken) {
 		this(null, accessToken, -1);
 	}
 	
-
 	@Builder
 	public AccessTokenInfo(String appid, String accessToken, int expiresIn) {
 		super();
@@ -50,5 +51,10 @@ public class AccessTokenInfo implements Serializable {
 
 	public String getAccessToken() {
 		return accessToken;
+	}
+
+
+	public AccessTokenInfo() {
+		super();
 	}
 }
