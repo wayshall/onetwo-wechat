@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.onetwo.common.apiclient.ApiClientMethod;
 import org.onetwo.common.apiclient.RequestContextData;
 import org.onetwo.common.apiclient.impl.AbstractApiClientFactoryBean;
+import org.onetwo.common.apiclient.utils.ApiClientUtils;
 import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.spring.SpringUtils;
 import org.onetwo.common.utils.ParamUtils;
@@ -20,6 +21,8 @@ import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants;
 import org.onetwo.ext.apiclient.wechat.utils.WechatErrors;
+import org.onetwo.ext.apiclient.wechat.utils.WechatException;
+import org.slf4j.Logger;
 import org.springframework.core.annotation.AnnotationAttributes;
 
 import com.google.common.cache.CacheBuilder;
@@ -162,9 +165,22 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 		}
 		
 		public Optional<AccessTokenInfo> getAccessToken(final Object[] args){
-			return accessTokenParameter.map(parameter->{
+			/*return accessTokenParameter.map(parameter->{
 				return (AccessTokenInfo)args[parameter.getParameterIndex()];
-			});
+			});*/
+			Logger logger = ApiClientUtils.getApiclientlogger();
+			AccessTokenInfo at = null;
+			if(accessTokenParameter.isPresent()){
+				at = (AccessTokenInfo)args[accessTokenParameter.get().getParameterIndex()];
+				if(at==null){
+					throw new WechatException(WechatClientErrors.ACCESS_TOKEN_CANNOT_BE_NULL);
+				}
+			}else{
+				if(logger.isDebugEnabled()){
+					logger.debug("AccessTokenInfo Parameter not found!");
+				}
+			}
+			return Optional.ofNullable(at);
 		}
 		
 	}

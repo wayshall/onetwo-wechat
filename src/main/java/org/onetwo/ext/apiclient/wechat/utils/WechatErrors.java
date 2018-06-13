@@ -13,6 +13,7 @@ import com.google.common.collect.Maps;
  * <br/>
  */
 public enum WechatErrors implements ErrorType {
+	ACCESS_TOKEN_MISSING(41001, "access_token missing"),
 	ACCESS_TOKEN_INVALID(40001, "invalid credential, access_token is invalid or not latest"),
 	API_UNAUTHORIZED(48001, "api功能未授权，请确认公众号已获得该接口，可以在公众平台官网-开发者中心页中查看接口权限"),
 	FORMAT_PARSE_ERROR(47001, "解析JSON/XML内容错误"),
