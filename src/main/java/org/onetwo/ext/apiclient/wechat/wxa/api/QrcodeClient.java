@@ -58,7 +58,7 @@ public interface QrcodeClient {
 	 * @param request
 	 * @return
 	 */
-	@PostMapping(value="/wxa/createwxaqrcode", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@PostMapping(value="/cgi-bin/wxaapp/createwxaqrcode", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	ByteArrayResource createwxaqrcode(AccessTokenInfo accessToken, @Valid @RequestBody CreatewxaqrcodeRequest request);
 	
 
