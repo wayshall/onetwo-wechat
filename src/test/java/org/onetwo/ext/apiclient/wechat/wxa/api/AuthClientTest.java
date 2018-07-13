@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.wechat.wxa.auth.api;
+package org.onetwo.ext.apiclient.wechat.wxa.api;
 
 import org.junit.Test;
 import org.onetwo.ext.apiclient.wechat.WechatBaseTestsAdapter;

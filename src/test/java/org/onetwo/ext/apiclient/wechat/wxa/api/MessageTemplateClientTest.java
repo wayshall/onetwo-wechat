@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.wechat.wxapp.api;
+package org.onetwo.ext.apiclient.wechat.wxa.api;
 
 import org.junit.Test;
 import org.onetwo.ext.apiclient.wechat.WechatBaseTestsAdapter;
@@ -9,6 +9,7 @@ import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.wxa.api.MessageTemplateClient;
 import org.onetwo.ext.apiclient.wechat.wxa.request.MessageTemplateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * @author wayshall
@@ -23,7 +24,7 @@ public class MessageTemplateClientTest extends WechatBaseTestsAdapter {
 	@Test
 	public void testSend(){
 		GetAccessTokenRequest request = GetAccessTokenRequest.builder()
-																.appid("")
+																.appid(appid)
 																.secret("")
 															.build();
 		AccessTokenInfo tokenInfo = accessTokenService.getOrRefreshAccessToken(request);

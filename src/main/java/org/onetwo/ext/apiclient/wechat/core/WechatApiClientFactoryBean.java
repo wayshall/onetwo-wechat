@@ -163,6 +163,13 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 		public Optional<ApiClientMethodParameter> getAccessTokenParameter() {
 			return accessTokenParameter;
 		}
+
+		@Override
+		protected boolean isSpecalPemerater(ApiClientMethodParameter parameter){
+			return super.isSpecalPemerater(parameter) || 
+					(accessTokenParameter.isPresent() && accessTokenParameter.get().getParameterIndex()==parameter.getParameterIndex());
+		}
+		
 		
 		public Optional<AccessTokenInfo> getAccessToken(final Object[] args){
 			/*return accessTokenParameter.map(parameter->{
