@@ -19,6 +19,8 @@ public enum WechatErrors implements ErrorType {
 	FORMAT_PARSE_ERROR(47001, "解析JSON/XML内容错误"),
 	USER_NOT_EXIST(46004, "不存在的用户"),
 	WXAPP_LOGIN_ERROR(40029, "微信小程序登录错误，无效的code！"),
+	
+	CONTENT_RISKY(87014, "内容含有违法违规内容"),
 
 	TEMPLATE_ID_ERROR(40037, "template_id不正确"),
 	TEMPLATE_ID_EXPIRED(41028, "form_id不正确，或者过期"),

@@ -1,8 +1,10 @@
 package org.onetwo.ext.apiclient.wechat.wxa.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import org.junit.Test;
+import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.ext.apiclient.wechat.WechatBaseTestsAdapter;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
@@ -23,11 +25,27 @@ public class ContentSecurityClientTest extends WechatBaseTestsAdapter {
 		AccessTokenInfo accessToken = getAccessToken();
 		System.out.println("tokenInfo:"+accessToken);
 		Resource media = new FileSystemResource("d:/test/test.jpg");
-//		media = new ClassPathResource("img/kq.jpg");
-//		media = new ByteArrayHttpMessageConverter();
-//		byte[] data = FileUtils.toByteArray(media.getInputStream());
 		WechatResponse res = contentSecurityClient.imgSecCheck(accessToken, media);
 		System.out.println("res:" + res);
+		assertThat(res.isSuccess()).isTrue();
+		
+		media = new FileSystemResource("d:/test/很黄很黄.png");
+		res = contentSecurityClient.imgSecCheck(accessToken, media);
+		System.out.println("res:" + res);
+		assertThat(res.isSuccess()).isTrue();
+	}
+	
+	@Test
+	public void testMsgSecCheck() throws Exception{
+		String content = "我是党员老江";
+		AccessTokenInfo accessToken = getAccessToken();
+		WechatResponse res = contentSecurityClient.msgSecCheck(accessToken, content);
+		assertThat(res.isSuccess()).isTrue();
+
+		assertThatExceptionOfType(ApiClientException.class).isThrownBy(()->{
+			contentSecurityClient.msgSecCheck(accessToken, "我是党员江泽民");
+		});
+		res = contentSecurityClient.msgSecCheck(accessToken, "我是党员江他喵的泽民");
 		assertThat(res.isSuccess()).isTrue();
 	}
 

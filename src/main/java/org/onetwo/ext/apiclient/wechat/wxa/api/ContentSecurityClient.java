@@ -29,4 +29,8 @@ public interface ContentSecurityClient {
 	@PostMapping(value="/wxa/img_sec_check", consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
 	WechatResponse imgSecCheck(AccessTokenInfo accessToken, Resource media);
 	
+
+	@PostMapping(value="/wxa/msg_sec_check", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	WechatResponse msgSecCheck(AccessTokenInfo accessToken, String content);
+	
 }
