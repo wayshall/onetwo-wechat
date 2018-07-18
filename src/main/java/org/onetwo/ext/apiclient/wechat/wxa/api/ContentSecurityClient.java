@@ -7,6 +7,7 @@ import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.UrlConst;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * https://developers.weixin.qq.com/miniprogram/dev/api/imgSecCheck.html
@@ -27,10 +28,10 @@ public interface ContentSecurityClient {
 	 * @param media
 	 */
 	@PostMapping(value="/wxa/img_sec_check", consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
-	WechatResponse imgSecCheck(AccessTokenInfo accessToken, Resource media);
+	WechatResponse imgSecCheck(AccessTokenInfo accessToken, @RequestParam("media") Resource media);
 	
 
 	@PostMapping(value="/wxa/msg_sec_check", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	WechatResponse msgSecCheck(AccessTokenInfo accessToken, String content);
+	WechatResponse msgSecCheck(AccessTokenInfo accessToken, @RequestParam("content") String content);
 	
 }

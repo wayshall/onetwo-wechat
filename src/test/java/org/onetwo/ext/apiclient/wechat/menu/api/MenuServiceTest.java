@@ -37,9 +37,18 @@ public class MenuServiceTest extends WechatBaseTestsAdapter {
 		WechatResponse res = menuService.create(token, request);
 		assertThat(res.isSuccess()).isTrue();
 		
+		menuService.delete(token);
+	}
+	
+	@Test
+	public void testCreateMenu2() throws IOException{
+		String token = accessTokenService.getAccessToken().getAccessToken();
+		
+		String classPath = "menu_create.json";
+
 		ClassPathResource cpr = new ClassPathResource(classPath);
 		String json = FileUtils.readAsString(cpr.getInputStream());
-		res = menuService.create(token, json);
+		WechatResponse res = menuService.create(token, json);
 		assertThat(res.isSuccess()).isTrue();
 		
 		
