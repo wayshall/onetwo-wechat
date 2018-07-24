@@ -5,6 +5,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 import org.onetwo.ext.apiclient.wechat.basic.api.WechatOauth2ClientTest;
 import org.onetwo.ext.apiclient.wechat.basic.api.WechatServerTest;
+import org.onetwo.ext.apiclient.wechat.media.api.ImageClientTest;
 import org.onetwo.ext.apiclient.wechat.menu.api.MenuServiceTest;
 import org.onetwo.ext.apiclient.wechat.wxa.api.ContentSecurityClientTest;
 
@@ -18,7 +19,8 @@ import org.onetwo.ext.apiclient.wechat.wxa.api.ContentSecurityClientTest;
 	WechatServerTest.class,
 	MenuServiceTest.class,
 	WechatOauth2ClientTest.class,
-	ContentSecurityClientTest.class
+	ContentSecurityClientTest.class,
+	ImageClientTest.class
 })
 public class WechatTestCase {
 
