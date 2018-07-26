@@ -10,8 +10,10 @@ spring:
         serialization:
             indent_output: true
     redis: 
-        host: localhost
-        database: 0
+        host: 182.61.40.185
+        port: 6379
+        password: redis.01234
+        database: 16
         pool: 
             maxActive: 5
 jfish: 
@@ -19,6 +21,15 @@ jfish:
         enabled: true
         lockRegistry:
             key: defaultLock
-wechat: 
-    accessToken: 
+#    cache:
+#        redis:
+#            usePrefix: true
+#            expires:
+#                UAA-CLIENT-OPTIONS: 2h
+wechat:
+    appid: wxa38038a61217ad7a
+    appsecret: cce357273caaaeac9d6314ace4209b84
+#    token: GHIOP34asdF5678JKertyU
+#    encodingAESKey: BSAiqt48pdcZFp5yJVmqR2VYeeaE4HTxxa0mZdC96CF
+    accessToken:
         storer: redis
