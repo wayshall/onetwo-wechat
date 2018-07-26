@@ -10,6 +10,9 @@ import org.onetwo.ext.apiclient.wechat.utils.WechatAppInfo;
  */
 public interface WechatConfig {
 
+	String PREFIX  = "wechat";
+	String ENABLE_MESSAGE_SERVE_KEY = PREFIX+".enableMessageServe.enabled";
+
 	String getToken();
 
 	String getGrantType();

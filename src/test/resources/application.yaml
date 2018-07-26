@@ -22,3 +22,5 @@ jfish:
 wechat: 
     accessToken: 
         storer: redis
+    enableMessageServe: 
+        enabled: false

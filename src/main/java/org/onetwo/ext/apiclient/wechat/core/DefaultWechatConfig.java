@@ -21,7 +21,7 @@ import com.google.common.collect.Maps;
 @ConfigurationProperties(DefaultWechatConfig.PREFIX)
 @Data
 public class DefaultWechatConfig implements WechatConfig{
-	public static final String PREFIX  = "wechat";
+//	public static final String PREFIX  = "wechat";
 //	public static final String SECURITY_OAUTH2_ENABLED_KEY = PREFIX + ".security.oauth2.enabled";
 	
 //	@Value("${wechat.token}")

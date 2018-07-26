@@ -264,12 +264,12 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 		final private List<MessageHandler> handlers = Lists.newArrayList();
 		public MessageHandlerMeta(String messageType) {
 			super();
-			Assert.notNull(messageType);
+			Assert.notNull(messageType, "messageType not null");
 			this.messageType = messageType;
 		}
 		
 		public void addHandler(MessageHandler handler){
-			Assert.notNull(handler);
+			Assert.notNull(handler, "handler not null");
 			this.handlers.add(handler);
 			AnnotationAwareOrderComparator.sort(handlers);
 		}
