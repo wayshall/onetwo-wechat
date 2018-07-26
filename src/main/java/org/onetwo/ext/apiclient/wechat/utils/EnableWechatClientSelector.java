@@ -3,6 +3,7 @@ package org.onetwo.ext.apiclient.wechat.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.onetwo.common.apiclient.impl.RestExecutorConfiguration;
 import org.onetwo.common.spring.context.AbstractImportSelector;
 import org.onetwo.ext.apiclient.qcloud.QCloudLiveConfiguration;
 import org.onetwo.ext.apiclient.wechat.EnableWechatClient;
@@ -24,6 +25,7 @@ public class EnableWechatClientSelector extends AbstractImportSelector<EnableWec
 	protected List<String> doSelect(AnnotationMetadata metadata, AnnotationAttributes attributes) {
 		List<String> classNames = new ArrayList<String>();
 		classNames.add(WechatApiClentRegistrar.class.getName());
+		classNames.add(RestExecutorConfiguration.class.getName());
 		classNames.add(WechatSupportConfiguration.class.getName());
 		
 		

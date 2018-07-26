@@ -9,15 +9,16 @@ spring:
     jackson:
         serialization:
             indent_output: true
+    redis: 
+        host: localhost
+        database: 0
+        pool: 
+            maxActive: 5
 jfish: 
     redis:
         enabled: true
-        hostName: 127.0.0.1
         lockRegistry:
             key: defaultLock
 wechat: 
     accessToken: 
         storer: redis
-    task: 
-        refreshToken: 
-            ignoreIntervalInMinutes: -1
