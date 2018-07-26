@@ -46,7 +46,7 @@
 		    <version>3.13.0</version>
 		</dependency>
 		         -->
-		        
+
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
@@ -299,6 +299,13 @@
 
 	
 	<repositories>
+        <repository>
+            <id>microcloud</id>
+            <url>https://microcloudtech.com/nexus/repository/maven-snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
 	    <repository>
              <id>oss</id>
              <url>https://oss.sonatype.org/content/repositories/snapshots/</url>

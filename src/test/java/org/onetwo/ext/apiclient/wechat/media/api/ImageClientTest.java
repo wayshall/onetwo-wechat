@@ -19,7 +19,7 @@ public class ImageClientTest extends WechatBaseTestsAdapter {
 	@Autowired
 	private ImageClient imageClient;
 	@Autowired
-	AccessTokenService accessTokenService;
+	private AccessTokenService accessTokenService;
 	
 	@Test
 	public void test(){

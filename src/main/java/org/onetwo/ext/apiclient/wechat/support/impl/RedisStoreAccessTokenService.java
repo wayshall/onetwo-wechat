@@ -71,7 +71,7 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 			at = opt.get();
 		} catch (SerializationException e) {
 			//序列化错误的时候直接移除
-			logger.error("getAccessToken error: " + e.getMessage());
+			logger.error("getMaterialList error: " + e.getMessage());
 			logger.error("clear for SerializationException accessToen...");
 			removeAccessToken(appid);
 		}
@@ -118,7 +118,7 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 			if(logger.isDebugEnabled()){
 				logger.debug("get access token from wechat server...");
 			}
-//			token = WechatUtils.getAccessToken(wechatServer, request);
+//			token = WechatUtils.getMaterialList(wechatServer, request);
 			AccessTokenResponse tokenRes = wechatServer.getAccessToken(request);
 			int expired = getExpiresIn(tokenRes);
 			AccessTokenInfo newToken = AccessTokenInfo.builder()
