@@ -1,10 +1,13 @@
 package org.onetwo.ext.apiclient.wechat.article.api;
 
+import org.onetwo.common.utils.FieldName;
 import org.onetwo.ext.apiclient.wechat.article.vo.req.AddNewsBody;
 import org.onetwo.ext.apiclient.wechat.article.vo.req.MaterialListBody;
 import org.onetwo.ext.apiclient.wechat.article.vo.req.SendAllBody;
 import org.onetwo.ext.apiclient.wechat.article.vo.resp.*;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;
+import org.springframework.core.io.AbstractResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,21 +32,21 @@ public interface ArticleTestClient {
      * 新增其他类型永久素材：<br>
      * 图片（image）、语音（voice）、视频（video）和缩略图（thumb）
      */
-    @PostMapping(path = "/material/add_material?access_token={accessToken}&type={type}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    AddMaterialResBody addMaterial(@PathVariable("accessToken") String accessToken, @PathVariable("type") String type, @RequestParam("media") MultipartFile media);
+    @PostMapping(value = "/material/add_material?access_token={accessToken}&type={type}", consumes = {"multipart/form-data"})
+    AddMaterialResBody addMaterial(@PathVariable("accessToken") String accessToken, @PathVariable("type") String type, @FieldName("media") Resource media);
 
     /**
      * 新增永久图文素材<br>
      * 不知道和上传图文消息素材有什么不同
      */
-    @PostMapping(path = "/material/add_news?access_token={accessToken}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(path = "/material/add_news?access_token={accessToken}",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     AddNewsResBody addNews(@PathVariable("accessToken") String accessToken, @Validated @RequestBody AddNewsBody body);
 
     /**
      * 上传图文消息内的图片获取URL
      */
-    @PostMapping(path = "/media/uploadimg?access_token={accessToken}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    UploadImgResBody uploadImg(@PathVariable("accessToken") String accessToken, @RequestParam("media") MultipartFile media);
+    @PostMapping(value = "/media/uploadimg?access_token={accessToken}",consumes = {"multipart/form-data"})
+    UploadImgResBody uploadImg(@PathVariable("accessToken") String accessToken,@FieldName("media") Resource media);
 
     /**
      * 上传图文消息素材<br>

@@ -13,7 +13,7 @@ spring:
         host: 182.61.40.185
         port: 6379
         password: redis.01234
-        database: 16
+        database: 12
         pool:
             maxActive: 5
 jfish:

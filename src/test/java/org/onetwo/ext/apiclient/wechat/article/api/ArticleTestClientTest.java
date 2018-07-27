@@ -4,11 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.onetwo.common.apiclient.resouce.FileNameByteArrayResource;
 import org.onetwo.ext.apiclient.wechat.WechatBaseTestsAdapter;
 import org.onetwo.ext.apiclient.wechat.article.vo.req.*;
 import org.onetwo.ext.apiclient.wechat.article.vo.resp.*;
 import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -67,8 +69,9 @@ public class ArticleTestClientTest extends WechatBaseTestsAdapter {
         }
         FileInputStream inputStream = new FileInputStream(file);
         MultipartFile media = new MockMultipartFile(file.getName(), inputStream);
+        ByteArrayResource byteArrayResource = new FileNameByteArrayResource(media.getOriginalFilename(), media.getBytes());
 
-        AddMaterialResBody resBody = articleTestClient.addMaterial(token, "image", media);
+        AddMaterialResBody resBody = articleTestClient.addMaterial(token, "image", byteArrayResource);
         toJsonString("新增其他类型永久素材", resBody);
     }
 
@@ -109,8 +112,9 @@ public class ArticleTestClientTest extends WechatBaseTestsAdapter {
         }
         FileInputStream inputStream = new FileInputStream(file);
         MultipartFile media = new MockMultipartFile(file.getName(), inputStream);
+        ByteArrayResource byteArrayResource = new FileNameByteArrayResource(media.getOriginalFilename(), media.getBytes());
 
-        UploadImgResBody resBody = articleTestClient.uploadImg(token, media);
+        UploadImgResBody resBody = articleTestClient.uploadImg(token, byteArrayResource);
         toJsonString("上传图文消息内的图片获取URL", resBody);
     }
 
