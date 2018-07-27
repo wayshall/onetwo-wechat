@@ -33,3 +33,5 @@ wechat:
 #    encodingAESKey: BSAiqt48pdcZFp5yJVmqR2VYeeaE4HTxxa0mZdC96CF
     accessToken:
         storer: redis
+    enableMessageServe: 
+        enabled: false

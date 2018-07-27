@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.wechat.article.vo.resp;
+package org.onetwo.ext.apiclient.wechat.material.response;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

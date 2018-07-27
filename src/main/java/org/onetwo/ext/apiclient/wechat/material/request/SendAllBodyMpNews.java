@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.wechat.article.vo.req;
+package org.onetwo.ext.apiclient.wechat.material.request;
 
 import lombok.Data;
 

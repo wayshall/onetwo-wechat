@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.wechat.article.vo.resp;
+package org.onetwo.ext.apiclient.wechat.material.response;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,7 +9,7 @@ import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class AddNewsResBody extends WechatResponse {
+public class UploadImgResponse extends WechatResponse {
 
-    private String media_id;
+    protected String url;
 }

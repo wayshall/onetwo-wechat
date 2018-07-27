@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.wechat.article.vo.req;
+package org.onetwo.ext.apiclient.wechat.material.request;
 
 import lombok.Data;
 
@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
  * @author LeeKITMAN
  */
 @Data
-public class MaterialListBody {
+public class BatchgetMaterialRequest {
 
     /**
      * 素材的类型，图片（image）、视频（video）、语音 （voice）、图文（news）
