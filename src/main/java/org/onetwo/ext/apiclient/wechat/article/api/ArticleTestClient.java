@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * @author LeeKITMAN
+ * 文档地址：<br>
+ *     https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1445241432
  */
 @WechatApiClient
 public interface ArticleTestClient {
