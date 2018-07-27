@@ -72,7 +72,7 @@ public class MemoryAccessTokenService implements AccessTokenService {
 			if(accessToken!=null && !accessToken.isExpired()){
 				return accessToken;
 			}
-			accessToken = WechatUtils.getAccessToken(wechatServer, request);
+			accessToken = WechatUtils.getMaterialList(wechatServer, request);
 			this.accessTokenCaches.put(request.getAppid(), accessToken);
 			return accessToken;
 		} finally{
