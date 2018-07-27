@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 文档地址：<br>
+ * 文档地址：主要是【素材管理】和【消息管理】<br>
  *     https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1445241432
  */
 @WechatApiClient
