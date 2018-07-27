@@ -27,7 +27,7 @@ public class WechatBaseBootTests {
 	}
 	
 	@SpringBootApplication
-	@EnableWechatClient
+	@EnableWechatClient(enableMessageServe = false)
 	@Import(RedisConfiguration.class)
 	public static class TestStarter {
 	}
