@@ -1,5 +1,6 @@
 package org.onetwo.ext.apiclient.wechat;
 
+import org.junit.Before;
 import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
@@ -17,6 +18,13 @@ public class WechatBaseTestsAdapter extends WechatBaseBootTests {
 	
 	@Autowired
 	AccessTokenService accessTokenService;
+	
+	protected AccessTokenInfo accessTokenInfo;
+	    
+    @Before
+    public void setup(){
+    	this.accessTokenInfo = getAccessToken();
+    }
 	
 	protected AccessTokenInfo getAccessToken(){
 		GetAccessTokenRequest request = GetAccessTokenRequest.builder()

@@ -22,12 +22,11 @@ public class ImageClientTest extends WechatBaseTestsAdapter {
 	private AccessTokenService accessTokenService;
 	
 	@Test
-	public void test(){
-		String token = accessTokenService.getAccessToken().getAccessToken();
+	public void testUpload(){
 		Resource buffer = new ClassPathResource("img/kq.jpg");
 		assertThatExceptionOfType(ApiClientException.class)
 		.isThrownBy(()->{
-			UploadResponse res = this.imageClient.upload(token, buffer);
+			UploadResponse res = this.imageClient.uploadimg(accessTokenInfo, buffer);
 			System.out.println("url: " + res.getUrl());
 		})
 		.withMessage("api功能未授权，请确认公众号已获得该接口，可以在公众平台官网-开发者中心页中查看接口权限");

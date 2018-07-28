@@ -26,9 +26,7 @@ jfish:
 #            usePrefix: true
 #            expires:
 #                UAA-CLIENT-OPTIONS: 2h
-wechat:
-    appid: wxa38038a61217ad7a
-    appsecret: cce357273caaaeac9d6314ace4209b84
+wechat: 
 #    token: GHIOP34asdF5678JKertyU
 #    encodingAESKey: BSAiqt48pdcZFp5yJVmqR2VYeeaE4HTxxa0mZdC96CF
     accessToken:

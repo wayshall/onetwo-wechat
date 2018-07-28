@@ -226,4 +226,49 @@ public abstract class WechatConstants {
 		REDIS
 	}
 
+	public static enum MediaTypes {
+		IMAGE("图片"),
+		VOICE("语音"),
+		VIDEO("视频"),
+		THUMB("缩略图");
+		
+		private final String label;
+
+		private MediaTypes(String label) {
+			this.label = label;
+		}
+
+		public String getLabel() {
+			return label;
+		}
+		
+		@JsonValue
+		public String getValue(){
+			return name();
+		}
+	}
+
+	public static enum MsgTypes {
+		MPNEWS("图文消息"),
+		TEXT("文本"),
+		VOICE("语音/音频"),
+		MPVIDEO("视频"),
+		WXCARD("微信卡券"),
+		IMAGE("图片");
+		
+		private final String label;
+
+		private MsgTypes(String label) {
+			this.label = label;
+		}
+
+		public String getLabel() {
+			return label;
+		}
+		
+		@JsonValue
+		public String getValue(){
+			return name();
+		}
+	}
 }
