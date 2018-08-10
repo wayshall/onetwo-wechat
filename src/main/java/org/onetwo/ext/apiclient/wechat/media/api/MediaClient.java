@@ -1,14 +1,18 @@
 package org.onetwo.ext.apiclient.wechat.media.api;
 
+import org.onetwo.common.apiclient.annotation.ResponseHandler;
 import org.onetwo.common.utils.FieldName;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;
+import org.onetwo.ext.apiclient.wechat.handler.ByteArrayResponseHandler;
 import org.onetwo.ext.apiclient.wechat.material.response.UploadNewsResponse;
 import org.onetwo.ext.apiclient.wechat.media.request.AddNewsRequest;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.MediaTypes;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,5 +43,17 @@ public interface MediaClient extends ImageClient {
      */
     @PostMapping(path = "/media/uploadnews", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     UploadNewsResponse uploadNews(AccessTokenInfo accessToken, @Validated @RequestBody AddNewsRequest body);
+    
+    /***
+     * 获取临时素材
+     * https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1444738727
+     * @author wayshall
+     * @param accessToken
+     * @param mediaId
+     * @return
+     */
+    @GetMapping(path = "/media/get", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseHandler(ByteArrayResponseHandler.class)
+    ByteArrayResource get(AccessTokenInfo accessToken, @RequestParam("media_id") String mediaId);
 
 }

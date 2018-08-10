@@ -2,10 +2,12 @@ package org.onetwo.ext.apiclient.wechat.media.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+import org.onetwo.common.file.FileUtils;
 import org.onetwo.ext.apiclient.wechat.WechatBaseTestsAdapter;
 import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.material.response.UploadNewsResponse;
@@ -13,8 +15,10 @@ import org.onetwo.ext.apiclient.wechat.media.request.AddNewsRequest;
 import org.onetwo.ext.apiclient.wechat.media.request.AddNewsRequest.AddNewsItem;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.MediaTypes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 
 /**
  * @author wayshall
@@ -25,6 +29,20 @@ public class MediaClientTest extends WechatBaseTestsAdapter {
 	private MediaClient mediaClient;
 	@Autowired
 	private AccessTokenService accessTokenService;
+	
+
+	@Test
+	public void testUploadUrl() throws Exception{
+		Resource buffer = new UrlResource("https://test-1252097922.cos.ap-guangzhou.myqcloud.com/club_album-711891c1-2a8e-4637-94d5-c7d2de86617d.png");
+		UploadNewsResponse res = this.mediaClient.upload(accessTokenInfo, MediaTypes.IMAGE, buffer);
+		System.out.println("res:"+res);
+		assertThat(res.isSuccess()).isTrue();
+		assertThat(res.getMediaId()).isNotNull();
+
+		String mediaId = res.getMediaId();
+		ByteArrayResource byteRes = mediaClient.get(accessTokenInfo, mediaId);
+		FileUtils.writeByteArrayToFile(new File("D:/test/media-get.jpg"), byteRes.getByteArray());
+	}
 	
 	@Test
 	public void testUploadNews(){
