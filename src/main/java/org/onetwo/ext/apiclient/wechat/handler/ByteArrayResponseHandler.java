@@ -22,12 +22,16 @@ public class ByteArrayResponseHandler implements CustomResponseHandler<ByteArray
 	@Override
 	public Object handleResponse(ApiClientMethod apiMethod, ResponseEntity<ByteArrayResource> responseEntity) {
 		MediaType mediaType = responseEntity.getHeaders().getContentType();
-		if(mediaType!=null && (mediaType.isCompatibleWith(MediaType.APPLICATION_JSON) || mediaType.isCompatibleWith(MediaType.TEXT_PLAIN) )){
+		if(isTextMedia(mediaType)){
 			WechatResponse response = JsonMapper.IGNORE_NULL.fromJson(responseEntity.getBody().getByteArray(), WechatResponse.class);
 			if(!response.isSuccess()){
 				throw WechatUtils.translateToApiClientException(apiMethod, response, responseEntity);
 			}
 		}
 		return responseEntity.getBody();
+	}
+	
+	protected boolean isTextMedia(MediaType mediaType){
+		return mediaType!=null && (mediaType.isCompatibleWith(MediaType.APPLICATION_JSON) || mediaType.isCompatibleWith(MediaType.TEXT_PLAIN));
 	}
 }
