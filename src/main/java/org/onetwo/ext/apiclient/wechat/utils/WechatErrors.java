@@ -26,8 +26,8 @@ public enum WechatErrors implements ErrorType {
 	TEMPLATE_ID_EXPIRED(41028, "form_id不正确，或者过期"),
 	TEMPLATE_ID_HAS_USED(41029, "form_id已被使用"),
 	PAGE_ERROR(41030, "page不正确"),
-	API_CALL_EXCEEDS_QUOTA(45009, "接口调用超过限额（目前默认每个帐号日调用限额为100万）")
-	;
+	API_CALL_EXCEEDS_QUOTA(45009, "接口调用超过限额（目前默认每个帐号日调用限额为100万）"),
+	CLIENTMSGID_EXIST(45065, "摘要值已经存在，此消息已经群发过");
 
 	private static final Map<Integer, WechatErrors> ERROR_MAP;
 	
