@@ -22,12 +22,12 @@ import org.onetwo.ext.apiclient.wechat.serve.dto.ServeAuthParam;
 import org.onetwo.ext.apiclient.wechat.serve.spi.Message;
 import org.onetwo.ext.apiclient.wechat.serve.spi.MessageHandler;
 import org.onetwo.ext.apiclient.wechat.serve.spi.MessageRouterService;
+import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.MessageType;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.MessageTypeParams;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -51,24 +51,30 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 	private MapToBeanConvertor beanConvertor = MapToBeanConvertor.builder().build();
 	private Map<Class<? extends Message>, MessageHandlerMeta> handlerMapper = Maps.newConcurrentMap();
 	/***
-	 * 用mapper隔离messageType和messageClass，让其可扩展
+	 * 用mapper隔离messageType和messageClass，让其可扩展;
+	 * 根据MsgType获取对应的消息class，并通过反射创建message对象
 	 */
 	private BiMap<String, Class<? extends Message>> receiveTypeMapper = HashBiMap.create();
 	
 
 	private ObjectMapper objectMapper;
-	@Autowired
-	private WechatConfig wechatConfig;
-	private WXBizMsgCrypt messageCrypt;
+//	@Autowired
+//	private WechatConfig wechatConfig;
+//	private WXBizMsgCrypt messageCrypt;
+	private WechatConfigProvider wechatConfigProvider;
 	
 
 	protected WXBizMsgCrypt getMessageCrypt(){
-		return messageCrypt;
+		return wechatConfigProvider.getWXBizMsgCrypt();
 	}
 	
-	public void setMessageCrypt(WXBizMsgCrypt messageCrypt) {
-		this.messageCrypt = messageCrypt;
+	public WechatConfig getWechatConfig(){
+		return this.wechatConfigProvider.getWechatConfig();
 	}
+	
+	/*public void setMessageCrypt(WXBizMsgCrypt messageCrypt) {
+		this.messageCrypt = messageCrypt;
+	}*/
 
 	public void setObjectMapper(ObjectMapper objectMapper) {
 		this.objectMapper = objectMapper;
@@ -83,13 +89,13 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 		if(objectMapper==null){
 			objectMapper = Jackson2ObjectMapperBuilder.xml().build();
 		}
-		try {
+		/*try {
 			if(messageCrypt==null){
 				this.messageCrypt = new WXBizMsgCrypt(wechatConfig.getToken(), wechatConfig.getEncodingAESKey(), wechatConfig.getAppid());
 			}
 		} catch (AesException e) {
 			throw new BaseException(e.getMessage(), e);
-		}
+		}*/
 	}
 
 	@Override
@@ -153,7 +159,7 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 		}
 		try {
 			//经测试，实际上微信url验证不会加密
-			if(wechatConfig.isEncryptByAes()){
+			if(getWechatConfig().isEncryptByAes()){
 				return getMessageCrypt().verifyUrl(auth.getSignature(), auth.getTimestamp(), auth.getNonce(), auth.getEchostr());
 			}
 		} catch (AesException e) {
@@ -165,7 +171,7 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 	
 	private boolean isValidRequest(ServeAuthParam auth){
 		List<String> authItems = new ArrayList<>();
-		authItems.add(wechatConfig.getToken());
+		authItems.add(getWechatConfig().getToken());
 		authItems.add(auth.getTimestamp());
 		authItems.add(auth.getNonce());
 		Collections.sort(authItems);
@@ -199,6 +205,7 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 	}
 	
 	/***
+	 * 根据MsgType获取对应的消息class，并通过反射创建message对象
 	 * convert message map to bean
 	 * @author wayshall
 	 * @param message

@@ -24,6 +24,13 @@ public interface MessageRouterService {
 	
 	MessageRouterService clearHandlers(Class<? extends Message> messageType);
 	
+	/***
+	 * MessageType枚举类未定义映射的消息，可通过mapping来扩展
+	 * @author wayshall
+	 * @param messageType
+	 * @param messageClass
+	 * @return
+	 */
 	MessageRouterService mappingReceive(String messageType, Class<? extends Message> messageClass);
 	
 	

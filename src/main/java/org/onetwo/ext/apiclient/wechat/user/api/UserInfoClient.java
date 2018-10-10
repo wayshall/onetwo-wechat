@@ -5,15 +5,21 @@ import java.util.List;
 import javax.validation.Valid;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;
 import org.onetwo.ext.apiclient.wechat.user.request.UserInfoGetRequest;
 import org.onetwo.ext.apiclient.wechat.user.response.UserInfoGetResponse;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.Lists;
 
 /**
  * 
@@ -28,16 +34,26 @@ public interface UserInfoClient {
 	@RequestMapping(method=RequestMethod.GET)
 	UserInfoGetResponse get(AccessTokenInfo accessTokenInfo, @Valid UserInfoGetRequest request);
 
-	@RequestMapping(method=RequestMethod.GET)
-	UserInfoBatchGetResponse batchget(AccessTokenInfo accessTokenInfo, @Valid UserInfoBatchGetRequest request);
+	@PostMapping(path="batchget", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	UserInfoBatchGetResponse batchget(AccessTokenInfo accessTokenInfo, @Valid @RequestBody UserInfoBatchGetRequest request);
 	
 	@Data
 	public static class UserInfoBatchGetRequest {
 		@JsonProperty("user_list")
+		@Valid
 		List<UserInfoGetRequest> userList;
+		
+		public UserInfoBatchGetRequest add(UserInfoGetRequest getRequest) {
+			if(this.userList==null){
+				this.userList = Lists.newArrayList();
+			}
+			this.userList.add(getRequest);
+			return this;
+		}
 	}
 	@Data
-	public static class UserInfoBatchGetResponse {
+	@EqualsAndHashCode(callSuper=true)
+	public static class UserInfoBatchGetResponse extends WechatResponse {
 		@JsonProperty("user_info_list")
 		List<UserInfoGetResponse> userInfoList;
 	}

@@ -18,7 +18,7 @@ public class PoiClientTest extends WechatBaseTestsAdapter {
 	@Test
 	public void testGetPoiList(){
 		GetPoiListRequest buffer = GetPoiListRequest.builder().build();
-		GetPoiListResponse repsonse = poiClient.getPoiList(buffer);
+		GetPoiListResponse repsonse = poiClient.getPoiList(getAccessToken(), buffer);
 		System.out.println("response: " + repsonse);
 	}
 

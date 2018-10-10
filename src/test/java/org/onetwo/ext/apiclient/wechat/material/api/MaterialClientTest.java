@@ -7,7 +7,6 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.onetwo.ext.apiclient.wechat.WechatBaseTestsAdapter;
 import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
@@ -18,7 +17,6 @@ import org.onetwo.ext.apiclient.wechat.material.response.AddNewsResponse;
 import org.onetwo.ext.apiclient.wechat.material.response.BatchgetMaterialResponse;
 import org.onetwo.ext.apiclient.wechat.media.request.AddNewsRequest;
 import org.onetwo.ext.apiclient.wechat.media.request.AddNewsRequest.AddNewsItem;
-import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -36,13 +34,8 @@ public class MaterialClientTest extends WechatBaseTestsAdapter {
     private MaterialClient articleTestClient;
     @Autowired
     AccessTokenService accessTokenService;
-
-    AccessTokenInfo accessTokenInfo;
     
-    @Before
-    public void setup(){
-    	this.accessTokenInfo = accessTokenService.getAccessToken();
-    }
+    String mediaId = null;
 
     private void toJsonString(String msg, Object resBody) {
         ObjectMapper mapper = new ObjectMapper();
@@ -93,14 +86,14 @@ public class MaterialClientTest extends WechatBaseTestsAdapter {
         AddVideoMaterialRequest video = new AddVideoMaterialRequest();
         video.setTitle("test");
         video.setIntroduction("test");
-        
     	Resource res = new ClassPathResource("img/kq.jpg");
-//        ByteArrayResource byteArrayResource = new FileNameByteArrayResource("kq.jpg", FileUtils.toByteArray(res.getInputStream()));
         AddMaterialResponse resBody = articleTestClient.addMaterial(accessTokenInfo, "image", res, video);
+        
         toJsonString("新增其他类型永久素材", resBody);
         assertThat(resBody.isSuccess()).isTrue();
         assertThat(resBody.getMediaId()).isNotNull();
         assertThat(resBody.getUrl()).isNotNull();
+        mediaId = resBody.getMediaId();
     }
 
     /**
@@ -108,11 +101,18 @@ public class MaterialClientTest extends WechatBaseTestsAdapter {
      */
     @Test
     public void testAddNews() {
+    	AddVideoMaterialRequest video = new AddVideoMaterialRequest();
+        video.setTitle("test");
+        video.setIntroduction("test");
+    	Resource res = new ClassPathResource("img/kq.jpg");
+        AddMaterialResponse mediaResBody = articleTestClient.addMaterial(accessTokenInfo, "image", res, video);
+        
+        
         AddNewsRequest body = new AddNewsRequest();
         List<AddNewsItem> list = new ArrayList<>();
         AddNewsItem articles = new AddNewsItem();
         articles.setTitle("测试标题");
-        articles.setThumbMediaId("kQiTKiCLHlfN6aKTMJ-IP19S1efmmNsm2l3C8NuuTB4");
+        articles.setThumbMediaId(mediaResBody.getMediaId());
         articles.setAuthor("leekitman");
         articles.setShowCoverPic(true);
         articles.setContent("噫吁嚱，危乎高哉！蜀道之难，难于上青天！蚕丛及鱼凫，开国何茫然！尔来四万八千岁，不与秦塞通人烟。西当太白有鸟道，可以横绝峨眉巅。");

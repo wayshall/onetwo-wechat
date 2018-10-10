@@ -30,16 +30,29 @@ public class ReceiveMessage implements Message {
 	public FlowType getFlowType(){
 		return FlowType.RECEIVE;
 	}
+	
+	/***
+	 * 关注/取消关注事件
+	 * 详见：https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140454
+	 * @author wayshall
+	 *
+	 */
+	@Data
+	@EqualsAndHashCode(callSuper=true)
+	public static class EventMessage extends ReceiveMessage {
+		@FieldName("Event")
+		private String event;
+	}
 
 	@Data
-	@EqualsAndHashCode(callSuper=false)
+	@EqualsAndHashCode(callSuper=true)
 	public static class MediaMessage extends ReceiveMessage {
 		@FieldName("MediaId")
 		private String mediaId;
 	}
 
 	@Data
-	@EqualsAndHashCode(callSuper=false)
+	@EqualsAndHashCode(callSuper=true)
 	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor
@@ -49,7 +62,7 @@ public class ReceiveMessage implements Message {
 	}
 
 	@Data
-	@EqualsAndHashCode(callSuper=false)
+	@EqualsAndHashCode(callSuper=true)
 	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor
@@ -59,7 +72,7 @@ public class ReceiveMessage implements Message {
 	}
 
 	@Data
-	@EqualsAndHashCode(callSuper=false)
+	@EqualsAndHashCode(callSuper=true)
 	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor
@@ -74,7 +87,7 @@ public class ReceiveMessage implements Message {
 	}
 
 	@Data
-	@EqualsAndHashCode(callSuper=false)
+	@EqualsAndHashCode(callSuper=true)
 	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor
@@ -87,7 +100,7 @@ public class ReceiveMessage implements Message {
 	}
 
 	@Data
-	@EqualsAndHashCode(callSuper=false)
+	@EqualsAndHashCode(callSuper=true)
 	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor
@@ -100,7 +113,7 @@ public class ReceiveMessage implements Message {
 	}
 
 	@Data
-	@EqualsAndHashCode(callSuper=false)
+	@EqualsAndHashCode(callSuper=true)
 	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor
@@ -129,7 +142,7 @@ public class ReceiveMessage implements Message {
 
 
 	@Data
-	@EqualsAndHashCode(callSuper=false)
+	@EqualsAndHashCode(callSuper=true)
 	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor

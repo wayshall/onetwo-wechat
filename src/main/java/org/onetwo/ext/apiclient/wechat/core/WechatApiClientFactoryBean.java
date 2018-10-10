@@ -15,7 +15,6 @@ import org.onetwo.common.apiclient.utils.ApiClientUtils;
 import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.spring.SpringUtils;
 import org.onetwo.common.utils.ParamUtils;
-import org.onetwo.ext.apiclient.wechat.basic.request.AccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClientFactoryBean.WechatMethod;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
@@ -23,7 +22,6 @@ import org.onetwo.ext.apiclient.wechat.utils.WechatConstants;
 import org.onetwo.ext.apiclient.wechat.utils.WechatErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatException;
 import org.slf4j.Logger;
-import org.springframework.core.annotation.AnnotationAttributes;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -54,10 +52,10 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 		return apiClient;
 	}
 	
-	protected String getAccessToken(){
+	/*protected String getAccessToken(){
 		String accessToken = getAccessTokenService().getAccessToken().getAccessToken();
 		return accessToken;
-	}
+	}*/
 	
 	protected AccessTokenService getAccessTokenService(){
 		AccessTokenService accessTokenService = SpringUtils.getBean(applicationContext, AccessTokenService.class);
@@ -103,13 +101,13 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 		@Override
 		protected Object[] processArgumentsBeforeRequest(MethodInvocation invocation, WechatMethod method){
 			final Object[] args = super.processArgumentsBeforeRequest(invocation, method);
-			method.findParameterByType(AccessTokenRequest.class)
+			/*method.findParameterByType(AccessTokenRequest.class)
 					.ifPresent(p->{
 						AccessTokenRequest atRequest = (AccessTokenRequest)args[p.getParameterIndex()];
 						if(StringUtils.isBlank(atRequest.getAccessToken())){
 							atRequest.setAccessToken(getAccessToken());
 						}
-					});
+					});*/
 			return args;
 		}
 		
@@ -124,10 +122,10 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 		@Override
 		public String processUrlBeforeRequest(final String actualUrl, WechatMethod method, RequestContextData context){
 			String newUrl = actualUrl;
-			if(method.isAutoAppendAccessToken()){
+			/*if(method.isAutoAppendAccessToken()){
 				String accessToken = getAccessToken();
 				newUrl = ParamUtils.appendParam(newUrl, WechatConstants.PARAMS_ACCESS_TOKEN, accessToken);
-			}
+			}*/
 			Optional<AccessTokenInfo> at = method.getAccessToken(context.getMethodArgs());
 			if(at.isPresent()){
 				newUrl = ParamUtils.appendParam(newUrl, WechatConstants.PARAMS_ACCESS_TOKEN, at.get().getAccessToken());
@@ -138,7 +136,7 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 	}
 
 	static class WechatMethod extends ApiClientMethod {
-		private boolean autoAppendAccessToken;
+//		private boolean autoAppendAccessToken;
 		private Optional<ApiClientMethodParameter> accessTokenParameter;
 		
 		public WechatMethod(Method method) {
@@ -148,17 +146,18 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 		@Override
 		public void initialize(){
 			super.initialize();
+			/*
 			Optional<AnnotationAttributes> configOpt = SpringUtils.getAnnotationAttributes(method, WechatRequestConfig.class, true);
 			configOpt.ifPresent(attrs->{
 				autoAppendAccessToken = attrs.getBoolean("accessToken");
-			});
+			});*/
 
 			accessTokenParameter = findParameterByType(AccessTokenInfo.class);
 		}
 
-		public boolean isAutoAppendAccessToken() {
+		/*public boolean isAutoAppendAccessToken() {
 			return autoAppendAccessToken;
-		}
+		}*/
 
 		public Optional<ApiClientMethodParameter> getAccessTokenParameter() {
 			return accessTokenParameter;

@@ -82,7 +82,6 @@ public class WechatUtils {
 	}
 	
 	public static AccessTokenInfo getAccessToken(TokenApi wechatServer, GetAccessTokenRequest request){
-		
 		AccessTokenResponse response = wechatServer.getAccessToken(request);
 		AccessTokenInfo accessToken = AccessTokenInfo.builder()
 													.accessToken(response.getAccessToken())

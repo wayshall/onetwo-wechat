@@ -27,7 +27,7 @@ public class CardClientTest extends WechatBaseTestsAdapter {
 												 .build();
 		String json = JsonMapper.IGNORE_NULL.toJson(request);
 		System.out.println("json:"+json);
-		BatchgetResponse res = cardClient.batchget(request);
+		BatchgetResponse res = cardClient.batchget(getAccessToken(), request);
 		System.out.println("res:" + res);
 	}
 

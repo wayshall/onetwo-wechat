@@ -1,9 +1,9 @@
 package org.onetwo.ext.apiclient.wechat.poi.api;
 
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;
-import org.onetwo.ext.apiclient.wechat.core.WechatRequestConfig;
 import org.onetwo.ext.apiclient.wechat.poi.request.GetPoiListRequest;
 import org.onetwo.ext.apiclient.wechat.poi.response.GetPoiListResponse;
+import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 /**
@@ -21,7 +21,7 @@ public interface PoiClient {
 	 * @return
 	 */
 	@PostMapping(path="/poi/getpoilist", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@WechatRequestConfig(accessToken=true)
-	GetPoiListResponse getPoiList(GetPoiListRequest buffer);
+//	@WechatRequestConfig(accessToken=true)
+	GetPoiListResponse getPoiList(AccessTokenInfo accessToken, GetPoiListRequest buffer);
 
 }

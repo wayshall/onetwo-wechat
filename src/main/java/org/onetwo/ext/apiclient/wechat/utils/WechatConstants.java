@@ -1,6 +1,9 @@
 package org.onetwo.ext.apiclient.wechat.utils;
 
+import java.util.stream.Stream;
+
 import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage;
+import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage.EventMessage;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage.ImageMessage;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage.LinkMessage;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage.LocationMessage;
@@ -105,6 +108,7 @@ public abstract class WechatConstants {
 		
 	}
 	public static enum MessageType {
+		EVENT("事件消息", EventMessage.class),
 		TEXT("文本消息", TextMessage.class),
 		IMAGE("图片消息", ImageMessage.class),
 		VOICE("语音消息", VoiceMessage.class),
@@ -270,5 +274,27 @@ public abstract class WechatConstants {
 		public String getValue(){
 			return name();
 		}
+	}
+	
+	public static enum EventTypes {
+		SUBSCRIBE("订阅"),
+		UNSUBSCRIBE("取消订阅");
+		
+		final private String label;
+
+		private EventTypes(String label) {
+			this.label = label;
+		}
+
+		public String getLabel() {
+			return label;
+		}
+		
+		public static EventTypes of(String status){
+			return Stream.of(values()).filter(s->s.name().equals(status))
+										.findAny()
+										.orElseThrow(()->new IllegalArgumentException("event: " + status));
+		}
+		
 	}
 }

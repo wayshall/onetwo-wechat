@@ -11,7 +11,7 @@ public interface Message {
 	
 	FlowType getFlowType();
 
-	enum FlowType {
+	public enum FlowType {
 		RECEIVE,
 		REPLY;
 	}

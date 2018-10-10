@@ -16,7 +16,8 @@ public interface AccessTokenService {
 	 * @author wayshall
 	 * @return
 	 */
-	AccessTokenInfo getAccessToken();
+	/*@Deprecated
+	AccessTokenInfo getAccessToken();*/
 	AccessTokenInfo getOrRefreshAccessToken(GetAccessTokenRequest request);
 	AccessTokenInfo refreshAccessToken(GetAccessTokenRequest request);
 	void removeAccessToken(String appid);

@@ -13,5 +13,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.METHOD})
 public @interface WechatRequestConfig {
 
-	boolean accessToken() default true;
+//	boolean accessToken() default true;
 }
