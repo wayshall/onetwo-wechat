@@ -16,4 +16,6 @@ public class BaseServeParam {
 	private String timestamp;
 	@NotBlank
 	private String nonce;
+	
+	private String clientId;
 }

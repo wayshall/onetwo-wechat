@@ -5,6 +5,7 @@ import java.util.Map;
 import org.onetwo.ext.apiclient.wechat.serve.dto.MessageParam;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ServeAuthParam;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.MediaTypeKeys;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -14,12 +15,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 public interface ServeEndpoint {
 
-	@RequestMapping(method=RequestMethod.GET, params="echostr")
-	String auth(ServeAuthParam authRequet);
+	@RequestMapping(path="/serve/{clientId}", method=RequestMethod.GET, params="echostr")
+	String auth(@PathVariable("clientId") String clientId, ServeAuthParam authRequet);
 
-	@RequestMapping(method=RequestMethod.POST, 
+	@RequestMapping(path="/serve/{clientId}", 
+					method=RequestMethod.POST, 
 					consumes={MediaTypeKeys.TEXT_XML_VALUE_UTF8, MediaTypeKeys.APPLICATION_XML_VALUE_UTF8},
 					produces={MediaTypeKeys.TEXT_XML_VALUE_UTF8})
-	Object onMessageReceived(MessageParam msgParam, Map<String, Object> message);
+	Object onMessageReceived(@PathVariable("clientId") String clientId, MessageParam msgParam, Map<String, Object> message);
 
 }

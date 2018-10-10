@@ -55,10 +55,10 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 		Assert.notNull(wechatConfig, "wechat config can not be null");
 	}
 
-	public AccessTokenInfo getAccessToken() {
+	/*public AccessTokenInfo getAccessToken() {
 		GetAccessTokenRequest request = WechatUtils.createGetAccessTokenRequest(wechatConfig);
 		return getOrRefreshAccessToken(request);
-	}
+	}*/
 	
 	public Optional<AccessTokenInfo> getAccessToken(String appid) {
 		Assert.hasText(appid, "appid must have length; it must not be null or empty");

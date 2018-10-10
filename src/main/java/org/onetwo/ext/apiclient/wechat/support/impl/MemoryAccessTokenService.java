@@ -10,7 +10,6 @@ import org.onetwo.common.log.JFishLoggerFactory;
 import org.onetwo.ext.apiclient.wechat.basic.api.WechatServer;
 import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
-import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatException;
@@ -33,8 +32,8 @@ public class MemoryAccessTokenService implements AccessTokenService {
 
 	@Autowired
 	private WechatServer wechatServer;
-	@Autowired
-	private WechatConfig wechatConfig;
+	/*@Autowired
+	private WechatConfig wechatConfig;*/
 	
 //	private volatile AccessTokenInfo accessToken;
 //	private ReentrantLock obtainAcessTokenLock = new ReentrantLock();
@@ -43,9 +42,9 @@ public class MemoryAccessTokenService implements AccessTokenService {
 																		.build();
 	private Map<String, ReentrantLock> lockMap = Maps.newConcurrentMap();
 	
-	public AccessTokenInfo getAccessToken() {
+	/*public AccessTokenInfo getAccessToken() {
 		return getOrRefreshAccessToken(WechatUtils.createGetAccessTokenRequest(wechatConfig));
-	}
+	}*/
 	
 	@Override
 	public Optional<AccessTokenInfo> getAccessToken(String appid) {
@@ -145,8 +144,8 @@ public class MemoryAccessTokenService implements AccessTokenService {
 		return wechatServer;
 	}
 
-	public WechatConfig getWechatConfig() {
+	/*public WechatConfig getWechatConfig() {
 		return wechatConfig;
-	}
+	}*/
 
 }

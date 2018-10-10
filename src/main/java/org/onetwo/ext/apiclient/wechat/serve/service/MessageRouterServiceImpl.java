@@ -28,6 +28,7 @@ import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.MessageType;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.MessageTypeParams;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -61,6 +62,7 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 //	@Autowired
 //	private WechatConfig wechatConfig;
 //	private WXBizMsgCrypt messageCrypt;
+	@Autowired
 	private WechatConfigProvider wechatConfigProvider;
 	
 

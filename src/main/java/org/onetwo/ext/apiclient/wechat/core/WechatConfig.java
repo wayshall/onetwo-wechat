@@ -1,8 +1,5 @@
 package org.onetwo.ext.apiclient.wechat.core;
 
-import java.util.Map;
-
-import org.onetwo.ext.apiclient.wechat.utils.WechatAppInfo;
 
 /**
  * @author wayshall
@@ -15,23 +12,48 @@ public interface WechatConfig {
 
 	String getToken();
 
-	String getGrantType();
+//	String getGrantType();
 
 	String getAppid();
 
 	String getAppsecret();
 	
+	/***
+	 * aeskey
+	 * @author wayshall
+	 * @return
+	 */
 	String getEncodingAESKey();
 	
+	/*** 
+	 * 是否使用aes加密
+	 * @author wayshall
+	 * @return
+	 */
 	boolean isEncryptByAes();
 	
+	/***
+	 * oauth2跳转url，一般会在拦截器构造，如果为空，则使用此配置
+	 * @author wayshall
+	 * @return
+	 */
 	String getOauth2RedirectUri();
 	String getOauth2Scope();
+	
+	/***
+	 * oauth2验证拦截url，默认所有
+	 * @author wayshall
+	 * @return
+	 */
 	String[] getOauth2InterceptUrls();
 	
-	
+	/***
+	 * 使用浏览器访问oauth2授权链接时，是否已直接抛错
+	 * @author wayshall
+	 * @return
+	 */
 	boolean isOauth2ErrorInBrowser();
 	
-	Map<String, WechatAppInfo> getApps();
+//	Map<String, WechatAppInfo> getApps();
 	
 }

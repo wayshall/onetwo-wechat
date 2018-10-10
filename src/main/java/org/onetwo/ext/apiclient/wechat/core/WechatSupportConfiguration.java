@@ -1,11 +1,13 @@
 package org.onetwo.ext.apiclient.wechat.core;
 
 import org.onetwo.common.spring.Springs;
+import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.support.impl.MemoryAccessTokenService;
 import org.onetwo.ext.apiclient.wechat.support.impl.RedisStoreAccessTokenService;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.WechatConfigKeys;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
@@ -22,19 +24,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 @Configuration
 @ComponentScan(basePackageClasses=MemoryAccessTokenService.class)
-@EnableConfigurationProperties(DefaultWechatConfig.class)
 @EnableScheduling
 public class WechatSupportConfiguration implements ApplicationContextAware {
-
-	@Autowired
-	private DefaultWechatConfig wechatConfig;
 	
-	@Bean
-	@Primary
-	public WechatConfig wechatConfig(){
-		return wechatConfig;
-	}
-
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		Springs.initApplicationIfNotInitialized(applicationContext);
@@ -50,6 +42,25 @@ public class WechatSupportConfiguration implements ApplicationContextAware {
 	@ConditionalOnProperty(name=WechatConfigKeys.STORER_KEY, havingValue=WechatConfigKeys.STORER_REDIS_KEY)
 	public AccessTokenService redisStoreAccessTokenService(){
 		return new RedisStoreAccessTokenService();
+	}
+
+	@Configuration
+	@EnableConfigurationProperties(DefaultWechatConfig.class)
+	@ConditionalOnMissingBean(WechatConfig.class)
+	protected static class DefaultWechatConfigConfiguration {
+		@Autowired
+		private DefaultWechatConfig wechatConfig;
+		
+		@Bean
+		@Primary
+		public WechatConfig wechatConfig(){
+			return wechatConfig;
+		}
+		
+		@Bean
+		public WechatConfigProvider wechatConfigProvider(){
+			return new SimpleWechatConfigProvider();
+		}
 	}
 	
 	/*@Bean

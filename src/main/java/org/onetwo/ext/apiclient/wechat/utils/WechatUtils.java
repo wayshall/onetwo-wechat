@@ -19,7 +19,6 @@ import org.onetwo.ext.apiclient.wechat.basic.api.TokenApi;
 import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
-import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.GrantTypeKeys;
 import org.onetwo.ext.apiclient.wechat.wxa.response.WxappUserInfo;
 import org.springframework.data.redis.core.BoundValueOperations;
@@ -72,14 +71,14 @@ public class WechatUtils {
 		return request;
 	}
 	
-	public static GetAccessTokenRequest createGetAccessTokenRequest(WechatConfig wechatConfig){
+	/*public static GetAccessTokenRequest createGetAccessTokenRequest(WechatConfig wechatConfig){
 		GetAccessTokenRequest request = GetAccessTokenRequest.builder()
 				.grantType(wechatConfig.getGrantType())
 				.appid(wechatConfig.getAppid())
 				.secret(wechatConfig.getAppsecret())
 				.build();
 		return request;
-	}
+	}*/
 	
 	public static AccessTokenInfo getAccessToken(TokenApi wechatServer, GetAccessTokenRequest request){
 		AccessTokenResponse response = wechatServer.getAccessToken(request);

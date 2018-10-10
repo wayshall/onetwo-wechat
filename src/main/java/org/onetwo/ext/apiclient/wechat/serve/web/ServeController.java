@@ -13,8 +13,8 @@ import org.onetwo.ext.apiclient.wechat.serve.spi.MessageRouterService;
 import org.onetwo.ext.apiclient.wechat.serve.spi.ServeEndpoint;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  * <br/>
  */
 @RestController
-@RequestMapping("serve")
+//@RequestMapping("serve")
 public class ServeController implements UnderlineInitBinder, ServeEndpoint {
 	
 	protected Logger logger = JFishLoggerFactory.getLogger(this.getClass());
@@ -31,13 +31,15 @@ public class ServeController implements UnderlineInitBinder, ServeEndpoint {
 	private MessageRouterService messageRouterService;
 
 	@Override
-	public String auth(@Valid ServeAuthParam authRequet){
+	public String auth(@PathVariable("clientId") String clientId, @Valid ServeAuthParam authRequet){
+		authRequet.setClientId(clientId);
 		logger.info("ServeAuthParam: {}", authRequet);
 		return messageRouterService.verifyUrl(authRequet);
 	}
 
 	@Override
-	public Object onMessageReceived(MessageParam msgParam, @RequestBody Map<String, Object> message){
+	public Object onMessageReceived(@PathVariable("clientId") String clientId, MessageParam msgParam, @RequestBody Map<String, Object> message){
+		msgParam.setClientId(clientId);
 		logger.info("msgParam: {}, body: {}", msgParam, message);
 		MessageContext mc = MessageContext.builder()
 											.param(msgParam)

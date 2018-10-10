@@ -7,7 +7,6 @@ import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.onetwo.ext.apiclient.wechat.utils.WechatAppInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.AccessTokenStorers;
-import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.GrantTypeKeys;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.Oauth2Keys;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.WechatConfigKeys;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -28,7 +27,7 @@ public class DefaultWechatConfig implements WechatConfig{
 	private String token;
 	
 //	@Value("${wechat.grantType:"+GrantTypeKeys.CLIENT_CREDENTIAL+"}")
-	private String grantType = GrantTypeKeys.CLIENT_CREDENTIAL;
+//	private String grantType = GrantTypeKeys.CLIENT_CREDENTIAL;
 	
 //	@Value("${wechat.appid}")
 	private String appid;
