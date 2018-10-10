@@ -35,5 +35,5 @@ public interface MenuService {
 	 * @return
 	 */
 	@GetMapping(value="/delete?access_token={accessToken}")
-	void delete(@PathVariable("accessToken") String accessToken);
+	WechatResponse delete(@PathVariable("accessToken") String accessToken);
 }

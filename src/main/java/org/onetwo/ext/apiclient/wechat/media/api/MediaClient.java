@@ -26,12 +26,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * api地址：https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1481187827_i0l21
- * 
+ * @see ImageClient 
  * @author wayshall
  * <br/>
  */
 @WechatApiClient
-public interface MediaClient extends ImageClient {
+public interface MediaClient {
 	
 	/***
 	 * https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1444738726
@@ -61,7 +61,7 @@ public interface MediaClient extends ImageClient {
 		}
      * @author wayshall
      * @param accessToken
-     * @param mediaId
+     * @param mediaId form-data中媒体文件标识
      * @return 如果是图片返回 ByteArrayResource，如果是视频，返回地址，类型为 String
      */
     @GetMapping(path = "/media/get", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)

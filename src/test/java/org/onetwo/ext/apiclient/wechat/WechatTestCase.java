@@ -9,6 +9,7 @@ import org.onetwo.ext.apiclient.wechat.material.api.MaterialClientTest;
 import org.onetwo.ext.apiclient.wechat.media.api.ImageClientTest;
 import org.onetwo.ext.apiclient.wechat.media.api.MediaClientTest;
 import org.onetwo.ext.apiclient.wechat.menu.api.MenuServiceTest;
+import org.onetwo.ext.apiclient.wechat.user.api.UserInfoClientTest;
 import org.onetwo.ext.apiclient.wechat.wxa.api.ContentSecurityClientTest;
 
 /**
@@ -24,8 +25,8 @@ import org.onetwo.ext.apiclient.wechat.wxa.api.ContentSecurityClientTest;
 	ContentSecurityClientTest.class,
 	ImageClientTest.class,
 	MediaClientTest.class,
-	MaterialClientTest.class
-	
+	MaterialClientTest.class,
+	UserInfoClientTest.class
 })
 public class WechatTestCase {
 

@@ -1,5 +1,6 @@
 package org.onetwo.ext.apiclient.wechat.media.api;
 
+import org.onetwo.common.utils.FieldName;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;
 import org.onetwo.ext.apiclient.wechat.media.response.UploadResponse;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
@@ -17,6 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface ImageClient {
 	
 	@PostMapping(path="/media/uploadimg", consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
-	UploadResponse uploadimg(AccessTokenInfo accessToken, @RequestBody Resource buffer);
+	UploadResponse uploadimg(AccessTokenInfo accessToken, /*@RequestBody*/@FieldName("buffer") Resource buffer);
 
 }

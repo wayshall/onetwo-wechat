@@ -32,6 +32,7 @@ public interface MaterialClient {
     /**
      * 新增其他类型永久素材：<br>
      * 图片（image）、语音（voice）、视频（video）和缩略图（thumb）
+     * @param media form-data中媒体文件标识
      */
     @PostMapping(value = "/material/add_material", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     AddMaterialResponse addMaterial(AccessTokenInfo accessToken, 

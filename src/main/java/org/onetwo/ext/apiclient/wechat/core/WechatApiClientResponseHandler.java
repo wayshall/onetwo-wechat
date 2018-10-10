@@ -20,6 +20,9 @@ public class WechatApiClientResponseHandler extends DefaultApiClientResponseHand
 	@Override
 	public Class<?> getActualResponseType(WechatMethod invokeMethod){
 		Class<?> responseType = invokeMethod.getMethodReturnType();
+		/*if(invokeMethod.isReturnVoid()){
+			responseType = WechatResponse.class;
+		}*/
 		/*if(!WechatResponse.class.isAssignableFrom(responseType)){
 			Intro<?> intro = ReflectUtils.getIntro(responseType);
 			if(!intro.hasProperty("errcode") || !intro.hasProperty("errmsg")){
