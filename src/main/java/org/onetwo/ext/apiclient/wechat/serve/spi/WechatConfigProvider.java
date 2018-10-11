@@ -11,10 +11,10 @@ import org.onetwo.ext.apiclient.wechat.crypt.WXBizMsgCrypt;
  */
 public interface WechatConfigProvider {
 	
-	WechatConfig getWechatConfig();
+	WechatConfig getWechatConfig(String clientId);
 	
-	default public WXBizMsgCrypt getWXBizMsgCrypt(){
-		WechatConfig wechatConfig = getWechatConfig();
+	default public WXBizMsgCrypt getWXBizMsgCrypt(String clientId){
+		WechatConfig wechatConfig = getWechatConfig(clientId);
 		try {
 			return new WXBizMsgCrypt(wechatConfig.getToken(), wechatConfig.getEncodingAESKey(), wechatConfig.getAppid());
 		} catch (AesException e) {

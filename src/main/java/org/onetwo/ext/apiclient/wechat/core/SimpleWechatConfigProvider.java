@@ -20,7 +20,6 @@ public class SimpleWechatConfigProvider implements WechatConfigProvider, Initial
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		WechatConfig wechatConfig = getWechatConfig();
 		try {
 			this.wxbizMsgCrypt = new WXBizMsgCrypt(wechatConfig.getToken(), wechatConfig.getEncodingAESKey(), wechatConfig.getAppid());
 		} catch (AesException e) {
@@ -29,12 +28,12 @@ public class SimpleWechatConfigProvider implements WechatConfigProvider, Initial
 	}
 
 	@Override
-	public WechatConfig getWechatConfig() {
+	public WechatConfig getWechatConfig(String clientId) {
 		return wechatConfig;
 	}
 
 	@Override
-	public WXBizMsgCrypt getWXBizMsgCrypt(){
+	public WXBizMsgCrypt getWXBizMsgCrypt(String clientId){
 		return this.wxbizMsgCrypt;
 	}
 	

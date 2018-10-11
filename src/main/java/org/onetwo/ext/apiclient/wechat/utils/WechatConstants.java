@@ -291,7 +291,7 @@ public abstract class WechatConstants {
 		}
 		
 		public static EventTypes of(String status){
-			return Stream.of(values()).filter(s->s.name().equals(status))
+			return Stream.of(values()).filter(s->s.name().equalsIgnoreCase(status))
 										.findAny()
 										.orElseThrow(()->new IllegalArgumentException("event: " + status));
 		}

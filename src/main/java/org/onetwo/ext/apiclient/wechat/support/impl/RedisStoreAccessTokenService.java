@@ -11,7 +11,6 @@ import org.onetwo.ext.apiclient.wechat.basic.api.WechatServer;
 import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
-import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
@@ -35,8 +34,8 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 
 	@Autowired
 	private WechatServer wechatServer;
-	@Autowired
-	private WechatConfig wechatConfig;
+//	@Autowired
+//	private WechatConfig wechatConfig;
 	/*@Autowired
 	private JedisConnectionFactory jedisConnectionFactory;*/
 	
@@ -52,7 +51,7 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 	public void afterPropertiesSet() throws Exception {
 		Assert.notNull(redisTemplate, "redisTemplate not found");
 		Assert.notNull(redisLockRegistry, "redisLockRegistry not found");
-		Assert.notNull(wechatConfig, "wechat config can not be null");
+//		Assert.notNull(wechatConfig, "wechat config can not be null");
 	}
 
 	/*public AccessTokenInfo getAccessToken() {
@@ -171,10 +170,6 @@ public class RedisStoreAccessTokenService implements AccessTokenService, Initial
 
 	public WechatServer getWechatServer() {
 		return wechatServer;
-	}
-
-	public WechatConfig getWechatConfig() {
-		return wechatConfig;
 	}
 
 	public void setRetryLockInSeconds(int retryLockInSeconds) {

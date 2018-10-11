@@ -28,8 +28,7 @@ public @interface EnableWechatClient {
 	 * @author wayshall
 	 * @return
 	 */
-	@Deprecated
-	boolean enableMessageServe() default true;
+	boolean enableMessageServe() default false;
 	boolean enableOAuth2Interceptor() default false;
 
 }

@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 public interface ServeEndpoint {
 
-	@RequestMapping(path="/serve/{clientId}", method=RequestMethod.GET, params="echostr")
+	@RequestMapping(path="/{clientId}", method=RequestMethod.GET, params="echostr")
 	String auth(@PathVariable("clientId") String clientId, ServeAuthParam authRequet);
 
-	@RequestMapping(path="/serve/{clientId}", 
+	@RequestMapping(path="/{clientId}", 
 					method=RequestMethod.POST, 
 					consumes={MediaTypeKeys.TEXT_XML_VALUE_UTF8, MediaTypeKeys.APPLICATION_XML_VALUE_UTF8},
 					produces={MediaTypeKeys.TEXT_XML_VALUE_UTF8})

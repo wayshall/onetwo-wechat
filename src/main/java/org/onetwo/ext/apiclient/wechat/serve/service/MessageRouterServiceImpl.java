@@ -66,12 +66,12 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 	private WechatConfigProvider wechatConfigProvider;
 	
 
-	protected WXBizMsgCrypt getMessageCrypt(){
-		return wechatConfigProvider.getWXBizMsgCrypt();
+	protected WXBizMsgCrypt getMessageCrypt(String clientId){
+		return wechatConfigProvider.getWXBizMsgCrypt(clientId);
 	}
 	
-	public WechatConfig getWechatConfig(){
-		return this.wechatConfigProvider.getWechatConfig();
+	public WechatConfig getWechatConfig(String clientId){
+		return this.wechatConfigProvider.getWechatConfig(clientId);
 	}
 	
 	/*public void setMessageCrypt(WXBizMsgCrypt messageCrypt) {
@@ -147,7 +147,7 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 		if(message.getParam().isEncryptByAes()){
 			try {
 				String replyMsg = this.objectMapper.writeValueAsString(replyMessage);
-				replyMessage = getMessageCrypt().encryptMsg(replyMsg, message.getParam().getTimestamp(), message.getParam().getNonce());
+				replyMessage = getMessageCrypt(message.getParam().getClientId()).encryptMsg(replyMsg, message.getParam().getTimestamp(), message.getParam().getNonce());
 			} catch (Exception e) {
 				throw new BaseException("reply message error："+e.getMessage(), e);
 			}
@@ -161,8 +161,8 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 		}
 		try {
 			//经测试，实际上微信url验证不会加密
-			if(getWechatConfig().isEncryptByAes()){
-				return getMessageCrypt().verifyUrl(auth.getSignature(), auth.getTimestamp(), auth.getNonce(), auth.getEchostr());
+			if(getWechatConfig(auth.getClientId()).isEncryptByAes()){
+				return getMessageCrypt(auth.getClientId()).verifyUrl(auth.getSignature(), auth.getTimestamp(), auth.getNonce(), auth.getEchostr());
 			}
 		} catch (AesException e) {
 			logger.error("verifyUrl url error: "+e.getMessage(), e);
@@ -173,7 +173,7 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 	
 	private boolean isValidRequest(ServeAuthParam auth){
 		List<String> authItems = new ArrayList<>();
-		authItems.add(getWechatConfig().getToken());
+		authItems.add(getWechatConfig(auth.getClientId()).getToken());
 		authItems.add(auth.getTimestamp());
 		authItems.add(auth.getNonce());
 		Collections.sort(authItems);
@@ -192,7 +192,7 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 	protected Map<String, Object> decodeMessageBody(MessageContext message){
 		String encryptBody = (String)message.getMessageBody().get(WechatConstants.BODY_ENCRYPT); 
 		try {
-			String xml = getMessageCrypt().decryptMsg(message.getParam().getMsgSignature(), 
+			String xml = getMessageCrypt(message.getParam().getClientId()).decryptMsg(message.getParam().getMsgSignature(), 
 											message.getParam().getTimestamp(), 
 											message.getParam().getNonce(), 
 											encryptBody);
@@ -221,6 +221,7 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 		}else{
 			messageMap = message.getMessageBody();
 		}
+		messageMap.put("clientId", message.getParam().getClientId());
 		String msgTypeValue = (String)messageMap.get(MessageTypeParams.MSG_TYPE);
 		if(StringUtils.isBlank(msgTypeValue)){
 			throw new BaseException("unknow message type:"+msgTypeValue);

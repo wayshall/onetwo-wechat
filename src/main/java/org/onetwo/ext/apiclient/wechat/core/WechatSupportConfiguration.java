@@ -46,7 +46,7 @@ public class WechatSupportConfiguration implements ApplicationContextAware {
 
 	@Configuration
 	@EnableConfigurationProperties(DefaultWechatConfig.class)
-	@ConditionalOnMissingBean(WechatConfig.class)
+	@ConditionalOnMissingBean(WechatConfigProvider.class)
 	protected static class DefaultWechatConfigConfiguration {
 		@Autowired
 		private DefaultWechatConfig wechatConfig;

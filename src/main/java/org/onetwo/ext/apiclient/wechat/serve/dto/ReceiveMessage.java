@@ -27,6 +27,8 @@ public class ReceiveMessage implements Message {
 	@FieldName("MsgType")
 	private String msgType;
 	
+	private String clientId;
+	
 	public FlowType getFlowType(){
 		return FlowType.RECEIVE;
 	}
