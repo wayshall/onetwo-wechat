@@ -32,6 +32,14 @@ public class WechatException extends BaseException implements ExceptionCodeMark{
 		super(exceptionType.getErrorMessage(), cause);
 		initErrorCode(exceptionType.getErrorCode());
 	}
+
+	public WechatException(String message) {
+		super(message);
+	}
+	public WechatException(String message, Throwable cause) {
+		super(message, cause);
+		initErrorCode(BASE_CODE);
+	}
 	
 	final protected void initErrorCode(String code){
 		if(StringUtils.isNotBlank(code))
