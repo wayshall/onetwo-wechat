@@ -1,6 +1,5 @@
 package org.onetwo.ext.apiclient.wechat.user.request;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +20,7 @@ public class UserInfoGetRequest {
 	public UserInfoGetRequest(String openid, String lang) {
 		super();
 		this.openid = openid;
-		if(lang == null) {
+		if(lang != null) {
 			this.lang = lang;
 		}
 	}
