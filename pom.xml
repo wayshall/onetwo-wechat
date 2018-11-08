@@ -301,7 +301,7 @@
 	<repositories>
         <repository>
             <id>microcloud</id>
-            <url>https://microcloudtech.com/nexus/repository/maven-snapshots/</url>
+            <url>https://test.micro-cloud-tech.cn/nexus/repository/maven-snapshots/</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>

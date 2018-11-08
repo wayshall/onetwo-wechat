@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.onetwo.ext.apiclient.qqmap.api.GeocoderClient;
 import org.onetwo.ext.apiclient.wechat.utils.EnableWechatClientSelector;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.UrlConst;
 import org.springframework.context.annotation.Import;
@@ -19,7 +20,7 @@ import org.springframework.context.annotation.Import;
 public @interface EnableWechatClient {
 	
 	String[] basePackages() default {};
-	Class<?>[] basePackageClasses() default {};
+	Class<?>[] basePackageClasses() default {GeocoderClient.class};
 	
 	String baseUrl() default UrlConst.API_BASE_URL;
 	
