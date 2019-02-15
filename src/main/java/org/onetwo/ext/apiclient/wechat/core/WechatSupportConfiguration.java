@@ -1,6 +1,7 @@
 package org.onetwo.ext.apiclient.wechat.core;
 
 import org.onetwo.common.spring.Springs;
+import org.onetwo.ext.apiclient.wechat.event.WechatEventBus;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.support.impl.MemoryAccessTokenService;
 import org.onetwo.ext.apiclient.wechat.support.impl.RedisStoreAccessTokenService;
@@ -69,5 +70,10 @@ public class WechatSupportConfiguration implements ApplicationContextAware {
 	public RedisRefreshAccessTokenTask redisRefreshAccessTokenTask(){
 		return new RedisRefreshAccessTokenTask();
 	}*/
+	
+	@Bean
+	public WechatEventBus wechatEventBus() {
+		return new WechatEventBus();
+	}
 	
 }
