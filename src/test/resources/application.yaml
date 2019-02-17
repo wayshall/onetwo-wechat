@@ -10,10 +10,9 @@ spring:
         serialization:
             indent_output: true
     redis:
-        host: 182.61.40.185
+        host: localhost
         port: 6379
-        password: redis.01234
-        database: 12
+        database: 1
         pool:
             maxActive: 5
 jfish:
