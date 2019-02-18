@@ -30,10 +30,39 @@ public class MpTemplateMessge {
 	@NotNull
 	private LinkedHashMap<String, MpTemplateMessgeData> data;
 	
+	public MpTemplateMessge(String templateId, String url, MiniprogramData miniprogram) {
+		super();
+		this.templateId = templateId;
+		this.url = url;
+		this.miniprogram = miniprogram;
+	}
+	
+
+	public MpTemplateMessge addData(String key, MpTemplateMessgeData value){
+		if(data==null){
+			data = new LinkedHashMap<>();
+		}
+		data.put(key, value);
+		return this;
+	}
+	
+	public MpTemplateMessge addData(String key, String value){
+		MpTemplateMessgeData d = new MpTemplateMessgeData();
+		d.setValue(value);
+		addData(key, d);
+		return this;
+	}
+
 	@Data
 	public static class MiniprogramData {
 		private String appid;
 		private String pagepath;
+		@Builder
+		public MiniprogramData(String appid, String pagepath) {
+			super();
+			this.appid = appid;
+			this.pagepath = pagepath;
+		}
 	}
 
 	@Builder

@@ -39,15 +39,22 @@ public class UniformMessageRequest implements Serializable {
 
 	@NotBlank
 	@JsonProperty("mp_template_msg")
-	private MpTemplateMessgeRequest mpTemplateMsg;
+	private MpTemplateMessgeVO mpTemplateMsg;
 
 	@Data
 	@EqualsAndHashCode(callSuper=false)
-	protected static class MpTemplateMessgeRequest extends MpTemplateMessge {
+	public static class MpTemplateMessgeVO extends MpTemplateMessge {
 		/***
 		 * 公众号appid，要求与小程序有绑定且同主体
 		 */
 		private String appid;
+
+		@Builder
+		public MpTemplateMessgeVO(String templateId, String url, MiniprogramData miniprogram, String appid) {
+			super(templateId, url, miniprogram);
+			this.appid = appid;
+		}
+		
 	}
 
 }
