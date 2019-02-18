@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.qcloud.api.message;
+package org.onetwo.ext.apiclient.qcloud.live.api.message;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

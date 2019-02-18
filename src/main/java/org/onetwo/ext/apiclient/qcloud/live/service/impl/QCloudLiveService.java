@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.qcloud.service.impl;
+package org.onetwo.ext.apiclient.qcloud.live.service.impl;
 
 import java.util.Date;
 import java.util.Map;
@@ -10,12 +10,12 @@ import org.onetwo.common.expr.Expression;
 import org.onetwo.common.expr.ExpressionFacotry;
 import org.onetwo.common.utils.ParamUtils;
 import org.onetwo.common.utils.StringUtils;
-import org.onetwo.ext.apiclient.qcloud.LiveProperties;
-import org.onetwo.ext.apiclient.qcloud.service.StreamDataProvider;
-import org.onetwo.ext.apiclient.qcloud.service.StreamDataProvider.StreamData;
-import org.onetwo.ext.apiclient.qcloud.util.LiveUtils;
-import org.onetwo.ext.apiclient.qcloud.util.LiveUtils.PlayTypes;
-import org.onetwo.ext.apiclient.qcloud.vo.LivingResult;
+import org.onetwo.ext.apiclient.qcloud.live.LiveProperties;
+import org.onetwo.ext.apiclient.qcloud.live.service.StreamDataProvider;
+import org.onetwo.ext.apiclient.qcloud.live.service.StreamDataProvider.StreamData;
+import org.onetwo.ext.apiclient.qcloud.live.util.LiveUtils;
+import org.onetwo.ext.apiclient.qcloud.live.util.LiveUtils.PlayTypes;
+import org.onetwo.ext.apiclient.qcloud.live.vo.LivingResult;
 import org.springframework.util.Assert;
 
 import com.google.common.collect.Maps;

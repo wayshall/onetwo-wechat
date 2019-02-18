@@ -1,10 +1,10 @@
-package org.onetwo.ext.apiclient.qcloud.service;
+package org.onetwo.ext.apiclient.qcloud.live.service;
 
 import java.util.Date;
 
 import lombok.Data;
 
-import org.onetwo.ext.apiclient.qcloud.LiveProperties;
+import org.onetwo.ext.apiclient.qcloud.live.LiveProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 

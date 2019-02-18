@@ -1,11 +1,11 @@
-package org.onetwo.ext.apiclient.qcloud;
+package org.onetwo.ext.apiclient.qcloud.live;
 
-import org.onetwo.ext.apiclient.qcloud.endpoint.CallbackEndpoint;
-import org.onetwo.ext.apiclient.qcloud.endpoint.impl.CallbackController;
-import org.onetwo.ext.apiclient.qcloud.service.LiveMessagePublisher;
-import org.onetwo.ext.apiclient.qcloud.service.StreamDataProvider;
-import org.onetwo.ext.apiclient.qcloud.service.impl.DefaultLiveMessagePublisher;
-import org.onetwo.ext.apiclient.qcloud.service.impl.QCloudLiveService;
+import org.onetwo.ext.apiclient.qcloud.live.endpoint.CallbackEndpoint;
+import org.onetwo.ext.apiclient.qcloud.live.endpoint.impl.CallbackController;
+import org.onetwo.ext.apiclient.qcloud.live.service.LiveMessagePublisher;
+import org.onetwo.ext.apiclient.qcloud.live.service.StreamDataProvider;
+import org.onetwo.ext.apiclient.qcloud.live.service.impl.DefaultLiveMessagePublisher;
+import org.onetwo.ext.apiclient.qcloud.live.service.impl.QCloudLiveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

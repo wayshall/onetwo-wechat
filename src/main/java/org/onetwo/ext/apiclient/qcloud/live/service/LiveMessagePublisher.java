@@ -1,8 +1,8 @@
-package org.onetwo.ext.apiclient.qcloud.service;
+package org.onetwo.ext.apiclient.qcloud.live.service;
 
 import java.util.Map;
 
-import org.onetwo.ext.apiclient.qcloud.api.message.MessageHeader;
+import org.onetwo.ext.apiclient.qcloud.live.api.message.MessageHeader;
 
 /**
  * @author wayshall

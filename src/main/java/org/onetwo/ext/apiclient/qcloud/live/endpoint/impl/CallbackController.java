@@ -1,12 +1,12 @@
-package org.onetwo.ext.apiclient.qcloud.endpoint.impl;
+package org.onetwo.ext.apiclient.qcloud.live.endpoint.impl;
 
 import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.onetwo.ext.apiclient.qcloud.LiveProperties;
-import org.onetwo.ext.apiclient.qcloud.endpoint.CallbackEndpoint;
-import org.onetwo.ext.apiclient.qcloud.service.LiveMessagePublisher;
+import org.onetwo.ext.apiclient.qcloud.live.LiveProperties;
+import org.onetwo.ext.apiclient.qcloud.live.endpoint.CallbackEndpoint;
+import org.onetwo.ext.apiclient.qcloud.live.service.LiveMessagePublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;

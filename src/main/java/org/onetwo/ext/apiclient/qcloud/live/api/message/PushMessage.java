@@ -1,12 +1,12 @@
-package org.onetwo.ext.apiclient.qcloud.api.message;
+package org.onetwo.ext.apiclient.qcloud.live.api.message;
 
 import javax.validation.constraints.NotNull;
+
+import org.onetwo.ext.apiclient.qcloud.live.util.LiveUtils.EventTypes;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import org.onetwo.ext.apiclient.qcloud.util.LiveUtils.EventTypes;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

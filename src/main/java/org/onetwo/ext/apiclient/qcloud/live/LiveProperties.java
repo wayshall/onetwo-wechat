@@ -1,8 +1,8 @@
-package org.onetwo.ext.apiclient.qcloud;
+package org.onetwo.ext.apiclient.qcloud.live;
 
 import lombok.Data;
 
-import org.onetwo.ext.apiclient.qcloud.service.StreamDataProvider.StreamData;
+import org.onetwo.ext.apiclient.qcloud.live.service.StreamDataProvider.StreamData;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**

@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.qcloud.service;
+package org.onetwo.ext.apiclient.qcloud.live.service;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

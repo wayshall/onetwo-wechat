@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.qcloud.service.impl;
+package org.onetwo.ext.apiclient.qcloud.live.service.impl;
 
 import java.util.Map;
 
@@ -8,13 +8,13 @@ import org.onetwo.common.convert.Types;
 import org.onetwo.common.exception.ServiceException;
 import org.onetwo.common.spring.SpringUtils;
 import org.onetwo.common.utils.CUtils;
-import org.onetwo.ext.apiclient.qcloud.api.message.MessageHeader;
-import org.onetwo.ext.apiclient.qcloud.api.message.PushMessage;
-import org.onetwo.ext.apiclient.qcloud.api.message.RecordingMessage;
-import org.onetwo.ext.apiclient.qcloud.api.message.ScreenShotMessage;
-import org.onetwo.ext.apiclient.qcloud.service.LiveMessageListener;
-import org.onetwo.ext.apiclient.qcloud.service.LiveMessagePublisher;
-import org.onetwo.ext.apiclient.qcloud.util.LiveUtils.EventTypes;
+import org.onetwo.ext.apiclient.qcloud.live.api.message.MessageHeader;
+import org.onetwo.ext.apiclient.qcloud.live.api.message.PushMessage;
+import org.onetwo.ext.apiclient.qcloud.live.api.message.RecordingMessage;
+import org.onetwo.ext.apiclient.qcloud.live.api.message.ScreenShotMessage;
+import org.onetwo.ext.apiclient.qcloud.live.service.LiveMessageListener;
+import org.onetwo.ext.apiclient.qcloud.live.service.LiveMessagePublisher;
+import org.onetwo.ext.apiclient.qcloud.live.util.LiveUtils.EventTypes;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

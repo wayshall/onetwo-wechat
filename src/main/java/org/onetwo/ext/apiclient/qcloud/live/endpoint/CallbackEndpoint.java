@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.qcloud.endpoint;
+package org.onetwo.ext.apiclient.qcloud.live.endpoint;
 
 import java.util.Map;
 

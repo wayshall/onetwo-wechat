@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.qcloud.vo;
+package org.onetwo.ext.apiclient.qcloud.live.vo;
 
 import java.io.Serializable;
 
