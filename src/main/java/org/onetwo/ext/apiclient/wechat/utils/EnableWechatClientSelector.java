@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.onetwo.common.apiclient.impl.RestExecutorConfiguration;
 import org.onetwo.common.spring.context.AbstractImportSelector;
-import org.onetwo.ext.apiclient.qcloud.live.QCloudLiveConfiguration;
 import org.onetwo.ext.apiclient.wechat.EnableWechatClient;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClentRegistrar;
 import org.onetwo.ext.apiclient.wechat.core.WechatSupportConfiguration;
@@ -40,7 +39,6 @@ public class EnableWechatClientSelector extends AbstractImportSelector<EnableWec
 		}
 		
 
-		classNames.add(QCloudLiveConfiguration.class.getName());
 //		classNames.add(WechatSecurityOAuth2Configuration.class.getName());
 		
 		return classNames;

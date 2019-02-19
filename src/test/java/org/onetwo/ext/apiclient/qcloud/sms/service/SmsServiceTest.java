@@ -24,6 +24,7 @@ public class SmsServiceTest extends QCloudSmsBaseBootTests {
 											.phoneNumber(testSmsProperties.getPhone())
 											.templId(testSmsProperties.getTemplateId1())
 											.params(Arrays.asList("test1", "2019-92-18"))
+											.sign("wechat")
 											.build();
 		this.smsService.sendTemplateMessage(request);
 	}

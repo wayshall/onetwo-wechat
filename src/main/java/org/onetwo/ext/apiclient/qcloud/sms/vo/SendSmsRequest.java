@@ -17,6 +17,9 @@ public class SendSmsRequest {
 	String phoneNumber;
 	int templId;
 	List<String> params;
+	/***
+	 * 签名，以[sign]的方式放在短信前面
+	 */
 	String sign;
 	String extend;
 	String ext;

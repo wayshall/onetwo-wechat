@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
  * <br/>
  */
 @Configuration
-@ConditionalOnProperty(LiveProperties.ENABLE_KEY)
+@ConditionalOnProperty(name=LiveProperties.ENABLE_KEY, matchIfMissing=true)
 @EnableConfigurationProperties(LiveProperties.class)
 public class QCloudLiveConfiguration {
 	
