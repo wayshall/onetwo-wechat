@@ -5,13 +5,13 @@ import java.util.function.Supplier;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.onetwo.boot.module.redis.TokenValidator;
-import org.onetwo.boot.module.redis.TokenValidatorErrors;
-import org.onetwo.common.exception.ErrorType;
 import org.onetwo.common.exception.ServiceException;
 import org.onetwo.ext.apiclient.qcloud.sms.service.SmsService;
 import org.onetwo.ext.apiclient.qcloud.sms.vo.SendSmsRequest;
 import org.onetwo.ext.apiclient.qcloud.smscode.SmsCodeModule;
 import org.onetwo.ext.apiclient.qcloud.smscode.SmsCodeProperties;
+import org.onetwo.ext.apiclient.qcloud.smscode.service.SmsCodeExceptionTranslator;
+import org.onetwo.ext.apiclient.qcloud.smscode.service.SmsCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -21,7 +21,7 @@ import org.springframework.util.Assert;
  * <br/>
  */
 @Service
-public class SmsCodeServiceImpl {
+public class SmsCodeServiceImpl implements SmsCodeService {
 
 	@Autowired
 	private SmsService smsService;
@@ -29,18 +29,18 @@ public class SmsCodeServiceImpl {
 	private TokenValidator tokenValidator;
 	private SmsCodeProperties smsCodeProperties;
 	
-	public SmsCodeServiceImpl(SmsCodeProperties smsCodeProperties) {
+	private SmsCodeExceptionTranslator exceptionTranslator;
+	
+	public SmsCodeServiceImpl(SmsCodeProperties smsCodeProperties, SmsCodeExceptionTranslator exceptionTranslator) {
 		super();
 		this.smsCodeProperties = smsCodeProperties;
+		this.exceptionTranslator = exceptionTranslator;
 	}
 
-	/***
-	 * 检查验证码
-	 * @author weishao zeng
-	 * @param mobile
-	 * @param code
-	 * @param supplier
+	/* (non-Javadoc)
+	 * @see org.onetwo.ext.apiclient.qcloud.smscode.service.impl.SmsCodeService#check(java.lang.String, org.onetwo.ext.apiclient.qcloud.smscode.SmsCodeModule, java.lang.String, java.util.function.Supplier)
 	 */
+	@Override
 	public <T> T check(String mobile, SmsCodeModule bizType, String code, Supplier<T> supplier) {
 		try {
 			return tokenValidator.check(getStoreKey(mobile, bizType), code, supplier);
@@ -50,28 +50,14 @@ public class SmsCodeServiceImpl {
 	}
 	
 	public ServiceException translateServiceException(ServiceException e) {
-		ErrorType errorType = e.getExceptionType();
-		ServiceException newSe = e;
-		if (TokenValidatorErrors.TOKEN_INVALID.equals(errorType)) {
-			newSe = new ServiceException("验证码错误", e);
-		} else if (TokenValidatorErrors.TOKEN_NOT_EXPIRED.equals(errorType)) {
-			newSe = new ServiceException("验证码未过期，不能重复发送", e);
-		} else if (TokenValidatorErrors.REQUIRED_VALUE.equals(errorType)) {
-			throw new ServiceException("缺少参数", e);
-		} else {
-			newSe = e;
-		}
-		return newSe;
+		return exceptionTranslator.translateServiceException(e);
 	}
 	
 	
-	/***
-	 * 获取验证码
-	 * @author weishao zeng
-	 * @param mobile
-	 * @param bizType
-	 * @return
+	/* (non-Javadoc)
+	 * @see org.onetwo.ext.apiclient.qcloud.smscode.service.impl.SmsCodeService#obtain(java.lang.String, org.onetwo.ext.apiclient.qcloud.smscode.SmsCodeModule)
 	 */
+	@Override
 	public String obtain(String mobile, SmsCodeModule bizType) {
 		String code = null;
 		try {

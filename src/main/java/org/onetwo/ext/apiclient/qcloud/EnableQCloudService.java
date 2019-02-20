@@ -19,5 +19,6 @@ public @interface EnableQCloudService {
 	
 	boolean live() default false;
 	boolean sms() default false;
+	boolean smsCode() default false;
 	
 }

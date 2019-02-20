@@ -6,6 +6,7 @@ import java.util.List;
 import org.onetwo.common.spring.context.AbstractImportSelector;
 import org.onetwo.ext.apiclient.qcloud.live.QCloudLiveConfiguration;
 import org.onetwo.ext.apiclient.qcloud.sms.SmsConfiguration;
+import org.onetwo.ext.apiclient.qcloud.smscode.SmsCodeConfiguration;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
 
@@ -21,6 +22,7 @@ public class EnableQCloudServiceSelector extends AbstractImportSelector<EnableQC
 
 		addIfModuleEnabled(attributes, "live", QCloudLiveConfiguration.class, classNames);
 		addIfModuleEnabled(attributes, "sms", SmsConfiguration.class, classNames);
+		addIfModuleEnabled(attributes, "smsCode", SmsCodeConfiguration.class, classNames);
 		
 		return classNames;
 	}
