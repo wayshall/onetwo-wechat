@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	
     <groupId>org.onetwo4j</groupId>
-    <version>0.0.6-SNAPSHOT</version>
+    <version>4.7.2</version>
     <artifactId>onetwo-wechat</artifactId>
     <packaging>jar</packaging>
 
@@ -13,7 +12,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <onetwo.version>4.7.2-SNAPSHOT</onetwo.version>
+    <onetwo.version>4.7.2</onetwo.version>
     <java.version>1.8</java.version>
   </properties>
   
@@ -35,6 +34,7 @@
       <url>https://github.com/wayshall/wechat</url>
       <connection>scm:git:ssh://git@github.com/wayshall/onetwo-wechat.git</connection>
       <developerConnection>scm:git:ssh://git@github.com/wayshall/onetwo-wechat.git</developerConnection>
+    <tag>onetwo-modules-4.7.2</tag>
   </scm>
 
 	
