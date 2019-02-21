@@ -8,6 +8,7 @@
     <packaging>jar</packaging>
 
 	<name>onetwo-wechat</name>
+    <url>https://github.com/wayshall/wechat</url>
 	<description>onetwo-wechat</description>
 
   <properties>
@@ -34,7 +35,7 @@
       <url>https://github.com/wayshall/wechat</url>
       <connection>scm:git:ssh://git@github.com/wayshall/onetwo-wechat.git</connection>
       <developerConnection>scm:git:ssh://git@github.com/wayshall/onetwo-wechat.git</developerConnection>
-    <tag>onetwo-modules-4.7.2</tag>
+    <tag>onetwo-modules</tag>
   </scm>
 
 	
