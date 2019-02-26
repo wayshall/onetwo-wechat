@@ -20,6 +20,9 @@ public interface SmsCodeExceptionTranslator {
 			ServiceException newSe = e;
 			if (TokenValidatorErrors.TOKEN_INVALID.equals(errorType)) {
 				newSe = new ServiceException("验证码错误", e);
+			} else if (TokenValidatorErrors.TOKEN_EXPIRED.equals(errorType)) {
+				newSe = new ServiceException("验证码已过期", e);
+				newSe.putAsMap(e.getErrorContext());
 			} else if (TokenValidatorErrors.TOKEN_NOT_EXPIRED.equals(errorType)) {
 				newSe = new ServiceException("验证码未过期，不能重复发送", e);
 			} else if (TokenValidatorErrors.REQUIRED_VALUE.equals(errorType)) {
