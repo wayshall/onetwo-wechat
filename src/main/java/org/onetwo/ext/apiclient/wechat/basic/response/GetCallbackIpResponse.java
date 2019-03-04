@@ -2,10 +2,10 @@ package org.onetwo.ext.apiclient.wechat.basic.response;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Data;
 import lombok.ToString;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author wayshall
@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @Data
 @ToString
-public class GetCallbackIpResponse {
+public class GetCallbackIpResponse extends WechatResponse {
 	
 	@JsonProperty("ip_list")
 	private Set<String> ipList;

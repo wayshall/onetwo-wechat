@@ -1,6 +1,8 @@
 package org.onetwo.ext.apiclient.wechat.core;
 
 import org.onetwo.common.spring.Springs;
+import org.onetwo.ext.apiclient.wechat.dbm.service.AccessTokenRepository;
+import org.onetwo.ext.apiclient.wechat.dbm.service.DbStoreAccessTokenService;
 import org.onetwo.ext.apiclient.wechat.event.WechatEventBus;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.support.impl.MemoryAccessTokenService;
@@ -43,6 +45,23 @@ public class WechatSupportConfiguration implements ApplicationContextAware {
 	@ConditionalOnProperty(name=WechatConfigKeys.STORER_KEY, havingValue=WechatConfigKeys.STORER_REDIS_KEY)
 	public AccessTokenService redisStoreAccessTokenService(){
 		return new RedisStoreAccessTokenService();
+	}
+	
+	@Configuration
+	@ConditionalOnProperty(name=WechatConfigKeys.STORER_KEY, havingValue=WechatConfigKeys.STORER_DATABASE_KEY)
+	protected static class DatabaseConfiguration {
+
+		
+		@Bean
+		public AccessTokenService dbStoreAccessTokenService(WechatConfig wechatConfig, AccessTokenRepository accessTokenRepository){
+			DbStoreAccessTokenService service = new DbStoreAccessTokenService(accessTokenRepository);
+			return service;
+		}
+		
+		@Bean
+		public AccessTokenRepository accessTokenRepository() {
+			return new AccessTokenRepository();
+		}
 	}
 
 	@Configuration
