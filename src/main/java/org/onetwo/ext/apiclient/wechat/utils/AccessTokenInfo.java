@@ -25,7 +25,7 @@ public class AccessTokenInfo implements Serializable {
 	}
 	
 	@Builder
-	public AccessTokenInfo(String appid, String accessToken, int expiresIn) {
+	public AccessTokenInfo(String appid, String accessToken, long expiresIn) {
 		super();
 		this.accessToken = accessToken;
 //		this.expireAt = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(expiresIn-SHORTER_EXPIRE_TIME_IN_SECONDS);

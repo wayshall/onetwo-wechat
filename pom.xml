@@ -96,6 +96,11 @@
           <groupId>org.onetwo4j</groupId>
           <artifactId>onetwo-boot</artifactId>
         </dependency>
+        <dependency>
+          <groupId>org.onetwo4j</groupId>
+          <artifactId>onetwo-dbm</artifactId>
+          <optional>true</optional>
+        </dependency>
         
         <dependency>
 			<groupId>org.bouncycastle</groupId>
@@ -167,6 +172,11 @@
         </dependency>
         
         <!-- for test -->
+	    <dependency>
+	        <groupId>mysql</groupId>
+	        <artifactId>mysql-connector-java</artifactId>
+	        <scope>test</scope>
+	    </dependency> 
 	    <dependency>
 	      <groupId>junit</groupId>
 	      <artifactId>junit</artifactId>

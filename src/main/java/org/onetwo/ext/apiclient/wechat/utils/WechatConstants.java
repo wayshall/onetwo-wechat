@@ -76,6 +76,7 @@ public abstract class WechatConstants {
 		public static final String STORER_KEY = "wechat.accessToken.storer";
 		public static final String STORER_REDIS_KEY = "redis";
 		public static final String STORER_MEMORY_KEY = "memory";
+		public static final String STORER_DATABASE_KEY = "database";
 	}
 	
 	/***
@@ -227,7 +228,8 @@ public abstract class WechatConstants {
 
 	public static enum AccessTokenStorers {
 		MEMORY,
-		REDIS
+		REDIS,
+		DATABASE
 	}
 
 	public static enum MediaTypes {
