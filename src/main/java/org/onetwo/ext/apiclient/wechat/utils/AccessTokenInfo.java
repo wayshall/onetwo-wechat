@@ -30,7 +30,11 @@ public class AccessTokenInfo implements Serializable {
 		this.accessToken = accessToken;
 //		this.expireAt = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(expiresIn-SHORTER_EXPIRE_TIME_IN_SECONDS);
 		//expiresIn 调用方已减
-		this.expireAt = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(expiresIn);
+		if (expiresIn>=0) {
+			this.expireAt = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(expiresIn);
+		} else {
+			this.expireAt = -1;
+		}
 		this.appid = appid;
 	}
 	

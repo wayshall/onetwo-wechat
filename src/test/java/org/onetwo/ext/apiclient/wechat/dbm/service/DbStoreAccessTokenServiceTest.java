@@ -36,6 +36,9 @@ public class DbStoreAccessTokenServiceTest extends WechatDbmTestsAdapter{
 		//assertThat(response.isSuccess()).isTrue();
 		assertThat(response.getIpList()).isNotEmpty();
 		
+		accessTokenInfo.setAccessToken("error");
+		response = wechatServer.getCallbackIp(accessTokenInfo);
+		
 	}
 }
 

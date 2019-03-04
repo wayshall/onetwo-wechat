@@ -1,3 +1,4 @@
 wechat: 
     accessToken: 
         storer: database
+        #autoRemove: true

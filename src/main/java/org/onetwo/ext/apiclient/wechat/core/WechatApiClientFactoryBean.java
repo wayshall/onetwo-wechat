@@ -3,9 +3,6 @@ package org.onetwo.ext.apiclient.wechat.core;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.lang3.StringUtils;
 import org.onetwo.common.apiclient.ApiClientMethod;
@@ -19,13 +16,18 @@ import org.onetwo.ext.apiclient.wechat.core.WechatApiClientFactoryBean.WechatMet
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants;
+import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.WechatConfigKeys;
 import org.onetwo.ext.apiclient.wechat.utils.WechatErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatException;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 
 /**
@@ -46,6 +48,16 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 																	}
 																});
 
+
+	@Value(WechatConfigKeys.ACCESSTOKEN_AUTO_REMOVE_KEY)
+	private boolean autoRemove;
+	
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		super.afterPropertiesSet();
+	}
+	
 	@Override
 	protected DefaultApiMethodInterceptor createApiMethodInterceptor() {
 		WechatClientMethodInterceptor apiClient = new WechatClientMethodInterceptor(API_METHOD_CACHES);
@@ -80,9 +92,11 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 						invokeMethod.getAccessTokenParameter().isPresent()){
 					Optional<AccessTokenInfo> at = invokeMethod.getAccessToken(invocation.getArguments());
 					if(at.isPresent() && StringUtils.isNotBlank(at.get().getAppid())){
-						String appid = at.get().getAppid();
-						logger.info("accesstoken is invalid, try to remove  ...");
-						getAccessTokenService().removeAccessToken(appid);
+						if (autoRemove) {
+							String appid = at.get().getAppid();
+							logger.info("accesstoken is invalid, try to remove  ...");
+							getAccessTokenService().removeAccessToken(appid);
+						}
 //						return super.doInvoke(invocation, invokeMethod);
 					}
 				}

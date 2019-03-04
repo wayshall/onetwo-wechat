@@ -51,9 +51,11 @@ public class WechatSupportConfiguration implements ApplicationContextAware {
 	@ConditionalOnProperty(name=WechatConfigKeys.STORER_KEY, havingValue=WechatConfigKeys.STORER_DATABASE_KEY)
 	protected static class DatabaseConfiguration {
 
+		
 		@Bean
-		public AccessTokenService dbStoreAccessTokenService(AccessTokenRepository accessTokenRepository){
-			return new DbStoreAccessTokenService(accessTokenRepository);
+		public AccessTokenService dbStoreAccessTokenService(WechatConfig wechatConfig, AccessTokenRepository accessTokenRepository){
+			DbStoreAccessTokenService service = new DbStoreAccessTokenService(accessTokenRepository);
+			return service;
 		}
 		
 		@Bean
