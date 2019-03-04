@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.lang3.StringUtils;
 import org.onetwo.common.apiclient.ApiClientMethod;
-import org.onetwo.common.apiclient.ApiErrorHandler;
 import org.onetwo.common.apiclient.RequestContextData;
 import org.onetwo.common.apiclient.impl.AbstractApiClientFactoryBean;
 import org.onetwo.common.apiclient.utils.ApiClientUtils;
@@ -89,33 +88,22 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 			try {
 				return super.doInvoke(invocation, invokeMethod);
 			} catch (ApiClientException e) {
-				if(WechatErrors.isNeedToRemoveToken(e.getCode()) && 
+				if(WechatErrors.ACCESS_TOKEN_INVALID.getErrorCode().equals(e.getCode()) && 
 						invokeMethod.getAccessTokenParameter().isPresent()){
 					Optional<AccessTokenInfo> at = invokeMethod.getAccessToken(invocation.getArguments());
 					if(at.isPresent() && StringUtils.isNotBlank(at.get().getAppid())){
 						if (autoRemove) {
 							String appid = at.get().getAppid();
-							Optional<AccessTokenInfo> refreshOpt = getAccessTokenService().refreshAccessTokenByAppid(appid);
-							if (refreshOpt.isPresent()) {
-								logger.info("refreshAccessTokenByAppid success, retry invoke wechat method ...");
-								at.get().setAccessToken(refreshOpt.get().getAccessToken());
-								return super.doInvoke(invocation, invokeMethod);
-							} else {
-								logger.warn("refreshAccessTokenByAppid faild, try to remove...");
-								getAccessTokenService().removeAccessToken(appid);
-							}
-						} else {
-							logger.warn("accesstoken is invalid and disable auto remove");
+							logger.info("accesstoken is invalid, try to remove  ...");
+							getAccessTokenService().removeAccessToken(appid);
 						}
-					} else {
-						logger.warn("accesstoken is invalid and AccessTokenInfo not found");
+//						return super.doInvoke(invocation, invokeMethod);
 					}
-				} else {
-					logger.warn("accesstoken autoRemove has disabled");
 				}
 				throw e;
 			}
 		}
+
 
 		/***
 		 * 如果AccessTokenRequest没有设置过accessToken，则自动设置
@@ -180,12 +168,7 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 
 			accessTokenParameter = findParameterByType(AccessTokenInfo.class);
 		}
-		
-		@Override
-		protected ApiErrorHandler obtainDefaultApiErrorHandler() {
-			return ApiErrorHandler.DEFAULT;
-		}
-		
+
 		/*public boolean isAutoAppendAccessToken() {
 			return autoAppendAccessToken;
 		}*/
