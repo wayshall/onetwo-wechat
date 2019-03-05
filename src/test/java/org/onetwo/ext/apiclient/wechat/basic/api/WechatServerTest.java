@@ -38,6 +38,9 @@ public class WechatServerTest extends WechatBaseTestsAdapter {
 		//assertThat(response.isSuccess()).isTrue();
 		assertThat(response.getIpList()).isNotEmpty();
 		
+		// 测试自动刷新
+		accessTokenInfo.setAccessToken("error");
+		response = wechatServer.getCallbackIp(accessTokenInfo);
 	}
 
 }

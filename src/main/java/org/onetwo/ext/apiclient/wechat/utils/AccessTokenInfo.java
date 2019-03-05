@@ -19,6 +19,7 @@ public class AccessTokenInfo implements Serializable {
 	private String appid;
 	private String accessToken;
 	private long expireAt = -1;
+	private long expiresIn;
 
 	public AccessTokenInfo(String accessToken) {
 		this(null, accessToken, -1);
@@ -30,6 +31,7 @@ public class AccessTokenInfo implements Serializable {
 		this.accessToken = accessToken;
 //		this.expireAt = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(expiresIn-SHORTER_EXPIRE_TIME_IN_SECONDS);
 		//expiresIn 调用方已减
+		this.expiresIn = expiresIn;
 		if (expiresIn>=0) {
 			this.expireAt = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(expiresIn);
 		} else {

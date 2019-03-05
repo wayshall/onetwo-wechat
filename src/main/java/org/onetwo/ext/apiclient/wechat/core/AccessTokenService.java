@@ -19,6 +19,7 @@ public interface AccessTokenService {
 	/*@Deprecated
 	AccessTokenInfo getAccessToken();*/
 	AccessTokenInfo getOrRefreshAccessToken(GetAccessTokenRequest request);
+	Optional<AccessTokenInfo> refreshAccessTokenByAppid(String appid);
 	AccessTokenInfo refreshAccessToken(GetAccessTokenRequest request);
 	void removeAccessToken(String appid);
 	/***
