@@ -93,20 +93,7 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 						invokeMethod.getAccessTokenParameter().isPresent()){
 					Optional<AccessTokenInfo> at = invokeMethod.getAccessToken(invocation.getArguments());
 					if(at.isPresent() && StringUtils.isNotBlank(at.get().getAppid())){
-						if (autoRemove) {
-							String appid = at.get().getAppid();
-							Optional<AccessTokenInfo> refreshOpt = getAccessTokenService().refreshAccessTokenByAppid(appid);
-							if (refreshOpt.isPresent()) {
-								logger.info("refreshAccessTokenByAppid success, retry invoke wechat method ...");
-								at.get().setAccessToken(refreshOpt.get().getAccessToken());
-								return super.doInvoke(invocation, invokeMethod);
-							} else {
-								logger.warn("refreshAccessTokenByAppid faild, try to remove...");
-								getAccessTokenService().removeAccessToken(appid);
-							}
-						} else {
-							logger.warn("accesstoken is invalid and disable auto remove");
-						}
+						return this.processAutoRemove(invocation, invokeMethod, at.get(), e);
 					} else {
 						logger.warn("accesstoken is invalid and AccessTokenInfo not found");
 					}
@@ -115,6 +102,33 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 				}
 				throw e;
 			}
+		}
+		
+		/***
+		 * 处理自动删除……
+		 * @author weishao zeng
+		 * @param invocation
+		 * @param invokeMethod
+		 * @param at
+		 * @param e
+		 * @return
+		 */
+		protected Object processAutoRemove(MethodInvocation invocation, WechatMethod invokeMethod, AccessTokenInfo at, ApiClientException e) {
+			if (autoRemove) {
+				String appid = at.getAppid();
+				Optional<AccessTokenInfo> refreshOpt = getAccessTokenService().refreshAccessTokenByAppid(appid);
+				if (refreshOpt.isPresent()) {
+					logger.info("refreshAccessTokenByAppid success, retry invoke wechat method. token: {}", refreshOpt.get().getAccessToken());
+					at.setAccessToken(refreshOpt.get().getAccessToken());
+					return super.doInvoke(invocation, invokeMethod);
+				} else {
+					logger.warn("refreshAccessTokenByAppid faild, try to remove...");
+					getAccessTokenService().removeAccessToken(appid);
+				}
+			} else {
+				logger.warn("accesstoken is invalid and disable auto remove");
+			}
+			throw e;
 		}
 
 		/***

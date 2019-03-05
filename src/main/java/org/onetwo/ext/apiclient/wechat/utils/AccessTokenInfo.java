@@ -2,6 +2,7 @@ package org.onetwo.ext.apiclient.wechat.utils;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import org.onetwo.common.date.DateUtils;
 
@@ -16,11 +17,12 @@ import lombok.Data;
 @SuppressWarnings("serial")
 @Data
 public class AccessTokenInfo implements Serializable {
-	public static int SHORTER_EXPIRE_TIME_IN_SECONDS = 60;
+	final public static int SHORTER_EXPIRE_TIME_IN_SECONDS = 60;
+	final public static int UPDATE_NEWLY_DURATION_SECONDS = 5;
 
 	private String appid;
 	private String accessToken;
-	private Date expireAt = null;
+	private Date updateAt = null;
 	private long expiresIn;
 
 	public AccessTokenInfo(String accessToken) {
@@ -28,28 +30,43 @@ public class AccessTokenInfo implements Serializable {
 	}
 	
 	@Builder
-	public AccessTokenInfo(String appid, String accessToken, long expiresIn, Date createAt) {
+	public AccessTokenInfo(String appid, String accessToken, long expiresIn, Date updateAt) {
 		super();
 		this.accessToken = accessToken;
 //		this.expireAt = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(expiresIn-SHORTER_EXPIRE_TIME_IN_SECONDS);
 		//expiresIn 调用方已减
 		this.expiresIn = expiresIn;
-		if (createAt!=null && expiresIn>=0) {
-//			this.expireAt = createAt.getTime() + TimeUnit.SECONDS.toMillis(expiresIn);
-			this.expireAt = DateUtils.addSeconds(createAt, Long.valueOf(expiresIn).intValue());
-		} else {
-			this.expireAt = null;
-		}
+		this.updateAt = updateAt;
 		this.appid = appid;
 	}
 	
+	protected Date getExpireAt() {
+		Date expireAt = DateUtils.addSeconds(updateAt, Long.valueOf(expiresIn).intValue());
+		return expireAt;
+	}
+	
 	public boolean isExpired(){
-		if(expireAt==null){
+		if(expiresIn == -1){
 			//没有设置则不过期
 			return false;
 		}
 		long current = System.currentTimeMillis();
-		return current > expireAt.getTime();
+		return current > getExpireAt().getTime();
+	}
+	
+	/***
+	 * 是否最近（五秒钟内）更新过
+	 * @author weishao zeng
+	 * @return
+	 */
+	public boolean isUpdatedNewly(){
+		if(updateAt==null){
+			return false;
+		}
+		long duration = System.currentTimeMillis() - updateAt.getTime();
+//		long durationSeconds = TimeUnit.MILLISECONDS.toSeconds(duration);
+//		System.out.println("===========>now: " + now+", update: " + updateAt.getTime()+", " + updateAt.toLocaleString() + ", duration: " + duration+", durationSeconds: " + durationSeconds);
+		return  TimeUnit.MILLISECONDS.toSeconds(duration) < UPDATE_NEWLY_DURATION_SECONDS;
 	}
 
 
