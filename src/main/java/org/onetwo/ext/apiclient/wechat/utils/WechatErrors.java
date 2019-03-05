@@ -14,7 +14,11 @@ import com.google.common.collect.Maps;
  */
 public enum WechatErrors implements ErrorType {
 	ACCESS_TOKEN_MISSING(41001, "access_token missing"),
-	ACCESS_TOKEN_INVALID(40001, "invalid credential, access_token is invalid or not latest"),
+	
+	ACCESS_TOKEN_INVALID_CREDENTIAL(40001, "invalid credential, access_token is invalid or not latest"),
+	ACCESS_TOKEN_EXPIRED(42001, "access_token 超时，请检查 access_token 的有效期"),
+	ACCESS_TOKEN_INVALID(40014, "不合法的 access_token ，请开发者认真比对 access_token 的有效性（如是否过期）"),
+	
 	API_UNAUTHORIZED(48001, "api功能未授权，请确认公众号已获得该接口，可以在公众平台官网-开发者中心页中查看接口权限"),
 	FORMAT_PARSE_ERROR(47001, "解析JSON/XML内容错误"),
 	USER_NOT_EXIST(46004, "不存在的用户"),
@@ -59,5 +63,13 @@ public enum WechatErrors implements ErrorType {
 	
 	public static Optional<WechatErrors> byErrcode(int errcode){
 		return Optional.ofNullable(ERROR_MAP.get(errcode));
+	}
+	public static boolean isNeedToRemoveToken(String errorCode) {
+		if (ACCESS_TOKEN_INVALID_CREDENTIAL.getErrorCode().equals(errorCode) || 
+				ACCESS_TOKEN_EXPIRED.getErrorCode().equals(errorCode) || 
+				ACCESS_TOKEN_INVALID.getErrorCode().equals(errorCode) ) {
+			return true;
+		}
+		return false;
 	}
 }

@@ -10,6 +10,7 @@ import org.onetwo.common.log.JFishLoggerFactory;
 import org.onetwo.ext.apiclient.wechat.basic.api.WechatServer;
 import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
+import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatException;
@@ -41,16 +42,28 @@ public class MemoryAccessTokenService implements AccessTokenService {
 																		.expireAfterWrite(120, TimeUnit.MINUTES)
 																		.build();
 	private Map<String, ReentrantLock> lockMap = Maps.newConcurrentMap();
-	
-	/*public AccessTokenInfo getAccessToken() {
-		return getOrRefreshAccessToken(WechatUtils.createGetAccessTokenRequest(wechatConfig));
-	}*/
+	@Autowired
+	protected WechatConfig wechatConfig;
 	
 	@Override
 	public Optional<AccessTokenInfo> getAccessToken(String appid) {
 		Assert.hasText(appid, "appid must have length; it must not be null or empty");
 		AccessTokenInfo at = accessTokenCaches.getIfPresent(appid);
 		return Optional.ofNullable(at);
+	}
+
+
+	@Override
+	public Optional<AccessTokenInfo> refreshAccessTokenByAppid(String appid) {
+		if (appid==null || !appid.equals(wechatConfig.getAppid())) {
+			return Optional.empty();
+		}
+		GetAccessTokenRequest request = GetAccessTokenRequest.builder()
+																.appid(appid)
+																.secret(wechatConfig.getAppsecret())
+															.build();
+		AccessTokenInfo tokenInfo = refreshAccessToken(request);
+		return Optional.of(tokenInfo);
 	}
 
 	@Override

@@ -10,6 +10,7 @@ import org.onetwo.ext.apiclient.wechat.basic.api.WechatServer;
 import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
+import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
@@ -39,12 +40,30 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	private RedisLockRegistry redisLockRegistry;
 //	private RedisLockRunner redisLockRunner;
 	private int retryLockInSeconds = 1;
+	
+	@Autowired
+	protected WechatConfig wechatConfig;
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		Assert.notNull(redisLockRegistry, "redisLockRegistry not found");
 //		Assert.notNull(wechatConfig, "wechat config can not be null");
 	}
+	
+	@Override
+	public Optional<AccessTokenInfo> refreshAccessTokenByAppid(String appid) {
+		if (appid==null || !appid.equals(wechatConfig.getAppid())) {
+			return Optional.empty();
+		}
+		GetAccessTokenRequest request = GetAccessTokenRequest.builder()
+																.appid(appid)
+																.secret(wechatConfig.getAppsecret())
+															.build();
+		AccessTokenInfo tokenInfo = refreshAccessToken(request);
+		return Optional.of(tokenInfo);
+	}
+
+
 
 	abstract protected String getStoreType();
 	
