@@ -28,7 +28,7 @@ public class AccessTokenRepository {
 											.appid(appid)
 											.accessToken(at.getAccessToken())
 											.expiresIn(at.getExpiresIn())
-											.createAt(at.getCreateAt())
+											.updateAt(at.getUpdateAt())
 											.build();
 		return Optional.of(atInfo);
 	}

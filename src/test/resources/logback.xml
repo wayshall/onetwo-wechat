@@ -26,7 +26,11 @@
     </encoder>
   </appender>
   
-  
+    <!-- print dbm sql-->
+    <logger name="org.onetwo.dbm.core.internal.LogSqlInterceptor" level="TRACE">
+        <appender-ref ref="console" />
+    </logger>
+    
    <logger name="org.onetwo.common.spring.rest.ExtRestTemplate" level="DEBUG">  
        <appender-ref ref="logFile" />   
    </logger>  

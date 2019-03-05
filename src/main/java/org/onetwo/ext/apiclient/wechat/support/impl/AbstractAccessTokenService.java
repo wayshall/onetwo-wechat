@@ -100,7 +100,8 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 		AccessTokenInfo at = getRedisLockRunnerByAppId(request.getAppid()).tryLock(()->{
 			Optional<AccessTokenInfo> opt = getAccessToken(request.getAppid());
 			
-			if(opt.isPresent() && !opt.get().isExpired()){
+			//未过时且最近更新过
+			if(opt.isPresent() && !opt.get().isExpired() && opt.get().isUpdatedNewly()){
 				if(logger.isInfoEnabled()){
 					logger.info("double check access token from {} server...", getStoreType());
 				}
@@ -113,7 +114,7 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 														.appid(request.getAppid())
 														.accessToken(tokenRes.getAccessToken())
 														.expiresIn(expired)
-														.createAt(new Date())
+														.updateAt(new Date())
 														.build();
 			saveNewToken(newToken);
 			if(logger.isInfoEnabled()){
