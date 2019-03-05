@@ -28,6 +28,7 @@ public class AccessTokenRepository {
 											.appid(appid)
 											.accessToken(at.getAccessToken())
 											.expiresIn(at.getExpiresIn())
+											.createAt(at.getCreateAt())
 											.build();
 		return Optional.of(atInfo);
 	}
@@ -36,7 +37,7 @@ public class AccessTokenRepository {
 		WxAccessTokenEntity tokenEntity = new WxAccessTokenEntity();
 		tokenEntity.setWxAppid(atInfo.getAppid());
 		tokenEntity.setAccessToken(atInfo.getAccessToken());
-		tokenEntity.setExpiresIn(atInfo.getExpireAt());
+		tokenEntity.setExpiresIn(atInfo.getExpiresIn());
 		baseEntityManager.save(tokenEntity);
 		return tokenEntity;
 	}

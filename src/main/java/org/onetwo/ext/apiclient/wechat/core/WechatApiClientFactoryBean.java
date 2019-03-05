@@ -110,6 +110,8 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 					} else {
 						logger.warn("accesstoken is invalid and AccessTokenInfo not found");
 					}
+				} else {
+					logger.warn("accesstoken autoRemove has disabled");
 				}
 				throw e;
 			}
