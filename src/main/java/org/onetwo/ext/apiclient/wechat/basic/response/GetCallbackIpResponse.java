@@ -5,6 +5,7 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
@@ -12,6 +13,7 @@ import lombok.ToString;
  * <br/>
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 @ToString
 public class GetCallbackIpResponse extends WechatResponse {
 	

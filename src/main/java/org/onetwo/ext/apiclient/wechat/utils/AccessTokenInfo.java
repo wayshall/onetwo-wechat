@@ -1,7 +1,9 @@
 package org.onetwo.ext.apiclient.wechat.utils;
 
 import java.io.Serializable;
-import java.util.concurrent.TimeUnit;
+import java.util.Date;
+
+import org.onetwo.common.date.DateUtils;
 
 import lombok.Builder;
 import lombok.Data;
@@ -18,35 +20,36 @@ public class AccessTokenInfo implements Serializable {
 
 	private String appid;
 	private String accessToken;
-	private long expireAt = -1;
+	private Date expireAt = null;
 	private long expiresIn;
 
 	public AccessTokenInfo(String accessToken) {
-		this(null, accessToken, -1);
+		this(null, accessToken, -1, null);
 	}
 	
 	@Builder
-	public AccessTokenInfo(String appid, String accessToken, int expiresIn) {
+	public AccessTokenInfo(String appid, String accessToken, long expiresIn, Date createAt) {
 		super();
 		this.accessToken = accessToken;
 //		this.expireAt = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(expiresIn-SHORTER_EXPIRE_TIME_IN_SECONDS);
 		//expiresIn 调用方已减
 		this.expiresIn = expiresIn;
-		if (expiresIn>=0) {
-			this.expireAt = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(expiresIn);
+		if (createAt!=null && expiresIn>=0) {
+//			this.expireAt = createAt.getTime() + TimeUnit.SECONDS.toMillis(expiresIn);
+			this.expireAt = DateUtils.addSeconds(createAt, Long.valueOf(expiresIn).intValue());
 		} else {
-			this.expireAt = -1;
+			this.expireAt = null;
 		}
 		this.appid = appid;
 	}
 	
 	public boolean isExpired(){
-		if(expireAt==-1){
+		if(expireAt==null){
 			//没有设置则不过期
 			return false;
 		}
 		long current = System.currentTimeMillis();
-		return current > expireAt;
+		return current > expireAt.getTime();
 	}
 
 

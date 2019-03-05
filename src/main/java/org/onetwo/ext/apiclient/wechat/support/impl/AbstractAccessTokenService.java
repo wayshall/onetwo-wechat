@@ -1,10 +1,11 @@
 package org.onetwo.ext.apiclient.wechat.support.impl;
 
+import java.util.Date;
 import java.util.Optional;
 
 import org.onetwo.boot.module.redis.RedisLockRunner;
+import org.onetwo.common.apiclient.utils.ApiClientUtils;
 import org.onetwo.common.exception.ApiClientException;
-import org.onetwo.common.log.JFishLoggerFactory;
 import org.onetwo.common.utils.LangUtils;
 import org.onetwo.ext.apiclient.wechat.basic.api.WechatServer;
 import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
@@ -27,7 +28,7 @@ import org.springframework.util.Assert;
  */
 abstract public class AbstractAccessTokenService implements AccessTokenService, InitializingBean {
 	
-	protected final Logger logger = JFishLoggerFactory.getLogger(this.getClass());
+	protected final Logger logger = ApiClientUtils.getApiclientlogger();
 
 	@Autowired
 	private WechatServer wechatServer;
@@ -53,6 +54,7 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	@Override
 	public Optional<AccessTokenInfo> refreshAccessTokenByAppid(String appid) {
 		if (appid==null || !appid.equals(wechatConfig.getAppid())) {
+			logger.warn("appid error, ignore refresh, appid: {}, configuration appid: {}", appid, wechatConfig.getAppid());
 			return Optional.empty();
 		}
 		GetAccessTokenRequest request = GetAccessTokenRequest.builder()
@@ -82,8 +84,8 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 		try {
 			//使用锁，防止正在更新的时候，同时又删除
 			getRedisLockRunnerByAppId(appid).tryLock(()->{
-				if(logger.isDebugEnabled()){
-					logger.debug("remove accessToken from {} server...", getStoreType());
+				if(logger.isInfoEnabled()){
+					logger.info("remove accessToken from {} server...", getStoreType());
 				}
 				removeByAppid(appid);
 				return null;
@@ -97,10 +99,11 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	public AccessTokenInfo refreshAccessToken(GetAccessTokenRequest request){
 		AccessTokenInfo at = getRedisLockRunnerByAppId(request.getAppid()).tryLock(()->{
 			Optional<AccessTokenInfo> opt = getAccessToken(request.getAppid());
-			if(logger.isDebugEnabled()){
-				logger.debug("double check access token from {} server...", getStoreType());
-			}
+			
 			if(opt.isPresent() && !opt.get().isExpired()){
+				if(logger.isInfoEnabled()){
+					logger.info("double check access token from {} server...", getStoreType());
+				}
 				return opt.get();
 			}
 			
@@ -110,10 +113,11 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 														.appid(request.getAppid())
 														.accessToken(tokenRes.getAccessToken())
 														.expiresIn(expired)
+														.createAt(new Date())
 														.build();
 			saveNewToken(newToken);
-			if(logger.isDebugEnabled()){
-				logger.debug("saved new access token : {}", newToken);
+			if(logger.isInfoEnabled()){
+				logger.info("saved new access token : {}", newToken);
 			}
 			return newToken;
 		}, ()->{
@@ -149,8 +153,8 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	 * @return
 	 */
 	private int getExpiresIn(AccessTokenResponse token){
-//		return token.getExpiresIn();
-		return token.getExpiresIn() - AccessTokenInfo.SHORTER_EXPIRE_TIME_IN_SECONDS;
+		return token.getExpiresIn();
+//		return token.getExpiresIn() - AccessTokenInfo.SHORTER_EXPIRE_TIME_IN_SECONDS;
 	}
 	
 
