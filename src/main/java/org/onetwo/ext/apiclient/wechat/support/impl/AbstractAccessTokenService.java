@@ -12,6 +12,7 @@ import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
+import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
@@ -43,7 +44,8 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	private int retryLockInSeconds = 1;
 	
 	@Autowired
-	protected WechatConfig wechatConfig;
+//	protected WechatConfig wechatConfig;
+	private WechatConfigProvider wechatConfigProvider;
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -53,6 +55,7 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	
 	@Override
 	public Optional<AccessTokenInfo> refreshAccessTokenByAppid(String appid) {
+		WechatConfig wechatConfig = wechatConfigProvider.getWechatConfig(appid);
 		if (appid==null || !appid.equals(wechatConfig.getAppid())) {
 			logger.warn("appid error, ignore refresh, appid: {}, configuration appid: {}", appid, wechatConfig.getAppid());
 			return Optional.empty();
