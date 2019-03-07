@@ -40,7 +40,7 @@ public class AccessTokenInfo implements Serializable {
 		this.appid = appid;
 	}
 	
-	protected Date getExpireAt() {
+	public Date getExpireAt() {
 		Date expireAt = DateUtils.addSeconds(updateAt, Long.valueOf(expiresIn).intValue());
 		return expireAt;
 	}
