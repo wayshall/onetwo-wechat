@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringUtils;
 import org.onetwo.common.exception.ServiceException;
+import org.onetwo.common.log.JFishLoggerFactory;
 import org.onetwo.ext.apiclient.qcloud.sms.SmsException;
 import org.onetwo.ext.apiclient.qcloud.sms.SmsProperties;
 import org.onetwo.ext.apiclient.qcloud.sms.service.SmsService;
@@ -67,6 +68,7 @@ public class QCloudSmsService implements InitializingBean, SmsService {
 			throw new SmsException(SmsErrors.ERR_SMS_SEND, e);
 		}
     	if(result.result!=0) {
+			JFishLoggerFactory.findMailLogger().error("send sms error, mobile: {},  templateId: {}, error: {}", request.getPhoneNumber(), request.getTemplId(), result);
     		throw new SmsException(result.errMsg, String.valueOf(result.result));
     	}
     }
