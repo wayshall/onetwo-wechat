@@ -7,7 +7,6 @@ import org.onetwo.boot.module.redis.RedisLockRunner;
 import org.onetwo.common.apiclient.utils.ApiClientUtils;
 import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.utils.LangUtils;
-import org.onetwo.ext.apiclient.wechat.basic.api.WechatServer;
 import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
@@ -16,6 +15,8 @@ import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
+import org.onetwo.ext.apiclient.wxcommon.AccessTokenProvider;
+import org.onetwo.ext.apiclient.wxcommon.WxClientTypes;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,7 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	
 	protected final Logger logger = ApiClientUtils.getApiclientlogger();
 
-	@Autowired
-	private WechatServer wechatServer;
+	private AccessTokenProvider accessTokenProvider;
 //	@Autowired
 //	private WechatConfig wechatConfig;
 	/*@Autowired
@@ -43,9 +43,11 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 //	private RedisLockRunner redisLockRunner;
 	private int retryLockInSeconds = 1;
 	
-	@Autowired
+//	@Autowired
 //	protected WechatConfig wechatConfig;
 	private WechatConfigProvider wechatConfigProvider;
+	
+	private WxClientTypes supportedClientType = WxClientTypes.WECHAT;
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -98,6 +100,9 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 		}
 	}
 
+	protected AccessTokenResponse getAccessToken(GetAccessTokenRequest request) {
+		return accessTokenProvider.getAccessToken(request);
+	}
 
 	public AccessTokenInfo refreshAccessToken(GetAccessTokenRequest request){
 		AccessTokenInfo at = getRedisLockRunnerByAppId(request.getAppid()).tryLock(()->{
@@ -111,7 +116,7 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 				return opt.get();
 			}
 			
-			AccessTokenResponse tokenRes = wechatServer.getAccessToken(request);
+			AccessTokenResponse tokenRes = getAccessToken(request);
 			int expired = getExpiresIn(tokenRes);
 			AccessTokenInfo newToken = AccessTokenInfo.builder()
 														.appid(request.getAppid())
@@ -173,13 +178,24 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 		return redisLockRunner;
 	}
 	
-
-	public WechatServer getWechatServer() {
-		return wechatServer;
+	public void setAccessTokenProvider(AccessTokenProvider accessTokenProvider) {
+		this.accessTokenProvider = accessTokenProvider;
 	}
 
 	public void setRetryLockInSeconds(int retryLockInSeconds) {
 		this.retryLockInSeconds = retryLockInSeconds;
+	}
+
+	public void setWechatConfigProvider(WechatConfigProvider wechatConfigProvider) {
+		this.wechatConfigProvider = wechatConfigProvider;
+	}
+
+	public WxClientTypes getSupportedClientType() {
+		return supportedClientType;
+	}
+
+	public void setSupportedClientType(WxClientTypes supportedClientType) {
+		this.supportedClientType = supportedClientType;
 	}
 
 

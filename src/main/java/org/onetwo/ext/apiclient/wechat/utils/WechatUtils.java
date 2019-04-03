@@ -21,6 +21,7 @@ import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.GrantTypeKeys;
 import org.onetwo.ext.apiclient.wechat.wxa.response.WxappUserInfo;
+import org.onetwo.ext.apiclient.wxcommon.WxClientTypes;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +32,8 @@ import org.springframework.http.ResponseEntity;
  */
 public class WechatUtils {
 
-	public static final String ACCESS_TOKEN_PREFIX = "wechat_accesstoken:";
-	public static final String LOCK_KEY = "lock_wechat_acesstoken:";
+	public static final String ACCESS_TOKEN_PREFIX = "wx_accesstoken:";
+	public static final String LOCK_KEY = "locker:wx_acesstoken:";
 	static {
 		Security.addProvider(new BouncyCastleProvider());
 	}
@@ -82,23 +83,27 @@ public class WechatUtils {
 	
 	public static AccessTokenInfo getAccessToken(TokenApi wechatServer, GetAccessTokenRequest request){
 		AccessTokenResponse response = wechatServer.getAccessToken(request);
+		return toAccessTokenInfo(request.getAppid(), response);
+	}
+	
+	public static AccessTokenInfo toAccessTokenInfo(String appid, AccessTokenResponse response){
 		AccessTokenInfo accessToken = AccessTokenInfo.builder()
 													.accessToken(response.getAccessToken())
 													.expiresIn(response.getExpiresIn())
-													.appid(request.getAppid())
+													.appid(appid)
 													.build();
 		return accessToken;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static BoundValueOperations<String, AccessTokenInfo> boundValueOperationsByAppId(RedisTemplate<String, ?> redisTemplate, String appid){
-		String key = getAccessTokenKey(appid);
+	public static BoundValueOperations<String, AccessTokenInfo> boundValueOperationsByAppId(RedisTemplate<String, ?> redisTemplate, String appid, WxClientTypes clientType){
+		String key = getAccessTokenKey(appid, clientType);
 		BoundValueOperations<String, AccessTokenInfo> opt = (BoundValueOperations<String, AccessTokenInfo>)redisTemplate.boundValueOps(key);
 		return opt;
 	}
 
-	public static String getAccessTokenKey(String appid){
-		return WechatUtils.ACCESS_TOKEN_PREFIX + appid;
+	public static String getAccessTokenKey(String appid, WxClientTypes clientType){
+		return WechatUtils.ACCESS_TOKEN_PREFIX + clientType.name() + ":" + appid;
 	}
 	
 	public static ApiClientException translateToApiClientException(ApiClientMethod invokeMethod, WechatResponse baseResponse, ResponseEntity<?> responseEntity){

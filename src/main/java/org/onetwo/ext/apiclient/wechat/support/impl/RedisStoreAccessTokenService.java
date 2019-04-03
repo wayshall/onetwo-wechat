@@ -37,7 +37,7 @@ public class RedisStoreAccessTokenService extends AbstractAccessTokenService {
 
 	@Override
 	protected void removeByAppid(String appid) {
-		String key = WechatUtils.getAccessTokenKey(appid);
+		String key = WechatUtils.getAccessTokenKey(appid, getSupportedClientType());
 		this.redisTemplate.delete(key);
 	}
 
@@ -69,7 +69,7 @@ public class RedisStoreAccessTokenService extends AbstractAccessTokenService {
 	}
 	
 	private BoundValueOperations<String, AccessTokenInfo> boundValueOperationsByAppId(String appid){
-		return WechatUtils.boundValueOperationsByAppId(redisTemplate, appid);
+		return WechatUtils.boundValueOperationsByAppId(redisTemplate, appid, getSupportedClientType());
 	}
 
 }

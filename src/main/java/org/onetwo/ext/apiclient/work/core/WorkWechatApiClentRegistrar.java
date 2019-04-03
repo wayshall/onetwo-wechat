@@ -1,10 +1,12 @@
-package org.onetwo.ext.apiclient.wechat.core;
+package org.onetwo.ext.apiclient.work.core;
 
 import java.util.stream.Stream;
 
 import org.onetwo.common.apiclient.RestExecutorFactory;
 import org.onetwo.common.apiclient.impl.AbstractApiClentRegistrar;
-import org.onetwo.ext.apiclient.wechat.EnableWechatClient;
+import org.onetwo.ext.apiclient.wechat.core.WechatApiClientFactoryBean;
+import org.onetwo.ext.apiclient.wechat.core.WechatApiClientResponseHandler;
+import org.onetwo.ext.apiclient.work.EnableWorkWechatClient;
 import org.onetwo.ext.apiclient.wxcommon.WxClientTypes;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
@@ -17,7 +19,7 @@ import org.springframework.util.ClassUtils;
  * @author wayshall
  * <br/>
  */
-public class WechatApiClentRegistrar extends AbstractApiClentRegistrar<EnableWechatClient, WechatApiClient> {
+public class WorkWechatApiClentRegistrar extends AbstractApiClentRegistrar<EnableWorkWechatClient, WorkWechatApiClient> {
 	
 	private WechatApiClientResponseHandler responseHandler = new WechatApiClientResponseHandler();
 
@@ -32,7 +34,7 @@ public class WechatApiClentRegistrar extends AbstractApiClentRegistrar<EnableWec
 		String className = annotationMetadata.getClassName();
 		BeanDefinitionBuilder definition = BeanDefinitionBuilder.genericBeanDefinition(WechatApiClientFactoryBean.class);
 
-		definition.addPropertyValue("wxClientTypes", WxClientTypes.WECHAT);
+		definition.addPropertyValue("wxClientTypes", WxClientTypes.WORK_WECHAT);
 		definition.addPropertyValue("url", resolveUrl(attributes));
 		definition.addPropertyValue("path", resolvePath(attributes));
 //		definition.addPropertyValue("name", name);
