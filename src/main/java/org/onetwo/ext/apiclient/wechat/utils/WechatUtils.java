@@ -32,8 +32,8 @@ import org.springframework.http.ResponseEntity;
  */
 public class WechatUtils {
 
-	public static final String ACCESS_TOKEN_PREFIX = "wx_accesstoken:";
-	public static final String LOCK_KEY = "locker:wx_acesstoken:";
+	public static final String ACCESS_TOKEN_PREFIX = "WX_ACCESSTOKEN:";
+	public static final String LOCK_KEY = "LOCKER:WX_ACESSTOKEN:";
 	static {
 		Security.addProvider(new BouncyCastleProvider());
 	}

@@ -1,20 +1,33 @@
 package org.onetwo.ext.apiclient.work.basic;
 
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.commons.lang3.RandomStringUtils;
 import org.onetwo.boot.module.redis.CacheData;
 import org.onetwo.boot.module.redis.RedisOperationService;
+import org.onetwo.common.date.DateUtils;
+import org.onetwo.common.expr.ExpressionFacotry;
+import org.onetwo.common.md.Hashs;
+import org.onetwo.common.spring.SpringUtils;
+import org.onetwo.common.spring.copier.CopyUtils;
+import org.onetwo.common.utils.StringUtils;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.work.basic.api.TicketClient;
 import org.onetwo.ext.apiclient.work.basic.api.TicketClient.JsApiTicketResponse;
+import org.onetwo.ext.apiclient.work.basic.request.JsApiSignatureRequest;
+import org.onetwo.ext.apiclient.work.basic.response.JsApiSignatureResponse;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 /**
  * @author weishao zeng
  * <br/>
  */
-@Service
 public class TicketService implements InitializingBean {
+	private static final String SIGNATURE_TEMPLATE = "jsapi_ticket=${ticket}&noncestr=${noncestr}&timestamp=${timestamp}&url=${url}";
+	
 	@Autowired
 	private TicketClient ticketClient;
 	@Autowired
@@ -31,11 +44,52 @@ public class TicketService implements InitializingBean {
 
 
 	public JsApiTicketResponse getJsApiTicket(AccessTokenInfo accessToken) {
-		String key = getKey(accessToken.getAppid());
+		String key = getKey("config:"+accessToken.getAppid());
 		return redisOperationService.getCache(key, () -> {
 			JsApiTicketResponse res = ticketClient.getJsApiTicket(accessToken);
-			return CacheData.<JsApiTicketResponse>builder().value(res).build();
+			return CacheData.<JsApiTicketResponse>builder().
+												value(res)
+												.expire(res.getExpiresIn())
+												.timeUnit(TimeUnit.SECONDS)
+												.build();
 		});
+	}
+	
+	public JsApiTicketResponse getAgentJsApiTicket(AccessTokenInfo accessToken) {
+		String key = getKey(TicketClient.TYPE_AGENT_CONFIG + ":"+accessToken.getAppid());
+		return redisOperationService.getCache(key, () -> {
+			JsApiTicketResponse res = ticketClient.getAgentJsApiTicket(accessToken, TicketClient.TYPE_AGENT_CONFIG);
+			return CacheData.<JsApiTicketResponse>builder().
+												value(res)
+												.expire(res.getExpiresIn())
+												.timeUnit(TimeUnit.SECONDS)
+												.build();
+		});
+	}
+	
+	public JsApiSignatureResponse signature(AccessTokenInfo accessToken, JsApiSignatureRequest request) {
+		JsApiTicketResponse ticketRes = getJsApiTicket(accessToken);
+		return signature(ticketRes.getTicket(), request);
+	}
+	
+	static public JsApiSignatureResponse signature(String ticket, JsApiSignatureRequest request) {
+		Assert.notNull(request.getUrl(), "url can not be null");
+//		Assert.notNull(request.getAppId(), "appid can not be null");
+		if (request.getTimestamp()==null) {
+			request.setTimestamp(DateUtils.now().getTime());
+		}
+		if (StringUtils.isBlank(request.getNoncestr())) {
+			request.setNoncestr(RandomStringUtils.randomAscii(16));
+		}
+		
+		Map<String, Object> context = SpringUtils.toFlatMap(request);
+		context.put("ticket", ticket);
+		
+		String parameterStr = ExpressionFacotry.DOLOR.parse(SIGNATURE_TEMPLATE, context);
+		String signature = Hashs.sha1().hash(parameterStr).toLowerCase();
+		JsApiSignatureResponse res = CopyUtils.copy(JsApiSignatureResponse.class, request);
+		res.setSignature(signature);
+		return res;
 	}
 	
 	public void removeByAppid(String appid) {

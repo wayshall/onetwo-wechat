@@ -2,6 +2,7 @@ package org.onetwo.ext.apiclient.wechat.support.impl;
 
 import java.util.Date;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import org.onetwo.boot.module.redis.RedisLockRunner;
 import org.onetwo.common.apiclient.utils.ApiClientUtils;
@@ -23,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.redis.util.RedisLockRegistry;
 import org.springframework.util.Assert;
 
+import lombok.Setter;
+
 /**
  * 基于redis
  * @author wayshall
@@ -41,7 +44,8 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	@Autowired
 	private RedisLockRegistry redisLockRegistry;
 //	private RedisLockRunner redisLockRunner;
-	private int retryLockInSeconds = 1;
+	@Setter
+	private long lockWaitInSeconds = 1;
 	
 //	@Autowired
 //	protected WechatConfig wechatConfig;
@@ -131,6 +135,7 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 			return newToken;
 		}, ()->{
 			//如果锁定失败，则休息1秒，然后递归……
+			int retryLockInSeconds = 1;
 			if(logger.isWarnEnabled()){
 				logger.warn("obtain redisd lock error, sleep {} seconds and retry...", retryLockInSeconds);
 			}
@@ -170,6 +175,8 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	private RedisLockRunner getRedisLockRunnerByAppId(String appid){
 		RedisLockRunner redisLockRunner = RedisLockRunner.builder()
 														 .lockKey(WechatUtils.LOCK_KEY+appid)
+														 .time(lockWaitInSeconds)
+														 .unit(TimeUnit.SECONDS)
 														 .errorHandler(e->{
 															 throw new ApiClientException(WechatClientErrors.ACCESS_TOKEN_REFRESH_ERROR, e);
 														 })
@@ -182,9 +189,6 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 		this.accessTokenProvider = accessTokenProvider;
 	}
 
-	public void setRetryLockInSeconds(int retryLockInSeconds) {
-		this.retryLockInSeconds = retryLockInSeconds;
-	}
 
 	public void setWechatConfigProvider(WechatConfigProvider wechatConfigProvider) {
 		this.wechatConfigProvider = wechatConfigProvider;

@@ -3,9 +3,11 @@ package org.onetwo.ext.apiclient.wechat.support.impl;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+import org.onetwo.boot.module.redis.RedisUtils;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.SerializationException;
@@ -18,13 +20,16 @@ import org.springframework.util.Assert;
  */
 public class RedisStoreAccessTokenService extends AbstractAccessTokenService {
 	
-	@Autowired
+//	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
+	@Autowired
+	private JedisConnectionFactory jedisConnectionFactory;
 	
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		super.afterPropertiesSet();
+		this.redisTemplate = RedisUtils.createJsonValueRedisTemplate(jedisConnectionFactory);
 		Assert.notNull(redisTemplate, "redisTemplate not found");
 //		Assert.notNull(wechatConfig, "wechat config can not be null");
 	}

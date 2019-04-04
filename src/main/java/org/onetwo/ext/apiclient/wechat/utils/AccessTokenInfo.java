@@ -6,6 +6,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.onetwo.common.date.DateUtils;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -18,7 +20,7 @@ import lombok.Data;
 @Data
 public class AccessTokenInfo implements Serializable {
 	final public static int SHORTER_EXPIRE_TIME_IN_SECONDS = 60;
-	final public static int UPDATE_NEWLY_DURATION_SECONDS = 5;
+	final public static int UPDATE_NEWLY_DURATION_SECONDS = 10;
 
 	private String appid;
 	private String accessToken;
@@ -39,12 +41,14 @@ public class AccessTokenInfo implements Serializable {
 		this.updateAt = updateAt;
 		this.appid = appid;
 	}
-	
+
+	@JsonIgnore
 	public Date getExpireAt() {
 		Date expireAt = DateUtils.addSeconds(updateAt, Long.valueOf(expiresIn).intValue());
 		return expireAt;
 	}
 	
+	@JsonIgnore
 	public boolean isExpired(){
 		if(expiresIn == -1){
 			//没有设置则不过期
@@ -59,6 +63,7 @@ public class AccessTokenInfo implements Serializable {
 	 * @author weishao zeng
 	 * @return
 	 */
+	@JsonIgnore
 	public boolean isUpdatedNewly(){
 		if(updateAt==null){
 			return false;
