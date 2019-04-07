@@ -40,45 +40,7 @@ public class WechatSupportConfiguration implements ApplicationContextAware {
 		return new WechatAccessTokenProvider();
 	}
 	
-	@Bean
-	@ConditionalOnProperty(name=WechatConfigKeys.STORER_KEY, havingValue=WechatConfigKeys.STORER_MEMORY_KEY, matchIfMissing=true)
-	public AccessTokenService memoryAccessTokenService(WechatAccessTokenProvider accessTokenProvider, WechatConfigProvider wechatConfigProvider){
-		MemoryAccessTokenService service = new MemoryAccessTokenService();
-		service.setAccessTokenProvider(accessTokenProvider);
-		service.setWechatConfigProvider(wechatConfigProvider);
-		return service;
-	}
-	
-	@Bean
-	@ConditionalOnProperty(name=WechatConfigKeys.STORER_KEY, havingValue=WechatConfigKeys.STORER_REDIS_KEY)
-	public AccessTokenService redisStoreAccessTokenService(WechatAccessTokenProvider accessTokenProvider, WechatConfigProvider wechatConfigProvider){
-		RedisStoreAccessTokenService tokenService = new RedisStoreAccessTokenService();
-		tokenService.setAccessTokenProvider(accessTokenProvider);
-		tokenService.setWechatConfigProvider(wechatConfigProvider);
-		return tokenService;
-	}
-	
-	@Configuration
-	@ConditionalOnProperty(name=WechatConfigKeys.STORER_KEY, havingValue=WechatConfigKeys.STORER_DATABASE_KEY)
-	protected static class DatabaseConfiguration {
-
-		
-		@Bean
-		public AccessTokenService dbStoreAccessTokenService(WechatConfig wechatConfig, 
-															AccessTokenRepository accessTokenRepository,
-															WechatAccessTokenProvider accessTokenProvider,
-															WechatConfigProvider wechatConfigProvider){
-			DbStoreAccessTokenService tokenService = new DbStoreAccessTokenService(accessTokenRepository);
-			tokenService.setAccessTokenProvider(accessTokenProvider);
-			tokenService.setWechatConfigProvider(wechatConfigProvider);
-			return tokenService;
-		}
-		
-		@Bean
-		public AccessTokenRepository accessTokenRepository() {
-			return new AccessTokenRepository();
-		}
-	}
+	// ...
 
 	@Configuration
 	@EnableConfigurationProperties(DefaultWechatConfig.class)

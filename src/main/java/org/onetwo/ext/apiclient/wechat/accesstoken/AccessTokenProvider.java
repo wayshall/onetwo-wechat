@@ -1,4 +1,6 @@
-package org.onetwo.ext.apiclient.wxcommon;
+package org.onetwo.ext.apiclient.wechat.accesstoken;
+
+import java.util.List;
 
 import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
@@ -10,6 +12,8 @@ import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 public interface AccessTokenProvider {
 	
 	AccessTokenResponse getAccessToken(GetAccessTokenRequest request);
+	
+	List<AccessTokenTypes> getAccessTokenTypes();
 	
 }
 

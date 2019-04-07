@@ -8,17 +8,17 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.onetwo.common.log.JFishLoggerFactory;
+import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenProvider;
+import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenService;
+import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenTypes;
 import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
-import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatException;
 import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
-import org.onetwo.ext.apiclient.wxcommon.AccessTokenProvider;
-import org.onetwo.ext.apiclient.wxcommon.WxClientTypes;
 import org.slf4j.Logger;
 import org.springframework.util.Assert;
 
@@ -53,7 +53,7 @@ public class MemoryAccessTokenService implements AccessTokenService {
 	
 	@Getter
 	@Setter
-	private WxClientTypes supportedClientType = WxClientTypes.WECHAT;
+	private AccessTokenTypes supportedClientType = AccessTokenTypes.WECHAT;
 	
 	@Override
 	public Optional<AccessTokenInfo> getAccessToken(String appid) {

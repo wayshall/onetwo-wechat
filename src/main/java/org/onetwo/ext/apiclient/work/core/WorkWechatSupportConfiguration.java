@@ -1,7 +1,8 @@
 package org.onetwo.ext.apiclient.work.core;
 
 import org.onetwo.common.spring.Springs;
-import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
+import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenProvider;
+import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.core.SimpleWechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.dbm.service.AccessTokenRepository;
@@ -11,7 +12,6 @@ import org.onetwo.ext.apiclient.wechat.support.impl.MemoryAccessTokenService;
 import org.onetwo.ext.apiclient.wechat.support.impl.RedisStoreAccessTokenService;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.WechatConfigKeys;
 import org.onetwo.ext.apiclient.work.utils.WorkWechatConstants.WorkWechatConfigKeys;
-import org.onetwo.ext.apiclient.wxcommon.AccessTokenProvider;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

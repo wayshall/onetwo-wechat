@@ -1,10 +1,9 @@
-package org.onetwo.ext.apiclient.wechat.core;
+package org.onetwo.ext.apiclient.wechat.accesstoken;
 
 import java.util.Optional;
 
 import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
-import org.onetwo.ext.apiclient.wxcommon.WxClientTypes;
 
 /**
  * @author wayshall
@@ -36,6 +35,6 @@ public interface AccessTokenService {
 	 * @author weishao zeng
 	 * @return
 	 */
-	WxClientTypes getSupportedClientType();
+//	AccessTokenTypes getSupportedClientType();
 	
 }

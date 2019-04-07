@@ -8,16 +8,16 @@ import org.onetwo.boot.module.redis.RedisLockRunner;
 import org.onetwo.common.apiclient.utils.ApiClientUtils;
 import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.utils.LangUtils;
+import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenProvider;
+import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenService;
+import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenTypes;
 import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
-import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
-import org.onetwo.ext.apiclient.wxcommon.AccessTokenProvider;
-import org.onetwo.ext.apiclient.wxcommon.WxClientTypes;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +51,7 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 //	protected WechatConfig wechatConfig;
 	private WechatConfigProvider wechatConfigProvider;
 	
-	private WxClientTypes supportedClientType = WxClientTypes.WECHAT;
+	private AccessTokenTypes supportedClientType = AccessTokenTypes.WECHAT;
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -194,11 +194,11 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 		this.wechatConfigProvider = wechatConfigProvider;
 	}
 
-	public WxClientTypes getSupportedClientType() {
+	public AccessTokenTypes getSupportedClientType() {
 		return supportedClientType;
 	}
 
-	public void setSupportedClientType(WxClientTypes supportedClientType) {
+	public void setSupportedClientType(AccessTokenTypes supportedClientType) {
 		this.supportedClientType = supportedClientType;
 	}
 

@@ -12,7 +12,10 @@ import org.onetwo.common.apiclient.impl.AbstractApiClientFactoryBean;
 import org.onetwo.common.apiclient.utils.ApiClientUtils;
 import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.spring.SpringUtils;
+import org.onetwo.common.utils.Assert;
 import org.onetwo.common.utils.ParamUtils;
+import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenService;
+import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenTypes;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClientFactoryBean.WechatMethod;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
@@ -20,10 +23,8 @@ import org.onetwo.ext.apiclient.wechat.utils.WechatConstants;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.WechatConfigKeys;
 import org.onetwo.ext.apiclient.wechat.utils.WechatErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatException;
-import org.onetwo.ext.apiclient.wxcommon.WxClientTypes;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.Assert;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -55,13 +56,13 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 	@Value(WechatConfigKeys.ACCESSTOKEN_AUTO_REMOVE_KEY)
 	private boolean autoRemove;
 	
-	private WxClientTypes wxClientTypes;
+	private AccessTokenTypes accessTokenType;
 	
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		super.afterPropertiesSet();
-		Assert.notNull(wxClientTypes, "wxClientTypes can not be null");
+		Assert.notNull(accessTokenType, "accessTokenType can not be null");
 	}
 	
 	@Override
@@ -76,17 +77,17 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 	}*/
 	
 	protected AccessTokenService getAccessTokenService(){
-		/*AccessTokenService accessTokenService = SpringUtils.getBean(applicationContext, AccessTokenService.class);
+		AccessTokenService accessTokenService = SpringUtils.getBean(applicationContext, AccessTokenService.class);
 		if(accessTokenService==null){
 			throw new ApiClientException(WechatClientErrors.ACCESS_TOKEN_SERVICE_NOT_FOUND);
 		}
-		return accessTokenService;*/
-		AccessTokenService accessTokenService = SpringUtils.getBeans(applicationContext, AccessTokenService.class)
-															.stream()
-															.filter(ts -> ts.getSupportedClientType()==wxClientTypes)
-															.findFirst()
-															.orElseThrow(() -> new ApiClientException(WechatClientErrors.ACCESS_TOKEN_SERVICE_NOT_FOUND));
 		return accessTokenService;
+//		AccessTokenService accessTokenService = SpringUtils.getBeans(applicationContext, AccessTokenService.class)
+//															.stream()
+//															.filter(ts -> ts.getSupportedClientType()==wxClientTypes)
+//															.findFirst()
+//															.orElseThrow(() -> new ApiClientException(WechatClientErrors.ACCESS_TOKEN_SERVICE_NOT_FOUND));
+//		return accessTokenService;
 	}
 	
 	final class WechatClientMethodInterceptor extends DefaultApiMethodInterceptor {

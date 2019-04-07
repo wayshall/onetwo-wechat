@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.onetwo.common.apiclient.impl.RestExecutorConfiguration;
 import org.onetwo.common.spring.context.AbstractImportSelector;
+import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenConfiguration;
 import org.onetwo.ext.apiclient.work.EnableWorkWechatClient;
 import org.onetwo.ext.apiclient.work.WorkWechatConfiguration;
 import org.springframework.core.annotation.AnnotationAttributes;
@@ -21,6 +22,7 @@ public class EnableWorkWechatClientSelector extends AbstractImportSelector<Enabl
 		List<String> classNames = new ArrayList<String>();
 		classNames.add(WorkWechatApiClentRegistrar.class.getName());
 		classNames.add(RestExecutorConfiguration.class.getName());
+		classNames.add(AccessTokenConfiguration.class.getName());
 		
 		classNames.add(WorkWechatSupportConfiguration.class.getName());
 		classNames.add(WorkWechatConfiguration.class.getName());

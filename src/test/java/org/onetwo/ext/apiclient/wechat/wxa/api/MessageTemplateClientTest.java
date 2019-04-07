@@ -2,9 +2,9 @@ package org.onetwo.ext.apiclient.wechat.wxa.api;
 
 import org.junit.Test;
 import org.onetwo.ext.apiclient.wechat.WechatBaseTestsAdapter;
+import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
-import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.message.request.MpTemplateMessge.MiniprogramData;
 import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.wxa.request.MessageTemplateRequest;

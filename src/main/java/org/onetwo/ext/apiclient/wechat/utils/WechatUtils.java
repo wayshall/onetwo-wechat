@@ -15,13 +15,13 @@ import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.exception.ErrorTypes;
 import org.onetwo.common.jackson.JsonMapper;
 import org.onetwo.common.utils.LangUtils;
+import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenTypes;
 import org.onetwo.ext.apiclient.wechat.basic.api.TokenApi;
 import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.GrantTypeKeys;
 import org.onetwo.ext.apiclient.wechat.wxa.response.WxappUserInfo;
-import org.onetwo.ext.apiclient.wxcommon.WxClientTypes;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
@@ -96,13 +96,13 @@ public class WechatUtils {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static BoundValueOperations<String, AccessTokenInfo> boundValueOperationsByAppId(RedisTemplate<String, ?> redisTemplate, String appid, WxClientTypes clientType){
+	public static BoundValueOperations<String, AccessTokenInfo> boundValueOperationsByAppId(RedisTemplate<String, ?> redisTemplate, String appid, AccessTokenTypes clientType){
 		String key = getAccessTokenKey(appid, clientType);
 		BoundValueOperations<String, AccessTokenInfo> opt = (BoundValueOperations<String, AccessTokenInfo>)redisTemplate.boundValueOps(key);
 		return opt;
 	}
 
-	public static String getAccessTokenKey(String appid, WxClientTypes clientType){
+	public static String getAccessTokenKey(String appid, AccessTokenTypes clientType){
 		return WechatUtils.ACCESS_TOKEN_PREFIX + clientType.name() + ":" + appid;
 	}
 	

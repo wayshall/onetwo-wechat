@@ -9,7 +9,7 @@ import org.onetwo.ext.apiclient.work.core.WorkWechatConfig;
 public abstract class WorkWechatConstants {
 
 	public static abstract class LockerKeys {
-		public static final String JSAPI_TICKET = "locker:jsApiTicket:";
+		public static final String JSAPI_TICKET = "LOCKER:jsApiTicket:";
 	}
 
 	public static abstract class WorkWechatConfigKeys {
