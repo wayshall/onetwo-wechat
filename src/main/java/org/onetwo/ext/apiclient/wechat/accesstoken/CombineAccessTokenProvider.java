@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.onetwo.common.exception.ApiClientException;
-import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenProvider;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenTypes;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 

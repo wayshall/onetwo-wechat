@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 import org.onetwo.ext.apiclient.wechat.WechatBaseTestsAdapter;
-import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenService;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.basic.response.GetCallbackIpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 

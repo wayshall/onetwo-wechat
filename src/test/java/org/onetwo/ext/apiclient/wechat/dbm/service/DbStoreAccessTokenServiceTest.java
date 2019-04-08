@@ -7,8 +7,8 @@ import org.junit.Test;
 import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.utils.LangUtils;
 import org.onetwo.ext.apiclient.wechat.WechatDbmTestsAdapter;
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.basic.response.GetCallbackIpResponse;
-import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatErrors;
 import org.springframework.beans.factory.annotation.Autowired;
 

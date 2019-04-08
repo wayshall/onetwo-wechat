@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.onetwo.common.file.FileUtils;
 import org.onetwo.common.spring.utils.ClassPathJsonDataBinder;
 import org.onetwo.ext.apiclient.wechat.WechatBaseTestsAdapter;
-import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenService;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.view.api.MenuService;
 import org.onetwo.ext.apiclient.wechat.view.request.CreateMenuRequest;

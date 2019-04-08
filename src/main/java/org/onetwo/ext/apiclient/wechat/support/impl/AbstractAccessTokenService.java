@@ -8,14 +8,15 @@ import org.onetwo.boot.module.redis.RedisLockRunner;
 import org.onetwo.common.apiclient.utils.ApiClientUtils;
 import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.utils.LangUtils;
-import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenProvider;
-import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenService;
-import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenTypes;
-import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenProvider;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenTypes;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
-import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
 import org.slf4j.Logger;
@@ -60,7 +61,8 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	}
 	
 	@Override
-	public Optional<AccessTokenInfo> refreshAccessTokenByAppid(String appid) {
+	public Optional<AccessTokenInfo> refreshAccessTokenByAppid(AppidRequest refreshTokenRequest) {
+		String appid = refreshTokenRequest.getAppid();
 		WechatConfig wechatConfig = wechatConfigProvider.getWechatConfig(appid);
 		if (appid==null || !appid.equals(wechatConfig.getAppid())) {
 			logger.warn("appid error, ignore refresh, appid: {}, configuration appid: {}", appid, wechatConfig.getAppid());
@@ -69,6 +71,7 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 		GetAccessTokenRequest request = GetAccessTokenRequest.builder()
 																.appid(appid)
 																.secret(wechatConfig.getAppsecret())
+																.accessTokenType(refreshTokenRequest.getAccessTokenType())
 															.build();
 		AccessTokenInfo tokenInfo = refreshAccessToken(request);
 		return Optional.of(tokenInfo);

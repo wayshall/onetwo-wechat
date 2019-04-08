@@ -14,10 +14,11 @@ import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.spring.SpringUtils;
 import org.onetwo.common.utils.Assert;
 import org.onetwo.common.utils.ParamUtils;
-import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenService;
-import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenTypes;
+import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenTypes;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClientFactoryBean.WechatMethod;
-import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.WechatConfigKeys;
@@ -128,7 +129,12 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 		protected Object processAutoRemove(MethodInvocation invocation, WechatMethod invokeMethod, AccessTokenInfo at, ApiClientException e) {
 			if (autoRemove) {
 				String appid = at.getAppid();
-				Optional<AccessTokenInfo> refreshOpt = getAccessTokenService().refreshAccessTokenByAppid(appid);
+				Optional<AccessTokenInfo> refreshOpt = getAccessTokenService().refreshAccessTokenByAppid(
+																							AppidRequest.builder()
+																									.appid(appid)
+																									.accessTokenType(accessTokenType)
+																									.build()
+																							);
 				if (refreshOpt.isPresent()) {
 					logger.info("refreshAccessTokenByAppid success, retry invoke wechat method. token: {}", refreshOpt.get().getAccessToken());
 					at.setAccessToken(refreshOpt.get().getAccessToken());

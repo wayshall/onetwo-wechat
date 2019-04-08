@@ -2,9 +2,9 @@ package org.onetwo.ext.apiclient.wechat.dbm.service;
 
 import java.util.Optional;
 
-import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.support.impl.AbstractAccessTokenService;
-import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.springframework.util.Assert;
 
 /**

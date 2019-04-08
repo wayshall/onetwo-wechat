@@ -9,7 +9,7 @@ import java.util.List;
 import org.junit.Test;
 import org.onetwo.common.file.FileUtils;
 import org.onetwo.ext.apiclient.wechat.WechatBaseTestsAdapter;
-import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenService;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.material.response.UploadNewsResponse;
 import org.onetwo.ext.apiclient.wechat.media.request.AddNewsRequest;
 import org.onetwo.ext.apiclient.wechat.media.request.AddNewsRequest.AddNewsItem;

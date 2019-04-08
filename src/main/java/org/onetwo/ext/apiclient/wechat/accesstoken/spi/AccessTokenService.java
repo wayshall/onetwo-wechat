@@ -1,9 +1,10 @@
-package org.onetwo.ext.apiclient.wechat.accesstoken;
+package org.onetwo.ext.apiclient.wechat.accesstoken.spi;
 
 import java.util.Optional;
 
-import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
-import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
+import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 
 /**
  * @author wayshall
@@ -19,7 +20,7 @@ public interface AccessTokenService {
 	/*@Deprecated
 	AccessTokenInfo getAccessToken();*/
 	AccessTokenInfo getOrRefreshAccessToken(GetAccessTokenRequest request);
-	Optional<AccessTokenInfo> refreshAccessTokenByAppid(String appid);
+	Optional<AccessTokenInfo> refreshAccessTokenByAppid(AppidRequest appidRequest);
 	AccessTokenInfo refreshAccessToken(GetAccessTokenRequest request);
 	void removeAccessToken(String appid);
 	/***

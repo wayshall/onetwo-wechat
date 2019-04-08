@@ -1,10 +1,10 @@
-package org.onetwo.ext.apiclient.wechat.basic.request;
+package org.onetwo.ext.apiclient.wechat.accesstoken.request;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.onetwo.common.annotation.IgnoreField;
 import org.onetwo.common.utils.FieldName;
 import org.onetwo.common.utils.StringUtils;
-import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenTypes;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenTypes;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.GrantTypeKeys;
 
 import lombok.Builder;

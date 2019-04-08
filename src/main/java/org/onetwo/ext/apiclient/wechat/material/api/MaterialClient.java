@@ -1,6 +1,7 @@
 package org.onetwo.ext.apiclient.wechat.material.api;
 
 import org.onetwo.common.utils.FieldName;
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;
 import org.onetwo.ext.apiclient.wechat.material.request.AddVideoMaterialRequest;
 import org.onetwo.ext.apiclient.wechat.material.request.BatchgetMaterialRequest;
@@ -8,7 +9,6 @@ import org.onetwo.ext.apiclient.wechat.material.response.AddMaterialResponse;
 import org.onetwo.ext.apiclient.wechat.material.response.AddNewsResponse;
 import org.onetwo.ext.apiclient.wechat.material.response.BatchgetMaterialResponse;
 import org.onetwo.ext.apiclient.wechat.media.request.AddNewsRequest;
-import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;

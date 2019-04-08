@@ -1,9 +1,9 @@
 package org.onetwo.ext.apiclient.wechat;
 
 import org.junit.Before;
-import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenService;
-import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
-import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
+import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ActiveProfiles;

@@ -3,8 +3,8 @@ package org.onetwo.ext.apiclient.wechat.dbm.service;
 import java.util.Optional;
 
 import org.onetwo.common.db.spi.BaseEntityManager;
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.dbm.entity.WxAccessTokenEntity;
-import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 

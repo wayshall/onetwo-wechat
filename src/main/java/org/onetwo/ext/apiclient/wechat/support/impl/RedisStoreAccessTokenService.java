@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import org.onetwo.boot.module.redis.RedisUtils;
-import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;

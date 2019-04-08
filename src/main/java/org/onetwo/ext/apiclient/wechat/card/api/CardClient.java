@@ -1,9 +1,9 @@
 package org.onetwo.ext.apiclient.wechat.card.api;
 
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.card.request.BatchgetRequest;
 import org.onetwo.ext.apiclient.wechat.card.response.BatchgetResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;
-import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.UrlConst;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;

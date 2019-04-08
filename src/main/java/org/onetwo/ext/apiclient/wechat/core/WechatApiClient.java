@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenTypes;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenTypes;
 
 /**
  * @author wayshall

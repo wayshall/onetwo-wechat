@@ -4,10 +4,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenService;
-import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenTypes;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
-import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.work.core.WorkWechatConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -47,18 +48,20 @@ public class WorkWechatBaseBootTests {
 		GetAccessTokenRequest request = GetAccessTokenRequest.builder()
 																.appid(wechatConfig.getAppid())
 																.secret(wechatConfig.getAppsecret())
+																.accessTokenType(AccessTokenTypes.WORK_WECHAT)
 															.build();
 		AccessTokenInfo tokenInfo = accessTokenService.getOrRefreshAccessToken(request);
 		return tokenInfo;
 	}
 	
-	protected AccessTokenInfo getAgentAccessToken(){
+/*	protected AccessTokenInfo getAgentAccessToken(){
 		WechatConfig wechatConfig = workWechatConfig.getApps().get("party-agent");
 		GetAccessTokenRequest request = GetAccessTokenRequest.builder()
 																.appid(wechatConfig.getAppid())
 																.secret(wechatConfig.getAppsecret())
+																.accessTokenType(AccessTokenTypes.WORK_AGENT)
 															.build();
 		AccessTokenInfo tokenInfo = accessTokenService.getOrRefreshAccessToken(request);
 		return tokenInfo;
-	}
+	}*/
 }

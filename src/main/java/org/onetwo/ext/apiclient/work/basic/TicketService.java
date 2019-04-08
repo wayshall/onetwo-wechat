@@ -12,7 +12,7 @@ import org.onetwo.common.md.Hashs;
 import org.onetwo.common.spring.SpringUtils;
 import org.onetwo.common.spring.copier.CopyUtils;
 import org.onetwo.common.utils.StringUtils;
-import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.work.basic.api.TicketClient;
 import org.onetwo.ext.apiclient.work.basic.api.TicketClient.JsApiTicketResponse;
 import org.onetwo.ext.apiclient.work.basic.request.JsApiSignatureRequest;
@@ -42,8 +42,13 @@ public class TicketService implements InitializingBean {
 		return keyPrefix + key;
 	}
 
-
-	public JsApiTicketResponse getJsApiTicket(AccessTokenInfo accessToken) {
+	/***
+	 * 获取企业jsapi ticket
+	 * @author weishao zeng
+	 * @param accessToken
+	 * @return
+	 */
+	public JsApiTicketResponse getCropJsApiTicket(AccessTokenInfo accessToken) {
 		String key = getKey("config:"+accessToken.getAppid());
 		return redisOperationService.getCache(key, () -> {
 			JsApiTicketResponse res = ticketClient.getJsApiTicket(accessToken);
@@ -55,6 +60,12 @@ public class TicketService implements InitializingBean {
 		});
 	}
 	
+	/***
+	 * 获取应用jsapi ticket
+	 * @author weishao zeng
+	 * @param accessToken
+	 * @return
+	 */
 	public JsApiTicketResponse getAgentJsApiTicket(AccessTokenInfo accessToken) {
 		String key = getKey(TicketClient.TYPE_AGENT_CONFIG + ":"+accessToken.getAppid());
 		return redisOperationService.getCache(key, () -> {
@@ -67,8 +78,13 @@ public class TicketService implements InitializingBean {
 		});
 	}
 	
-	public JsApiSignatureResponse signature(AccessTokenInfo accessToken, JsApiSignatureRequest request) {
-		JsApiTicketResponse ticketRes = getJsApiTicket(accessToken);
+	public JsApiSignatureResponse getCropSignature(AccessTokenInfo accessToken, JsApiSignatureRequest request) {
+		JsApiTicketResponse ticketRes = getCropJsApiTicket(accessToken);
+		return signature(ticketRes.getTicket(), request);
+	}
+	
+	public JsApiSignatureResponse getAgentSignature(AccessTokenInfo accessToken, JsApiSignatureRequest request) {
+		JsApiTicketResponse ticketRes = getAgentJsApiTicket(accessToken);
 		return signature(ticketRes.getTicket(), request);
 	}
 	

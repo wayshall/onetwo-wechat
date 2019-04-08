@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.junit.Test;
 import org.onetwo.ext.apiclient.wechat.WechatBaseTestsAdapter;
-import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenService;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.material.request.AddVideoMaterialRequest;
 import org.onetwo.ext.apiclient.wechat.material.request.BatchgetMaterialRequest;
 import org.onetwo.ext.apiclient.wechat.material.response.AddMaterialResponse;
