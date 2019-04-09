@@ -2,6 +2,7 @@ package org.onetwo.ext.apiclient.work.oauth2;
 
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
+import org.onetwo.ext.apiclient.wechat.serve.spi.WechatOAuth2UserRepository.OAuth2User;
 import org.onetwo.ext.apiclient.work.core.WorkWechatApiClient;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -24,9 +25,9 @@ public interface WorkOauth2Client {
 	
 	@Data
 	@EqualsAndHashCode(callSuper=false)
-	public class UserInfoResponse extends WechatResponse {
-		@JsonProperty("OpenId")
-		private String openId;
+	public class UserInfoResponse extends WechatResponse implements OAuth2User {
+		@JsonProperty("UserId")
+		private String userId;
 		@JsonProperty("DeviceId")
 		private String deviceId;
 	}

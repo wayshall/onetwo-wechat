@@ -1,9 +1,14 @@
 package org.onetwo.ext.apiclient.wechat.serve.spi;
 
 import java.util.Optional;
+import java.util.UUID;
 
+import javax.servlet.http.HttpSession;
+
+import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.serve.dto.RequestHoder;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatOAuth2UserRepository.OAuth2User;
+import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.Oauth2ClientKeys;
 
 /**
  * T OAuth2UserInfo
@@ -16,7 +21,7 @@ public interface WechatOAuth2UserRepository<T extends OAuth2User> {
 
 	void saveCurrentUser(RequestHoder request, T userInfo, boolean refresh);
 
-	boolean checkOauth2State(RequestHoder request, String state);
+	boolean checkOauth2State(RequestHoder request, WechatConfig wechatConfig, String state);
 
 	/****
 	 * 生成state参数
@@ -24,7 +29,14 @@ public interface WechatOAuth2UserRepository<T extends OAuth2User> {
 	 * @param request
 	 * @return
 	 */
-	String generateAndStoreOauth2State(RequestHoder request);
+	default String generateAndStoreOauth2State(RequestHoder request, WechatConfig wechatConfig){
+		String state = UUID.randomUUID().toString();
+		HttpSession session = request.getRequest().getSession();
+		if(session!=null){
+			session.setAttribute(Oauth2ClientKeys.STORE_STATE_KEY, state);
+		}
+		return state;
+	}
 
 	public interface OAuth2User {
 		/***
@@ -32,7 +44,9 @@ public interface WechatOAuth2UserRepository<T extends OAuth2User> {
 		 * @author weishao zeng
 		 * @return
 		 */
-		boolean isAccessTokenExpired();
+		default boolean isAccessTokenExpired() {
+			return false;
+		}
 		/****
 		 * accesstoken已过期时，是否采用刷新token的方式更新token和用户信息
 		 * 

@@ -15,7 +15,6 @@ import org.onetwo.common.web.utils.RequestUtils;
 import org.onetwo.common.web.utils.ResponseUtils;
 import org.onetwo.ext.apiclient.wechat.basic.response.AuthorizeData;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
-import org.onetwo.ext.apiclient.wechat.oauth2.response.OAuth2AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.serve.dto.RequestHoder;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatOAuth2UserRepository;
@@ -53,13 +52,6 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 		WechatConfig wechatConfig = wechatConfigProvider.getWechatConfig(getAppid(request));
 		return wechatConfig;
 	}
-	/***
-	 * 如果配置为userinfo，则去获取userinfo
-	 * @author wayshall
-	 * @param request
-	 * @param userInfo
-	 */
-	abstract protected U processUserInfo(HttpServletRequest request, OAuth2AccessTokenResponse tokenRespose);
 
 	protected boolean refreshToken(HttpServletRequest request, U userInfo){
 		/*if(userInfo.isRefreshTokenExpired()){
@@ -118,7 +110,7 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 		if(StringUtils.isNotBlank(code)){
 			String state = request.getParameter(Oauth2ClientKeys.PARAMS_STATE);
 			RequestHoder holder = RequestHoder.builder().request(request).build();
-			if(!wechatOAuth2UserRepository.checkOauth2State(holder, state)){
+			if(!wechatOAuth2UserRepository.checkOauth2State(holder, getWechatConfig(request), state)){
 				throw new WechatException(WechatClientErrors.OAUTH2_STATE_ERROR);
 			}
 			
@@ -158,13 +150,13 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 		} catch (IOException e) {
 			throw new WechatException("redirect error: " + e.getMessage(), e);
 		}
-		return true;
+		return false;
 	}
 	
 	protected AuthorizeData getWechatAuthorizeData(HttpServletRequest request){
 		RequestHoder holder = RequestHoder.builder().request(request).build();
 		String redirectUrl = buildRedirectUrl(request);
-		String state = wechatOAuth2UserRepository.generateAndStoreOauth2State(holder);
+		String state = wechatOAuth2UserRepository.generateAndStoreOauth2State(holder, getWechatConfig(request));
 //		AuthorizeData authorize = wechatOauth2Client.createAuthorize(redirectUrl, state);
 		AuthorizeData authorize = createAuthorize(getWechatConfig(request), redirectUrl, state);
 		return authorize;

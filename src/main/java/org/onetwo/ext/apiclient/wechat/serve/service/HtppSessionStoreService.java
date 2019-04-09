@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.onetwo.common.web.utils.RequestUtils;
+import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.serve.dto.RequestHoder;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatOAuth2UserRepository;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatOAuth2UserRepository.OAuth2User;
@@ -41,7 +42,7 @@ public class HtppSessionStoreService<T extends OAuth2User> implements WechatOAut
 	}
 	
 	@Override
-	public boolean checkOauth2State(RequestHoder request, String state){
+	public boolean checkOauth2State(RequestHoder request, WechatConfig wechatConfig, String state){
 		HttpSession session = request.getRequest().getSession();
 		if(session!=null){
 			String storedState = (String)session.getAttribute(Oauth2ClientKeys.STORE_STATE_KEY);
@@ -58,7 +59,7 @@ public class HtppSessionStoreService<T extends OAuth2User> implements WechatOAut
 	 * @return
 	 */
 	@Override
-	public String generateAndStoreOauth2State(RequestHoder request){
+	public String generateAndStoreOauth2State(RequestHoder request, WechatConfig wechatConfig){
 		String state = UUID.randomUUID().toString();
 		HttpSession session = request.getRequest().getSession();
 		if(session!=null){

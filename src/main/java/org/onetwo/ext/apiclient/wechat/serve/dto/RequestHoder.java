@@ -17,7 +17,7 @@ public class RequestHoder {
 	public static RequestHoder current(){
 		return builder().request(WebHolder.getRequest().get()).build();
 	}
-	HttpServletRequest request;
+	private HttpServletRequest request;
 	
 	@Builder
 	public RequestHoder(HttpServletRequest request) {

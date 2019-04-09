@@ -30,7 +30,7 @@ public class EnableWorkWechatClientSelector extends AbstractImportSelector<Enabl
 		
 
 		if(attributes.getBoolean("enableOAuth2Interceptor")){
-//			classNames.add(WorkOAuth2Configuration.class.getName());
+			classNames.add(WorkOAuth2Configuration.class.getName());
 		}
 		
 		return classNames;
