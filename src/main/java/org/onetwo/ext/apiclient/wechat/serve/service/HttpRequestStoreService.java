@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
  * <br/>
  */
 @Slf4j
-public class HtppSessionStoreService<T extends OAuth2User> implements WechatOAuth2UserRepository<T> {
+public class HttpRequestStoreService<T extends OAuth2User> implements WechatOAuth2UserRepository<T> {
 
 	private String userInfoKey = Oauth2ClientKeys.STORE_USER_INFO_KEY;
 

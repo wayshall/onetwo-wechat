@@ -22,6 +22,7 @@ public @interface EnableWorkWechatClient {
 	Class<?>[] basePackageClasses() default {};
 	
 	String baseUrl() default WorkUrlConst.API_BASE_URL;
+	boolean enableOAuth2Interceptor() default false;
 	
 
 }

@@ -2,6 +2,7 @@ package org.onetwo.ext.apiclient.work.core;
 
 import java.util.Map;
 
+import org.onetwo.common.utils.LangUtils;
 import org.onetwo.ext.apiclient.wechat.core.DefaultWechatConfig;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -20,7 +21,11 @@ public class WorkWechatConfig /*extends DefaultWechatConfig*/ {
 
 	public static final String CONFIG_PREFIX  = "work-wechat";
 	
-	private Map<String, DefaultWechatConfig> apps = Maps.newHashMap();
+	private Map<String, DefaultWechatConfig> apps = Maps.newLinkedHashMap();
+	
+	public WechatConfig getDefaultWechatConfig() {
+		return LangUtils.getFirst(apps);
+	}
 	
 	public WechatConfig getWechatConfig(String appid) {
 		return this.apps.entrySet().stream().filter(entry -> {

@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.onetwo.boot.core.web.mvc.interceptor.MvcInterceptorAdapter;
 import org.onetwo.ext.apiclient.wechat.oauth2.WechatOAuth2Hanlder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 
 /**
@@ -14,12 +13,16 @@ import org.springframework.web.method.HandlerMethod;
  */
 public class WechatOAuth2MvcInterceptor extends MvcInterceptorAdapter {
 	
-	@Autowired
-	private WechatOAuth2Hanlder wechatOAuth2Hanlder;
+	private WechatOAuth2Hanlder oauth2Hanlder;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handler) {
-		wechatOAuth2Hanlder.preHandle(request, response, handler);
+		oauth2Hanlder.preHandle(request, response, handler);
 		return true;
 	}
+
+	public void setOAuth2Hanlder(WechatOAuth2Hanlder oauth2Hanlder) {
+		this.oauth2Hanlder = oauth2Hanlder;
+	}
+	
 }

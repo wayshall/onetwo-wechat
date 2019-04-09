@@ -4,15 +4,16 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import org.onetwo.ext.apiclient.wechat.serve.spi.WechatOAuth2UserRepository.OAuth2User;
 import org.springframework.util.Assert;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author wayshall
@@ -23,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OAuth2UserInfo implements Serializable {
+public class OAuth2UserInfo implements Serializable, OAuth2User {
 	/***
 	 * 
 	 */
@@ -54,13 +55,13 @@ public class OAuth2UserInfo implements Serializable {
 
 	@JsonIgnore
 	public boolean isAccessTokenExpired(){
-		Assert.notNull(accessAt);
+		Assert.notNull(accessAt, "accessAt can not be null");
 		long duration = System.currentTimeMillis() - accessAt;
 		return TimeUnit.MILLISECONDS.toSeconds(duration) > expiresIn;
 	}
 	
 	@JsonIgnore
-	public boolean isRefreshTokenExpired(){
+	public boolean isRefreshToken(){
 		if(refreshAt==null){
 			return false;
 		}

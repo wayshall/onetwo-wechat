@@ -1,7 +1,6 @@
 package org.onetwo.ext.apiclient.wechat.accesstoken;
 
-import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
-import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenTypes;
+import org.onetwo.common.utils.StringUtils;
 import org.onetwo.ext.apiclient.wechat.core.SimpleWechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.work.core.WorkWechatConfig;
@@ -19,12 +18,20 @@ public class CombineWechatConfigProvider extends SimpleWechatConfigProvider {
 	}
 
 	@Override
-	public WechatConfig getWechatConfig(AppidRequest appidRequest) {
-		String appid = appidRequest.getAppid();
-		if (appidRequest.getAccessTokenType()==AccessTokenTypes.WECHAT) {
-			return super.getWechatConfig(appid);
+	public WechatConfig getWechatConfig(String appid) {
+		WechatConfig config = null;
+		if (StringUtils.isBlank(appid)) {
+			if (StringUtils.isNotBlank(wechatConfig.getAppid())) {
+				config = wechatConfig;
+			} else {
+				config = this.workWechatConfig.getDefaultWechatConfig();
+			}
+		} else if (appid.equals(wechatConfig.getAppid())) {
+			config = wechatConfig;
+		} else {
+			config = this.workWechatConfig.getWechatConfig(appid);
 		}
-		return this.workWechatConfig.getWechatConfig(appid);
+		return config;
 	}
 
 

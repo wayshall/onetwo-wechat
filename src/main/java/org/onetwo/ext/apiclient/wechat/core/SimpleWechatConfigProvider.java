@@ -2,7 +2,6 @@ package org.onetwo.ext.apiclient.wechat.core;
 
 import org.onetwo.common.exception.BaseException;
 import org.onetwo.common.utils.StringUtils;
-import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
 import org.onetwo.ext.apiclient.wechat.crypt.AesException;
 import org.onetwo.ext.apiclient.wechat.crypt.WXBizMsgCrypt;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
@@ -15,7 +14,7 @@ import org.springframework.beans.factory.InitializingBean;
  */
 public class SimpleWechatConfigProvider implements WechatConfigProvider, InitializingBean {
 
-	private WechatConfig wechatConfig;
+	protected WechatConfig wechatConfig;
 	private WXBizMsgCrypt wxbizMsgCrypt;
 	
 	public SimpleWechatConfigProvider(WechatConfig wechatConfig) {
@@ -41,7 +40,7 @@ public class SimpleWechatConfigProvider implements WechatConfigProvider, Initial
 	
 
 	@Override
-	public WechatConfig getWechatConfig(AppidRequest appidRequest) {
+	public WechatConfig getWechatConfig(String appid) {
 		return wechatConfig;
 	}
 

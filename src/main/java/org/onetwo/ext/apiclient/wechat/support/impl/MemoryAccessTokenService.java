@@ -66,7 +66,7 @@ public class MemoryAccessTokenService implements AccessTokenService {
 
 	@Override
 	public Optional<AccessTokenInfo> refreshAccessTokenByAppid(AppidRequest appidRequest) {
-		WechatConfig wechatConfig = this.wechatConfigProvider.getWechatConfig(appidRequest);
+		WechatConfig wechatConfig = this.wechatConfigProvider.getWechatConfig(appidRequest.getAppid());
 		String appid = appidRequest.getAppid();
 		if (appid==null || !appid.equals(wechatConfig.getAppid())) {
 			return Optional.empty();

@@ -1,8 +1,6 @@
 package org.onetwo.ext.apiclient.wechat.serve.spi;
 
 import org.onetwo.common.exception.BaseException;
-import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
-import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenTypes;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.crypt.AesException;
 import org.onetwo.ext.apiclient.wechat.crypt.WXBizMsgCrypt;
@@ -13,14 +11,16 @@ import org.onetwo.ext.apiclient.wechat.crypt.WXBizMsgCrypt;
  */
 public interface WechatConfigProvider {
 	
-	default WechatConfig getWechatConfig(String clientId) {
+	WechatConfig getWechatConfig(String clientId);
+	
+	/*default WechatConfig getWechatConfig(String clientId) {
 		return getWechatConfig(AppidRequest.builder()
 											.appid(clientId)
 											.accessTokenType(AccessTokenTypes.WECHAT)
 											.build()
 								);
 	}
-	WechatConfig getWechatConfig(AppidRequest appidRequest);
+	WechatConfig getWechatConfig(AppidRequest appidRequest);*/
 	
 	default public WXBizMsgCrypt getWXBizMsgCrypt(String clientId){
 		WechatConfig wechatConfig = getWechatConfig(clientId);

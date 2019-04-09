@@ -8,6 +8,7 @@ import org.onetwo.common.spring.context.AbstractImportSelector;
 import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenConfiguration;
 import org.onetwo.ext.apiclient.work.EnableWorkWechatClient;
 import org.onetwo.ext.apiclient.work.WorkWechatConfiguration;
+import org.onetwo.ext.apiclient.work.oauth2.WorkOAuth2Configuration;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
 
@@ -26,6 +27,11 @@ public class EnableWorkWechatClientSelector extends AbstractImportSelector<Enabl
 		
 		classNames.add(WorkWechatSupportConfiguration.class.getName());
 		classNames.add(WorkWechatConfiguration.class.getName());
+		
+
+		if(attributes.getBoolean("enableOAuth2Interceptor")){
+//			classNames.add(WorkOAuth2Configuration.class.getName());
+		}
 		
 		return classNames;
 	}

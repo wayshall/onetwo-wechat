@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.onetwo.common.spring.mvc.annotation.BootMvcArgumentResolver;
 import org.onetwo.ext.apiclient.wechat.serve.dto.RequestHoder;
-import org.onetwo.ext.apiclient.wechat.serve.spi.WechatSessionRepository;
+import org.onetwo.ext.apiclient.wechat.serve.spi.WechatOAuth2UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -25,7 +25,7 @@ public class OAuth2UserInfoArgumentResolver implements HandlerMethodArgumentReso
 	@Autowired
 	private WechatOAuth2Hanlder wechatOAuth2Hanlder;
 	@Autowired
-	private WechatSessionRepository sessionStoreService;
+	private WechatOAuth2UserRepository sessionStoreService;
 	
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
