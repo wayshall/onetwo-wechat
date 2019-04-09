@@ -51,7 +51,7 @@ public class HttpRequestStoreService<T extends OAuth2User> implements WechatOAut
 	 */
 	@Override
 	public String generateAndStoreOauth2State(RequestHoder request, WechatConfig wechatConfig){
-		String state = this.tokenValidator.generateAlphanumeric(getUserKey(wechatConfig), 12);
+		String state = this.tokenValidator.generateAlphanumeric(getUserKey(wechatConfig), 12, 30);
 		return state;
 	}
 }

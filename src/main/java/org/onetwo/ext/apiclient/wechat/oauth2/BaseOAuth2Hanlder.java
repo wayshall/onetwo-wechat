@@ -141,8 +141,8 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 			return false;
 		}
 		try {
-			AuthorizeData authorizeData = getWechatAuthorizeData(request);
-			String authorizeUrl = authorizeData.toAuthorizeUrl();
+//			AuthorizeData authorizeData = getWechatAuthorizeData(request);
+			String authorizeUrl = getAuthorizeUrl(request);
 			if(logger.isInfoEnabled()){
 				logger.info("redirect to authorizeUrl : {}", authorizeUrl);
 			}
@@ -153,13 +153,13 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 		return false;
 	}
 	
-	protected AuthorizeData getWechatAuthorizeData(HttpServletRequest request){
+	protected String getAuthorizeUrl(HttpServletRequest request){
 		RequestHoder holder = RequestHoder.builder().request(request).build();
 		String redirectUrl = buildRedirectUrl(request);
 		String state = wechatOAuth2UserRepository.generateAndStoreOauth2State(holder, getWechatConfig(request));
 //		AuthorizeData authorize = wechatOauth2Client.createAuthorize(redirectUrl, state);
 		AuthorizeData authorize = createAuthorize(getWechatConfig(request), redirectUrl, state);
-		return authorize;
+		return authorize.toAuthorizeUrl();
 	}
 	
 	protected String buildRedirectUrl(HttpServletRequest request){

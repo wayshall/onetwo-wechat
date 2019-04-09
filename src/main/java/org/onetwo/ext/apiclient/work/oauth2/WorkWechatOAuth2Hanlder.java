@@ -41,13 +41,14 @@ public class WorkWechatOAuth2Hanlder extends BaseOAuth2Hanlder<UserInfoResponse>
 	}
 
 	@Override
-	protected AuthorizeData getWechatAuthorizeData(HttpServletRequest request){
+	protected String getAuthorizeUrl(HttpServletRequest request){
 		WechatConfig wechatConfig = getWechatConfig(request);
 		RequestHoder holder = RequestHoder.builder().request(request).build();
 		String redirectUrl = buildRedirectUrl(request);
 		String state = getWechatOAuth2UserRepository().generateAndStoreOauth2State(holder, wechatConfig);
 		AuthorizeData authorize = createAuthorize(wechatConfig, redirectUrl, state);
-		return authorize;
+		String authorizeUrl = authorize.toAuthorizeUrl() + "#wechat_redirect";
+		return authorizeUrl;
 	}
 	
 }
