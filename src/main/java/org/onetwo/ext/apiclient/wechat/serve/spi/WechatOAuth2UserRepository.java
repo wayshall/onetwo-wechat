@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.serve.dto.RequestHoder;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatOAuth2UserRepository.OAuth2User;
@@ -21,7 +22,15 @@ public interface WechatOAuth2UserRepository<T extends OAuth2User> {
 
 	void saveCurrentUser(RequestHoder request, T userInfo, boolean refresh);
 
-	boolean checkOauth2State(RequestHoder request, WechatConfig wechatConfig, String state);
+	default boolean checkOauth2State(RequestHoder request, WechatConfig wechatConfig, String state) {
+		HttpSession session = request.getRequest().getSession();
+		if(session!=null){
+			String storedState = (String)session.getAttribute(Oauth2ClientKeys.STORE_STATE_KEY);
+			session.removeAttribute(Oauth2ClientKeys.STORE_STATE_KEY);
+			return StringUtils.isNotBlank(state) && state.equals(storedState);
+		}
+		return false;
+	}
 
 	/****
 	 * 生成state参数

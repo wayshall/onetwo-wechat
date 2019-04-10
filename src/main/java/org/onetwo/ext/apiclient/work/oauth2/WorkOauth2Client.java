@@ -19,6 +19,13 @@ import lombok.EqualsAndHashCode;
 @WorkWechatApiClient
 public interface WorkOauth2Client {
 	
+	/***
+	 * 
+	 * @author weishao zeng
+	 * @param accessToken
+	 * @param code 通过成员授权获取到的code，最大为512字节。每次成员授权带上的code将不一样，code只能使用一次，5分钟未被使用自动过期。
+	 * @return
+	 */
 	@GetMapping(path="/user/getuserinfo")
 	UserInfoResponse getUserInfo(AccessTokenInfo accessToken, String code);
 	
