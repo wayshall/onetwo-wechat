@@ -6,7 +6,6 @@ import org.onetwo.ext.apiclient.wechat.boot.WechatOAuth2MvcInterceptor;
 import org.onetwo.ext.apiclient.wechat.serve.service.HttpRequestStoreService;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatOAuth2UserRepository;
-import org.onetwo.ext.apiclient.work.oauth2.WorkOauth2Client.UserInfoResponse;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -35,7 +34,7 @@ public class WorkOAuth2Configuration {
 	
 	@Bean
 	@ConditionalOnMissingBean(WorkWechatOAuth2Hanlder.class)
-	public WorkWechatOAuth2Hanlder workWechatOAuth2Hanlder(WechatOAuth2UserRepository<UserInfoResponse> oauth2UserRepository, WechatConfigProvider wechatConfigProvider){
+	public WorkWechatOAuth2Hanlder workWechatOAuth2Hanlder(WechatOAuth2UserRepository<WorkUserLoginInfo> oauth2UserRepository, WechatConfigProvider wechatConfigProvider){
 		WorkWechatOAuth2Hanlder handler = new WorkWechatOAuth2Hanlder();
 		handler.setWechatOAuth2UserRepository(oauth2UserRepository);
 		handler.setWechatConfigProvider(wechatConfigProvider);
@@ -44,8 +43,8 @@ public class WorkOAuth2Configuration {
 	
 	@Bean
 	@ConditionalOnMissingBean(WechatOAuth2UserRepository.class)
-	public WechatOAuth2UserRepository<UserInfoResponse> sessionStoreService(){
-		return new HttpRequestStoreService<UserInfoResponse>();
+	public WechatOAuth2UserRepository<WorkUserLoginInfo> sessionStoreService(){
+		return new HttpRequestStoreService<WorkUserLoginInfo>();
 	}
 	
 }

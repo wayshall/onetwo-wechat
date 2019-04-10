@@ -28,7 +28,7 @@ public class WorkUserInfoResponse extends WechatResponse {
     private Integer[] isLeaderInDept; //": [1, 0],
     private String avatar; //": "http://wx.qlogo.cn/mmopen/ajNVdqHZLLA3WJ6DSZUfiakYe37PKnQhBIeOQBO4czqrnZDS79FH5Wm5m4X69TBicnHFlhiafvDwklOpZeXYQQ2icg/0",
     private String telephone; //": "020-123456",
-    private boolean enable; //": 1,
+    private Integer enable; //": 1,
     private String alias; //": "jackzhang",
     private String address; //": "广州市海珠区新港中路",
     private ExtattrData extattr;

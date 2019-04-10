@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public interface WorkUserClient {
 
 	@GetMapping(path="/user/get")
-	WorkUserInfoResponse get(AccessTokenInfo accessTokenInfo, String userid);
+	WorkUserInfoResponse getUser(AccessTokenInfo accessTokenInfo, String userid);
 	
 	
 }
