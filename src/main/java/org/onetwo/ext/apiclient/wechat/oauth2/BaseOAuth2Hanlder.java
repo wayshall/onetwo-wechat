@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.onetwo.boot.core.web.mvc.interceptor.MvcInterceptorAdapter;
 import org.onetwo.common.data.DataResult;
+import org.onetwo.common.exception.ErrorType;
 import org.onetwo.common.log.JFishLoggerFactory;
 import org.onetwo.common.spring.mvc.utils.DataResults;
 import org.onetwo.common.utils.LangUtils;
@@ -30,7 +32,7 @@ import org.springframework.web.method.HandlerMethod;
  * @author wayshall
  * <br/>
  */
-abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
+abstract public class BaseOAuth2Hanlder<U extends OAuth2User> extends MvcInterceptorAdapter {
 	
 	
 	protected final Logger logger = JFishLoggerFactory.getLogger(this.getClass());
@@ -73,10 +75,14 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 		return false;
 	}
 	
+	protected final boolean isOauth2ErrorInBrowser(HttpServletRequest request) {
+		WechatConfig wechatConfig = getWechatConfig(request);
+		return wechatConfig.isOauth2ErrorInBrowser();
+	}
+	
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handler) {
 		if(!RequestUtils.getBrowerMetaByAgent(request).isWechat()){
-			WechatConfig wechatConfig = getWechatConfig(request);
-			if(wechatConfig.isOauth2ErrorInBrowser()){
+			if(isOauth2ErrorInBrowser(request)){
 				throw new WechatException(WechatClientErrors.OAUTH2_ERROR_IN_BROWSER);
 			}/*else{
 				return ;
@@ -97,6 +103,14 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 		return handleNotLoginRequest(request, response, handler);
 	}
 	
+	final protected String getCodeParameter(HttpServletRequest request) {
+		return request.getParameter(Oauth2ClientKeys.PARAMS_CODE);
+	}
+	
+	final protected String getStateParameter(HttpServletRequest request) {
+		return request.getParameter(Oauth2ClientKeys.PARAMS_STATE);
+	}
+	
 	/***
 	 * 
 	 * @author weishao zeng
@@ -106,9 +120,9 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 	 * @return
 	 */
 	protected boolean handleNotLoginRequest(HttpServletRequest request, HttpServletResponse response, HandlerMethod handler) {
-		String code = request.getParameter(Oauth2ClientKeys.PARAMS_CODE);
+		String code = getCodeParameter(request);
 		if(StringUtils.isNotBlank(code)){
-			String state = request.getParameter(Oauth2ClientKeys.PARAMS_STATE);
+			String state = getStateParameter(request);
 			RequestHoder holder = RequestHoder.builder().request(request).build();
 			if(!wechatOAuth2UserRepository.checkOauth2State(holder, getWechatConfig(request), state)){
 				throw new WechatException(WechatClientErrors.OAUTH2_STATE_ERROR);
@@ -134,11 +148,20 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 	abstract protected U getOAuth2UserInfo(HttpServletRequest request, String code);
 
 	protected boolean handleWithoutCodeRequest(HttpServletRequest request, HttpServletResponse response, HandlerMethod handler) {
+		ErrorType error = null;
+		String state = getStateParameter(request);
+		if (StringUtils.isNotBlank(state)) {
+			error = WechatClientErrors.OAUTH2_REJECTED;
+		}
 		//如果是ajax请求，不跳转，返回错误信息
 		if(RequestUtils.isAjaxRequest(request) || RequestUtils.isAjaxHandlerMethod(handler)){
-			DataResult<?> result = DataResults.error(WechatClientErrors.OAUTH2_NOT_AUTHORIZE).build();
+			DataResult<?> result = DataResults.error(error==null?WechatClientErrors.OAUTH2_NOT_AUTHORIZE:error).build();
 			ResponseUtils.renderObjectAsJson(response, result);
 			return false;
+		}
+		
+		if (error!=null) {
+			throw new WechatException(error);
 		}
 		try {
 //			AuthorizeData authorizeData = getWechatAuthorizeData(request);
@@ -154,33 +177,36 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 	}
 	
 	protected String getAuthorizeUrl(HttpServletRequest request){
+		WechatConfig wechatConfig = getWechatConfig(request);
 		RequestHoder holder = RequestHoder.builder().request(request).build();
-		String redirectUrl = buildRedirectUrl(request);
+		
+		String redirectUrl = buildRedirectUrl(request, wechatConfig);
+//		redirectUrl = LangUtils.encodeUrl(redirectUrl);
+		
 		String state = wechatOAuth2UserRepository.generateAndStoreOauth2State(holder, getWechatConfig(request));
 //		AuthorizeData authorize = wechatOauth2Client.createAuthorize(redirectUrl, state);
 		AuthorizeData authorize = createAuthorize(getWechatConfig(request), redirectUrl, state);
 		return authorize.toAuthorizeUrl();
 	}
 	
-	protected String buildRedirectUrl(HttpServletRequest request){
-		String url = RequestUtils.buildFullRequestUrl(request.getScheme(), request.getServerName(), 80, request.getRequestURI(), request.getQueryString());
-		return url;
+	protected String buildRedirectUrl(HttpServletRequest request, WechatConfig wechatConfig){
+		String redirectUrl = wechatConfig.getOauth2RedirectUri();
+		//check redirectUri?
+		if(StringUtils.isBlank(redirectUrl)){
+//			throw new ApiClientException(WechatClientError.OAUTH2_REDIRECT_URL_BLANK);
+			redirectUrl = RequestUtils.buildFullRequestUrl(request.getScheme(), request.getServerName(), 80, request.getRequestURI(), request.getQueryString());
+		}
+		redirectUrl = LangUtils.encodeUrl(redirectUrl);
+		return redirectUrl;
 	}
 	
 	static public AuthorizeData createAuthorize(WechatConfig wechatConfig, String redirectUrl, String state){
-		String configRedirectUrl = wechatConfig.getOauth2RedirectUri();
-		//check redirectUri?
-		if(StringUtils.isBlank(configRedirectUrl)){
-//			throw new ApiClientException(WechatClientError.OAUTH2_REDIRECT_URL_BLANK);
-			configRedirectUrl = redirectUrl;
-		}
-		configRedirectUrl = LangUtils.encodeUrl(configRedirectUrl);
 		return AuthorizeData.builder()
 							.appid(wechatConfig.getAppid())
 							.scope(wechatConfig.getOauth2Scope())
 							.responseType(Oauth2Keys.RESPONSE_TYPE_CODE)
 							.state(state)
-							.redirectUri(configRedirectUrl)
+							.redirectUri(redirectUrl)
 							.build();
 	}
 

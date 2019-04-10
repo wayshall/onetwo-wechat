@@ -34,6 +34,7 @@ public class DefaultWechatConfig implements WechatConfig{
 	
 //	@Value("${wechat.appsecret}")
 	private String appsecret;
+	private String agentId;
 	
 //	@Value("${wechat.encodingAESKey:}")
 	private String encodingAESKey = "";
@@ -76,6 +77,7 @@ public class DefaultWechatConfig implements WechatConfig{
 		 */
 //		@Value("${wechat.oauth2.redirectUri:}")
 		private String redirectUri = "";
+		private String qrConnectRedirectUri;
 //		@Value("${wechat.oauth2.scope:"+Oauth2Keys.SCOPE_SNSAPI_USERINFO+"}")
 		private String scope = Oauth2Keys.SCOPE_SNSAPI_USERINFO;
 //		@Value("${wechat.oauth2.intercept.urls:}")
@@ -87,6 +89,16 @@ public class DefaultWechatConfig implements WechatConfig{
 	@Data
 	public static class AccessTokenProperties {
 		AccessTokenStorers storer = AccessTokenStorers.MEMORY;
+	}
+
+	@Override
+	public String getAgentId() {
+		return agentId;
+	}
+
+	@Override
+	public String getQrConnectRedirectUri() {
+		return oauth2.getQrConnectRedirectUri();
 	}
 	
 }

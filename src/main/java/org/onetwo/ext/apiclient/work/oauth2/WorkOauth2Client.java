@@ -36,6 +36,8 @@ public interface WorkOauth2Client {
 		private String userId;
 		@JsonProperty("DeviceId")
 		private String deviceId;
+		@JsonProperty("OpenId")
+		private String OopenId;
 	}
 
 }

@@ -2,7 +2,8 @@ package org.onetwo.ext.apiclient.work.oauth2;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.onetwo.common.exception.LoginException;
+import org.apache.commons.lang3.StringUtils;
+import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.spring.copier.CopyUtils;
 import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
@@ -12,6 +13,7 @@ import org.onetwo.ext.apiclient.wechat.basic.response.AuthorizeData;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.oauth2.BaseOAuth2Hanlder;
 import org.onetwo.ext.apiclient.wechat.serve.dto.RequestHoder;
+import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.work.oauth2.WorkOauth2Client.UserInfoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -39,8 +41,8 @@ public class WorkWechatOAuth2Hanlder extends BaseOAuth2Hanlder<WorkUserLoginInfo
 		if (logger.isInfoEnabled()) {
 			logger.info("get work wechat user success: {}", res);
 		}
-		if (!res.isSuccess()) {
-			throw new LoginException("企业微信授权失败了！");
+		if (StringUtils.isBlank(res.getUserId())) {
+			throw new ApiClientException(WechatClientErrors.OAUTH2_USER_NOT_WORK_MEMBER);
 		}
 		WorkUserLoginInfo loginInfo = CopyUtils.copy(WorkUserLoginInfo.class, res);
 		loginInfo.setAppid(wechatConfig.getAppid());
@@ -51,7 +53,7 @@ public class WorkWechatOAuth2Hanlder extends BaseOAuth2Hanlder<WorkUserLoginInfo
 	protected String getAuthorizeUrl(HttpServletRequest request){
 		WechatConfig wechatConfig = getWechatConfig(request);
 		RequestHoder holder = RequestHoder.builder().request(request).build();
-		String redirectUrl = buildRedirectUrl(request);
+		String redirectUrl = buildRedirectUrl(request, wechatConfig);
 		String state = getWechatOAuth2UserRepository().generateAndStoreOauth2State(holder, wechatConfig);
 		AuthorizeData authorize = createAuthorize(wechatConfig, redirectUrl, state);
 		String authorizeUrl = authorize.toAuthorizeUrl() + "#wechat_redirect";

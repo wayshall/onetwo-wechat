@@ -38,6 +38,7 @@ public interface WechatConfig {
 	 * @return
 	 */
 	String getOauth2RedirectUri();
+	String getQrConnectRedirectUri();
 	String getOauth2Scope();
 	
 	/***
@@ -55,5 +56,7 @@ public interface WechatConfig {
 	boolean isOauth2ErrorInBrowser();
 	
 //	Map<String, WechatAppInfo> getApps();
+	
+	String getAgentId();
 	
 }
