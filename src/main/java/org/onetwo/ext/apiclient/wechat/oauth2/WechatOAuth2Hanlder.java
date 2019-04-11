@@ -11,7 +11,7 @@ import org.onetwo.ext.apiclient.wechat.oauth2.request.OAuth2UserInfoRequest;
 import org.onetwo.ext.apiclient.wechat.oauth2.response.OAuth2AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.oauth2.response.OAuth2RefreshTokenResponse;
 import org.onetwo.ext.apiclient.wechat.oauth2.response.OAuth2UserInfoResponse;
-import org.onetwo.ext.apiclient.wechat.serve.dto.RequestHoder;
+import org.onetwo.ext.apiclient.wechat.serve.dto.WechatOAuth2Context;
 
 /**
  * @author wayshall
@@ -51,24 +51,24 @@ public class WechatOAuth2Hanlder extends BaseOAuth2Hanlder<OAuth2UserInfo> {
 	
 	
 	@Override
-	protected OAuth2UserInfo getOAuth2UserInfo(HttpServletRequest request, String code) {
+	protected OAuth2UserInfo getOAuth2UserInfo(WechatOAuth2Context context) {
 		OAuth2AccessTokenRequest tokenRequest = OAuth2AccessTokenRequest.builder()
-																		.code(code)
+																		.code(context.getCode())
 																		.build();
 		OAuth2AccessTokenResponse tokenRespose = this.wechatOauth2Client.getAccessToken(tokenRequest);
 		if(logger.isInfoEnabled()){
 		logger.info("get access token : {}", tokenRespose);
 		}
 		
-		OAuth2UserInfo userInfo = this.processUserInfo(request, tokenRespose);
+		OAuth2UserInfo userInfo = this.processUserInfo(context.getRequest(), tokenRespose);
 		return userInfo;
 	}
 
-	protected boolean refreshToken(HttpServletRequest request, OAuth2UserInfo userInfo){
+	protected boolean refreshToken(WechatOAuth2Context context, OAuth2UserInfo userInfo){
 		if(userInfo.isRefreshToken()){
 			return false;
 		}
-		WechatConfig wechatConfig = getWechatConfig(request);
+		WechatConfig wechatConfig = context.getWechatConfig();
 		OAuth2RefreshTokenRequest refreshRequest = OAuth2RefreshTokenRequest.builder()
 																	.appid(wechatConfig.getAppid())
 																	.refreshToken(userInfo.getRefreshToken())
@@ -78,8 +78,8 @@ public class WechatOAuth2Hanlder extends BaseOAuth2Hanlder<OAuth2UserInfo> {
 			logger.info("refresh token response: {}", response);
 		}
 		OAuth2AccessTokenResponse accessReponse = CopyUtils.copy(OAuth2AccessTokenResponse.class, response);
-		OAuth2UserInfo newUserInfo = processUserInfo(request, accessReponse);
-		this.getWechatOAuth2UserRepository().saveCurrentUser(RequestHoder.builder().request(request).build(), newUserInfo, true);
+		OAuth2UserInfo newUserInfo = processUserInfo(context.getRequest(), accessReponse);
+		this.getWechatOAuth2UserRepository().saveCurrentUser(context, newUserInfo, true);
 		return true;
 	}
 

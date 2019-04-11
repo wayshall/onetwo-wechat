@@ -3,7 +3,7 @@ package org.onetwo.ext.apiclient.wechat.serve.service;
 import java.util.Optional;
 
 import org.onetwo.common.web.utils.RequestUtils;
-import org.onetwo.ext.apiclient.wechat.serve.dto.RequestHoder;
+import org.onetwo.ext.apiclient.wechat.serve.dto.WechatOAuth2Context;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatOAuth2UserRepository;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatOAuth2UserRepository.OAuth2User;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.Oauth2ClientKeys;
@@ -21,7 +21,7 @@ public class HtppSessionStoreService<T extends OAuth2User> implements WechatOAut
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Optional<T> getCurrentUser(RequestHoder request){
+	public Optional<T> getCurrentUser(WechatOAuth2Context request){
 		return RequestUtils.getSession(request.getRequest()).map(session->{
 			log.info("getCurrentUser session id: {}", session.getId());
 			T userInfo = (T)session.getAttribute(userInfoKey);
@@ -29,7 +29,7 @@ public class HtppSessionStoreService<T extends OAuth2User> implements WechatOAut
 		});
 	}
 	@Override
-	public void saveCurrentUser(RequestHoder request, T userInfo, boolean refresh){
+	public void saveCurrentUser(WechatOAuth2Context request, T userInfo, boolean refresh){
 		RequestUtils.getSession(request.getRequest()).ifPresent(session->{
 			log.info("saveCurrentUser session id: {}", session.getId());
 			session.setAttribute(userInfoKey, userInfo);

@@ -3,18 +3,17 @@ package org.onetwo.ext.apiclient.work.oauth2;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.onetwo.boot.core.web.mvc.interceptor.MvcInterceptor;
 import org.onetwo.common.expr.ExpressionFacotry;
 import org.onetwo.common.utils.LangUtils;
 import org.onetwo.common.web.utils.RequestUtils;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
-import org.onetwo.ext.apiclient.wechat.serve.dto.RequestHoder;
+import org.onetwo.ext.apiclient.wechat.serve.dto.WechatOAuth2Context;
 
 /**
  * @author weishao zeng
  * <br/>
  */
-public class WorkQRConnectHandler extends WorkWechatOAuth2Hanlder implements MvcInterceptor {
+public class WorkQRConnectHandler extends WorkWechatOAuth2Hanlder {
 	
 	private static final String QR_CONNECT_URL_TEMPLATE = "https://open.work.weixin.qq.com/wwopen/sso/qrConnect?appid=${appid}&agentid=${agentid}&redirect_uri=${redirectUri}&state=${state}";
 
@@ -30,11 +29,10 @@ public class WorkQRConnectHandler extends WorkWechatOAuth2Hanlder implements Mvc
 	}
 
 	@Override
-	protected String getAuthorizeUrl(HttpServletRequest request){
-		WechatConfig wechatConfig = getWechatConfig(request);
-		RequestHoder holder = RequestHoder.builder().request(request).build();
-		String redirectUrl = buildRedirectUrl(request, wechatConfig);
-		String state = getWechatOAuth2UserRepository().generateAndStoreOauth2State(holder, wechatConfig);
+	protected String getAuthorizeUrl(WechatOAuth2Context context){
+		WechatConfig wechatConfig = context.getWechatConfig();
+		String redirectUrl = buildRedirectUrl(context);
+		String state = getWechatOAuth2UserRepository().generateAndStoreOauth2State(context);
 		String authorizeUrl = ExpressionFacotry.DOLOR.parse(
 													QR_CONNECT_URL_TEMPLATE, 
 													"appid", wechatConfig.getAppid(), 

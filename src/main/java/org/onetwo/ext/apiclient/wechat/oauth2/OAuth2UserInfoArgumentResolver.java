@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.onetwo.common.spring.mvc.annotation.BootMvcArgumentResolver;
-import org.onetwo.ext.apiclient.wechat.serve.dto.RequestHoder;
+import org.onetwo.ext.apiclient.wechat.serve.dto.WechatOAuth2Context;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatOAuth2UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
@@ -35,7 +35,7 @@ public class OAuth2UserInfoArgumentResolver implements HandlerMethodArgumentReso
 	@Override
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 		HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
-		RequestHoder holder = RequestHoder.builder().request(request).build();
+		WechatOAuth2Context holder = WechatOAuth2Context.builder().request(request).build();
 		Optional<OAuth2UserInfo> userOpt = sessionStoreService.getCurrentUser(holder);
 		if(!userOpt.isPresent()){
 			wechatOAuth2Hanlder.preHandle(request, webRequest.getNativeResponse(HttpServletResponse.class), null);
