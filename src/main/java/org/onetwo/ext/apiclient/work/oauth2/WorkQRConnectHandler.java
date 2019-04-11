@@ -17,7 +17,9 @@ public class WorkQRConnectHandler extends WorkWechatOAuth2Hanlder {
 	
 	private static final String QR_CONNECT_URL_TEMPLATE = "https://open.work.weixin.qq.com/wwopen/sso/qrConnect?appid=${appid}&agentid=${agentid}&redirect_uri=${redirectUri}&state=${state}";
 
-
+	protected void checkWechatBrowser(WechatOAuth2Context contex) {
+	}
+	
 	protected String buildRedirectUrl(HttpServletRequest request, WechatConfig wechatConfig){
 		String redirectUrl = wechatConfig.getQrConnectRedirectUri();
 		//check redirectUri?

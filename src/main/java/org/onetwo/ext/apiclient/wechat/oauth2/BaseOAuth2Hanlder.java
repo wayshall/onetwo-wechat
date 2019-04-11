@@ -72,7 +72,7 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 	}
 	
 
-	public void checkWechatBrowser(WechatOAuth2Context contex) {
+	protected void checkWechatBrowser(WechatOAuth2Context contex) {
 		if(!RequestUtils.getBrowerMetaByAgent(contex.getRequest()).isWechat()){
 			if(isOauth2ErrorInBrowser(contex)){
 				throw new WechatException(WechatClientErrors.OAUTH2_ERROR_IN_BROWSER);
