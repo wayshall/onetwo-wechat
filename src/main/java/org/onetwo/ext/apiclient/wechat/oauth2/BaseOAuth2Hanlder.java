@@ -42,17 +42,8 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 	private WechatConfigProvider wechatConfigProvider;
 	
 	
-	protected boolean isSsnUserInfoScope(HttpServletRequest request){
-		WechatConfig wechatConfig = getWechatConfig(request);
-		return Oauth2Keys.SCOPE_SNSAPI_USERINFO.equalsIgnoreCase(wechatConfig.getOauth2Scope());
-	}
-	
-	protected String getAppid(HttpServletRequest request) {
-		return request.getParameter("appid");
-	}
-	
-	protected WechatConfig getWechatConfig(HttpServletRequest request) {
-		WechatConfig wechatConfig = wechatConfigProvider.getWechatConfig(getAppid(request));
+	static public WechatConfig getWechatConfig(WechatConfigProvider wechatConfigProvider, WechatOAuth2Context contex) {
+		WechatConfig wechatConfig = wechatConfigProvider.getWechatConfig(contex.getAppid());
 		return wechatConfig;
 	}
 
@@ -76,15 +67,14 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 		return false;
 	}
 	
-	protected final boolean isOauth2ErrorInBrowser(HttpServletRequest request) {
-		WechatConfig wechatConfig = getWechatConfig(request);
-		return wechatConfig.isOauth2ErrorInBrowser();
+	protected final boolean isOauth2ErrorInBrowser(WechatOAuth2Context contex) {
+		return contex.getWechatConfig().isOauth2ErrorInBrowser();
 	}
 	
 
-	public void checkWechatBrowser(HttpServletRequest request) {
-		if(!RequestUtils.getBrowerMetaByAgent(request).isWechat()){
-			if(isOauth2ErrorInBrowser(request)){
+	public void checkWechatBrowser(WechatOAuth2Context contex) {
+		if(!RequestUtils.getBrowerMetaByAgent(contex.getRequest()).isWechat()){
+			if(isOauth2ErrorInBrowser(contex)){
 				throw new WechatException(WechatClientErrors.OAUTH2_ERROR_IN_BROWSER);
 			}/*else{
 				return ;
@@ -93,10 +83,11 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 	}
 	
 	public U handleInController(OAuth2Request oauth2Request, HttpServletRequest request, HttpServletResponse response) {
-		this.checkWechatBrowser(request);
+		DataWechatOAuth2Context context = new DataWechatOAuth2Context(oauth2Request, request);
+		context.setWechatConfig(getWechatConfig(wechatConfigProvider, context));
+		this.checkWechatBrowser(context);
 		
 		U userInfo = null;
-		WechatOAuth2Context context = new DataWechatOAuth2Context(oauth2Request, request, getWechatConfig(request));
 		if (StringUtils.isNotBlank(oauth2Request.getCode())) {
 			if(!wechatOAuth2UserRepository.checkOauth2State(context)){
 				throw new WechatException(WechatClientErrors.OAUTH2_STATE_ERROR);
@@ -122,8 +113,11 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 	 * @return
 	 */
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handler) {
-		this.checkWechatBrowser(request);
-		WechatOAuth2Context context = new RequestWechatOAuth2Context(request, getWechatConfig(request));
+		RequestWechatOAuth2Context context = new RequestWechatOAuth2Context(request);
+		context.setWechatConfig(getWechatConfig(wechatConfigProvider, context));
+		
+		this.checkWechatBrowser(context);
+		
 		Optional<U> userInfoOpt = wechatOAuth2UserRepository.getCurrentUser(context);
 		if(userInfoOpt.isPresent()){
 			U userInfo = userInfoOpt.get();

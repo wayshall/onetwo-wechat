@@ -1,7 +1,5 @@
 package org.onetwo.ext.apiclient.wechat.oauth2;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.onetwo.common.spring.copier.CopyUtils;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.oauth2.api.WechatOauth2Client;
@@ -29,11 +27,11 @@ public class WechatOAuth2Hanlder extends BaseOAuth2Hanlder<OAuth2UserInfo> {
 	 * @param request
 	 * @param userInfo
 	 */
-	protected OAuth2UserInfo processUserInfo(HttpServletRequest request, OAuth2AccessTokenResponse tokenRespose){
+	protected OAuth2UserInfo processUserInfo(WechatOAuth2Context context, OAuth2AccessTokenResponse tokenRespose){
 		OAuth2UserInfo userInfo = CopyUtils.copy(OAuth2UserInfo.class, tokenRespose);
 		userInfo.setAccessAt(System.currentTimeMillis());
 		userInfo.setRefreshAt(userInfo.getAccessAt());
-		if(isSsnUserInfoScope(request)){
+		if(context.isSsnUserInfoScope()){
 			OAuth2UserInfoRequest userInfoRequest = OAuth2UserInfoRequest.builder()
 																		.accessToken(tokenRespose.getAccessToken())
 																		.openid(tokenRespose.getOpenid())
@@ -60,7 +58,7 @@ public class WechatOAuth2Hanlder extends BaseOAuth2Hanlder<OAuth2UserInfo> {
 		logger.info("get access token : {}", tokenRespose);
 		}
 		
-		OAuth2UserInfo userInfo = this.processUserInfo(context.getRequest(), tokenRespose);
+		OAuth2UserInfo userInfo = this.processUserInfo(context, tokenRespose);
 		return userInfo;
 	}
 
@@ -78,7 +76,7 @@ public class WechatOAuth2Hanlder extends BaseOAuth2Hanlder<OAuth2UserInfo> {
 			logger.info("refresh token response: {}", response);
 		}
 		OAuth2AccessTokenResponse accessReponse = CopyUtils.copy(OAuth2AccessTokenResponse.class, response);
-		OAuth2UserInfo newUserInfo = processUserInfo(context.getRequest(), accessReponse);
+		OAuth2UserInfo newUserInfo = processUserInfo(context, accessReponse);
 		this.getWechatOAuth2UserRepository().saveCurrentUser(context, newUserInfo, true);
 		return true;
 	}
