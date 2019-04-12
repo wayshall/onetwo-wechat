@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.work.user.response;
+package org.onetwo.ext.apiclient.work.contact.response;
 
 import java.util.List;
 

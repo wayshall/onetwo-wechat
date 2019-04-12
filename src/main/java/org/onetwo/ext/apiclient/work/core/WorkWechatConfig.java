@@ -27,13 +27,25 @@ public class WorkWechatConfig /*extends DefaultWechatConfig*/ {
 		return LangUtils.getFirst(apps);
 	}
 	
+	/****
+	 * 首先根据appid匹配配置，如果找不到，则把appid参数当做名称查找
+	 * 
+	 * @author weishao zeng
+	 * @param appid
+	 * @return
+	 */
 	public WechatConfig getWechatConfig(String appid) {
 		return this.apps.entrySet().stream().filter(entry -> {
 			return entry.getValue().getAppid().equals(appid);
 		})
 		.findFirst()
-		.map(entry -> entry.getValue())
-		.orElse(null);
+		.map(entry -> (WechatConfig)entry.getValue())
+//		.orElse(null);
+		.orElseGet(() -> this.getWechatConfigByName(appid));
+	}
+	
+	public WechatConfig getWechatConfigByName(String appName) {
+		return this.apps.get(appName);
 	}
 }
 

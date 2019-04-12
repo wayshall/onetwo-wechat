@@ -1,8 +1,8 @@
-package org.onetwo.ext.apiclient.work.user.api;
+package org.onetwo.ext.apiclient.work.contact.api;
 
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
+import org.onetwo.ext.apiclient.work.contact.response.WorkUserInfoResponse;
 import org.onetwo.ext.apiclient.work.core.WorkWechatApiClient;
-import org.onetwo.ext.apiclient.work.user.response.WorkUserInfoResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**

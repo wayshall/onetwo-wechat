@@ -73,7 +73,7 @@ public class WechatApiClientResponseHandler extends DefaultApiClientResponseHand
 				}
 			}
 			
-			if(baseResponse!=null && !baseResponse.isSuccess()){
+			if(baseResponse!=null && !baseResponse.isSuccess() && invokeMethod.isAutoThrowIfErrorCode()){
 				logger.error("api[{}] error response: {}", invokeMethod.getMethod().getName(), baseResponse);
 				/*throw WechatErrors.byErrcode(baseResponse.getErrcode())
 				 			 .map(err->new ApiClientException(err, invokeMethod.getMethod(), null))
