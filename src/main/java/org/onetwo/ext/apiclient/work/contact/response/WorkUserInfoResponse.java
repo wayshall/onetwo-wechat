@@ -67,6 +67,10 @@ public class WorkUserInfoResponse extends WechatResponse {
     	 * 2： 小程序
     	 */
     	private AttributeType type;
+    	/****
+    	 * 经试验，成员自定义属性名称要唯一
+    	 * 但对外属性名称可重复……
+    	 */
     	private String name;
     	
     	/***
@@ -81,6 +85,30 @@ public class WorkUserInfoResponse extends WechatResponse {
     	 * miniprogram
     	 */
     	private MiniprogramValue miniprogram;
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Attribute other = (Attribute) obj;
+			if (name == null) {
+				if (other.name != null)
+					return false;
+			} else if (!name.equals(other.name))
+				return false;
+			return true;
+		}
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((name == null) ? 0 : name.hashCode());
+			return result;
+		}
+    	
     }
 
     @Data

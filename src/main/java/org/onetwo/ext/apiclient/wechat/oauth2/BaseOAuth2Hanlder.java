@@ -44,6 +44,9 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 	
 	static public WechatConfig getWechatConfig(WechatConfigProvider wechatConfigProvider, WechatOAuth2Context contex) {
 		WechatConfig wechatConfig = wechatConfigProvider.getWechatConfig(contex.getAppid());
+		if (StringUtils.isNotBlank(contex.getAppid()) && !contex.getAppid().equals(wechatConfig.getAppid())) {
+			throw new WechatException("config not found, error appid: " + contex.getAppid());
+		}
 		return wechatConfig;
 	}
 
