@@ -1,6 +1,6 @@
 package org.onetwo.ext.apiclient.wechat.core;
 
-import java.util.stream.Stream;
+import java.util.List;
 
 import org.onetwo.common.apiclient.RestExecutorFactory;
 import org.onetwo.common.apiclient.impl.AbstractApiClentRegistrar;
@@ -21,7 +21,7 @@ public class WechatApiClentRegistrar extends AbstractApiClentRegistrar<EnableWec
 	private WechatApiClientResponseHandler responseHandler = new WechatApiClientResponseHandler();
 
 	@Override
-	protected Stream<BeanDefinition> scanBeanDefinitions(AnnotationMetadata importingClassMetadata) {
+	protected List<BeanDefinition> scanBeanDefinitions(AnnotationMetadata importingClassMetadata) {
 		String extraPackage = ClassUtils.getPackageName(getImportingAnnotationClass());
 		return getAnnotationMetadataHelper(importingClassMetadata).scanBeanDefinitions(getComponentAnnotationClass(), extraPackage);
 	}

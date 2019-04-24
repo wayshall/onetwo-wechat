@@ -43,6 +43,8 @@ public class DefaultWechatConfig implements WechatConfig{
 	private AccessTokenProperties accessToken = new AccessTokenProperties();
 	
 	private Map<String, WechatAppInfo> apps = Maps.newHashMap();
+	
+	private PayProperties pay = new PayProperties();
 
 	public boolean isEncryptByAes(){
 		return StringUtils.isNotBlank(encodingAESKey);

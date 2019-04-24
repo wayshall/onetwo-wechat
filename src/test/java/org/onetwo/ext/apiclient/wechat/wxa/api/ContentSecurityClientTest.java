@@ -14,11 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.test.context.ActiveProfiles;
 
 /**
  * @author wayshall
  * <br/>
  */
+@ActiveProfiles("product")
 public class ContentSecurityClientTest extends WechatBaseTestsAdapter {
 	@Autowired
 	private ContentSecurityClient contentSecurityClient;

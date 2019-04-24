@@ -44,6 +44,8 @@ public abstract class WechatConstants {
 	
 	public static final String ENCRYPT_TYPE_AES = "aes";
 	
+	public static final String SIGN_MD5 = "MD5";
+	
 	//grantType
 	public static abstract class GrantTypeKeys {
 		public static final String CLIENT_CREDENTIAL = "client_credential";

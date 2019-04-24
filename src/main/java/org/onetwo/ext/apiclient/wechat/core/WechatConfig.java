@@ -1,5 +1,6 @@
 package org.onetwo.ext.apiclient.wechat.core;
 
+import lombok.Data;
 
 /**
  * @author wayshall
@@ -59,4 +60,12 @@ public interface WechatConfig {
 	
 	String getAgentId();
 	
+	PayProperties getPay();
+	
+
+	@Data
+	public class PayProperties {
+		private String merchantId;
+		private String apiKey;
+	}
 }

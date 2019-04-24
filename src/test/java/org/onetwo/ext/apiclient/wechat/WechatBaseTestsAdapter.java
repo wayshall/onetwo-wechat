@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ActiveProfiles;
 
-@ActiveProfiles("product")
+@ActiveProfiles("dev")
 public class WechatBaseTestsAdapter extends WechatBaseBootTests {
 
 	@Value("${wechat.appid}")

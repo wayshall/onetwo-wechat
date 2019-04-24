@@ -12,7 +12,6 @@ import org.onetwo.common.apiclient.impl.AbstractApiClientFactoryBean;
 import org.onetwo.common.apiclient.utils.ApiClientUtils;
 import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.spring.SpringUtils;
-import org.onetwo.common.utils.Assert;
 import org.onetwo.common.utils.ParamUtils;
 import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
@@ -63,7 +62,7 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		super.afterPropertiesSet();
-		Assert.notNull(accessTokenType, "accessTokenType can not be null");
+//		Assert.notNull(accessTokenType, "accessTokenType can not be null");
 	}
 	
 	@Override
@@ -193,7 +192,7 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 		}
 	}
 
-	static class WechatMethod extends ApiClientMethod {
+	public static class WechatMethod extends ApiClientMethod {
 //		private boolean autoAppendAccessToken;
 		private Optional<ApiClientMethodParameter> accessTokenParameter;
 		/***
