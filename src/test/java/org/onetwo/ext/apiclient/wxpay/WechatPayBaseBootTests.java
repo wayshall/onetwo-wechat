@@ -45,4 +45,9 @@ public class WechatPayBaseBootTests {
 	@Test
 	public void contextLoads() {
 	}
+	public WechatConfig getWechatConfig() {
+		return wechatConfig;
+	}
+	
+	
 }

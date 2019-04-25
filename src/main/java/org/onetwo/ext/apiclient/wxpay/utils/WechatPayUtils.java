@@ -33,7 +33,7 @@ public abstract class WechatPayUtils {
 		p.setSignType(WechatConstants.SIGN_MD5);
 		p.setTimeStamp(String.valueOf(System.currentTimeMillis()/1000)); //秒
 		
-		String paySign = WechatSigns.sign(signKey, p);
+		String paySign = WechatSigns.signMd5(signKey, p);
 		p.setPaySign(paySign);
 		return p;
 	}

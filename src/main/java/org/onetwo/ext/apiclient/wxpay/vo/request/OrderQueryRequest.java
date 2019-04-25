@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor
-@Builder
 public class OrderQueryRequest extends BasePayRequest {
 	
 
@@ -25,9 +24,9 @@ public class OrderQueryRequest extends BasePayRequest {
 	private String outTradeNo;
 
 	@Builder
-	public OrderQueryRequest(String appid, String mchId, String nonceStr, String sign, String sign_type,
+	public OrderQueryRequest(String appid, String mchId, String nonceStr, String sign, String signType,
 			String transactionId, String outTradeNo) {
-		super(appid, mchId, nonceStr, sign, sign_type);
+		super(appid, mchId, nonceStr, sign, signType);
 		this.transactionId = transactionId;
 		this.outTradeNo = outTradeNo;
 	}

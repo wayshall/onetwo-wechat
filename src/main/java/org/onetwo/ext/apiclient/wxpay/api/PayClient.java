@@ -16,10 +16,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 @WechatPayApiClient
 public interface PayClient {
 	
-	@PostMapping(path="/pay/unifiedorder", produces=MediaType.APPLICATION_XML_VALUE)
+	/****
+	 * 同一个商户订单号，不能修改金额、商品描述等关键字段，否则会提示：商户订单号重复
+	 * @author weishao zeng
+	 * @param request
+	 * @return
+	 */
+	@PostMapping(path="/pay/unifiedorder", produces=MediaType.APPLICATION_XML_VALUE, consumes=MediaType.APPLICATION_XML_VALUE)
 	UnifiledOrderResponse unifiedOrder(@RequestBody UnifiedOrderRequest request);
 	
-	@PostMapping(path="/pay/orderquery", produces=MediaType.APPLICATION_XML_VALUE)
+	@PostMapping(path="/pay/orderquery", produces=MediaType.APPLICATION_XML_VALUE, consumes=MediaType.APPLICATION_XML_VALUE)
 	OrderQueryResponse orderQuery(@RequestBody OrderQueryRequest request);
 
 }

@@ -1,5 +1,7 @@
 package org.onetwo.ext.apiclient.wxpay.vo.response;
 
+import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponsable;
+import org.onetwo.ext.apiclient.wechat.utils.WechatConstants;
 import org.onetwo.ext.apiclient.wxpay.utils.WechatPayUtils.PayResponseFields;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,11 +21,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JacksonXmlRootElement(localName="xml")
-public class WechatPayResponse {
+public class WechatPayResponse implements WechatResponsable {
 	@JsonProperty(PayResponseFields.KEY_ERRCODE)
-	private String returnErrcode;
+	private String returnCode;
 	@JsonProperty(PayResponseFields.KEY_ERRMSG)
-	private String returnErrmsg;
+	private String returnMsg;
 
 	/***
 	 * 业务结果
@@ -42,7 +44,7 @@ public class WechatPayResponse {
 	protected String errCodeDes;
 	
 	public boolean isSuccess(){
-		return "SUCCESS".equals(returnErrcode) && "SUCCESS".equals(resultCode);
+		return WechatConstants.SUCCESS.equals(returnCode) && WechatConstants.SUCCESS.equals(resultCode);
 	}
 
 }

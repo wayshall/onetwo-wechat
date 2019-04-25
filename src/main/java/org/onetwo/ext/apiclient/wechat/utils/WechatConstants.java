@@ -28,8 +28,6 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public abstract class WechatConstants {
 
-	
-
 	public static abstract class Oauth2ClientKeys {
 		public static final String STORE_USER_INFO_KEY = "wechat_oauth2_userInfo";
 		public static final String STORE_STATE_KEY = "wechat_oauth2_state";
@@ -38,6 +36,9 @@ public abstract class WechatConstants {
 		public static final String PARAMS_CODE = "code";
 	}
 	
+	public static final String SUCCESS = "SUCCESS";
+	public static final String OK = "OK";
+	
 	public static final String PARAMS_ACCESS_TOKEN = "access_token";
 	public static final String BODY_TO_USER_NAME = "ToUserName";
 	public static final String BODY_ENCRYPT = "Encrypt";
@@ -45,6 +46,7 @@ public abstract class WechatConstants {
 	public static final String ENCRYPT_TYPE_AES = "aes";
 	
 	public static final String SIGN_MD5 = "MD5";
+	public static final String SIGN_HMAC_SHA256 = "HMAC-SHA256";
 	
 	//grantType
 	public static abstract class GrantTypeKeys {
