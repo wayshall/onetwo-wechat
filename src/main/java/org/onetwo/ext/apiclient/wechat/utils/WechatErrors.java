@@ -36,6 +36,7 @@ public enum WechatErrors implements ErrorType {
 	API_CALL_EXCEEDS_QUOTA(45009, "接口调用超过限额（目前默认每个帐号日调用限额为100万）"),
 	
 
+	WORK_USER_ID_INVALID(40003, "无效的UserID"),
 	WORK_USER_NOT_FOUND(60111, "用户不存在"),
 	WORK_USER_DISABLED(60120, "成员已禁用"),
 	WORK_INVALID_PARTY_ID(60123, "无效的部门id"),

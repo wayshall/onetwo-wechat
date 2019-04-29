@@ -10,6 +10,10 @@ import org.onetwo.ext.apiclient.work.utils.WorkWechatConstants.WorkUrlConst;
 import org.springframework.context.annotation.Import;
 
 /**
+ * 企业微信接口调试工具：
+ * 
+ * https://work.weixin.qq.com/api/devtools/devtool.php
+ * 
  * @author wayshall
  * <br/>
  */

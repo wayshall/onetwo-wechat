@@ -11,6 +11,10 @@ import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.UrlConst;
 import org.springframework.context.annotation.Import;
 
 /**
+ * 微信接口调试工具：
+ * 
+ * https://mp.weixin.qq.com/debug/
+ * 
  * @author wayshall
  * <br/>
  */
