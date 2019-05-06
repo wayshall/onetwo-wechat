@@ -2,6 +2,9 @@ package org.onetwo.ext.apiclient.work.contact.response;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,7 +18,9 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper=false)
-public class WorkUserInfoResponse extends WechatResponse {
+public class WorkUserInfoVO extends WechatResponse {
+	@NotNull
+	@NotBlank
 	private String userid;//": "zhangsan",
     private String name;//": "李四",
     private Long[] department;//": [1, 2],
@@ -133,7 +138,8 @@ public class WorkUserInfoResponse extends WechatResponse {
     public static class ExternalProfileData {
     	@JsonProperty("external_corp_name")
     	private String externalCorpName;
-    	private List<Attribute> external_attr;
+    	@JsonProperty("external_attr")
+    	private List<Attribute> externalAttr;
     }
 
 }

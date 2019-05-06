@@ -8,12 +8,11 @@ import org.onetwo.boot.module.redis.RedisLockRunner;
 import org.onetwo.common.apiclient.utils.ApiClientUtils;
 import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.utils.LangUtils;
-import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenProvider;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
-import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenTypes;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
@@ -52,7 +51,7 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 //	protected WechatConfig wechatConfig;
 	private WechatConfigProvider wechatConfigProvider;
 	
-	private AccessTokenTypes supportedClientType = AccessTokenTypes.WECHAT;
+//	private AccessTokenTypes supportedClientType = AccessTokenTypes.WECHAT;
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -83,7 +82,8 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	
 	@Override
 	public AccessTokenInfo getOrRefreshAccessToken(GetAccessTokenRequest request) {
-		Optional<AccessTokenInfo> atOpt = getAccessToken(request.getAppid());
+		AppidRequest appidRequest = new AppidRequest(request.getAppid(), request.getAccessTokenType());
+		Optional<AccessTokenInfo> atOpt = getAccessToken(appidRequest);
 		if(atOpt.isPresent() && !atOpt.get().isExpired()){
 			return atOpt.get();
 		}
@@ -92,14 +92,15 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	}
 	
 
-	public void removeAccessToken(String appid) {
+	public void removeAccessToken(AppidRequest appidRequest) {
+		String appid = WechatUtils.getAppidKey(appidRequest);
 		try {
 			//使用锁，防止正在更新的时候，同时又删除
 			getRedisLockRunnerByAppId(appid).tryLock(()->{
 				if(logger.isInfoEnabled()){
 					logger.info("remove accessToken from {} server...", getStoreType());
 				}
-				removeByAppid(appid);
+				removeByAppid(appidRequest);
 				return null;
 			});
 		} catch (Exception e) {
@@ -110,13 +111,21 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	protected AccessTokenResponse getAccessToken(GetAccessTokenRequest request) {
 		return accessTokenProvider.getAccessToken(request);
 	}
+	
+	protected boolean isUpdatedNewly(Optional<AccessTokenInfo> opt) {
+		if(opt.isPresent() && !opt.get().isExpired() && opt.get().isUpdatedNewly()){
+			return true;
+		}
+		return false;
+	}
 
 	public AccessTokenInfo refreshAccessToken(GetAccessTokenRequest request){
 		AccessTokenInfo at = getRedisLockRunnerByAppId(request.getAppid()).tryLock(()->{
-			Optional<AccessTokenInfo> opt = getAccessToken(request.getAppid());
+			AppidRequest appidRequest = new AppidRequest(request.getAppid(), request.getAccessTokenType());
+			Optional<AccessTokenInfo> opt = getAccessToken(appidRequest);
 			
 			//未过时且最近更新过
-			if(opt.isPresent() && !opt.get().isExpired() && opt.get().isUpdatedNewly()){
+			if(isUpdatedNewly(opt)){
 				if(logger.isInfoEnabled()){
 					logger.info("double check access token from {} server...", getStoreType());
 				}
@@ -131,7 +140,7 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 														.expiresIn(expired)
 														.updateAt(new Date())
 														.build();
-			saveNewToken(newToken);
+			saveNewToken(newToken, appidRequest);
 			if(logger.isInfoEnabled()){
 				logger.info("saved new access token : {}", newToken);
 			}
@@ -154,14 +163,14 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	 * @author weishao zeng
 	 * @param appid
 	 */
-	abstract protected void removeByAppid(String appid);
+	abstract protected void removeByAppid(AppidRequest appid);
 	
 	/***
 	 * 刷新后保存
 	 * @author weishao zeng
 	 * @param newToken
 	 */
-	abstract protected void saveNewToken(AccessTokenInfo newToken);
+	abstract protected void saveNewToken(AccessTokenInfo newToken, AppidRequest appidRequest);
 	
 	/***
 	 * 获取设置redis的过期时间，比token有效时间稍短，避免过期
@@ -197,13 +206,13 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 		this.wechatConfigProvider = wechatConfigProvider;
 	}
 
-	public AccessTokenTypes getSupportedClientType() {
+	/*public AccessTokenTypes getSupportedClientType() {
 		return supportedClientType;
 	}
 
 	public void setSupportedClientType(AccessTokenTypes supportedClientType) {
 		this.supportedClientType = supportedClientType;
-	}
+	}*/
 
 
 }

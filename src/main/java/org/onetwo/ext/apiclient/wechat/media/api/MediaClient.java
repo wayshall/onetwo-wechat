@@ -2,10 +2,10 @@ package org.onetwo.ext.apiclient.wechat.media.api;
 
 import java.util.Map;
 
+import org.onetwo.common.annotation.FieldName;
 import org.onetwo.common.apiclient.ApiClientMethod;
 import org.onetwo.common.apiclient.annotation.ResponseHandler;
 import org.onetwo.common.jackson.JsonMapper;
-import org.onetwo.common.utils.FieldName;
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;

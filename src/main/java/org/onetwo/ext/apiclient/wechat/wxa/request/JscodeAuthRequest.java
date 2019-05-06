@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import org.onetwo.common.utils.FieldName;
+import org.onetwo.common.annotation.FieldName;
 import org.onetwo.common.utils.StringUtils;
 import org.onetwo.ext.apiclient.wechat.basic.request.AuthBaseRequest;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.GrantTypeKeys;

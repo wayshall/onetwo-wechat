@@ -30,7 +30,7 @@ public class WorkWechatAccessTokenProvider implements AccessTokenProvider {
 	
 	@Override
 	public List<AccessTokenTypes> getAccessTokenTypes() {
-		return Arrays.asList(AccessTokenTypes.WORK_WECHAT);
+		return Arrays.asList(AccessTokenTypes.WORK_WECHAT, AccessTokenTypes.CONTACTS);
 	}
 
 }

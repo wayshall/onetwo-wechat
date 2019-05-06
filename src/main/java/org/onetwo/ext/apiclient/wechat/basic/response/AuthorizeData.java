@@ -3,7 +3,7 @@ package org.onetwo.ext.apiclient.wechat.basic.response;
 import lombok.Builder;
 import lombok.Data;
 
-import org.onetwo.common.utils.FieldName;
+import org.onetwo.common.annotation.FieldName;
 import org.onetwo.common.utils.ParamUtils;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.Oauth2Keys;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.UrlConst;

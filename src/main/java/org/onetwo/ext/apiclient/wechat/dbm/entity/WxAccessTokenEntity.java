@@ -23,6 +23,7 @@ public class WxAccessTokenEntity extends AbstractTimeRecordableEntity {
 	 */
 	private static final long serialVersionUID = 6883914646989577935L;
 	@Id
+	private String id;
 	private String wxAppid;
 	private String accessToken;
 	private Long expiresIn;

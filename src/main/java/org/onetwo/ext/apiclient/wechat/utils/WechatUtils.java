@@ -15,6 +15,7 @@ import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.exception.ErrorTypes;
 import org.onetwo.common.jackson.JsonMapper;
 import org.onetwo.common.utils.LangUtils;
+import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenTypes;
@@ -103,8 +104,8 @@ public class WechatUtils {
 		return opt;
 	}
 
-	public static String getAccessTokenKey(String appid, AccessTokenTypes clientType){
-		return WechatUtils.ACCESS_TOKEN_PREFIX + clientType.name() + ":" + appid;
+	public static String getAccessTokenKey(String appid, AccessTokenTypes accessTokenType){
+		return WechatUtils.ACCESS_TOKEN_PREFIX + getAppidKey(appid, accessTokenType);
 	}
 	
 	public static ApiClientException translateToApiClientException(ApiClientMethod invokeMethod, WechatResponse baseResponse, ResponseEntity<?> responseEntity){
@@ -114,6 +115,14 @@ public class WechatUtils {
 								 										baseResponse.getErrmsg(), 
 								 										responseEntity.getStatusCodeValue())
 								 									));
+	}
+	
+	public static String getAppidKey(AppidRequest appidRequest) {
+		return getAppidKey(appidRequest.getAppid(), appidRequest.getAccessTokenType());
+	}
+	
+	private static String getAppidKey(String appid, AccessTokenTypes accessTokenType) {
+		return appid + ":" + accessTokenType.name();
 	}
 	
 	private WechatUtils(){

@@ -22,14 +22,14 @@ public interface AccessTokenService {
 	AccessTokenInfo getOrRefreshAccessToken(GetAccessTokenRequest request);
 	Optional<AccessTokenInfo> refreshAccessTokenByAppid(AppidRequest appidRequest);
 	AccessTokenInfo refreshAccessToken(GetAccessTokenRequest request);
-	void removeAccessToken(String appid);
+	void removeAccessToken(AppidRequest appidRequest);
 	/***
 	 * 根据appid获取缓存的token
 	 * @author wayshall
 	 * @param appid
 	 * @return
 	 */
-	Optional<AccessTokenInfo> getAccessToken(String appid);
+	Optional<AccessTokenInfo> getAccessToken(AppidRequest appidRequest);
 	
 	/***
 	 * tokenService支持哪种类型的client

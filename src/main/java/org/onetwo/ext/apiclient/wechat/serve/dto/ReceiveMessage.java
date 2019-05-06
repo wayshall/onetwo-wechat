@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import org.onetwo.common.utils.FieldName;
+import org.onetwo.common.annotation.FieldName;
 import org.onetwo.ext.apiclient.wechat.serve.spi.Message;
 
 /**

@@ -1,6 +1,6 @@
 package org.onetwo.ext.apiclient.wechat.wxa.api;
 
-import org.onetwo.common.utils.FieldName;
+import org.onetwo.common.annotation.FieldName;
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;

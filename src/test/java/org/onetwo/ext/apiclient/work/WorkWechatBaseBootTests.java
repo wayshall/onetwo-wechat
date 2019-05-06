@@ -54,6 +54,17 @@ public class WorkWechatBaseBootTests {
 		return tokenInfo;
 	}
 	
+	protected AccessTokenInfo getContactAccessToken(){
+		WechatConfig wechatConfig = workWechatConfig.getApps().get("party");
+		GetAccessTokenRequest request = GetAccessTokenRequest.builder()
+																.appid(wechatConfig.getAppid())
+																.secret(wechatConfig.getContactSecrect())
+																.accessTokenType(AccessTokenTypes.CONTACTS)
+															.build();
+		AccessTokenInfo tokenInfo = accessTokenService.getOrRefreshAccessToken(request);
+		return tokenInfo;
+	}
+	
 /*	protected AccessTokenInfo getAgentAccessToken(){
 		WechatConfig wechatConfig = workWechatConfig.getApps().get("party-agent");
 		GetAccessTokenRequest request = GetAccessTokenRequest.builder()

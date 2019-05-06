@@ -34,6 +34,7 @@ public class DefaultWechatConfig implements WechatConfig{
 	
 //	@Value("${wechat.appsecret}")
 	private String appsecret;
+	private String contactSecrect;
 	private String agentId;
 	
 //	@Value("${wechat.encodingAESKey:}")

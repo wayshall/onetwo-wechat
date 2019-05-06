@@ -19,6 +19,13 @@ public interface WechatConfig {
 
 	String getAppsecret();
 	
+	/****
+	 * 通讯录secrect
+	 * @author weishao zeng
+	 * @return
+	 */
+	String getContactSecrect();
+	
 	/***
 	 * aeskey
 	 * @author wayshall

@@ -15,5 +15,5 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=false)
 public class WorkUserListResponse extends WechatResponse {
-	private List<WorkUserInfoResponse> userlist;
+	private List<WorkUserInfoVO> userlist;
 }
