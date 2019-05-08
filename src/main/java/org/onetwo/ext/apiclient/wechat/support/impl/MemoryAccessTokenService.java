@@ -9,7 +9,6 @@ import org.onetwo.common.log.JFishLoggerFactory;
 import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
-import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenProvider;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
@@ -29,9 +28,6 @@ import com.google.common.cache.CacheBuilder;
 public class MemoryAccessTokenService extends AbstractAccessTokenService implements AccessTokenService {
 	private final Logger logger = JFishLoggerFactory.getLogger(this.getClass());
 
-//	@Autowired
-//	private WechatServer wechatServer;
-	private AccessTokenProvider accessTokenProvider;
 	/*@Autowired
 	private WechatConfig wechatConfig;*/
 	
@@ -129,7 +125,7 @@ public class MemoryAccessTokenService extends AbstractAccessTokenService impleme
 		try {
 			return this.accessTokenCaches.get(key, ()->{
 //				AccessTokenInfo accessToken = WechatUtils.getAccessToken(wechatServer, request);
-				AccessTokenResponse response = this.accessTokenProvider.getAccessToken(request);
+				AccessTokenResponse response = this.getAccessTokenProvider().getAccessToken(request);
 				AccessTokenInfo at = WechatUtils.toAccessTokenInfo(request.getAppid(), response);
 				at.setUpdateAt(new Date());
 				return at;

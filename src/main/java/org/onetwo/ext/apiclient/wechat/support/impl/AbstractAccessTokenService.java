@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.redis.util.RedisLockRegistry;
 import org.springframework.util.Assert;
 
+import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -35,6 +36,7 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	
 	protected final Logger logger = ApiClientUtils.getApiclientlogger();
 
+	@Getter
 	private AccessTokenProvider accessTokenProvider;
 //	@Autowired
 //	private WechatConfig wechatConfig;

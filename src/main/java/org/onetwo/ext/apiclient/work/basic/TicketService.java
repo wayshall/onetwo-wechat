@@ -8,6 +8,7 @@ import org.onetwo.boot.module.redis.CacheData;
 import org.onetwo.boot.module.redis.RedisOperationService;
 import org.onetwo.common.date.DateUtils;
 import org.onetwo.common.expr.ExpressionFacotry;
+import org.onetwo.common.log.JFishLoggerFactory;
 import org.onetwo.common.md.Hashs;
 import org.onetwo.common.spring.SpringUtils;
 import org.onetwo.common.spring.copier.CopyUtils;
@@ -17,6 +18,7 @@ import org.onetwo.ext.apiclient.work.basic.api.TicketClient;
 import org.onetwo.ext.apiclient.work.basic.api.TicketClient.JsApiTicketResponse;
 import org.onetwo.ext.apiclient.work.basic.request.JsApiSignatureRequest;
 import org.onetwo.ext.apiclient.work.basic.response.JsApiSignatureResponse;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
@@ -27,6 +29,7 @@ import org.springframework.util.Assert;
  */
 public class TicketService implements InitializingBean {
 	private static final String SIGNATURE_TEMPLATE = "jsapi_ticket=${ticket}&noncestr=${noncestr}&timestamp=${timestamp}&url=${url}";
+	static private final Logger logger = JFishLoggerFactory.getLogger(TicketService.class);
 	
 	@Autowired
 	private TicketClient ticketClient;
@@ -92,7 +95,7 @@ public class TicketService implements InitializingBean {
 		Assert.notNull(request.getUrl(), "url can not be null");
 //		Assert.notNull(request.getAppId(), "appid can not be null");
 		if (request.getTimestamp()==null) {
-			request.setTimestamp(DateUtils.now().getTime());
+			request.setTimestamp(DateUtils.now().getTime()/1000);
 		}
 		if (StringUtils.isBlank(request.getNoncestr())) {
 			request.setNoncestr(RandomStringUtils.randomAscii(16));
@@ -103,6 +106,11 @@ public class TicketService implements InitializingBean {
 		
 		String parameterStr = ExpressionFacotry.DOLOR.parse(SIGNATURE_TEMPLATE, context);
 		String signature = Hashs.sha1().hash(parameterStr).toLowerCase();
+		
+		if (logger.isInfoEnabled()) {
+			logger.info("context: {}, signature: {}", context, signature);
+		}
+		
 		JsApiSignatureResponse res = CopyUtils.copy(JsApiSignatureResponse.class, request);
 		res.setSignature(signature);
 		return res;

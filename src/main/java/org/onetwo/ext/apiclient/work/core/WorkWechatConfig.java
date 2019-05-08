@@ -44,6 +44,15 @@ public class WorkWechatConfig /*extends DefaultWechatConfig*/ {
 		.orElseGet(() -> this.getWechatConfigByName(appid));
 	}
 	
+	public WechatConfig getWechatConfigByAgentId(String agentId) {
+		return this.apps.entrySet().stream().filter(entry -> {
+			return entry.getValue().getAgentId().equals(agentId);
+		})
+		.findFirst()
+		.map(entry -> (WechatConfig)entry.getValue())
+		.orElseGet(() -> this.getWechatConfigByName(agentId));
+	}
+	
 	public WechatConfig getWechatConfigByName(String appName) {
 		return this.apps.get(appName);
 	}

@@ -5,9 +5,10 @@ import java.util.List;
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenTypes;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
+import org.onetwo.ext.apiclient.work.contact.request.UpdateUserInfoRequest;
 import org.onetwo.ext.apiclient.work.contact.response.Convert2OpenidResponse;
 import org.onetwo.ext.apiclient.work.contact.response.Convert2OpenidResponse.Convert2UseridResponse;
-import org.onetwo.ext.apiclient.work.contact.response.WorkUserInfoVO;
+import org.onetwo.ext.apiclient.work.contact.response.WorkUserInfoResponse;
 import org.onetwo.ext.apiclient.work.contact.response.WorkUserListResponse;
 import org.onetwo.ext.apiclient.work.core.WorkWechatApiClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +29,7 @@ import lombok.Data;
 public interface WorkUserClient {
 
 	@GetMapping(path="/user/get")
-	WorkUserInfoVO getUser(AccessTokenInfo accessTokenInfo, String userid);
+	WorkUserInfoResponse getUser(AccessTokenInfo accessTokenInfo, String userid);
 	
 	/****
 	 * https://work.weixin.qq.com/api/doc#90000/90135/90197
@@ -39,7 +40,7 @@ public interface WorkUserClient {
 	 * @return
 	 */
 	@PostMapping(path="/user/update")
-	WechatResponse update(AccessTokenInfo accessTokenInfo, @RequestBody WorkUserInfoVO request);
+	WechatResponse update(AccessTokenInfo accessTokenInfo, @RequestBody UpdateUserInfoRequest request);
 	
 	/***
 	 * https://work.weixin.qq.com/api/doc#90000/90135/90199

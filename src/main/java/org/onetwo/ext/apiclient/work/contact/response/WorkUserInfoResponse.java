@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,7 +19,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper=false)
-public class WorkUserInfoVO extends WechatResponse {
+public class WorkUserInfoResponse extends WechatResponse {
 	@NotNull
 	@NotBlank
 	private String userid;//": "zhangsan",
@@ -61,7 +62,12 @@ public class WorkUserInfoVO extends WechatResponse {
     public static enum AttributeType {
     	TEXT,
     	WEB,
-    	Miniprogram
+    	Miniprogram;
+    	
+    	@JsonValue
+    	public int toValue() {
+    		return ordinal();
+    	}
     }
     
     @Data

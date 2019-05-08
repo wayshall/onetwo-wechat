@@ -30,6 +30,9 @@ public class CombineWechatConfigProvider extends SimpleWechatConfigProvider {
 			config = wechatConfig;
 		} else {
 			config = this.workWechatConfig.getWechatConfig(appid);
+			if (config==null) {
+				config = this.workWechatConfig.getWechatConfigByAgentId(appid);
+			}
 		}
 		return config;
 	}

@@ -5,12 +5,14 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import org.junit.Test;
 import org.onetwo.common.exception.ApiClientException;
+import org.onetwo.common.spring.copier.CopyUtils;
 import org.onetwo.ext.apiclient.work.WorkWechatBaseBootTests;
 import org.onetwo.ext.apiclient.work.contact.api.WorkUserClient.Convert2OpenidRequest;
 import org.onetwo.ext.apiclient.work.contact.api.WorkUserClient.Convert2UseridRequest;
+import org.onetwo.ext.apiclient.work.contact.request.UpdateUserInfoRequest;
 import org.onetwo.ext.apiclient.work.contact.response.Convert2OpenidResponse;
 import org.onetwo.ext.apiclient.work.contact.response.Convert2OpenidResponse.Convert2UseridResponse;
-import org.onetwo.ext.apiclient.work.contact.response.WorkUserInfoVO;
+import org.onetwo.ext.apiclient.work.contact.response.WorkUserInfoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -25,7 +27,7 @@ public class WorkUserClientTest extends WorkWechatBaseBootTests {
 	@Test
 	public void testGetUser() {
 		assertThatExceptionOfType(ApiClientException.class).isThrownBy(() -> {
-			WorkUserInfoVO res = workUserClient.getUser(getContactAccessToken(), "");
+			WorkUserInfoResponse res = workUserClient.getUser(getContactAccessToken(), "");
 			System.out.println("res:" + res);
 		})
 		.withMessageContaining("用户不存在");
@@ -34,15 +36,14 @@ public class WorkUserClientTest extends WorkWechatBaseBootTests {
 	@Test
 	public void testUpdateUser() {
 		String userid = "ZengWeiShao";
-		WorkUserInfoVO res = workUserClient.getUser(getContactAccessToken(), userid);
+		WorkUserInfoResponse res = workUserClient.getUser(getContactAccessToken(), userid);
 		System.out.println("res:" + res);
 		
-		WorkUserInfoVO update = new WorkUserInfoVO();
-		update.setUserid(res.getUserid());
+		UpdateUserInfoRequest update = CopyUtils.copy(UpdateUserInfoRequest.class, res);
 		update.setAlias("曾卫韶");
 		workUserClient.update(getContactAccessToken(), update);
 		
-		WorkUserInfoVO res2 = workUserClient.getUser(getContactAccessToken(), userid);
+		WorkUserInfoResponse res2 = workUserClient.getUser(getContactAccessToken(), userid);
 		System.out.println("res2:" + res2);
 		assertThat(res2.getAlias()).isEqualTo(update.getAlias());
 	}
