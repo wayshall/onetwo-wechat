@@ -1,4 +1,5 @@
-package org.onetwo.ext.apiclient.wechat.crypt;
+
+package org.onetwo.ext.apiclient.work.crypt;
 
 @SuppressWarnings("serial")
 public class AesException extends RuntimeException {
@@ -8,7 +9,7 @@ public class AesException extends RuntimeException {
 	public final static int ParseXmlError = -40002;
 	public final static int ComputeSignatureError = -40003;
 	public final static int IllegalAesKey = -40004;
-	public final static int ValidateAppidError = -40005;
+	public final static int ValidateCorpidError = -40005;
 	public final static int EncryptAESError = -40006;
 	public final static int DecryptAESError = -40007;
 	public final static int IllegalBuffer = -40008;
@@ -28,8 +29,8 @@ public class AesException extends RuntimeException {
 			return "sha加密生成签名失败";
 		case IllegalAesKey:
 			return "SymmetricKey非法";
-		case ValidateAppidError:
-			return "appid校验失败";
+		case ValidateCorpidError:
+			return "corpid校验失败";
 		case EncryptAESError:
 			return "aes加密失败";
 		case DecryptAESError:

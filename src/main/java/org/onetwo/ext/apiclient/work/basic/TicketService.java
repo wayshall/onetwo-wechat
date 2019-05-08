@@ -107,8 +107,8 @@ public class TicketService implements InitializingBean {
 		String parameterStr = ExpressionFacotry.DOLOR.parse(SIGNATURE_TEMPLATE, context);
 		String signature = Hashs.sha1().hash(parameterStr).toLowerCase();
 		
-		if (logger.isInfoEnabled()) {
-			logger.info("context: {}, signature: {}", context, signature);
+		if (logger.isDebugEnabled()) {
+			logger.debug("context: {}, signature: {}", context, signature);
 		}
 		
 		JsApiSignatureResponse res = CopyUtils.copy(JsApiSignatureResponse.class, request);

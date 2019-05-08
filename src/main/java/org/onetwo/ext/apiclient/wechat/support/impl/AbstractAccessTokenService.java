@@ -28,7 +28,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 基于redis
+ * TODO: 注意企业微信有可能存在这样的情况：同一个appid（cropid），但是使用不同应用的秘钥获取不同的accesstoken，
+	 * 此时如果根据appid来识别不同的token是无法做到的，需要另外处理。
+	 * 使用appid+secrect作为store key？或者根据两者生成唯一hash，然后保存到AccessTokenInfo，刷新的时候调用？在AppidRequest增加标识？
+	 * 
  * @author wayshall
  * <br/>
  */
@@ -169,6 +172,9 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	
 	/***
 	 * 刷新后保存
+	 * TODO: 注意企业微信有可能存在这样的情况：同一个appid（cropid），但是使用不同应用的秘钥获取不同的accesstoken，
+	 * 此时如果根据appid来识别不同的token是无法做到的，需要另外处理。
+	 * 使用appid+secrect作为store key？或者根据两者生成唯一hash，然后保存到AccessTokenInfo，刷新的时候调用？在AppidRequest增加标识？
 	 * @author weishao zeng
 	 * @param newToken
 	 */

@@ -3,6 +3,7 @@ package org.onetwo.ext.apiclient.wechat.accesstoken;
 import org.onetwo.common.utils.StringUtils;
 import org.onetwo.ext.apiclient.wechat.core.SimpleWechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
+import org.onetwo.ext.apiclient.wechat.crypt.WechatMsgCrypt;
 import org.onetwo.ext.apiclient.work.core.WorkWechatConfig;
 
 /**
@@ -37,5 +38,9 @@ public class CombineWechatConfigProvider extends SimpleWechatConfigProvider {
 		return config;
 	}
 
-
+	@Override
+	public WechatMsgCrypt getWXBizMsgCrypt(String clientId){
+		WechatMsgCrypt wxbizMsgCrypt = createWXBizMsgCrypt(getWechatConfig(clientId));
+		return wxbizMsgCrypt;
+	}
 }

@@ -15,7 +15,7 @@ import org.onetwo.common.spring.utils.MapToBeanConvertor;
 import org.onetwo.common.utils.StringUtils;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.crypt.AesException;
-import org.onetwo.ext.apiclient.wechat.crypt.WXBizMsgCrypt;
+import org.onetwo.ext.apiclient.wechat.crypt.WechatMsgCrypt;
 import org.onetwo.ext.apiclient.wechat.serve.dto.MessageContext;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ServeAuthParam;
@@ -66,7 +66,7 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 	private WechatConfigProvider wechatConfigProvider;
 	
 
-	protected WXBizMsgCrypt getMessageCrypt(String clientId){
+	protected WechatMsgCrypt getMessageCrypt(String clientId){
 		return wechatConfigProvider.getWXBizMsgCrypt(clientId);
 	}
 	

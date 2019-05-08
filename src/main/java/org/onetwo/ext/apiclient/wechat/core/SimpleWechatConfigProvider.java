@@ -4,8 +4,10 @@ import org.onetwo.common.exception.BaseException;
 import org.onetwo.common.utils.StringUtils;
 import org.onetwo.ext.apiclient.wechat.crypt.AesException;
 import org.onetwo.ext.apiclient.wechat.crypt.WXBizMsgCrypt;
+import org.onetwo.ext.apiclient.wechat.crypt.WechatMsgCrypt;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.utils.WechatException;
+import org.onetwo.ext.apiclient.work.crypt.WXBizMsgCryptAdaptor;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
@@ -15,7 +17,7 @@ import org.springframework.beans.factory.InitializingBean;
 public class SimpleWechatConfigProvider implements WechatConfigProvider, InitializingBean {
 
 	protected WechatConfig wechatConfig;
-	private WXBizMsgCrypt wxbizMsgCrypt;
+	private WechatMsgCrypt wxbizMsgCrypt;
 	
 	public SimpleWechatConfigProvider(WechatConfig wechatConfig) {
 		super();
@@ -29,9 +31,15 @@ public class SimpleWechatConfigProvider implements WechatConfigProvider, Initial
 		}
 	}
 	
-	protected WXBizMsgCrypt createWXBizMsgCrypt(WechatConfig wechatConfig) {
+	protected WechatMsgCrypt createWXBizMsgCrypt(WechatConfig wechatConfig) {
 		try {
-			WXBizMsgCrypt wxbizMsgCrypt = new WXBizMsgCrypt(wechatConfig.getToken(), wechatConfig.getEncodingAESKey(), wechatConfig.getAppid());
+			WechatMsgCrypt wxbizMsgCrypt = null;
+			if (StringUtils.isBlank(wechatConfig.getAgentId())) {
+				wxbizMsgCrypt = new WXBizMsgCrypt(wechatConfig.getToken(), wechatConfig.getEncodingAESKey(), wechatConfig.getAppid());
+			} else {
+				System.out.println("--------------WXBizMsgCryptAdaptor");
+				wxbizMsgCrypt = new WXBizMsgCryptAdaptor(wechatConfig.getToken(), wechatConfig.getEncodingAESKey(), wechatConfig.getAppid());
+			}
 			return wxbizMsgCrypt;
 		} catch (AesException e) {
 			throw new BaseException(e.getMessage(), e);
@@ -45,7 +53,7 @@ public class SimpleWechatConfigProvider implements WechatConfigProvider, Initial
 	}
 
 	@Override
-	public WXBizMsgCrypt getWXBizMsgCrypt(String clientId){
+	public WechatMsgCrypt getWXBizMsgCrypt(String clientId){
 		if(this.wxbizMsgCrypt==null){
 			throw new WechatException("可能没有配置encodingAesKey");
 		}

@@ -54,7 +54,7 @@ public class WXBizMsgCryptTest {
 	@Test
 	public void testNormal() throws ParserConfigurationException, SAXException, IOException {
 		try {
-			WXBizMsgCrypt pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
+			WechatMsgCrypt pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
 			String afterEncrpt = pc.encryptMsg(replyMsg, timestamp, nonce);
 
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -117,7 +117,7 @@ public class WXBizMsgCryptTest {
 	public void testValidateSignatureError() throws ParserConfigurationException, SAXException,
 			IOException {
 		try {
-			WXBizMsgCrypt pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
+			WechatMsgCrypt pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
 			String afterEncrpt = pc.encryptMsg(replyMsg, timestamp, nonce);
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
@@ -140,7 +140,7 @@ public class WXBizMsgCryptTest {
 
 	@Test
 	public void testVerifyUrl() throws AesException {
-		WXBizMsgCrypt wxcpt = new WXBizMsgCrypt("QDG6eK",
+		WechatMsgCrypt wxcpt = new WXBizMsgCrypt("QDG6eK",
 				"jWmYm7qr5nMoAUwZRjGtBxmz3KA1tkAj3ykkR6q2B2C", "wx5823bf96d3bd56c7");
 		String verifyMsgSig = "5c45ff5e21c57e6ad56bac8758b79b1d9ac89fd3";
 		String timeStamp = "1409659589";
