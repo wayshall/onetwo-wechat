@@ -2,6 +2,7 @@ package org.onetwo.ext.apiclient.wechat.serve.spi;
 
 import org.onetwo.ext.apiclient.wechat.serve.dto.MessageContext;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ServeAuthParam;
+import org.onetwo.ext.apiclient.wechat.serve.service.MessageRouterServiceImpl;
 import org.onetwo.ext.apiclient.wechat.serve.spi.Message.ReceiveMessageType;
 
 /**
@@ -36,6 +37,7 @@ public interface MessageRouterService {
 	// 暂时不开放这个方法
 //	MessageRouterService register(String messageType, Class<? extends Message> messageClass, MessageHandler<?, ?>... handlers);
 	
+	<T extends Message> MessageRouterServiceImpl register(String messageType, Class<T> messageClass, MessageHandler<T, ?> handler);
 	/***
 	 * 通过泛型handler获取messageClass，少传一个参数
 	 * @author weishao zeng

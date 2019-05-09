@@ -2,7 +2,6 @@ package org.onetwo.ext.apiclient.work.serve.web;
 
 import javax.validation.Valid;
 
-import org.onetwo.boot.core.web.api.WebApi;
 import org.onetwo.common.log.JFishLoggerFactory;
 import org.onetwo.common.spring.copier.UnderlineInitBinder;
 import org.onetwo.ext.apiclient.wechat.serve.dto.MessageContext;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 //@RestController
 @RequestMapping("/workEventServe") //ww = work wechat
-@WebApi
 public class WorkEventServeController implements UnderlineInitBinder {
 	
 	protected Logger logger = JFishLoggerFactory.getLogger(this.getClass());

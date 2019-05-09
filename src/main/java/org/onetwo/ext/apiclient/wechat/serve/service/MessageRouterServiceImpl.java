@@ -98,7 +98,7 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		for(MessageType mt : MessageType.values()){
-			register(mt.getName(), mt.getMessageClass());
+			registerBy(mt.getName(), mt.getMessageClass());
 		}
 		if (messageTypeExtractor==null) {
 			this.messageTypeExtractor = new DefaultMessageConverter(jacksonXmlMapper);
@@ -122,7 +122,7 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 	@SuppressWarnings("unchecked")
 	public MessageRouterServiceImpl register(String messageType, MessageHandler<?, ?> handler){
 		Class<? extends Message> messageClass = getMessageClassByHandler((Class<? extends MessageHandler<?, ?>>)handler.getClass());
-		return this.register(messageType, messageClass, handler);
+		return this.registerBy(messageType, messageClass, handler);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -130,7 +130,7 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 		Class<? extends Message> messageClass = getMessageClassByHandler(handlerClass);
 		this.checkAndPutMessageType(messageType, messageClass);
 		List<MessageHandler<?, ?>> handler = (List<MessageHandler<?, ?>>)SpringUtils.getBeans(applicationContext, handlerClass);
-		return this.register(messageType, messageClass, handler.toArray(new MessageHandler<?, ?>[0]));
+		return this.registerBy(messageType, messageClass, handler.toArray(new MessageHandler<?, ?>[0]));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -140,16 +140,20 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 			throw new BaseException("the message class of msgType must be same with the message class of handler");
 		}
 		List<MessageHandler<?, ?>> handler = (List<MessageHandler<?, ?>>)SpringUtils.getBeans(applicationContext, handlerClass);
-		return this.register(msgType.getName(), messageClass, handler.toArray(new MessageHandler<?, ?>[0]));
+		return this.registerBy(msgType.getName(), messageClass, handler.toArray(new MessageHandler<?, ?>[0]));
 	}
 	
 //	@Override
-	public MessageRouterServiceImpl register(String messageType, Class<? extends Message> messageClass, MessageHandler<?, ?>... handlers){
+	public MessageRouterServiceImpl registerBy(String messageType, Class<? extends Message> messageClass, MessageHandler<?, ?>... handlers){
 		this.checkAndPutMessageType(messageType, messageClass);
 		if (!LangUtils.isEmpty(handlers)) {
 			registerHandlerForType(messageClass, handlers);
 		}
 		return this;
+	}
+	
+	public <T extends Message> MessageRouterServiceImpl register(String messageType, Class<T> messageClass, MessageHandler<T, ?> handler) {
+		return this.registerBy(messageType, messageClass, handler);
 	}
 	
 	private void checkAndPutMessageType(String messageType, Class<? extends Message> messageClass) {
@@ -367,7 +371,7 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 
 	@Override
 	public MessageRouterService register(ReceiveMessageType msgType, MessageHandler<?, ?> handler){
-		return this.register(msgType.getName(), msgType.getMessageClass(), handler);
+		return this.registerBy(msgType.getName(), msgType.getMessageClass(), handler);
 	}
 
 
