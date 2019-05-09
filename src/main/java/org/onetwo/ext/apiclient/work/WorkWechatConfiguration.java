@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class WorkWechatConfiguration {
-	
+
 	@Bean
 	public TicketService ticketService() {
 		return new TicketService();
@@ -25,5 +25,6 @@ public class WorkWechatConfiguration {
 		MessageRouterServiceImpl service = new MessageRouterServiceImpl();
 		return service;
 	}
+	
 }
 

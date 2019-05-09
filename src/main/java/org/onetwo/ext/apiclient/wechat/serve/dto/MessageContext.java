@@ -1,7 +1,5 @@
 package org.onetwo.ext.apiclient.wechat.serve.dto;
 
-import java.util.Map;
-
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,6 +12,7 @@ import lombok.Data;
 public class MessageContext {
 	
 	private MessageParam param;
-	private Map<String, Object> messageBody;
+	private String messageBody;
+	private String decryptBody;
 
 }

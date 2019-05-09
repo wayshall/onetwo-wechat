@@ -2,7 +2,7 @@ package org.onetwo.ext.apiclient.wechat.serve.spi;
 
 import org.onetwo.ext.apiclient.wechat.serve.dto.MessageContext;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ServeAuthParam;
-import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.MessageType;
+import org.onetwo.ext.apiclient.wechat.serve.spi.Message.ReceiveMessageType;
 
 /**
  * @author wayshall
@@ -19,8 +19,9 @@ public interface MessageRouterService {
 	 * @param handler
 	 * @return
 	 */
-	MessageRouterService register(MessageHandler<?, ?> handler);
-	MessageRouterService register(MessageType msgType, MessageHandler<?, ?> handler);
+	// 暂时不开放这个方法
+//	MessageRouterService register(MessageHandler<?, ?> handler);
+	
 	
 	MessageRouterService clearHandlers(Class<? extends Message> messageType);
 	
@@ -29,10 +30,24 @@ public interface MessageRouterService {
 	 * @author wayshall
 	 * @param messageType
 	 * @param messageClass
+	 * @param handlers
 	 * @return
 	 */
-	MessageRouterService mappingReceive(String messageType, Class<? extends Message> messageClass);
+	// 暂时不开放这个方法
+//	MessageRouterService register(String messageType, Class<? extends Message> messageClass, MessageHandler<?, ?>... handlers);
 	
+	/***
+	 * 通过泛型handler获取messageClass，少传一个参数
+	 * @author weishao zeng
+	 * @param messageType
+	 * @param handler
+	 * @return
+	 */
+	MessageRouterService register(String messageType, MessageHandler<?, ?> handler);
+	MessageRouterService register(String messageType, Class<? extends MessageHandler<?, ?>> handlerClass);
+
+	MessageRouterService register(ReceiveMessageType msgType, MessageHandler<?, ?> handler);
+	MessageRouterService register(ReceiveMessageType msgType, Class<? extends MessageHandler<?, ?>> handlerClass);
 	
 	String verifyUrl(ServeAuthParam auth);
 

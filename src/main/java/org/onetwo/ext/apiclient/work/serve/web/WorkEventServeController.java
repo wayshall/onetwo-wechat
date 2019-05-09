@@ -1,7 +1,5 @@
 package org.onetwo.ext.apiclient.work.serve.web;
 
-import java.util.Map;
-
 import javax.validation.Valid;
 
 import org.onetwo.boot.core.web.api.WebApi;
@@ -16,6 +14,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -24,9 +23,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * <br/>
  */
 //@RestController
-@RequestMapping("/work/wxserve")
+@RequestMapping("/workEventServe") //ww = work wechat
 @WebApi
-public class WorkServeController implements UnderlineInitBinder {
+public class WorkEventServeController implements UnderlineInitBinder {
 	
 	protected Logger logger = JFishLoggerFactory.getLogger(this.getClass());
 	
@@ -54,7 +53,7 @@ public class WorkServeController implements UnderlineInitBinder {
 					consumes={MediaTypeKeys.TEXT_XML_VALUE_UTF8, MediaTypeKeys.APPLICATION_XML_VALUE_UTF8},
 					produces={MediaTypeKeys.TEXT_XML_VALUE_UTF8})
 //	public Object onMessageReceived(@PathVariable("clientId") String clientId, WorkMessageParam msgParam, Map<String, Object> message) {
-	public Object onMessageReceived(@PathVariable("clientId") String clientId, WorkMessageParam msgParam, Map<String, Object> message) {
+	public Object onMessageReceived(@PathVariable("clientId") String clientId, WorkMessageParam msgParam, @RequestBody String message) {
 		msgParam.setClientId(clientId);
 		logger.info("msgParam: {}, body: {}", msgParam, message);
 		MessageContext mc = MessageContext.builder()

@@ -37,7 +37,6 @@ public class SimpleWechatConfigProvider implements WechatConfigProvider, Initial
 			if (StringUtils.isBlank(wechatConfig.getAgentId())) {
 				wxbizMsgCrypt = new WXBizMsgCrypt(wechatConfig.getToken(), wechatConfig.getEncodingAESKey(), wechatConfig.getAppid());
 			} else {
-				System.out.println("--------------WXBizMsgCryptAdaptor");
 				wxbizMsgCrypt = new WXBizMsgCryptAdaptor(wechatConfig.getToken(), wechatConfig.getEncodingAESKey(), wechatConfig.getAppid());
 			}
 			return wxbizMsgCrypt;

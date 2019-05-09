@@ -1,29 +1,33 @@
 package org.onetwo.ext.apiclient.wechat.serve.dto;
 
+import org.onetwo.common.annotation.FieldName;
+import org.onetwo.ext.apiclient.wechat.serve.spi.Message;
+import org.onetwo.ext.apiclient.wechat.serve.spi.Tenantable;
+
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import org.onetwo.common.annotation.FieldName;
-import org.onetwo.ext.apiclient.wechat.serve.spi.Message;
-
 /**
  * @author wayshall
  * <br/>
  */
 @Data
-public class ReceiveMessage implements Message {
+@JacksonXmlRootElement(localName="xml")
+public class ReceiveMessage implements Message, Tenantable {
 	
 	@FieldName("ToUserName")
 	private String toUserName;
 	@FieldName("FromUserName")
 	private String fromUserName;
 	@FieldName("CreateTime")
-	private long createTime;
+	private Long createTime;
 	@FieldName("MsgId")
-	private long msgId;
+	private Long msgId;
 	@FieldName("MsgType")
 	private String msgType;
 	

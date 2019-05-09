@@ -22,4 +22,29 @@ public abstract class WorkWechatConstants {
 		public static final String API_BASE_URL = API_DOMAIN_URL + "/cgi-bin";
 		
 	}
+
+	abstract public static class ContactChangeTypes {
+		public static final String CREATE_USER = "create_user";
+		public static final String UPDATE_USER = "update_user";
+		public static final String DELETE_USER = "delete_user";
+	}
+	
+	/*@AllArgsConstructor
+	public static enum ContactChangeTypes implements ReceiveMessageType{
+		
+		CREATE_USER("新增成员事件", ContactCreateUserMessage.class),
+//		DELETE_USER("删除成员事件"),
+//		UPDATE_USER("更新成员事件")
+		;
+		
+		@Getter
+		private String label;
+		@Getter
+		private Class<? extends ReceiveMessage> messageClass;
+		
+		public String getName() {
+			return name().toLowerCase();
+		}
+
+	}*/
 }

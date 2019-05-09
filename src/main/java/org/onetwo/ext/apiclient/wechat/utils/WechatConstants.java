@@ -18,6 +18,7 @@ import org.onetwo.ext.apiclient.wechat.serve.dto.ReplyMessage.NewsReplyMessage;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ReplyMessage.TextReplyMessage;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ReplyMessage.VideoReplyMessage;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ReplyMessage.VoiceReplyMessage;
+import org.onetwo.ext.apiclient.wechat.serve.spi.Message.ReceiveMessageType;
 import org.springframework.http.MediaType;
 
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -115,7 +116,7 @@ public abstract class WechatConstants {
 		public static final String LINK = "MsgType=link";
 		
 	}
-	public static enum MessageType {
+	public static enum MessageType implements ReceiveMessageType {
 		EVENT("事件消息", EventMessage.class),
 		TEXT("文本消息", TextMessage.class),
 		IMAGE("图片消息", ImageMessage.class),

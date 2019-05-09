@@ -1,7 +1,5 @@
 package org.onetwo.ext.apiclient.wechat.serve.web;
 
-import java.util.Map;
-
 import javax.validation.Valid;
 
 import org.onetwo.boot.core.web.api.WebApi;
@@ -23,9 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * <br/>
  */
 //@RestController
-@RequestMapping("wxserve")
+@RequestMapping("eventServe")
 @WebApi
-public class ServeController implements UnderlineInitBinder, ServeEndpoint {
+public class EventServeController implements UnderlineInitBinder, ServeEndpoint {
 	
 	protected Logger logger = JFishLoggerFactory.getLogger(this.getClass());
 	
@@ -40,7 +38,7 @@ public class ServeController implements UnderlineInitBinder, ServeEndpoint {
 	}
 
 	@Override
-	public Object onMessageReceived(@PathVariable("clientId") String clientId, MessageParam msgParam, @RequestBody Map<String, Object> message){
+	public Object onMessageReceived(@PathVariable("clientId") String clientId, MessageParam msgParam, @RequestBody String message){
 		msgParam.setClientId(clientId);
 		logger.info("msgParam: {}, body: {}", msgParam, message);
 		MessageContext mc = MessageContext.builder()

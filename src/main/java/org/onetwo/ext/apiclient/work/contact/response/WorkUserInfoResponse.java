@@ -9,6 +9,8 @@ import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -56,6 +58,8 @@ public class WorkUserInfoResponse extends WechatResponse {
 
     @Data
     public static class ExtattrData {
+//    	@JacksonXmlProperty(localName="Item")
+//    	@JacksonXmlElementWrapper(localName = "ExtAttr")
     	private List<Attribute> attrs;
     }
     
@@ -71,30 +75,36 @@ public class WorkUserInfoResponse extends WechatResponse {
     }
     
     @Data
+	@JacksonXmlRootElement(localName="Item")
     public static class Attribute {
     	/***
     	 * 0: 文本
     	 * 1： 网页
     	 * 2： 小程序
     	 */
+    	@JacksonXmlProperty(localName="Type")
     	private AttributeType type;
     	/****
     	 * 经试验，成员自定义属性名称要唯一
     	 * 但对外属性名称可重复……
     	 */
+    	@JacksonXmlProperty(localName="Name")
     	private String name;
     	
     	/***
     	 * 如果是文本
     	 */
+    	@JacksonXmlProperty(localName="Text")
     	private TextValue text;
     	/***
     	 * 如果是网页
     	 */
+    	@JacksonXmlProperty(localName="Web")
     	private WebValue web;
     	/***
     	 * miniprogram
     	 */
+    	@JacksonXmlProperty(localName="Miniprogram")
     	private MiniprogramValue miniprogram;
 		@Override
 		public boolean equals(Object obj) {
@@ -124,19 +134,25 @@ public class WorkUserInfoResponse extends WechatResponse {
 
     @Data
     public static class TextValue {
+    	@JacksonXmlProperty(localName="Value")
     	private String value;
     }
 
     @Data
     public static class WebValue {
+    	@JacksonXmlProperty(localName="Url")
     	private String url;
+    	@JacksonXmlProperty(localName="Title")
     	private String title;
     }
 
     @Data
     public static class MiniprogramValue {
+    	@JacksonXmlProperty(localName="Appid")
     	private String appid;
+    	@JacksonXmlProperty(localName="Pagepath")
     	private String pagepath;
+    	@JacksonXmlProperty(localName="Title")
     	private String title;
     }
     
