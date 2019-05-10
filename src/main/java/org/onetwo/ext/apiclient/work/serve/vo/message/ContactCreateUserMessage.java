@@ -5,7 +5,6 @@ import java.util.List;
 import org.onetwo.common.jackson.ArrayToStringSerializer;
 import org.onetwo.common.jackson.StringToIntegerArrayDerializer;
 import org.onetwo.common.jackson.StringToLongArrayDerializer;
-import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage;
 import org.onetwo.ext.apiclient.wechat.serve.spi.Message;
 import org.onetwo.ext.apiclient.work.contact.response.WorkUserInfoResponse.Attribute;
 
@@ -24,14 +23,8 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper=true)
-public class ContactCreateUserMessage extends ReceiveMessage implements Message {
+public class ContactCreateUserMessage extends ContactBaseMessage implements Message {
 
-	@JacksonXmlProperty(localName="Event")
-	private String event;
-	
-	@JacksonXmlProperty(localName="ChangeType")
-	private String changeType;
-	
 	@JacksonXmlProperty(localName="UserID")
 	private String userId;
 	

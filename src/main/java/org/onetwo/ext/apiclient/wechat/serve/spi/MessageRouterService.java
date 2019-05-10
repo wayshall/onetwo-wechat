@@ -45,7 +45,7 @@ public interface MessageRouterService {
 	 * @param handler
 	 * @return
 	 */
-	MessageRouterService register(String messageType, MessageHandler<?, ?> handler);
+	<T, R> MessageRouterService register(String messageType, MessageHandler<T, R> handler);
 	MessageRouterService register(String messageType, Class<? extends MessageHandler<?, ?>> handlerClass);
 
 	MessageRouterService register(ReceiveMessageType msgType, MessageHandler<?, ?> handler);

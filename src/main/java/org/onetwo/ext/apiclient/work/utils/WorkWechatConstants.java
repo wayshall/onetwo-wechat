@@ -27,6 +27,8 @@ public abstract class WorkWechatConstants {
 		public static final String CREATE_USER = "create_user";
 		public static final String UPDATE_USER = "update_user";
 		public static final String DELETE_USER = "delete_user";
+		public static final String CREATE_PARTY = "create_party";
+		public static final String UPDATE_PARTY = "update_party";
 	}
 	
 	/*@AllArgsConstructor

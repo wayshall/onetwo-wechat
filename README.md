@@ -1,6 +1,6 @@
 # onetwo-wechat
 
-一个简单的基于Spring RestTemplate封装的微信sdk
+一个简单的基于 Spring RestTemplate 封装的微信sdk
    
 ## 示例项目   
 示例项目，基于spring-boot
@@ -14,7 +14,7 @@
 
 
 ## maven
-当前snapshot版本：0.0.1-SNAPSHOT
+当前snapshot版本：4.7.3-SNAPSHOT
 
 若使用snapshot版本，请添加snapshotRepository仓储：
 ```xml
@@ -33,7 +33,7 @@
 <dependency>
     <groupId>org.onetwo4j</groupId>
     <artifactId>onetwo-wechat</artifactId>
-    <version>0.0.4-SNAPSHOT</version>
+    <version>4.7.3-SNAPSHOT</version>
 </dependency>
 
 ```
@@ -182,7 +182,7 @@ work-wechat:
 ### 企业微信登陆支持
 内置实现了oauth2和扫码登录支持。
 用户可以参考或者直接继承WorkLoginController实现业务登录流程。
-比如如果是使用zifish（jfish）框架，并基于jwt的登录，可以如下实现登录controller：
+比如如果是使用[zifish](https://github.com/wayshall/onetwo)框架，并基于jwt的登录，可以如下实现登录controller：
 ```Java
 @RestController
 @RequestMapping("/uaa/login")
@@ -214,8 +214,8 @@ messageRouterService.register(ContactChangeTypes.CREATE_USER, ContactCreateUserM
 
 ## 微信网页授权拦截
 
-### 基于onetwo的项目
-如果是基于onetwo的项目，使用了@EnableJFishBootExtension 注解激活扩展，会自动注册拦截器。
+### 基于zifish的项目
+如果是基于[zifish](https://github.com/wayshall/onetwo)的项目，使用了@EnableJFishBootExtension 注解激活扩展，会自动注册拦截器。
 使用的时候，通过@Interceptor注解把扩展拦截器标注在需要拦截的Controller即可：
 ```Java
 @RestController

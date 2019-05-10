@@ -120,8 +120,8 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public MessageRouterServiceImpl register(String messageType, MessageHandler<?, ?> handler){
-		Class<? extends Message> messageClass = getMessageClassByHandler((Class<? extends MessageHandler<?, ?>>)handler.getClass());
+	public <T, R> MessageRouterServiceImpl register(String messageType, MessageHandler<T, R> handler){
+		Class<? extends Message> messageClass = getMessageClassByHandler((Class<? extends MessageHandler<T, R>>)handler.getClass());
 		return this.registerBy(messageType, messageClass, handler);
 	}
 	
