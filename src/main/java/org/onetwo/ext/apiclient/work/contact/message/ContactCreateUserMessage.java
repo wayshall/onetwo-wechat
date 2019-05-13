@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.work.serve.vo.message;
+package org.onetwo.ext.apiclient.work.contact.message;
 
 import java.util.List;
 

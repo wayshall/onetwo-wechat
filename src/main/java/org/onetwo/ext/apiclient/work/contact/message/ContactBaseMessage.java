@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.work.serve.vo.message;
+package org.onetwo.ext.apiclient.work.contact.message;
 
 import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage;
 import org.onetwo.ext.apiclient.wechat.serve.spi.Message;
@@ -22,5 +22,6 @@ public class ContactBaseMessage extends ReceiveMessage implements Message {
 	
 	@JacksonXmlProperty(localName="ChangeType")
 	private String changeType;
+	
 }
 

@@ -51,6 +51,21 @@ public interface MessageRouterService {
 	MessageRouterService register(ReceiveMessageType msgType, MessageHandler<?, ?> handler);
 	MessageRouterService register(ReceiveMessageType msgType, Class<? extends MessageHandler<?, ?>> handlerClass);
 	
+	/***
+	 * 注册拦截器
+	 * @author weishao zeng
+	 * @param interceptorClass
+	 * @return
+	 */
+	MessageRouterService registerInteceptor(Class<? extends MessageInterceptor> interceptorClass);
+	/***
+	 * 注册拦截器
+	 * @author weishao zeng
+	 * @param interceptors
+	 * @return
+	 */
+	MessageRouterService registerInteceptor(MessageInterceptor... interceptors);
+	
 	String verifyUrl(ServeAuthParam auth);
 
 }

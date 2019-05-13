@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.onetwo.common.jackson.JacksonXmlMapper;
 import org.onetwo.common.jackson.JsonMapper;
 import org.onetwo.common.spring.SpringUtils;
-import org.onetwo.ext.apiclient.work.serve.vo.message.ContactCreateUserMessage;
+import org.onetwo.ext.apiclient.work.contact.message.ContactCreateUserMessage;
 
 public class JackXmlTest {
 	JacksonXmlMapper jacksonXmlMapper = JacksonXmlMapper.ignoreEmpty();

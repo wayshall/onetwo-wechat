@@ -17,12 +17,15 @@ import org.onetwo.common.utils.StringUtils;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.crypt.AesException;
 import org.onetwo.ext.apiclient.wechat.crypt.WechatMsgCrypt;
+import org.onetwo.ext.apiclient.wechat.serve.dto.MapMessage;
 import org.onetwo.ext.apiclient.wechat.serve.dto.MessageContext;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ServeAuthParam;
+import org.onetwo.ext.apiclient.wechat.serve.interceptor.MessageInterceptorChain;
 import org.onetwo.ext.apiclient.wechat.serve.service.MessageMetaExtractor.MessageMeta;
 import org.onetwo.ext.apiclient.wechat.serve.spi.Message;
 import org.onetwo.ext.apiclient.wechat.serve.spi.Message.ReceiveMessageType;
 import org.onetwo.ext.apiclient.wechat.serve.spi.MessageHandler;
+import org.onetwo.ext.apiclient.wechat.serve.spi.MessageInterceptor;
 import org.onetwo.ext.apiclient.wechat.serve.spi.MessageRouterService;
 import org.onetwo.ext.apiclient.wechat.serve.spi.Tenantable;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
@@ -73,6 +76,7 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 	private MessageMetaExtractor messageTypeExtractor;
 	@Autowired
 	private ApplicationContext applicationContext;
+	private List<MessageInterceptor> interceptors = new ArrayList<>();
 	
 
 	public void setMessageTypeExtractor(MessageMetaExtractor messageTypeExtractor) {
@@ -103,6 +107,9 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 		if (messageTypeExtractor==null) {
 			this.messageTypeExtractor = new DefaultMessageConverter(jacksonXmlMapper);
 		}
+		if (!this.interceptors.isEmpty()) {
+			AnnotationAwareOrderComparator.sort(interceptors);
+		}
 		/*try {
 			if(messageCrypt==null){
 				this.messageCrypt = new WXBizMsgCrypt(wechatConfig.getToken(), wechatConfig.getEncodingAESKey(), wechatConfig.getAppid());
@@ -110,6 +117,19 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 		} catch (AesException e) {
 			throw new BaseException(e.getMessage(), e);
 		}*/
+	}
+
+	@SuppressWarnings("unchecked")
+	public MessageRouterService registerInteceptor(Class<? extends MessageInterceptor> interceptorClass) {
+		List<MessageInterceptor> handler = (List<MessageInterceptor>)SpringUtils.getBeans(applicationContext, interceptorClass);
+		registerInteceptor(handler.toArray(new MessageInterceptor[0]));
+		return this;
+	}
+	
+	public MessageRouterService registerInteceptor(MessageInterceptor... interceptors) {
+		this.interceptors.addAll(Arrays.asList(interceptors));
+		AnnotationAwareOrderComparator.sort(this.interceptors);
+		return this;
 	}
 
 	/***
@@ -170,9 +190,9 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 	
 	protected Class<? extends Message> getMessageClass(String messageType){
 		Class<? extends Message> messageClass = receiveTypeMapper.get(messageType);
-		if(messageClass==null){
+		/*if(messageClass==null){
 			throw new WechatException("message class not found for messageType: " + messageType);
-		}
+		}*/
 		return messageClass;
 	}
 
@@ -181,12 +201,16 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 		this.handlerMapper.remove(messageType);
 		return this;
 	}
-
+	
 	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object publish(MessageContext message){
 		Message receiveMessage = convertMessageBody(message);
-		List<MessageHandler> handlers = findMessageHandlerMeta(receiveMessage).map(meta->meta.getHandlers())
+		message.setDecodedMessage(receiveMessage);
+		
+		MessageInterceptorChain chain = new MessageInterceptorChain(interceptors, message, () -> this.dispatchMessage(message));
+		return chain.invoke();
+		
+		/*List<MessageHandler> handlers = findMessageHandlerMeta(receiveMessage).map(meta->meta.getHandlers())
 																				.orElse(Collections.emptyList());
 		if(!handlers.isEmpty()){
 			//按order排序，返回第一个非null的回答消息，后续的忽略
@@ -194,6 +218,29 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 				Object replyMessage = handler.onMessage(receiveMessage);
 				if(logger.isInfoEnabled()){
 					logger.info("receiveMessage: {}, replyMessage: {}", receiveMessage, replyMessage);
+				}
+				if(replyMessage!=null){
+					return replyMessage(message, replyMessage);
+				}
+			}
+		}else{
+			logger.warn("handler not found for message: {}", message);
+		}
+		return "";*/
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	protected Object dispatchMessage(MessageContext message) {
+		Message decodeMessage = message.getDecodedMessage();
+		
+		List<MessageHandler> handlers = findMessageHandlerMeta(decodeMessage).map(meta->meta.getHandlers())
+																			.orElse(Collections.emptyList());
+		if(!handlers.isEmpty()){
+			//按order排序，返回第一个非null的回答消息，后续的忽略
+			for(MessageHandler handler : handlers){
+				Object replyMessage = handler.onMessage(decodeMessage);
+				if(logger.isInfoEnabled()){
+					logger.info("receiveMessage: {}, replyMessage: {}", decodeMessage, replyMessage);
 				}
 				if(replyMessage!=null){
 					return replyMessage(message, replyMessage);
@@ -319,7 +366,11 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 			messageClass = meta.getMessageBodyClass();
 		}
 		if(messageClass==null){
-			throw new WechatException("message class not found for message: " + meta);
+			messageClass = MapMessage.class;
+			if (logger.isWarnEnabled()) {
+				logger.warn("message class not found for messageType[{}], use {}", meta.getType(), MapMessage.class.getName());
+			}
+//			throw new WechatException("message class not found for message: " + meta);
 		}
 		return messageClass;
 	}
