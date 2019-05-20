@@ -56,7 +56,7 @@ public class WXBizMsgCrypt {
 	 */
 	public WXBizMsgCrypt(String token, String encodingAesKey, String receiveid) throws AesException {
 		if (encodingAesKey.length() != 43) {
-			throw new AesException(AesException.IllegalAesKey);
+			throw new AesException(AesException.IllegalAesKey, null);
 		}
 
 		this.token = token;
@@ -139,7 +139,7 @@ public class WXBizMsgCrypt {
 			return base64Encrypted;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new AesException(AesException.EncryptAESError);
+			throw new AesException(AesException.EncryptAESError, e);
 		}
 	}
 
@@ -166,7 +166,7 @@ public class WXBizMsgCrypt {
 			original = cipher.doFinal(encrypted);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new AesException(AesException.DecryptAESError);
+			throw new AesException(AesException.DecryptAESError, e);
 		}
 
 		String xmlContent, from_receiveid;
@@ -184,12 +184,12 @@ public class WXBizMsgCrypt {
 					CHARSET);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new AesException(AesException.IllegalBuffer);
+			throw new AesException(AesException.IllegalBuffer, e);
 		}
 
 		// receiveid不相同的情况
 		if (!from_receiveid.equals(receiveid)) {
-			throw new AesException(AesException.ValidateCorpidError);
+			throw new AesException(AesException.ValidateCorpidError, null);
 		}
 		return xmlContent;
 

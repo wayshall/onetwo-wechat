@@ -53,7 +53,10 @@ public class AesException extends RuntimeException {
 	}
 
 	AesException(int code) {
-		super(getMessage(code));
+		this(code, null);
+	}
+	AesException(int code, Throwable root) {
+		super(getMessage(code), root);
 		this.code = code;
 	}
 

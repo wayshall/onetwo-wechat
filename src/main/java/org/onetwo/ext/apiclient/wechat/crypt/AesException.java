@@ -51,8 +51,8 @@ public class AesException extends RuntimeException {
 		return code;
 	}
 
-	AesException(int code) {
-		super(getMessage(code));
+	AesException(int code, Throwable root) {
+		super(getMessage(code), root);
 		this.code = code;
 	}
 

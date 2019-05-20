@@ -55,7 +55,7 @@ public class WXBizMsgCrypt implements WechatMsgCrypt {
 	 */
 	public WXBizMsgCrypt(String token, String encodingAesKey, String appId) throws AesException {
 		if (encodingAesKey.length() != 43) {
-			throw new AesException(AesException.IllegalAesKey);
+			throw new AesException(AesException.IllegalAesKey, null); 
 		}
 
 		this.token = token;
@@ -138,7 +138,7 @@ public class WXBizMsgCrypt implements WechatMsgCrypt {
 			return base64Encrypted;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new AesException(AesException.EncryptAESError);
+			throw new AesException(AesException.EncryptAESError, e);
 		}
 	}
 
@@ -164,8 +164,9 @@ public class WXBizMsgCrypt implements WechatMsgCrypt {
 			// 解密
 			original = cipher.doFinal(encrypted);
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new AesException(AesException.DecryptAESError);
+//			e.printStackTrace();
+			logError(e);
+			throw new AesException(AesException.DecryptAESError, e);
 		}
 
 		String xmlContent, from_appid;
@@ -182,13 +183,14 @@ public class WXBizMsgCrypt implements WechatMsgCrypt {
 			from_appid = new String(Arrays.copyOfRange(bytes, 20 + xmlLength, bytes.length),
 					CHARSET);
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new AesException(AesException.IllegalBuffer);
+//			e.printStackTrace();
+			logError(e);
+			throw new AesException(AesException.IllegalBuffer, e);
 		}
 
 		// appid不相同的情况
 		if (!from_appid.equals(appId)) {
-			throw new AesException(AesException.ValidateAppidError);
+			throw new AesException(AesException.ValidateAppidError, null);
 		}
 		return xmlContent;
 
@@ -263,7 +265,7 @@ public class WXBizMsgCrypt implements WechatMsgCrypt {
 		// System.out.println("第三方收到URL中的签名：" + msg_sign);
 		// System.out.println("第三方校验签名：" + signature);
 		if (!signature.equals(msgSignature)) {
-			throw new AesException(AesException.ValidateSignatureError);
+			throw new AesException(AesException.ValidateSignatureError, null);
 		}
 
 		// 解密
@@ -288,7 +290,7 @@ public class WXBizMsgCrypt implements WechatMsgCrypt {
 		String signature = SHA1.getSHA1(token, timeStamp, nonce, echoStr);
 
 		if (!signature.equals(msgSignature)) {
-			throw new AesException(AesException.ValidateSignatureError);
+			throw new AesException(AesException.ValidateSignatureError, null);
 		}
 
 		String result = decrypt(echoStr);

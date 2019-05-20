@@ -55,9 +55,10 @@ public class TicketService implements InitializingBean {
 		String key = getKey("config:"+accessToken.getAppid());
 		return redisOperationService.getCache(key, () -> {
 			JsApiTicketResponse res = ticketClient.getJsApiTicket(accessToken);
+			long expireIn = res.getExpiresIn() - 20; //减去一个大概的网络调用等消耗时间
 			return CacheData.<JsApiTicketResponse>builder().
 												value(res)
-												.expire(res.getExpiresIn())
+												.expire(expireIn)
 												.timeUnit(TimeUnit.SECONDS)
 												.build();
 		});
@@ -98,7 +99,7 @@ public class TicketService implements InitializingBean {
 			request.setTimestamp(DateUtils.now().getTime()/1000);
 		}
 		if (StringUtils.isBlank(request.getNoncestr())) {
-			request.setNoncestr(RandomStringUtils.randomAscii(16));
+			request.setNoncestr(RandomStringUtils.randomAlphanumeric(16));
 		}
 		
 		Map<String, Object> context = SpringUtils.toFlatMap(request);
