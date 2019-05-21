@@ -2,6 +2,7 @@ package org.onetwo.ext.apiclient.wechat.utils;
 
 import java.util.stream.Stream;
 
+import org.onetwo.common.spring.converter.ValueEnum;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage.EventMessage;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage.ImageMessage;
@@ -240,7 +241,7 @@ public abstract class WechatConstants {
 		DATABASE
 	}
 
-	public static enum MediaTypes {
+	public static enum MediaTypes implements ValueEnum<String> {
 		IMAGE("图片"),
 		VOICE("语音"),
 		VIDEO("视频"),
@@ -258,8 +259,9 @@ public abstract class WechatConstants {
 		
 		@JsonValue
 		public String getValue(){
-			return name();
+			return name().toLowerCase();
 		}
+		
 	}
 
 	public static enum MsgTypes {

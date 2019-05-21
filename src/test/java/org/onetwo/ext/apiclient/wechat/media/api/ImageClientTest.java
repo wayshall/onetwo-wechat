@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 import org.onetwo.ext.apiclient.wechat.WechatBaseTestsAdapter;
-import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.media.response.UploadResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -17,8 +16,6 @@ import org.springframework.core.io.Resource;
 public class ImageClientTest extends WechatBaseTestsAdapter {
 	@Autowired
 	private ImageClient imageClient;
-	@Autowired
-	private AccessTokenService accessTokenService;
 	
 	@Test
 	public void testUpload(){

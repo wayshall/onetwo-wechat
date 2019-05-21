@@ -65,7 +65,7 @@ public interface MediaClient {
      * @return 如果是图片返回 ByteArrayResource，如果是视频，返回地址，类型为 String
      */
     @GetMapping(path = "/media/get", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ResponseHandler(ByteArrayResponseHandler.class)
+	@ResponseHandler(MediaGetResponseHandler.class)
     <T> T get(AccessTokenInfo accessToken, @RequestParam("media_id") String mediaId);
     
     class MediaGetResponseHandler extends ByteArrayResponseHandler {

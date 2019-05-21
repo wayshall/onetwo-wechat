@@ -7,6 +7,7 @@ import org.onetwo.ext.apiclient.work.basic.TicketServiceTest;
 import org.onetwo.ext.apiclient.work.basic.api.GetTokenClientTest;
 import org.onetwo.ext.apiclient.work.contact.api.ContractClientTest;
 import org.onetwo.ext.apiclient.work.contact.api.WorkUserClientTest;
+import org.onetwo.ext.apiclient.work.media.api.WorkMediaClientTest;
 
 /**
  * @author weishao zeng
@@ -17,7 +18,8 @@ import org.onetwo.ext.apiclient.work.contact.api.WorkUserClientTest;
 	TicketServiceTest.class,
 	WorkUserClientTest.class,
 	GetTokenClientTest.class,
-	ContractClientTest.class
+	ContractClientTest.class,
+	WorkMediaClientTest.class
 })
 public class WorkWechatTestCase {
 
