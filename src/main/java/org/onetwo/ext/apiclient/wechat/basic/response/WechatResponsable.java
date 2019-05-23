@@ -2,6 +2,8 @@ package org.onetwo.ext.apiclient.wechat.basic.response;
 
 import org.onetwo.common.annotation.IgnoreField;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * @author weishao zeng
  * <br/>
@@ -13,6 +15,7 @@ public interface WechatResponsable {
 	 * @return
 	 */
 	@IgnoreField
+	@JsonIgnore
 	boolean isSuccess();
 }
 

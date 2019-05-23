@@ -44,13 +44,16 @@ public class AccessTokenInfo implements Serializable {
 
 	@JsonIgnore
 	public Date getExpireAt() {
+		if (updateAt==null) {
+			return null;
+		}
 		Date expireAt = DateUtils.addSeconds(updateAt, Long.valueOf(expiresIn).intValue());
 		return expireAt;
 	}
 	
 	@JsonIgnore
 	public boolean isExpired(){
-		if(expiresIn == -1){
+		if(updateAt==null || expiresIn == -1){
 			//没有设置则不过期
 			return false;
 		}
