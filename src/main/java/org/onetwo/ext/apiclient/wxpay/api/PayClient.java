@@ -25,6 +25,12 @@ public interface PayClient {
 	@PostMapping(path="/pay/unifiedorder", produces=MediaType.APPLICATION_XML_VALUE, consumes=MediaType.APPLICATION_XML_VALUE)
 	UnifiledOrderResponse unifiedOrder(@RequestBody UnifiedOrderRequest request);
 	
+	/***
+	 * https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_2
+	 * @author weishao zeng
+	 * @param request
+	 * @return
+	 */
 	@PostMapping(path="/pay/orderquery", produces=MediaType.APPLICATION_XML_VALUE, consumes=MediaType.APPLICATION_XML_VALUE)
 	OrderQueryResponse orderQuery(@RequestBody OrderQueryRequest request);
 

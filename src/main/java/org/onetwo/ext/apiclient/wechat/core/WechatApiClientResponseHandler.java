@@ -9,6 +9,7 @@ import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponsable;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClientFactoryBean.WechatMethod;
 import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
+import org.onetwo.ext.apiclient.wxpay.utils.WechatPayUtils.PayResponseFields;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 
@@ -41,7 +42,7 @@ public class WechatApiClientResponseHandler extends DefaultApiClientResponseHand
 			}else if(Map.class.isAssignableFrom(actualResponseType)){
 				//reponseType have not define errcode and errmsg
 				Map<String, ?> map = (Map<String, ?>) response;
-				if (map.containsKey(KEY_ERRCODE)) {
+				if (map.containsKey(KEY_ERRCODE) || map.containsKey(PayResponseFields.KEY_ERRCODE)) {
 					baseResponse = createBaseResponseByMap(map);
 					if(!invokeMethod.isReturnVoid()){
 //						response = map2Bean(map, invokeMethod.getMethodReturnType());
