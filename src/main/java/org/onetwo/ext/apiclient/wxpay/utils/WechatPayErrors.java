@@ -19,6 +19,7 @@ import com.google.common.collect.Maps;
 public enum WechatPayErrors implements ErrorType {
 	ORDER_NOT_EXIST("ORDERNOTEXIST", "此交易订单号不存在"),
 	SYSTEM_ERROR("SYSTEMERROR", "系统错误"),
+	ORDERPAID("ORDERPAID", "该订单已支付"),
 	
 	;
 
