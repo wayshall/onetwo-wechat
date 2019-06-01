@@ -30,7 +30,7 @@ public class WorkMediaClientTest extends WorkWechatBaseBootTests {
 	
 	@Test
 	public void getGet() {
-		String mediaId = "1glCir5mat26DyfTkNB_y5QPBfsEt4sPm2omEkePaXV2lqWekHaUNfiEwSFrPjAjC";
+		String mediaId = "103iee-Uz5UhMz1MHtMWg-Fqqs1R_c3-aCXlRwkSju9BYfcuKrufIULttkfbbqlFQ";
 		ByteArrayResource upRes = null;
 		upRes = this.workMediaClient.get(getAccessToken(), mediaId);
 		System.out.println("res:"+upRes.getFilename());//3zd4iU6whOG76O5BMjPoQi5-6P8Pd4Utq8m8SZ7Op1DA

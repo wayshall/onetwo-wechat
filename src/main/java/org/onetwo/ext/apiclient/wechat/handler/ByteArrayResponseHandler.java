@@ -40,7 +40,9 @@ public class ByteArrayResponseHandler implements CustomResponseHandler<ByteArray
 		if (StringUtils.isNotBlank(disposition)) {
 			filename = extractFileName(disposition);
 		}
-		FileNameByteArrayResource fileRes = new FileNameByteArrayResource(filename, byteArray.getByteArray());
+		String contentType = responseEntity.getHeaders().getFirst("Content-Type");
+		FileNameByteArrayResource fileRes = new FileNameByteArrayResource(filename, byteArray.getByteArray(), disposition);
+		fileRes.setContentType(contentType);
 		return fileRes;
 	}
 	
