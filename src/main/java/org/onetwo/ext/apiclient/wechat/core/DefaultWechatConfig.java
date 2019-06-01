@@ -35,7 +35,7 @@ public class DefaultWechatConfig implements WechatConfig{
 //	@Value("${wechat.appsecret}")
 	private String appsecret;
 	private String contactSecrect;
-	private String agentId;
+	private Long agentId;
 	
 //	@Value("${wechat.encodingAESKey:}")
 	private String encodingAESKey = "";
@@ -95,7 +95,7 @@ public class DefaultWechatConfig implements WechatConfig{
 	}
 
 	@Override
-	public String getAgentId() {
+	public Long getAgentId() {
 		return agentId;
 	}
 

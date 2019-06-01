@@ -36,6 +36,9 @@
    </logger>  
    <logger name="org.onetwo.ext.apiclient.wechat.utils.WechatSigns" level="DEBUG">  
        <appender-ref ref="logFile" />   
+   </logger> 
+   <logger name="org.onetwo.ext.apiclient.qcloud.nlp.util.NlpSigns" level="DEBUG">  
+       <appender-ref ref="logFile" />   
    </logger>  
    <logger name="JFishRestApiClient" level="INFO">  
        <appender-ref ref="logFile" />   

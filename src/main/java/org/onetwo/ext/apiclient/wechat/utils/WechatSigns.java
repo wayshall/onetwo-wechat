@@ -78,7 +78,7 @@ public abstract class WechatSigns {
 		return sourceString;
 	}
 	
-	public static String sign(Object data, String signKey, String sign, String signType) {
+	public static String sign(Object data, String signKey, String signType) {
 		String signResult = null;
 		if (StringUtils.isBlank(signType) || WechatConstants.SIGN_MD5.equalsIgnoreCase(signType)) {
 			signResult = signMd5(signKey, data);
@@ -89,12 +89,12 @@ public abstract class WechatSigns {
 	}
 	
 	public static boolean isSignCorrect(Object data, String signKey, String sign, String signType) {
-		String signResult = sign(data, signKey, sign, signType);
+		String signResult = sign(data, signKey, signType);
 		return signResult.equals(sign);
 	}
 	
 	public static void checkSign(Object data, String signKey, String sign, String signType) {
-		String signResult = sign(data, signKey, sign, signType);
+		String signResult = sign(data, signKey, signType);
 		if(logger.isDebugEnabled()){
 			logger.debug("sign: {}", sign);
 			logger.debug("signResult: {}", signResult);

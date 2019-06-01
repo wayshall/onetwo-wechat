@@ -1,8 +1,8 @@
 package org.onetwo.ext.apiclient.work.contact.message;
 
-import org.onetwo.common.jackson.ArrayToStringSerializer;
-import org.onetwo.common.jackson.StringToLongArrayDerializer;
-import org.onetwo.common.jackson.StringToStringArrayDerializer;
+import org.onetwo.common.jackson.serializer.ArrayToStringSerializer;
+import org.onetwo.common.jackson.serializer.StringToLongArrayDerializer;
+import org.onetwo.common.jackson.serializer.StringToStringArrayDerializer;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

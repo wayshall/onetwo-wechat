@@ -44,7 +44,7 @@ public class WorkWechatBaseBootTests {
     }
 	
 	protected AccessTokenInfo getAccessToken(){
-		WechatConfig wechatConfig = workWechatConfig.getApps().get("party");
+		WechatConfig wechatConfig = getWechatConfig();
 		GetAccessTokenRequest request = GetAccessTokenRequest.builder()
 																.appid(wechatConfig.getAppid())
 																.secret(wechatConfig.getAppsecret())
@@ -55,7 +55,7 @@ public class WorkWechatBaseBootTests {
 	}
 	
 	protected AccessTokenInfo getContactAccessToken(){
-		WechatConfig wechatConfig = workWechatConfig.getApps().get("party");
+		WechatConfig wechatConfig = getWechatConfig();
 		GetAccessTokenRequest request = GetAccessTokenRequest.builder()
 																.appid(wechatConfig.getAppid())
 																.secret(wechatConfig.getContactSecrect())
@@ -63,6 +63,11 @@ public class WorkWechatBaseBootTests {
 															.build();
 		AccessTokenInfo tokenInfo = accessTokenService.getOrRefreshAccessToken(request);
 		return tokenInfo;
+	}
+	
+	protected WechatConfig getWechatConfig() {
+		WechatConfig wechatConfig = workWechatConfig.getApps().get("party");
+		return wechatConfig;
 	}
 	
 /*	protected AccessTokenInfo getAgentAccessToken(){

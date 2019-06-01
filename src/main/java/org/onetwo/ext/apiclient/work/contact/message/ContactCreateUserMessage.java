@@ -2,9 +2,9 @@ package org.onetwo.ext.apiclient.work.contact.message;
 
 import java.util.List;
 
-import org.onetwo.common.jackson.ArrayToStringSerializer;
-import org.onetwo.common.jackson.StringToIntegerArrayDerializer;
-import org.onetwo.common.jackson.StringToLongArrayDerializer;
+import org.onetwo.common.jackson.serializer.ArrayToStringSerializer;
+import org.onetwo.common.jackson.serializer.StringToIntegerArrayDerializer;
+import org.onetwo.common.jackson.serializer.StringToLongArrayDerializer;
 import org.onetwo.ext.apiclient.wechat.serve.spi.Message;
 import org.onetwo.ext.apiclient.work.contact.response.WorkUserInfoResponse.Attribute;
 

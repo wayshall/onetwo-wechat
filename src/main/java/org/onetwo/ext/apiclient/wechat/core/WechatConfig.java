@@ -65,9 +65,18 @@ public interface WechatConfig {
 	
 //	Map<String, WechatAppInfo> getApps();
 	
-	String getAgentId();
+	Long getAgentId();
 	
 	PayProperties getPay();
+	
+	/***
+	 * 是否企业微信
+	 * @author weishao zeng
+	 * @return
+	 */
+	default boolean isWorkWechat() {
+		return getAgentId()!=null;
+	}
 	
 
 	@Data
