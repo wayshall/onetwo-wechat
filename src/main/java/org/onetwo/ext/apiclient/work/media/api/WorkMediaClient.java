@@ -42,6 +42,11 @@ public interface WorkMediaClient {
 
 	@PostMapping(path="/media/uploadimg", consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
 	UploadResponse uploadimg(AccessTokenInfo accessToken, @FieldName("media") Resource media);
+	
+
+    @GetMapping(path = "/media/get/jssdk")
+	@ResponseHandler(ByteArrayResponseHandler.class)
+    ByteArrayResource getJssdk(AccessTokenInfo accessToken, @RequestParam("media_id") String mediaId);
     
 }
 

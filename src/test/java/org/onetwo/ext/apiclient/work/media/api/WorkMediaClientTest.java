@@ -26,6 +26,19 @@ public class WorkMediaClientTest extends WorkWechatBaseBootTests {
 	@Autowired
 	WorkMediaClient workMediaClient;
 	
+
+	
+	@Test
+	public void getGet() {
+		String mediaId = "1glCir5mat26DyfTkNB_y5QPBfsEt4sPm2omEkePaXV2lqWekHaUNfiEwSFrPjAjC";
+		ByteArrayResource upRes = null;
+		upRes = this.workMediaClient.get(getAccessToken(), mediaId);
+		System.out.println("res:"+upRes.getFilename());//3zd4iU6whOG76O5BMjPoQi5-6P8Pd4Utq8m8SZ7Op1DA
+		upRes = this.workMediaClient.getJssdk(getAccessToken(), mediaId);
+		System.out.println("res:"+upRes.getFilename());//3zd4iU6whOG76O5BMjPoQi5-6P8Pd4Utq8m8SZ7Op1DA
+		
+	}
+	
 	@Test
 	public void testUploadAndGet() {
 		Resource buffer = new ClassPathResource("img/kq.jpg");
