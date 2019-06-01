@@ -1,7 +1,12 @@
 package org.onetwo.ext.apiclient.wechat.handler;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringUtils;
 import org.onetwo.common.apiclient.ApiClientMethod;
 import org.onetwo.common.apiclient.CustomResponseHandler;
+import org.onetwo.common.apiclient.resouce.FileNameByteArrayResource;
 import org.onetwo.common.jackson.JsonMapper;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
@@ -14,6 +19,7 @@ import org.springframework.http.ResponseEntity;
  * <br/>
  */
 public class ByteArrayResponseHandler implements CustomResponseHandler<ByteArrayResource> {
+	private static final Pattern FILE_NAME_PATTERN = Pattern.compile("^.*filename[\\*]?=\"(.*)\".*$");
 	@Override
 	public Class<ByteArrayResource> getResponseType() {
 		return ByteArrayResource.class;
@@ -28,10 +34,26 @@ public class ByteArrayResponseHandler implements CustomResponseHandler<ByteArray
 				throw WechatUtils.translateToApiClientException(apiMethod, response, responseEntity);
 			}
 		}
-		return responseEntity.getBody();
+		ByteArrayResource byteArray = responseEntity.getBody();
+		String filename = null;
+		String disposition = responseEntity.getHeaders().getFirst("Content-disposition");
+		if (StringUtils.isNotBlank(disposition)) {
+			filename = extractFileName(disposition);
+		}
+		FileNameByteArrayResource fileRes = new FileNameByteArrayResource(filename, byteArray.getByteArray());
+		return fileRes;
 	}
 	
 	protected boolean isTextMedia(MediaType mediaType){
 		return mediaType!=null && (mediaType.isCompatibleWith(MediaType.APPLICATION_JSON) || mediaType.isCompatibleWith(MediaType.TEXT_PLAIN));
+	}
+	
+	public static String extractFileName(String disposition) {
+		Matcher matcher = FILE_NAME_PATTERN.matcher(disposition);
+		String fileName = null;
+		if (matcher.matches()) {
+			fileName = matcher.group(1);
+		}
+		return fileName;
 	}
 }
