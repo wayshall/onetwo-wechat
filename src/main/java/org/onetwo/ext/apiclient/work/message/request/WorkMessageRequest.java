@@ -1,14 +1,14 @@
 package org.onetwo.ext.apiclient.work.message.request;
 
-import java.awt.Image;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
 import org.onetwo.common.jackson.serializer.ListToStringSerializer.ListToVerticalJoinerStringSerializer;
+import org.onetwo.common.jackson.serializer.StringToListDerializer.VerticalSplitorToListDerializer;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import lombok.AllArgsConstructor;
@@ -21,20 +21,24 @@ import lombok.NoArgsConstructor;
  * <br/>
  */
 @Data
+@NoArgsConstructor
 public class WorkMessageRequest {
 	/***
 	 * 成员ID列表（消息接收者，多个接收者用‘|’分隔，最多支持1000个）。特殊情况：指定为@all，则向该企业应用的全部成员发送
 	 */
 	@JsonSerialize(using=ListToVerticalJoinerStringSerializer.class)
+	@JsonDeserialize(using=VerticalSplitorToListDerializer.class)
 	private List<String> touser; //" : "UserID1|UserID2|UserID3",
 	
 	@JsonSerialize(using=ListToVerticalJoinerStringSerializer.class)
+	@JsonDeserialize(using=VerticalSplitorToListDerializer.class)
 	private List<String> toparty; //" : "PartyID1|PartyID2",
 
 	@JsonSerialize(using=ListToVerticalJoinerStringSerializer.class)
+	@JsonDeserialize(using=VerticalSplitorToListDerializer.class)
 	private List<String> totag; //" : "TagID1 | TagID2",
 	@NotNull
-	final private WorkSendMessageType msgtype; //" : "text",
+	private WorkSendMessageType msgtype; //" : "text",
 	/***
 	 * 企业应用的id，整型。企业内部开发，可在应用的设置页面查看；第三方服务商，可通过接口 获取企业授权信息 获取该参数值
 	 */
@@ -65,14 +69,14 @@ public class WorkMessageRequest {
 	@Builder(builderClassName="TextMessageBuilder", builderMethodName="textBuilder")
 	public WorkMessageRequest(List<String> touser, List<String> toparty, List<String> totag,
 			Long agentid, int safe, String text) {
-		this(touser, toparty, totag, WorkSendMessageType.TEXT, agentid, safe);
+		this(touser, toparty, totag, WorkSendMessageType.text, agentid, safe);
 		this.text = new TextData(text);
 	}
 	
 	@Builder(builderClassName="ImageMessageBuilder", builderMethodName="imageBuilder")
 	public WorkMessageRequest(List<String> touser, List<String> toparty, List<String> totag,
 			Long agentid, String mediaId, int safe) {
-		this(touser, toparty, totag, WorkSendMessageType.TEXT, agentid, safe);
+		this(touser, toparty, totag, WorkSendMessageType.text, agentid, safe);
 		this.image = new ImageData(mediaId);
 	}
 	
@@ -94,7 +98,7 @@ public class WorkMessageRequest {
 	@Builder(builderClassName="TextCardMessageBuilder", builderMethodName="textCardBuilder")
 	public WorkMessageRequest(List<String> touser, List<String> toparty, List<String> totag,
 			Long agentid, int safe, String title, String description, String url, String btntxt) {
-		this(touser, toparty, totag, WorkSendMessageType.TEXTCARD, agentid, safe);
+		this(touser, toparty, totag, WorkSendMessageType.textcard, agentid, safe);
 		this.textcard = new TextCardData(title, description, url, btntxt);
 	}
 
@@ -123,32 +127,27 @@ public class WorkMessageRequest {
 	}
 
 	public static enum WorkSendMessageType {
-		TEXT,
-		IMAGE,
-		VOICE,
-		VIDEO,
-		FILE,
+		text,
+		image,
+		voice,
+		video,
+		file,
 		/***
 		 * 文本卡片消息
 		 */
-		TEXTCARD,
+		textcard,
 		/***
 		 * 图文
 		 */
-		NEWS,
+		news,
 		/***
 		 * mpnews类型的图文消息，跟普通的图文消息一致，唯一的差异是图文内容存储在企业微信。
 多次发送mpnews，会被认为是不同的图文，阅读、点赞的统计会被分开计算。
 		 */
-		MPNEWS,
-		MARKDOWN,
-		MINIPROGRAM_NOTICE,
-		TASKCARD;
-		
-		@JsonValue
-		public String getValue() {
-			return name().toLowerCase();
-		}
+		mpnews,
+		markdown,
+		miniprogram_notice,
+		taskcard;
 		
 	}
 	   

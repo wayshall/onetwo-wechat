@@ -43,5 +43,4 @@ public class MessageClientTest extends WorkWechatBaseBootTests {
 		SendMessageResponse res = this.messageClient.send(accessToken, request);
 		System.out.println("res: " + res);
 	}
-
 }

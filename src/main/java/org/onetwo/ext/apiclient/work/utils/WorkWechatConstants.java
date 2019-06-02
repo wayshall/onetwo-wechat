@@ -44,12 +44,13 @@ public abstract class WorkWechatConstants {
 	}
 
 	abstract public static class WorkReveiveMessageTypeNames {
-		public static final String TEXT = "msg_work_text";
-		public static final String IMAGE = "msg_work_image";
-		public static final String VOICE = "msg_work_voice";
-		public static final String VIDEO = "msg_work_video";
-		public static final String LOCATION = "msg_work_location";
-		public static final String LINK = "msg_work_link";
+		public static final String MQ_MESSAGE_TAG = "work_message";
+		public static final String TEXT = MQ_MESSAGE_TAG + "_text";
+		public static final String IMAGE = MQ_MESSAGE_TAG + "_image";
+		public static final String VOICE = MQ_MESSAGE_TAG + "_voice";
+		public static final String VIDEO = MQ_MESSAGE_TAG + "_video";
+		public static final String LOCATION = MQ_MESSAGE_TAG + "_location";
+		public static final String LINK = MQ_MESSAGE_TAG + "_link";
 	}
 	
 	@AllArgsConstructor
