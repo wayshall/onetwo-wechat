@@ -1,6 +1,17 @@
 package org.onetwo.ext.apiclient.work.utils;
 
+import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage;
+import org.onetwo.ext.apiclient.wechat.serve.spi.Message.ReceiveMessageType;
 import org.onetwo.ext.apiclient.work.core.WorkWechatConfig;
+import org.onetwo.ext.apiclient.work.serve.vo.message.ImageWorkMessage;
+import org.onetwo.ext.apiclient.work.serve.vo.message.LinkWorkMessage;
+import org.onetwo.ext.apiclient.work.serve.vo.message.LocationWorkMessage;
+import org.onetwo.ext.apiclient.work.serve.vo.message.TextWorkMessage;
+import org.onetwo.ext.apiclient.work.serve.vo.message.VideoWorkMessage;
+import org.onetwo.ext.apiclient.work.serve.vo.message.VoiceWorkMessage;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * @author wayshall
@@ -30,6 +41,33 @@ public abstract class WorkWechatConstants {
 		public static final String CREATE_PARTY = "create_party";
 		public static final String UPDATE_PARTY = "update_party";
 		public static final String UPDATE_TAG = "update_tag";
+	}
+
+	abstract public static class WorkReveiveMessageTypeNames {
+		public static final String TEXT = "msg_work_text";
+		public static final String IMAGE = "msg_work_image";
+		public static final String VOICE = "msg_work_voice";
+		public static final String VIDEO = "msg_work_video";
+		public static final String LOCATION = "msg_work_location";
+		public static final String LINK = "msg_work_link";
+	}
+	
+	@AllArgsConstructor
+	public static enum WorkReveiveMessageType implements ReceiveMessageType {
+		TEXT(WorkReveiveMessageTypeNames.TEXT, "文本消息", TextWorkMessage.class),
+		IMAGE(WorkReveiveMessageTypeNames.IMAGE, "图片消息", ImageWorkMessage.class),
+		VOICE(WorkReveiveMessageTypeNames.VOICE, "语音消息", VoiceWorkMessage.class),
+		VIDEO(WorkReveiveMessageTypeNames.VIDEO, "视频消息", VideoWorkMessage.class),
+		LOCATION(WorkReveiveMessageTypeNames.LOCATION, "位置消息", LocationWorkMessage.class),
+		LINK(WorkReveiveMessageTypeNames.LINK, "链接消息", LinkWorkMessage.class),
+		;
+
+		@Getter
+		final private String name;
+		@Getter
+		final private String label;
+		@Getter
+		final private Class<? extends ReceiveMessage> messageClass;
 	}
 	
 	/*@AllArgsConstructor

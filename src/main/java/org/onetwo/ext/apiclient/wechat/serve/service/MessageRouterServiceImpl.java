@@ -229,6 +229,12 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 		return "";*/
 	}
 
+	/****
+	 * 查找对应的消息处理器，如果没有找到，则返回空字符
+	 * @author weishao zeng
+	 * @param message
+	 * @return
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected Object dispatchMessage(MessageContext message) {
 		Message decodeMessage = message.getDecodedMessage();

@@ -34,7 +34,7 @@ public class WorkMessageRequest {
 	@JsonSerialize(using=ListToVerticalJoinerStringSerializer.class)
 	private List<String> totag; //" : "TagID1 | TagID2",
 	@NotNull
-	final private WorkMessageType msgtype; //" : "text",
+	final private WorkSendMessageType msgtype; //" : "text",
 	/***
 	 * 企业应用的id，整型。企业内部开发，可在应用的设置页面查看；第三方服务商，可通过接口 获取企业授权信息 获取该参数值
 	 */
@@ -51,7 +51,7 @@ public class WorkMessageRequest {
 	
 	private TextCardData textcard;
 	
-	public WorkMessageRequest(List<String> touser, List<String> toparty, List<String> totag, WorkMessageType msgtype,
+	public WorkMessageRequest(List<String> touser, List<String> toparty, List<String> totag, WorkSendMessageType msgtype,
 			Long agentid, int safe) {
 		super();
 		this.touser = touser;
@@ -65,14 +65,14 @@ public class WorkMessageRequest {
 	@Builder(builderClassName="TextMessageBuilder", builderMethodName="textBuilder")
 	public WorkMessageRequest(List<String> touser, List<String> toparty, List<String> totag,
 			Long agentid, int safe, String text) {
-		this(touser, toparty, totag, WorkMessageType.TEXT, agentid, safe);
+		this(touser, toparty, totag, WorkSendMessageType.TEXT, agentid, safe);
 		this.text = new TextData(text);
 	}
 	
 	@Builder(builderClassName="ImageMessageBuilder", builderMethodName="imageBuilder")
 	public WorkMessageRequest(List<String> touser, List<String> toparty, List<String> totag,
 			Long agentid, String mediaId, int safe) {
-		this(touser, toparty, totag, WorkMessageType.TEXT, agentid, safe);
+		this(touser, toparty, totag, WorkSendMessageType.TEXT, agentid, safe);
 		this.image = new ImageData(mediaId);
 	}
 	
@@ -94,7 +94,7 @@ public class WorkMessageRequest {
 	@Builder(builderClassName="TextCardMessageBuilder", builderMethodName="textCardBuilder")
 	public WorkMessageRequest(List<String> touser, List<String> toparty, List<String> totag,
 			Long agentid, int safe, String title, String description, String url, String btntxt) {
-		this(touser, toparty, totag, WorkMessageType.TEXTCARD, agentid, safe);
+		this(touser, toparty, totag, WorkSendMessageType.TEXTCARD, agentid, safe);
 		this.textcard = new TextCardData(title, description, url, btntxt);
 	}
 
@@ -122,7 +122,7 @@ public class WorkMessageRequest {
 		}
 	}
 
-	public static enum WorkMessageType {
+	public static enum WorkSendMessageType {
 		TEXT,
 		IMAGE,
 		VOICE,

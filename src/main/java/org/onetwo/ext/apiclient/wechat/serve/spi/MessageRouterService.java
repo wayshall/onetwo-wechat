@@ -1,5 +1,7 @@
 package org.onetwo.ext.apiclient.wechat.serve.spi;
 
+import java.util.stream.Stream;
+
 import org.onetwo.ext.apiclient.wechat.serve.dto.MessageContext;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ServeAuthParam;
 import org.onetwo.ext.apiclient.wechat.serve.service.MessageRouterServiceImpl;
@@ -25,6 +27,13 @@ public interface MessageRouterService {
 	
 	
 	MessageRouterService clearHandlers(Class<? extends Message> messageType);
+
+	default <E extends ReceiveMessageType> MessageRouterService register(E[] messageTypes) {
+		Stream.of(messageTypes).forEach(msg -> {
+			register(msg.getName(), msg.getMessageClass(), null);
+		});
+		return this;
+	}
 	
 	/***
 	 * MessageType枚举类未定义映射的消息，可通过mapping来扩展
