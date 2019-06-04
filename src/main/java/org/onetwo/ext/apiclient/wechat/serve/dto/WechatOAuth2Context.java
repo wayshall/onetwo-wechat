@@ -81,7 +81,6 @@ public interface WechatOAuth2Context {
 			super();
 			this.request = request;
 			this.oauth2Request = oauth2Request;
-			this.wechatConfig = wechatConfig;
 		}
 		
 
