@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
+ * https://work.weixin.qq.com/api/doc#90000/90135/90971
+ * 
  * @author weishao zeng
  * <br/>
  */
@@ -25,10 +27,10 @@ public class ContactUpdateDepartMessage extends ContactBaseMessage {
 	
 	@Data
 	@EqualsAndHashCode(callSuper=true)
-	public class ContactCreateDepartMessage extends ContactUpdateDepartMessage {
+	static public class ContactCreateDepartMessage extends ContactUpdateDepartMessage {
 		
 		@JacksonXmlProperty(localName="Order")
-		private String order;
+		private Integer order;
 		
 	}
 }

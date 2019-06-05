@@ -10,10 +10,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.junit.Test;
+import org.onetwo.common.file.FileUtils;
 import org.onetwo.common.jackson.JacksonXmlMapper;
 import org.onetwo.common.jackson.JsonMapper;
 import org.onetwo.common.spring.SpringUtils;
 import org.onetwo.ext.apiclient.work.contact.message.ContactCreateUserMessage;
+import org.onetwo.ext.apiclient.work.contact.message.ContactUpdateDepartMessage.ContactCreateDepartMessage;
 
 public class JackXmlTest {
 	JacksonXmlMapper jacksonXmlMapper = JacksonXmlMapper.ignoreEmpty();
@@ -45,6 +47,14 @@ public class JackXmlTest {
 		ContactCreateUserMessage message = JsonMapper.IGNORE_EMPTY.fromJson(json, ContactCreateUserMessage.class);
 		System.out.println("message: " + message);
 	}
+	@Test
+	public void testCreatePartJson() throws Exception {
+		String json = "<xml><ToUserName><![CDATA[ww7c636a4c4040cf1e]]></ToUserName><FromUserName><![CDATA[sys]]></FromUserName><CreateTime>1559661734</CreateTime><MsgType><![CDATA[event]]></MsgType><Event><![CDATA[change_contact]]></Event><ChangeType><![CDATA[create_party]]></ChangeType><Id>20</Id><Name><![CDATA[综合车间党支部]]></Name><ParentId>6</ParentId><Order>99994000</Order></xml>";
+		json = FileUtils.readAsString(SpringUtils.classpath("data/contact_create_party.xml").getInputStream());
+		ContactCreateDepartMessage message = jacksonXmlMapper.fromXml(json, ContactCreateDepartMessage.class);
+		System.out.println("message: " + message);
+	}
+
 
 }
 

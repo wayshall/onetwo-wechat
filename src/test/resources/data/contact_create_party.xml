@@ -1,0 +1,12 @@
+<xml>
+	<ToUserName><![CDATA[ww7c636a4c4040cf1e]]></ToUserName>
+	<FromUserName><![CDATA[sys]]></FromUserName>
+	<CreateTime>1559661734</CreateTime>
+	<MsgType><![CDATA[event]]></MsgType>
+	<Event><![CDATA[change_contact]]></Event>
+	<ChangeType><![CDATA[create_party]]></ChangeType>
+	<Id>20</Id>
+	<Name><![CDATA[综合车间党支部]]></Name>
+	<ParentId>6</ParentId>
+	<Order>99994000</Order>
+</xml>
