@@ -43,7 +43,7 @@ public class WechatPayApiClientResponseHandler extends WechatApiClientResponseHa
 		return WechatPayErrors.byErrcode(errCode)
 						 .map(err->new ApiClientException(err, invokeMethod.getMethod(), null))
 						 .orElse(new ApiClientException(ErrorTypes.of(errCode, 
-								 										errMsg, 
+								 										errCode + ":" + errMsg, 
 								 										responseEntity.getStatusCodeValue())
 								 									));
 	}
