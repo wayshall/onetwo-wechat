@@ -54,6 +54,8 @@ public class WorkMessageRequest {
 	private ImageData image;
 	
 	private TextCardData textcard;
+	private NewsData news;
+	private MpnewsData mpnews;
 	
 	public WorkMessageRequest(List<String> touser, List<String> toparty, List<String> totag, WorkSendMessageType msgtype,
 			Long agentid, int safe) {
@@ -80,6 +82,20 @@ public class WorkMessageRequest {
 		this.image = new ImageData(mediaId);
 	}
 	
+	@Builder(builderClassName="NewsMessageBuilder", builderMethodName="newsBuilder")
+	public WorkMessageRequest(List<String> touser, List<String> toparty, List<String> totag,
+			Long agentid, List<NewsItemData> articles, int safe) {
+		this(touser, toparty, totag, WorkSendMessageType.news, agentid, safe);
+		this.news = new NewsData(articles);
+	}
+	
+	@Builder(builderClassName="MpnewsMessageBuilder", builderMethodName="mpnewsBuilder")
+	public WorkMessageRequest(List<String> touser, List<String> toparty, List<String> totag,
+			Long agentid, int safe, List<MpnewsItemData> articles) {
+		this(touser, toparty, totag, WorkSendMessageType.mpnews, agentid, safe);
+		this.mpnews = new MpnewsData(articles);
+	}
+	
 	@Data
 	@NoArgsConstructor
 	@AllArgsConstructor
@@ -93,6 +109,56 @@ public class WorkMessageRequest {
 	public static class ImageData {
 		@JsonProperty("media_id")
 		private String mediaId;
+	}
+	
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class NewsData {
+		private List<NewsItemData> articles;
+	}
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	@Builder
+	public static class NewsItemData {
+		private String title;
+		private String description;
+		private String url;
+		private String picurl;
+	}
+	
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class MpnewsData {
+		private List<MpnewsItemData> articles;
+	}
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	@Builder
+	public static class MpnewsItemData {
+		private String title;
+		/***
+		 * 图文消息缩略图的media_id, 可以通过素材管理接口获得。此处thumb_media_id即上传接口返回的media_id
+		 */
+		@JsonProperty("thumb_media_id")
+		private String thumbMediaId;
+		private String author;
+		/***
+		 * 图文消息的内容，支持html标签，不超过666 K个字节
+		 */
+		private String content;
+		/***
+		 * 图文消息的描述，不超过512个字节，超过会自动截断
+		 */
+		private String digest;
+		/***
+		 * 图文消息点击“阅读原文”之后的页面链接
+		 */
+		@JsonProperty("content_source_url")
+		private String contentSourceUrl;
 	}
 
 	@Builder(builderClassName="TextCardMessageBuilder", builderMethodName="textCardBuilder")
