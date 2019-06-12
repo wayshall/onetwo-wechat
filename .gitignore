@@ -26,9 +26,10 @@ release-pom.xml
 .releaseBackup
 pom.xml.releaseBackup
 *.orig
-application-product.yaml
+application-product*.yaml
 *-product.yaml
 *.externalToolBuilders
 *.iml
 /src/test/resources/conf/application-product.properties
 /target/
+PayClientZYTest.java
