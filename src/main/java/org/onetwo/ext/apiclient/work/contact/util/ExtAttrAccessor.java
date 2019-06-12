@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.onetwo.common.convert.Types;
 import org.onetwo.common.spring.SpringUtils;
 import org.onetwo.ext.apiclient.work.contact.response.WorkUserInfoResponse.Attribute;
+import org.onetwo.ext.apiclient.work.contact.response.WorkUserInfoResponse.AttributeType;
 import org.onetwo.ext.apiclient.work.contact.response.WorkUserInfoResponse.ExtattrData;
 import org.onetwo.ext.apiclient.work.contact.response.WorkUserInfoResponse.TextValue;
 import org.springframework.beans.BeanWrapper;
@@ -33,7 +34,11 @@ public interface ExtAttrAccessor {
     }
     
     default <T> Optional<T> getExtattrValue(String name, Class<T> attrType) {
-    	return getExtattr(name).map(attr -> {
+    	return getExtattrValue(name, attrType, AttributeType.findByType(attrType));
+    }
+    
+    default <T> Optional<T> getExtattrValue(String name, Class<T> attrType, AttributeType type) {
+    	return getExtattr(name).filter(attr -> attr.getType().equals(type)).map(attr -> {
     		BeanWrapper bw = SpringUtils.newBeanWrapper(attr);
     		Object val = bw.getPropertyValue(attr.getType().name().toLowerCase());
     		return attrType.cast(val);

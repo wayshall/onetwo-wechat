@@ -72,6 +72,18 @@ public class WorkUserInfoResponse extends WechatResponse {
     	public int toValue() {
     		return ordinal();
     	}
+    	
+    	public static AttributeType findByType(Class<?> type) {
+    		if (type==TextValue.class) {
+    			return TEXT;
+    		} else if (type==WebValue.class) {
+    			return WEB;
+    		} else if (type==MiniprogramValue.class) {
+    			return Miniprogram;
+    		} else {
+    			throw new IllegalArgumentException("unsupported data type: " + type);
+    		}
+    	}
     }
     
     @Data
