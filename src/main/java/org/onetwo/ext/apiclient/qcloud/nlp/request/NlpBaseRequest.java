@@ -1,8 +1,10 @@
-package org.onetwo.ext.apiclient.qcloud.nlp.vo;
+package org.onetwo.ext.apiclient.qcloud.nlp.request;
 
+import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.onetwo.common.annotation.FieldName;
+import org.onetwo.ext.apiclient.qcloud.nlp.util.NlpSigns.NlpSignTypes;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,8 +13,7 @@ import lombok.NoArgsConstructor;
  * <br/>
  */
 @Data
-//@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor
 public class NlpBaseRequest {
 	/***
 	 * 接口指令的名称，例如: LexicalAnalysis
@@ -35,12 +36,12 @@ ca:北美
 	 * 当前UNIX时间戳
 	 */
 	@FieldName("Timestamp")
-	int timestamp;
+	Long timestamp;
 	/****
 	 * 随机正整数，与 Timestamp 联合起来, 用于防止重放攻击
 	 */
 	@FieldName("Nonce")
-	int nonce;
+	Integer nonce;
 	/***
 	 * 由腾讯云平台上申请的标识身份的 SecretId 和 SecretKey, 其中 SecretKey 会用来生成 Signature
 具体参考 接口鉴权 页面
@@ -54,5 +55,31 @@ ca:北美
 	 */
 	@FieldName("Signature")
 	String signature;
+	
+	@FieldName("SignatureMethod")
+	String signatureMethod = NlpSignTypes.HmacSHA1.getName();
+
+	public NlpBaseRequest(String action, String region, Long timestamp, Integer nonce, String secretId,
+			String signature, String signatureMethod) {
+		super();
+		this.action = action;
+		this.region = region;
+		if (timestamp==null) {
+			this.timestamp = System.currentTimeMillis()/1000;
+		} else {
+			this.timestamp = timestamp;
+		}
+		if (nonce==null) {
+			this.nonce = RandomUtils.nextInt(10000, 99999);
+		} else {
+			this.nonce = nonce;
+		}
+		if (StringUtils.isNotBlank(signatureMethod)) {
+			this.signatureMethod = signatureMethod;
+		}
+		this.secretId = secretId;
+		this.signature = signature;
+	}
+	
 
 }

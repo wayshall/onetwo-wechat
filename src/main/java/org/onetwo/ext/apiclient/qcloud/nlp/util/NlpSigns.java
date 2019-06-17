@@ -4,7 +4,6 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang3.StringUtils;
 import org.onetwo.common.exception.BaseException;
 import org.onetwo.common.log.JFishLoggerFactory;
 import org.onetwo.common.reflect.BeanToMapConvertor;
@@ -14,8 +13,8 @@ import org.onetwo.common.spring.utils.EnhanceBeanToMapConvertor.EnhanceBeanToMap
 import org.onetwo.common.spring.utils.EnhanceBeanToMapConvertor.JsonPropertyConvert;
 import org.onetwo.common.utils.Assert;
 import org.onetwo.common.utils.ParamUtils;
-import org.onetwo.ext.apiclient.qcloud.nlp.vo.NlpBaseRequest;
-import org.onetwo.ext.apiclient.qcloud.nlp.vo.SignableData;
+import org.onetwo.ext.apiclient.qcloud.nlp.request.NlpBaseRequest;
+import org.onetwo.ext.apiclient.qcloud.nlp.request.SignableData;
 import org.onetwo.ext.apiclient.wechat.utils.WechatException;
 import org.slf4j.Logger;
 import org.springframework.util.MultiValueMap;
@@ -32,8 +31,8 @@ public abstract class NlpSigns {
 	
 	@AllArgsConstructor
 	public static enum NlpSignTypes {
-		HMAC_SHA1("HmacSHA1"),
-		HMAC_SHA256("HmacSHA256");
+		HmacSHA1("HmacSHA1"),
+		HmacSHA256("HmacSHA256");
 		
 		@Getter
 		private String name;
@@ -47,13 +46,17 @@ public abstract class NlpSigns {
 																								@Override
 																								public String convert(PropertyContext ctx) {
 																									String name = super.convert(ctx);
-																									name = StringUtils.capitalize(name.replace('_', '.'));
+																									name = name.replace('_', '.');
 																									return name;
 																								}
 																							})
 																							.propertyAcceptor((p, v)->v!=null)
 																							.build();
 
+	
+	public static String signHmac(String signKey, SignableData signData){
+		return signHmac(signKey, signData, NlpSignTypes.valueOf(signData.getRequest().getSignatureMethod()));
+	}
 	
 	public static String signHmac(String signKey, SignableData signData, NlpSignTypes signTypes){
 		String sourceString = convertToSourceString(signKey, signData);
@@ -83,6 +86,9 @@ public abstract class NlpSigns {
 		final String paramString = ParamUtils.comparableKeyMapToParamString(requestMap);
 //		String sourceString = paramString + "&key=" + signKey;
 		StringBuilder sourceString = new StringBuilder();
+		/*if (StringUtils.isNotBlank(data.getHost())) {
+			
+		}*/
 		sourceString.append(data.getMethod().toUpperCase())
 					.append(data.getHost())
 					.append(data.getPath())

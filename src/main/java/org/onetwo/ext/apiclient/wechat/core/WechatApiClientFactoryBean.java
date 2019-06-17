@@ -195,10 +195,6 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 	public static class WechatMethod extends ApiClientMethod {
 //		private boolean autoAppendAccessToken;
 		private Optional<ApiClientMethodParameter> accessTokenParameter;
-		/***
-		 * 如果返回了业务错误代码，是否自动抛错
-		 */
-		private boolean autoThrowIfErrorCode = true;
 		
 		public WechatMethod(Method method) {
 			super(method);
@@ -233,10 +229,6 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 		protected boolean isSpecalPemerater(ApiClientMethodParameter parameter){
 			return super.isSpecalPemerater(parameter) || 
 					(accessTokenParameter.isPresent() && accessTokenParameter.get().getParameterIndex()==parameter.getParameterIndex());
-		}
-		
-		public boolean isAutoThrowIfErrorCode() {
-			return autoThrowIfErrorCode;
 		}
 
 		public Optional<AccessTokenInfo> getAccessToken(final Object[] args){

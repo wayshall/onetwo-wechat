@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.qcloud.nlp.vo;
+package org.onetwo.ext.apiclient.qcloud.nlp.request;
 
 import lombok.Builder;
 import lombok.Data;
