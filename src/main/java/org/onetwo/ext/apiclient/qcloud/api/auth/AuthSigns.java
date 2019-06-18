@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.qcloud.nlp.util;
+package org.onetwo.ext.apiclient.qcloud.api.auth;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -13,8 +13,6 @@ import org.onetwo.common.spring.utils.EnhanceBeanToMapConvertor.EnhanceBeanToMap
 import org.onetwo.common.spring.utils.EnhanceBeanToMapConvertor.JsonPropertyConvert;
 import org.onetwo.common.utils.Assert;
 import org.onetwo.common.utils.ParamUtils;
-import org.onetwo.ext.apiclient.qcloud.nlp.request.NlpBaseRequest;
-import org.onetwo.ext.apiclient.qcloud.nlp.request.SignableData;
 import org.onetwo.ext.apiclient.wechat.utils.WechatException;
 import org.slf4j.Logger;
 import org.springframework.util.MultiValueMap;
@@ -26,11 +24,11 @@ import lombok.Getter;
  * @author weishao zeng
  * <br/>
  */
-public abstract class NlpSigns {
-	private static final Logger logger = JFishLoggerFactory.getLogger(NlpSigns.class);
+public abstract class AuthSigns {
+	private static final Logger logger = JFishLoggerFactory.getLogger(AuthSigns.class);
 	
 	@AllArgsConstructor
-	public static enum NlpSignTypes {
+	public static enum AuthSignTypes {
 		HmacSHA1("HmacSHA1"),
 		HmacSHA256("HmacSHA256");
 		
@@ -55,10 +53,10 @@ public abstract class NlpSigns {
 
 	
 	public static String signHmac(String signKey, SignableData signData){
-		return signHmac(signKey, signData, NlpSignTypes.valueOf(signData.getRequest().getSignatureMethod()));
+		return signHmac(signKey, signData, AuthSignTypes.valueOf(signData.getRequest().getSignatureMethod()));
 	}
 	
-	public static String signHmac(String signKey, SignableData signData, NlpSignTypes signTypes){
+	public static String signHmac(String signKey, SignableData signData, AuthSignTypes signTypes){
 		String sourceString = convertToSourceString(signKey, signData);
 		String hashString = null;
 		try {
@@ -81,7 +79,7 @@ public abstract class NlpSigns {
 	
 	public static String convertToSourceString(String signKey, SignableData data){
 		Assert.hasText(signKey, "signKey can not blank");
-		NlpBaseRequest request = data.getRequest();
+		AuthableRequest request = data.getRequest();
 		MultiValueMap<String, Object> requestMap = RestUtils.toMultiValueMap(request, BEAN_TO_MAP_CONVERTOR);
 		final String paramString = ParamUtils.comparableKeyMapToParamString(requestMap);
 //		String sourceString = paramString + "&key=" + signKey;
@@ -101,12 +99,12 @@ public abstract class NlpSigns {
 		return sourceString.toString();
 	}
 	
-	public static boolean isSignCorrect(SignableData data, String signKey, String sign, NlpSignTypes signType) {
+	public static boolean isSignCorrect(SignableData data, String signKey, String sign, AuthSignTypes signType) {
 		String signResult = signHmac(signKey, data, signType);
 		return signResult.equals(sign);
 	}
 	
-	public static void checkSign(SignableData data, String signKey, String sign, NlpSignTypes signType) {
+	public static void checkSign(SignableData data, String signKey, String sign, AuthSignTypes signType) {
 		String signResult = signHmac(signKey, data, signType);
 		if(logger.isDebugEnabled()){
 			logger.debug("sign: {}", sign);

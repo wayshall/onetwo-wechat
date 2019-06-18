@@ -24,7 +24,7 @@ public class NlpApiTest extends QCloudBaseBootTests {
 		TextSensitivityRequest request = TextSensitivityRequest.builder()
 															.region("ap-guangzhou")
 															.secretId(nlpProperties.getSecretId())
-															.content("共产党")
+															.content("打倒共产党")
 															.type(2)
 															.build();
 		/*SignableData signData = SignableData.builder()

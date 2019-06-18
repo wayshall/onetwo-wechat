@@ -2,7 +2,7 @@ package org.onetwo.ext.apiclient.qcloud.nlp.api;
 
 import org.onetwo.common.apiclient.annotation.ApiClientInterceptor;
 import org.onetwo.common.apiclient.annotation.RestApiClient;
-import org.onetwo.ext.apiclient.qcloud.nlp.interceptor.RequestSignInterceptor;
+import org.onetwo.ext.apiclient.qcloud.api.auth.RequestSignInterceptor;
 import org.onetwo.ext.apiclient.qcloud.nlp.request.TextSensitivityRequest;
 import org.onetwo.ext.apiclient.qcloud.nlp.response.TextSensitivityResponse;
 import org.springframework.http.MediaType;

@@ -1,9 +1,9 @@
-package org.onetwo.ext.apiclient.qcloud.nlp.request;
+package org.onetwo.ext.apiclient.qcloud.api.auth;
 
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.onetwo.common.annotation.FieldName;
-import org.onetwo.ext.apiclient.qcloud.nlp.util.NlpSigns.NlpSignTypes;
+import org.onetwo.ext.apiclient.qcloud.api.auth.AuthSigns.AuthSignTypes;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-public class NlpBaseRequest {
+public class AuthableRequest {
 	/***
 	 * 接口指令的名称，例如: LexicalAnalysis
 	 */
@@ -57,9 +57,9 @@ ca:北美
 	String signature;
 	
 	@FieldName("SignatureMethod")
-	String signatureMethod = NlpSignTypes.HmacSHA1.getName();
+	String signatureMethod = AuthSignTypes.HmacSHA1.getName();
 
-	public NlpBaseRequest(String action, String region, Long timestamp, Integer nonce, String secretId,
+	public AuthableRequest(String action, String region, Long timestamp, Integer nonce, String secretId,
 			String signature, String signatureMethod) {
 		super();
 		this.action = action;

@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.qcloud.nlp.request;
+package org.onetwo.ext.apiclient.qcloud.api.auth;
 
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +17,6 @@ public class SignableData {
 	private String host;
 	private String path;
 	
-	private NlpBaseRequest request;
+	private AuthableRequest request;
 
 }
