@@ -11,7 +11,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper=true)
 @ToString(callSuper=true)
-public class TextSensitivityResponse extends NlpBaseResponse {
+public class TextSensitivityResponse extends NlpV2BaseResponse {
 	Double sensitive; //	Double	敏感的概率
 	Double nonsensitive; //	Double	不敏感的概率
 }

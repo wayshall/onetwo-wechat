@@ -22,7 +22,7 @@ public class TextSensitivityRequest extends AuthableRequest {
 	@Builder
 	public TextSensitivityRequest(String region, Long timestamp, Integer nonce, String secretId,
 			String signature, String content, int type, String signatureMethod) {
-		super("TextSensitivity", region, timestamp, nonce, secretId, signature, signatureMethod);
+		super("TextSensitivity", region, timestamp, nonce, secretId, signature, signatureMethod, null);
 		this.content = content;
 		this.type = type;
 	}

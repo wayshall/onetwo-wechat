@@ -3,29 +3,29 @@ package org.onetwo.ext.apiclient.qcloud.nlp.util;
 import org.junit.Test;
 import org.onetwo.ext.apiclient.qcloud.QCloudBaseBootTests;
 import org.onetwo.ext.apiclient.qcloud.nlp.NlpProperties;
-import org.onetwo.ext.apiclient.qcloud.nlp.api.NlpApiV2;
-import org.onetwo.ext.apiclient.qcloud.nlp.request.TextSensitivityRequest;
-import org.onetwo.ext.apiclient.qcloud.nlp.response.TextSensitivityResponse;
+import org.onetwo.ext.apiclient.qcloud.nlp.api.NlpApiV3;
+import org.onetwo.ext.apiclient.qcloud.nlp.request.SensitiveWordsRecognitionRequest;
+import org.onetwo.ext.apiclient.qcloud.nlp.response.SensitiveWordsRecognitionResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author weishao zeng
  * <br/>
  */
-public class NlpApiTest extends QCloudBaseBootTests {
+public class NlpApiV3Test extends QCloudBaseBootTests {
 	@Autowired
 	NlpProperties nlpProperties;
 	
 	@Autowired
-	NlpApiV2 nlpApi;
+	NlpApiV3 nlpApi;
 	
 	@Test
 	public void test() {
-		TextSensitivityRequest request = TextSensitivityRequest.builder()
+		SensitiveWordsRecognitionRequest request = SensitiveWordsRecognitionRequest.builder()
 															.region("ap-guangzhou")
 															.secretId(nlpProperties.getSecretId())
-															.content("打倒共产党")
-															.type(2)
+															.version("2019-04-08")
+															.text("打倒共产党")
 															.build();
 		/*SignableData signData = SignableData.builder()
 											.request(request)
@@ -36,7 +36,7 @@ public class NlpApiTest extends QCloudBaseBootTests {
 		String signature = NlpSigns.signHmac(nlpProperties.getSecretKey(), signData);
 //		request.setSignature(LangUtils.encodeUrl(signature));
 		request.setSignature(signature);*/
-		TextSensitivityResponse res = this.nlpApi.textSensitivity(request);
+		SensitiveWordsRecognitionResponse res = this.nlpApi.sensitiveWordsRecognition(request);
 		System.out.println("res: " + res);
 	}
 

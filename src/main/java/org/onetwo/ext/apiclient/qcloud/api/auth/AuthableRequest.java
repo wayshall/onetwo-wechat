@@ -58,9 +58,12 @@ ca:北美
 	
 	@FieldName("SignatureMethod")
 	String signatureMethod = AuthSignTypes.HmacSHA1.getName();
+	
+	@FieldName("Version")
+	String version;
 
 	public AuthableRequest(String action, String region, Long timestamp, Integer nonce, String secretId,
-			String signature, String signatureMethod) {
+			String signature, String signatureMethod, String version) {
 		super();
 		this.action = action;
 		this.region = region;
@@ -79,6 +82,7 @@ ca:北美
 		}
 		this.secretId = secretId;
 		this.signature = signature;
+		this.version = version;
 	}
 	
 

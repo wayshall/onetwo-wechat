@@ -63,7 +63,7 @@ public class NlpSignsTest {
 		@Builder
 		public DescribeInstancesRequest(String action, String region, Long timestamp, int nonce, String secretId,
 				String signature, String signatureMethod, String instanceIds_0) {
-			super(action, region, timestamp, nonce, secretId, signature, signatureMethod);
+			super(action, region, timestamp, nonce, secretId, signature, signatureMethod, null);
 			this.instanceIds_0 = instanceIds_0;
 		}
 		

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
  * <br/>
  */
 @RestApiClient(url="https://wenzhi.api.qcloud.com")
-public interface NlpApi {
+public interface NlpApiV2 {
 	
 	/***
 	 * https://cloud.tencent.com/document/product/271/2615
@@ -28,5 +28,5 @@ public interface NlpApi {
 	@ApiClientInterceptor(RequestSignInterceptor.class)
 	@PostMapping(path="/v2/index.php", consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	TextSensitivityResponse textSensitivity(TextSensitivityRequest request);
-
+	
 }

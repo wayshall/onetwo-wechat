@@ -3,8 +3,8 @@ package org.onetwo.ext.apiclient.qcloud.nlp;
 import org.onetwo.common.apiclient.ApiClientMethod;
 import org.onetwo.common.apiclient.simple.SimpleApiClientResponseHandler;
 import org.onetwo.common.apiclient.simple.WithoutImportingAnnotationApiClentRegistrar;
-import org.onetwo.ext.apiclient.qcloud.nlp.api.NlpApi;
-import org.onetwo.ext.apiclient.qcloud.nlp.response.NlpBaseResponse;
+import org.onetwo.ext.apiclient.qcloud.nlp.api.NlpApiV2;
+import org.onetwo.ext.apiclient.qcloud.nlp.response.NlpV2BaseResponse;
 
 /**
  * @author weishao zeng
@@ -13,8 +13,8 @@ import org.onetwo.ext.apiclient.qcloud.nlp.response.NlpBaseResponse;
 public class NlpApiClentRegistrar extends WithoutImportingAnnotationApiClentRegistrar {
 
 	public NlpApiClentRegistrar() {
-		super(NlpApi.class);
-		SimpleApiClientResponseHandler<ApiClientMethod, NlpBaseResponse> handler = new SimpleApiClientResponseHandler<>();
+		super(NlpApiV2.class);
+		SimpleApiClientResponseHandler<ApiClientMethod, NlpV2BaseResponse> handler = new SimpleApiClientResponseHandler<>();
 		setResponseHandler(handler);
 	}
 
