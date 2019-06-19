@@ -25,7 +25,7 @@ public class NlpApiV3Test extends QCloudBaseBootTests {
 															.region("ap-guangzhou")
 															.secretId(nlpProperties.getSecretId())
 															.version("2019-04-08")
-															.text("打倒共产党")
+															.text("共产党")
 															.build();
 		/*SignableData signData = SignableData.builder()
 											.request(request)
