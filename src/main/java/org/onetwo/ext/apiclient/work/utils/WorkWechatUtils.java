@@ -1,5 +1,6 @@
 package org.onetwo.ext.apiclient.work.utils;
 
+import org.onetwo.common.utils.GuavaUtils;
 import org.onetwo.ext.apiclient.wechat.serve.spi.MessageRouterService;
 import org.onetwo.ext.apiclient.work.contact.message.ContactCreateUserMessage;
 import org.onetwo.ext.apiclient.work.contact.message.ContactDeleteUserMessage;
@@ -15,6 +16,27 @@ import org.onetwo.ext.apiclient.work.utils.WorkWechatConstants.WorkReveiveMessag
  * <br/>
  */
 abstract public class WorkWechatUtils {
+	/***
+	 * 企业微信不同的应用都是使用corpid和对应应用的secret获取accesstoken，
+	 * 但是accessTokenService是通过appid（这里是corrpid）作为可以来做缓存的，
+	 * 这样缓存无法区分不同的应用对应不同的accessToken；
+	 * 这里通过企业微信获取token的时候传入corpid:agentId的方式来区分，
+	 * 所以获取token的时候要先去掉agentid
+	 */
+	public static final String ID_SPLITOR = ":";
+	
+	public static String joinCorpid(String appid, Long agentId) {
+		if (agentId==null) {
+			return appid;
+		}
+		return appid.concat(ID_SPLITOR).concat(agentId.toString());
+	}
+	
+	public static String splitCorpid(String appid) {
+		String[] ids = GuavaUtils.split(appid, WorkWechatUtils.ID_SPLITOR);
+		String corpid = ids[0];
+		return corpid;
+	}
 	
 	/****
 	 * 映射通讯录的修改事件的消息类型

@@ -34,8 +34,8 @@ public class MessageClientTest extends WorkWechatBaseBootTests {
 	public void testSendTextCard() {
 		AccessTokenInfo accessToken = this.getAccessToken();
 		WorkMessageRequest request = WorkMessageRequest.textCardBuilder()
-													.agentid(getWechatConfig().getAgentId())
-													.touser(Arrays.asList("ZengWeiShao", "qy0106ea30ee79ba0029a316acb3"))
+													.agentid(1000015L)
+													.touser(Arrays.asList("ZengWeiShao")) //, "qy0106ea30ee79ba0029a316acb3"
 													.title("领奖通知")
 													.description("<div class=\"gray\">2016年9月26日</div> <div class=\"normal\">恭喜你抽中iPhone 7一台，领奖码：xxxx</div><div class=\"highlight\">请于2016年10月10日前联系行政同事领取</div>")
 													.url("http://zhihu.com")
