@@ -68,6 +68,7 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	public Optional<AccessTokenInfo> refreshAccessTokenByAppid(AppidRequest refreshTokenRequest) {
 		String appid = refreshTokenRequest.getAppid();
 		WechatConfig wechatConfig = wechatConfigProvider.getWechatConfig(appid);
+		WechatUtils.assertWechatConfigNotNull(wechatConfig, appid);
 		if (appid==null || !appid.equals(wechatConfig.getAppid())) {
 			logger.warn("appid error, ignore refresh, appid: {}, configuration appid: {}", appid, wechatConfig.getAppid());
 			return Optional.empty();

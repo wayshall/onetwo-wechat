@@ -22,6 +22,7 @@ import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenTypes;
 import org.onetwo.ext.apiclient.wechat.basic.api.TokenApi;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
+import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.GrantTypeKeys;
 import org.onetwo.ext.apiclient.wechat.wxa.response.WxappUserInfo;
 import org.springframework.data.redis.core.BoundValueOperations;
@@ -38,6 +39,12 @@ public class WechatUtils {
 	public static final String LOCK_KEY = "LOCKER:WX_ACESSTOKEN:";
 	static {
 		Security.addProvider(new BouncyCastleProvider());
+	}
+	
+	public static void assertWechatConfigNotNull(WechatConfig wechatConfig, String appid) {
+		if (wechatConfig==null) {
+			throw new WechatException("can not find wechat config for appid: " + appid);
+		}
 	}
 	public static WxappUserInfo decrypt(String sessionKey, String iv, String encryptedData){
 		AESCoder aes = AESCoder.pkcs7Padding(Base64.decodeBase64(sessionKey))

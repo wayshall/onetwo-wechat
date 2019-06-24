@@ -16,6 +16,8 @@ import org.springframework.beans.factory.InitializingBean;
  */
 public class SimpleWechatConfigProvider implements WechatConfigProvider, InitializingBean {
 
+//	protected final Logger logger = JFishLoggerFactory.getLogger(getClass());
+	
 	protected WechatConfig wechatConfig;
 	private WechatMsgCrypt wxbizMsgCrypt;
 	
@@ -32,6 +34,9 @@ public class SimpleWechatConfigProvider implements WechatConfigProvider, Initial
 	}
 	
 	protected WechatMsgCrypt createWXBizMsgCrypt(WechatConfig wechatConfig) {
+		if (wechatConfig==null) {
+			throw new IllegalArgumentException("wechat config can not be null!");
+		}
 		try {
 			WechatMsgCrypt wxbizMsgCrypt = null;
 			if (!wechatConfig.isWorkWechat()) { //普通微信

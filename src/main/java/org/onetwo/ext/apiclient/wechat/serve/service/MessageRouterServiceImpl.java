@@ -32,6 +32,7 @@ import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.MessageType;
 import org.onetwo.ext.apiclient.wechat.utils.WechatException;
+import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +89,9 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 	}
 	
 	public WechatConfig getWechatConfig(String clientId){
-		return this.wechatConfigProvider.getWechatConfig(clientId);
+		WechatConfig wechatConfig = this.wechatConfigProvider.getWechatConfig(clientId);
+		WechatUtils.assertWechatConfigNotNull(wechatConfig, clientId);
+		return wechatConfig;
 	}
 	
 	/*public void setMessageCrypt(WXBizMsgCrypt messageCrypt) {

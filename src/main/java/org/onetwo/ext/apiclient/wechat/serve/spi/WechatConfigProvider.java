@@ -5,6 +5,7 @@ import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.crypt.AesException;
 import org.onetwo.ext.apiclient.wechat.crypt.WXBizMsgCrypt;
 import org.onetwo.ext.apiclient.wechat.crypt.WechatMsgCrypt;
+import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
 
 /**
  * @author wayshall
@@ -25,6 +26,7 @@ public interface WechatConfigProvider {
 	
 	default public WechatMsgCrypt getWXBizMsgCrypt(String clientId){
 		WechatConfig wechatConfig = getWechatConfig(clientId);
+		WechatUtils.assertWechatConfigNotNull(wechatConfig, clientId);
 		try {
 			return new WXBizMsgCrypt(wechatConfig.getToken(), wechatConfig.getEncodingAESKey(), wechatConfig.getAppid());
 		} catch (AesException e) {
