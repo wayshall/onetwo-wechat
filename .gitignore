@@ -32,3 +32,5 @@ application-product.yaml
 *.iml
 /src/test/resources/conf/application-product.properties
 /target/
+D:/
+src/test/resources/application-product-zy.yaml
