@@ -1,8 +1,8 @@
 package org.onetwo.ext.apiclient.wechat.view.api;
 
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;
-import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.view.request.CreateMenuRequest;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;

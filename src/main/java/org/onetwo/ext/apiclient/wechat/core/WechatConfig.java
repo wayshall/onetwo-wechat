@@ -1,5 +1,6 @@
 package org.onetwo.ext.apiclient.wechat.core;
 
+import lombok.Data;
 
 /**
  * @author wayshall
@@ -17,6 +18,13 @@ public interface WechatConfig {
 	String getAppid();
 
 	String getAppsecret();
+	
+	/****
+	 * 通讯录secrect
+	 * @author weishao zeng
+	 * @return
+	 */
+	String getContactSecrect();
 	
 	/***
 	 * aeskey
@@ -38,6 +46,7 @@ public interface WechatConfig {
 	 * @return
 	 */
 	String getOauth2RedirectUri();
+	String getQrConnectRedirectUri();
 	String getOauth2Scope();
 	
 	/***
@@ -56,4 +65,23 @@ public interface WechatConfig {
 	
 //	Map<String, WechatAppInfo> getApps();
 	
+	Long getAgentId();
+	
+	PayProperties getPay();
+	
+	/***
+	 * 是否企业微信
+	 * @author weishao zeng
+	 * @return
+	 */
+	default boolean isWorkWechat() {
+		return getAgentId()!=null;
+	}
+	
+
+	@Data
+	public class PayProperties {
+		private String merchantId;
+		private String apiKey;
+	}
 }

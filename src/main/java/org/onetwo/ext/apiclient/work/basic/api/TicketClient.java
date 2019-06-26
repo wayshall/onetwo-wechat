@@ -1,9 +1,11 @@
 package org.onetwo.ext.apiclient.work.basic.api;
 
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
-import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.work.core.WorkWechatApiClient;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -39,6 +41,7 @@ public interface TicketClient {
 		 * 生成签名所需的jsapi_ticket，最长为512字节
 		 */
 		private String ticket;
+		@JsonProperty("expires_in")
 		private long expiresIn;
 	}
 

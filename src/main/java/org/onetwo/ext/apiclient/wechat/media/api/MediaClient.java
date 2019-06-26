@@ -2,16 +2,16 @@ package org.onetwo.ext.apiclient.wechat.media.api;
 
 import java.util.Map;
 
+import org.onetwo.common.annotation.FieldName;
 import org.onetwo.common.apiclient.ApiClientMethod;
 import org.onetwo.common.apiclient.annotation.ResponseHandler;
 import org.onetwo.common.jackson.JsonMapper;
-import org.onetwo.common.utils.FieldName;
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;
 import org.onetwo.ext.apiclient.wechat.handler.ByteArrayResponseHandler;
 import org.onetwo.ext.apiclient.wechat.material.response.UploadNewsResponse;
 import org.onetwo.ext.apiclient.wechat.media.request.AddNewsRequest;
-import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.MediaTypes;
 import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
 import org.springframework.core.io.ByteArrayResource;
@@ -65,7 +65,7 @@ public interface MediaClient {
      * @return 如果是图片返回 ByteArrayResource，如果是视频，返回地址，类型为 String
      */
     @GetMapping(path = "/media/get", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ResponseHandler(ByteArrayResponseHandler.class)
+	@ResponseHandler(MediaGetResponseHandler.class)
     <T> T get(AccessTokenInfo accessToken, @RequestParam("media_id") String mediaId);
     
     class MediaGetResponseHandler extends ByteArrayResponseHandler {

@@ -1,6 +1,6 @@
 # onetwo-wechat
 
-一个简单的基于Spring RestTemplate封装的微信sdk
+一个简单的基于 Spring RestTemplate 封装的微信sdk
    
 ## 示例项目   
 示例项目，基于spring-boot
@@ -14,7 +14,7 @@
 
 
 ## maven
-当前snapshot版本：0.0.1-SNAPSHOT
+当前snapshot版本：4.7.3-SNAPSHOT
 
 若使用snapshot版本，请添加snapshotRepository仓储：
 ```xml
@@ -33,7 +33,7 @@
 <dependency>
     <groupId>org.onetwo4j</groupId>
     <artifactId>onetwo-wechat</artifactId>
-    <version>0.0.4-SNAPSHOT</version>
+    <version>4.7.3-SNAPSHOT</version>
 </dependency>
 
 ```
@@ -159,10 +159,63 @@ public class MessageHandlerRegister {
 只需要在spring启动的时候，注入onetwo-wechat的MessageRouterService服务，并通过MessageRouterService的api注册相关类型的消息监听即可。
 上面的示例会在收到消息后简单回复一条"我收到你的消息啦~"的信息。
 
+## 企业微信api
+4.7.3 版本增加了对企业微信的支持
+
+### 企业微信的配置方式
+因为企业微信需要对多个应用支持，所以在兼容以前微信配置方式的前提下，增加work-wechat前缀配置以支持企业微信的配置，其中每个企业培训app的配置项都和普通配置的配置方式一样，可以参考WechatConfig
+```yaml
+work-wechat:
+    apps: 
+        party: 
+            appid: 企业微信cropid
+            appsecret: 应用秘钥
+            agentId: 应用id
+            encodingAESKey: aes加解密秘钥
+            token: 服务器验证token
+            oauth2: 
+                errorInBrowser: false
+                redirectUri: oauth2跳转url，比如http://domian/api/uaa/login/oauth2
+                qrConnectRedirectUri: 扫码登录http://domian/api/uaa/login/qrConnect
+```
+
+### 企业微信登陆支持
+内置实现了oauth2和扫码登录支持。
+用户可以参考或者直接继承WorkLoginController实现业务登录流程。
+比如如果是使用[zifish](https://github.com/wayshall/onetwo)框架，并基于jwt的登录，可以如下实现登录controller：
+```Java
+@RestController
+@RequestMapping("/uaa/login")
+public class LoginBffController extends WorkLoginController<JwtTokenInfo> {
+
+	@Autowired
+	private LoginService loginService;
+
+	@Override
+	protected JwtTokenInfo loginByWorkWechatUser(WorkUserLoginInfo workUserLoginInfo) {
+		return this.loginService.loginByWorkWechatUser(workUserLoginInfo);
+	}
+	
+}
+```
+
+### 企业微信消息回调
+WorkEventServeController已经封装了对企业微信消息通知的支持，用户引入依赖后，可以编写一个继承WorkEventServeController的controller即可，启动后可以从控制台的spring mvc的mapping信息中看到controller的路径，默认一般为：/workEventServe
+全路径一般为：http://domain.com/workEventServe/{appid}
+其中appid为配置文件里对应的appid
+
+注册回调处理器可以通过 MessageRouterService 服务，比如监听用户创建：
+```Java
+messageRouterService.register(ContactChangeTypes.CREATE_USER, ContactCreateUserMessage.class, msg -> {
+				// 处理业务……
+				return "";
+			});
+```
+
 ## 微信网页授权拦截
 
-### 基于onetwo的项目
-如果是基于onetwo的项目，使用了@EnableJFishBootExtension 注解激活扩展，会自动注册拦截器。
+### 基于zifish的项目
+如果是基于[zifish](https://github.com/wayshall/onetwo)的项目，使用了@EnableJFishBootExtension 注解激活扩展，会自动注册拦截器。
 使用的时候，通过@Interceptor注解把扩展拦截器标注在需要拦截的Controller即可：
 ```Java
 @RestController

@@ -1,9 +1,9 @@
 package org.onetwo.ext.apiclient.wechat.poi.api;
 
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;
 import org.onetwo.ext.apiclient.wechat.poi.request.GetPoiListRequest;
 import org.onetwo.ext.apiclient.wechat.poi.response.GetPoiListResponse;
-import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 /**

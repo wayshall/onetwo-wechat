@@ -36,6 +36,7 @@ public class WechatException extends BaseException implements ExceptionCodeMark{
 	public WechatException(String message) {
 		super(message);
 	}
+	
 	public WechatException(String message, Throwable cause) {
 		super(message, cause);
 		initErrorCode(BASE_CODE);

@@ -1,7 +1,7 @@
 package org.onetwo.ext.apiclient.wechat.crypt;
 
 @SuppressWarnings("serial")
-public class AesException extends Exception {
+public class AesException extends RuntimeException {
 
 	public final static int OK = 0;
 	public final static int ValidateSignatureError = -40001;
@@ -51,8 +51,8 @@ public class AesException extends Exception {
 		return code;
 	}
 
-	AesException(int code) {
-		super(getMessage(code));
+	AesException(int code, Throwable root) {
+		super(getMessage(code), root);
 		this.code = code;
 	}
 

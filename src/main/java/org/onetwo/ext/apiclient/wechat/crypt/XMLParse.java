@@ -49,7 +49,7 @@ class XMLParse {
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new AesException(AesException.ParseXmlError);
+			throw new AesException(AesException.ParseXmlError, e);
 		}
 	}
 

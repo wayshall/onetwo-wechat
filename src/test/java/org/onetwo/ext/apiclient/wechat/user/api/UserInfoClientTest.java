@@ -9,11 +9,13 @@ import org.onetwo.ext.apiclient.wechat.user.api.UserInfoClient.UserInfoBatchGetR
 import org.onetwo.ext.apiclient.wechat.user.request.UserInfoGetRequest;
 import org.onetwo.ext.apiclient.wechat.user.response.UserInfoGetResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 
 /**
  * @author wayshall
  * <br/>
  */
+@ActiveProfiles("product")
 public class UserInfoClientTest extends WechatBaseTestsAdapter {
 
 	@Autowired

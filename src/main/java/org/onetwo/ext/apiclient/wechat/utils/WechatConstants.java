@@ -2,6 +2,7 @@ package org.onetwo.ext.apiclient.wechat.utils;
 
 import java.util.stream.Stream;
 
+import org.onetwo.common.spring.converter.ValueEnum;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage.EventMessage;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ReceiveMessage.ImageMessage;
@@ -18,6 +19,7 @@ import org.onetwo.ext.apiclient.wechat.serve.dto.ReplyMessage.NewsReplyMessage;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ReplyMessage.TextReplyMessage;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ReplyMessage.VideoReplyMessage;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ReplyMessage.VoiceReplyMessage;
+import org.onetwo.ext.apiclient.wechat.serve.spi.Message.ReceiveMessageType;
 import org.springframework.http.MediaType;
 
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -28,8 +30,6 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public abstract class WechatConstants {
 
-	
-
 	public static abstract class Oauth2ClientKeys {
 		public static final String STORE_USER_INFO_KEY = "wechat_oauth2_userInfo";
 		public static final String STORE_STATE_KEY = "wechat_oauth2_state";
@@ -38,11 +38,17 @@ public abstract class WechatConstants {
 		public static final String PARAMS_CODE = "code";
 	}
 	
+	public static final String SUCCESS = "SUCCESS";
+	public static final String OK = "OK";
+	
 	public static final String PARAMS_ACCESS_TOKEN = "access_token";
 	public static final String BODY_TO_USER_NAME = "ToUserName";
 	public static final String BODY_ENCRYPT = "Encrypt";
 	
 	public static final String ENCRYPT_TYPE_AES = "aes";
+	
+	public static final String SIGN_MD5 = "MD5";
+	public static final String SIGN_HMAC_SHA256 = "HMAC-SHA256";
 	
 	//grantType
 	public static abstract class GrantTypeKeys {
@@ -55,6 +61,7 @@ public abstract class WechatConstants {
 		public static final String API_DOMAIN_URL = "https://api.weixin.qq.com";
 		public static final String API_BASE_URL = API_DOMAIN_URL + "/cgi-bin";
 		public static final String OAUTH2_AUTHORIZE = "https://open.weixin.qq.com/connect/oauth2/authorize";
+		public static final String OAUTH2_QR_CONNECT_AUTHORIZE = "https://open.work.weixin.qq.com/wwopen/sso/qrConnect";
 		public static final String OAUTH2_AUTHORIZE_TEMPLATE = OAUTH2_AUTHORIZE+
 																"?appid=${appid}&redirect_uri=${redirectUri}"
 																+ "&response_type=${responseType}&scope=${scope}"
@@ -110,7 +117,7 @@ public abstract class WechatConstants {
 		public static final String LINK = "MsgType=link";
 		
 	}
-	public static enum MessageType {
+	public static enum MessageType implements ReceiveMessageType {
 		EVENT("事件消息", EventMessage.class),
 		TEXT("文本消息", TextMessage.class),
 		IMAGE("图片消息", ImageMessage.class),
@@ -234,7 +241,7 @@ public abstract class WechatConstants {
 		DATABASE
 	}
 
-	public static enum MediaTypes {
+	public static enum MediaTypes implements ValueEnum<String> {
 		IMAGE("图片"),
 		VOICE("语音"),
 		VIDEO("视频"),
@@ -252,8 +259,9 @@ public abstract class WechatConstants {
 		
 		@JsonValue
 		public String getValue(){
-			return name();
+			return name().toLowerCase();
 		}
+		
 	}
 
 	public static enum MsgTypes {
