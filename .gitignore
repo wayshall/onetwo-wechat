@@ -32,5 +32,6 @@ application-product*.yaml
 *.iml
 /src/test/resources/conf/application-product.properties
 /target/
+src/test/resources/application-product-zy.yaml
 PayClientZYTest.java
 D:/
