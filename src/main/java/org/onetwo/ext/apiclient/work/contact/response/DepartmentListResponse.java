@@ -6,6 +6,7 @@ import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * @author weishao zeng
@@ -13,6 +14,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper=false)
+@ToString(callSuper=true)
 public class DepartmentListResponse extends WechatResponse {
 	
 	/***

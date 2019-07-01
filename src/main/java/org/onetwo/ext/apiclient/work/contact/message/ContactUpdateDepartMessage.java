@@ -16,13 +16,13 @@ import lombok.EqualsAndHashCode;
 public class ContactUpdateDepartMessage extends ContactBaseMessage {
 
 	@JacksonXmlProperty(localName="Id")
-	private String id;
+	private Long id;
 	
 	@JacksonXmlProperty(localName="Name")
 	private String name;
 	
 	@JacksonXmlProperty(localName="ParentId")
-	private String parentid;
+	private Long parentid;
 	
 	
 	@Data
