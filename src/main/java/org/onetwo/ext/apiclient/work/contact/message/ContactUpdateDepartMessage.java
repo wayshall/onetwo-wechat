@@ -33,5 +33,15 @@ public class ContactUpdateDepartMessage extends ContactBaseMessage {
 		private Integer order;
 		
 	}
+	
+	
+	@Data
+	@EqualsAndHashCode(callSuper=true)
+	static public class ContactDeleteDepartMessage extends ContactBaseMessage {
+
+		@JacksonXmlProperty(localName="Id")
+		private Long id;
+		
+	}
 }
 

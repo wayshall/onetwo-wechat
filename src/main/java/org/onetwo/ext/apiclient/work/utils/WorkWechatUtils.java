@@ -6,6 +6,7 @@ import org.onetwo.ext.apiclient.work.contact.message.ContactCreateUserMessage;
 import org.onetwo.ext.apiclient.work.contact.message.ContactDeleteUserMessage;
 import org.onetwo.ext.apiclient.work.contact.message.ContactUpdateDepartMessage;
 import org.onetwo.ext.apiclient.work.contact.message.ContactUpdateDepartMessage.ContactCreateDepartMessage;
+import org.onetwo.ext.apiclient.work.contact.message.ContactUpdateDepartMessage.ContactDeleteDepartMessage;
 import org.onetwo.ext.apiclient.work.contact.message.ContactUpdateTagMessage;
 import org.onetwo.ext.apiclient.work.contact.message.ContactUpdateUserMessage;
 import org.onetwo.ext.apiclient.work.utils.WorkWechatConstants.ContactChangeTypes;
@@ -51,6 +52,7 @@ abstract public class WorkWechatUtils {
 							.register(ContactChangeTypes.DELETE_USER, ContactDeleteUserMessage.class, null)
 							.register(ContactChangeTypes.CREATE_PARTY, ContactCreateDepartMessage.class, null)
 							.register(ContactChangeTypes.UPDATE_PARTY, ContactUpdateDepartMessage.class, null)
+							.register(ContactChangeTypes.DELETE_PARTY, ContactDeleteDepartMessage.class, null)
 							.register(ContactChangeTypes.UPDATE_TAG, ContactUpdateTagMessage.class, null);
 		return messageRouterService;
 	}

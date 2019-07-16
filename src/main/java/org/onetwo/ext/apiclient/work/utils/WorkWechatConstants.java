@@ -40,6 +40,7 @@ public abstract class WorkWechatConstants {
 		public static final String DELETE_USER = "delete_user";
 		public static final String CREATE_PARTY = "create_party";
 		public static final String UPDATE_PARTY = "update_party";
+		public static final String DELETE_PARTY = "delete_party";
 		public static final String UPDATE_TAG = "update_tag";
 	}
 
