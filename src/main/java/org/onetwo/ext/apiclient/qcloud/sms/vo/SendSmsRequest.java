@@ -6,12 +6,14 @@ import org.apache.commons.lang3.StringUtils;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author weishao zeng
  * <br/>
  */
 @Data
+@NoArgsConstructor
 public class SendSmsRequest {
 	String nationCode;
 	String phoneNumber;
