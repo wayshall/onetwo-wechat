@@ -18,12 +18,15 @@ public interface SmsCodeExceptionTranslator {
 		public ServiceException translateServiceException(ServiceException e) {
 			ErrorType errorType = e.getExceptionType();
 			ServiceException newSe = e;
-			if (TokenValidatorErrors.TOKEN_INVALID.equals(errorType)) {
-				newSe = new ServiceException("验证码错误", e);
+			if (TokenValidatorErrors.TOKEN_INVALID_OR_EXPIRED.equals(errorType)) {
+				newSe = new ServiceException("验证码错误或已过期", e);
+				newSe.putAsMap(e.getErrorContext());
 			} else if (TokenValidatorErrors.TOKEN_NOT_EXPIRED.equals(errorType)) {
 				newSe = new ServiceException("验证码未过期，不能重复发送", e);
+				newSe.putAsMap(e.getErrorContext());
 			} else if (TokenValidatorErrors.REQUIRED_VALUE.equals(errorType)) {
-				throw new ServiceException("缺少参数", e);
+				newSe = new ServiceException("缺少参数", e);
+				newSe.putAsMap(e.getErrorContext());
 			} else {
 				newSe = e;
 			}

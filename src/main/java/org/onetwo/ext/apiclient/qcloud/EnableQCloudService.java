@@ -16,7 +16,12 @@ import org.springframework.context.annotation.Import;
 @Target(ElementType.TYPE)
 @Import({EnableQCloudServiceSelector.class})
 public @interface EnableQCloudService {
-	
+	/***
+	 * 自然语言处理
+	 * @author weishao zeng
+	 * @return
+	 */
+	boolean nlp() default false;
 	boolean live() default false;
 	boolean sms() default false;
 	boolean smsCode() default false;

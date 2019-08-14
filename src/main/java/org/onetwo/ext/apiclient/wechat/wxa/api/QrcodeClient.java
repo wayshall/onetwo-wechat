@@ -3,9 +3,9 @@ package org.onetwo.ext.apiclient.wechat.wxa.api;
 import javax.validation.Valid;
 
 import org.onetwo.common.apiclient.annotation.ResponseHandler;
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;
 import org.onetwo.ext.apiclient.wechat.handler.ByteArrayResponseHandler;
-import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.UrlConst;
 import org.onetwo.ext.apiclient.wechat.wxa.request.BaseQrcodeRequest.CreatewxaqrcodeRequest;
 import org.onetwo.ext.apiclient.wechat.wxa.request.BaseQrcodeRequest.GetwxacodeRequest;

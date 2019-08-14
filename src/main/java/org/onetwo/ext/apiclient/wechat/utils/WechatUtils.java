@@ -15,10 +15,14 @@ import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.exception.ErrorTypes;
 import org.onetwo.common.jackson.JsonMapper;
 import org.onetwo.common.utils.LangUtils;
+import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenTypes;
 import org.onetwo.ext.apiclient.wechat.basic.api.TokenApi;
-import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
+import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.GrantTypeKeys;
 import org.onetwo.ext.apiclient.wechat.wxa.response.WxappUserInfo;
 import org.springframework.data.redis.core.BoundValueOperations;
@@ -31,10 +35,16 @@ import org.springframework.http.ResponseEntity;
  */
 public class WechatUtils {
 
-	public static final String ACCESS_TOKEN_PREFIX = "wechat_accesstoken:";
-	public static final String LOCK_KEY = "lock_wechat_acesstoken:";
+	public static final String ACCESS_TOKEN_PREFIX = "WX_ACCESSTOKEN:";
+	public static final String LOCK_KEY = "LOCKER:WX_ACESSTOKEN:";
 	static {
 		Security.addProvider(new BouncyCastleProvider());
+	}
+	
+	public static void assertWechatConfigNotNull(WechatConfig wechatConfig, String appid) {
+		if (wechatConfig==null) {
+			throw new WechatException("can not find wechat config for appid: " + appid);
+		}
 	}
 	public static WxappUserInfo decrypt(String sessionKey, String iv, String encryptedData){
 		AESCoder aes = AESCoder.pkcs7Padding(Base64.decodeBase64(sessionKey))
@@ -82,23 +92,27 @@ public class WechatUtils {
 	
 	public static AccessTokenInfo getAccessToken(TokenApi wechatServer, GetAccessTokenRequest request){
 		AccessTokenResponse response = wechatServer.getAccessToken(request);
+		return toAccessTokenInfo(request.getAppid(), response);
+	}
+	
+	public static AccessTokenInfo toAccessTokenInfo(String appid, AccessTokenResponse response){
 		AccessTokenInfo accessToken = AccessTokenInfo.builder()
 													.accessToken(response.getAccessToken())
 													.expiresIn(response.getExpiresIn())
-													.appid(request.getAppid())
+													.appid(appid)
 													.build();
 		return accessToken;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static BoundValueOperations<String, AccessTokenInfo> boundValueOperationsByAppId(RedisTemplate<String, ?> redisTemplate, String appid){
-		String key = getAccessTokenKey(appid);
+	public static BoundValueOperations<String, AccessTokenInfo> boundValueOperationsByAppId(RedisTemplate<String, ?> redisTemplate, String appid, AccessTokenTypes clientType){
+		String key = getAccessTokenKey(appid, clientType);
 		BoundValueOperations<String, AccessTokenInfo> opt = (BoundValueOperations<String, AccessTokenInfo>)redisTemplate.boundValueOps(key);
 		return opt;
 	}
 
-	public static String getAccessTokenKey(String appid){
-		return WechatUtils.ACCESS_TOKEN_PREFIX + appid;
+	public static String getAccessTokenKey(String appid, AccessTokenTypes accessTokenType){
+		return WechatUtils.ACCESS_TOKEN_PREFIX + getAppidKey(appid, accessTokenType);
 	}
 	
 	public static ApiClientException translateToApiClientException(ApiClientMethod invokeMethod, WechatResponse baseResponse, ResponseEntity<?> responseEntity){
@@ -108,6 +122,14 @@ public class WechatUtils {
 								 										baseResponse.getErrmsg(), 
 								 										responseEntity.getStatusCodeValue())
 								 									));
+	}
+	
+	public static String getAppidKey(AppidRequest appidRequest) {
+		return getAppidKey(appidRequest.getAppid(), appidRequest.getAccessTokenType());
+	}
+	
+	private static String getAppidKey(String appid, AccessTokenTypes accessTokenType) {
+		return appid + ":" + accessTokenType.name();
 	}
 	
 	private WechatUtils(){

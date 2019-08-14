@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringUtils;
 import org.onetwo.common.exception.ServiceException;
+import org.onetwo.common.log.JFishLoggerFactory;
+import org.onetwo.ext.apiclient.qcloud.sms.SmsException;
 import org.onetwo.ext.apiclient.qcloud.sms.SmsProperties;
 import org.onetwo.ext.apiclient.qcloud.sms.service.SmsService;
 import org.onetwo.ext.apiclient.qcloud.sms.vo.SendSmsRequest;
@@ -17,6 +19,7 @@ import com.github.qcloudsms.SmsSingleSenderResult;
 import lombok.Getter;
 
 /**
+ * https://cloud.tencent.com/document/product/382/3771#.E7.9F.AD.E4.BF.A1.E5.8F.91.E9.80.81.E9.94.99.E8.AF.AF.E7.A0.81
  * @author weishao zeng
  * <br/>
  */
@@ -62,10 +65,11 @@ public class QCloudSmsService implements InitializingBean, SmsService {
     	try {
     		result = this.smsSingleSender.sendWithParam(request.getNationCode(), request.getPhoneNumber(), request.getTemplId(), params, request.getSign(), request.getExtend(), request.getExt());
 		} catch (Exception e) {
-			throw new ServiceException(SmsErrors.ERR_SMS_SEND, e);
+			throw new SmsException(SmsErrors.ERR_SMS_SEND, e);
 		}
     	if(result.result!=0) {
-    		throw new ServiceException(result.errMsg, SmsErrors.ERR_SMS_SEND.name()).put("result", result.result);
+			JFishLoggerFactory.findMailLogger().error("send sms error, mobile: {},  templateId: {}, error: {}", request.getPhoneNumber(), request.getTemplId(), result);
+    		throw new SmsException(result.errMsg, String.valueOf(result.result));
     	}
     }
 	

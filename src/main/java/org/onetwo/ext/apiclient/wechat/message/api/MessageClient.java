@@ -1,9 +1,9 @@
 package org.onetwo.ext.apiclient.wechat.message.api;
 
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;
 import org.onetwo.ext.apiclient.wechat.material.response.SendAllResponse;
 import org.onetwo.ext.apiclient.wechat.message.request.SendAllRequest;
-import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -14,6 +14,7 @@ import org.springframework.web.method.HandlerMethod;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * 小程序formid收集拦截器
  * @author weishao zeng
  * <br/>
  */

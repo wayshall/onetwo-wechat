@@ -1,7 +1,5 @@
 package org.onetwo.ext.apiclient.wechat.serve.spi;
 
-import java.util.Map;
-
 import org.onetwo.ext.apiclient.wechat.serve.dto.MessageParam;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ServeAuthParam;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.MediaTypeKeys;
@@ -22,6 +20,6 @@ public interface ServeEndpoint {
 					method=RequestMethod.POST, 
 					consumes={MediaTypeKeys.TEXT_XML_VALUE_UTF8, MediaTypeKeys.APPLICATION_XML_VALUE_UTF8},
 					produces={MediaTypeKeys.TEXT_XML_VALUE_UTF8})
-	Object onMessageReceived(@PathVariable("clientId") String clientId, MessageParam msgParam, Map<String, Object> message);
+	Object onMessageReceived(@PathVariable("clientId") String clientId, MessageParam msgParam, String message);
 
 }

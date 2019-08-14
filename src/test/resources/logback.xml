@@ -26,8 +26,18 @@
     </encoder>
   </appender>
   
-  
+    <!-- print dbm sql-->
+    <logger name="org.onetwo.dbm.core.internal.LogSqlInterceptor" level="TRACE">
+        <appender-ref ref="console" />
+    </logger>
+    
    <logger name="org.onetwo.common.spring.rest.ExtRestTemplate" level="DEBUG">  
+       <appender-ref ref="logFile" />   
+   </logger>  
+   <logger name="org.onetwo.ext.apiclient.wechat.utils.WechatSigns" level="DEBUG">  
+       <appender-ref ref="logFile" />   
+   </logger> 
+   <logger name="org.onetwo.ext.apiclient.qcloud.nlp.util.NlpSigns" level="DEBUG">  
        <appender-ref ref="logFile" />   
    </logger>  
    <logger name="JFishRestApiClient" level="INFO">  
