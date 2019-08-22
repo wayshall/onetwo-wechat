@@ -29,7 +29,8 @@ public abstract class WechatSigns {
 																							.enableJsonPropertyAnnotation()
 																							.enableFieldNameAnnotation()
 //																							.enableUnderLineStyle()
-																							.propertyAcceptor((p, v)->v!=null)
+//																							.propertyAcceptor((p, v)->v!=null)
+																							.ignoreNull()
 																							.excludeProperties("sign", 
 																									"success"
 //																									, "signType", "sign_type"
