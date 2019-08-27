@@ -7,6 +7,7 @@ import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenProvider;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenTypes;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
+import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
 import org.onetwo.ext.apiclient.work.basic.api.WorkTokenClient;
 import org.onetwo.ext.apiclient.work.basic.api.WorkTokenClient.GetTokenRequest;
 import org.onetwo.ext.apiclient.work.utils.WorkWechatUtils;
@@ -27,6 +28,8 @@ public class WorkWechatAccessTokenProvider implements AccessTokenProvider {
 	
 	@Autowired
 	private WorkTokenClient workTokenClient;
+	@Autowired
+	private WechatConfigProvider wechatConfigProvider;
 
 	@Override
 	public AccessTokenResponse getAccessToken(GetAccessTokenRequest request) {
