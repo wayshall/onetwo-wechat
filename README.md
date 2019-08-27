@@ -257,7 +257,7 @@ wechat:
             bizId: 
             pushSafeKey: 
             callback: 
-				enabled: true
+	    	enabled: true
                 path: # 默认为：callback
 ```
 

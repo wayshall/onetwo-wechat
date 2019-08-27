@@ -116,7 +116,7 @@ public class OrderNotifyResponse extends WechatPayResponse implements CustomizeM
 	@JsonProperty("coupon_count")
 	private Integer couponCount;
 	
-	private List<CouponData> coupons;
+	private List<CouponData> coupon;
 
 	/***
 	 * 微信支付订单号	
@@ -150,14 +150,14 @@ public class OrderNotifyResponse extends WechatPayResponse implements CustomizeM
 		if (this.couponCount==null || this.couponCount<1) {
 			return ;
 		}
-		this.coupons = new ArrayList<>(this.couponCount);
+		this.coupon = new ArrayList<>(this.couponCount);
 		for (int i = 0; i < couponCount; i++) {
 			CouponData coupon = new CouponData();
-			coupon.setIndex(i);
+//			coupon.setIndex(i);
 			coupon.setId((String)responseMap.get("coupon_id_" + i));
 			coupon.setType((String)responseMap.get("coupon_type_" + i));
 			coupon.setFee(Types.asValue(responseMap.get("coupon_fee_" + i), Integer.class));
-			this.coupons.add(coupon);
+			this.coupon.add(coupon);
 		}
 	}
 	
@@ -179,7 +179,7 @@ NO_CASH---非充值优惠券
 开通免充值券功能，并且订单使用了优惠券后有返回（取值：CASH、NO_CASH）。$n为下标,从0开始编号，举例：coupon_type_$0
 		 */
 		private String type;
-		private Integer index;
+//		private Integer index;
 	}
 }
 

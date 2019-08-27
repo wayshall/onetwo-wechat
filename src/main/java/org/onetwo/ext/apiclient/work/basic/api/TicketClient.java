@@ -14,6 +14,9 @@ import lombok.EqualsAndHashCode;
  * 文档参考：
  * https://work.weixin.qq.com/api/doc#10029/%E8%8E%B7%E5%8F%96%E5%BA%94%E7%94%A8%E7%9A%84jsapi_ticket
  * 
+ * 签名验证工具：
+ * https://mp.weixin.qq.com/debug/cgi-bin/sandbox?t=jsapisign
+ * 
  * @author weishao zeng
  * <br/>
  */

@@ -11,11 +11,12 @@ import org.onetwo.common.md.CodeType;
 import org.onetwo.common.md.Hashs;
 import org.onetwo.common.md.MessageDigestHasher;
 import org.onetwo.common.reflect.BeanToMapConvertor;
-import org.onetwo.common.spring.rest.RestUtils;
+import org.onetwo.common.reflect.BeanToMapConvertor.ListPropertyContext;
 import org.onetwo.common.spring.utils.EnhanceBeanToMapConvertor.EnhanceBeanToMapBuilder;
 import org.onetwo.common.utils.Assert;
 import org.onetwo.common.utils.ParamUtils;
 import org.slf4j.Logger;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 /**
@@ -69,8 +70,16 @@ public abstract class WechatSigns {
 	
 	public static String convertToSourceString(String signKey, Object request){
 		Assert.hasText(signKey, "signKey can not blank");
-		MultiValueMap<String, Object> requestMap = RestUtils.toMultiValueMap(request, BEAN_TO_MAP_CONVERTOR);
-		final String paramString = ParamUtils.comparableKeyMapToParamString(requestMap);
+		final MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+		BEAN_TO_MAP_CONVERTOR.flatObject("", request, (key, value, ctx)->{
+			String name = key;
+			if (ctx.getParent() instanceof ListPropertyContext) {
+				ListPropertyContext pctx = (ListPropertyContext)ctx.getParent();
+				name = pctx.getPrefix() + "_" + ctx.getName() + "_" + pctx.getItemIndex(); // 这里要特别处理生成：coupon_fee_1，而不是coupon[1].fee
+			}
+			params.set(name, value);
+		});
+		final String paramString = ParamUtils.comparableKeyMapToParamString(params);
 		String sourceString = paramString + "&key=" + signKey;
 		if(logger.isDebugEnabled()){
 			logger.debug("param string: {}", paramString);
@@ -78,6 +87,7 @@ public abstract class WechatSigns {
 		}
 		return sourceString;
 	}
+
 	
 	public static String sign(Object data, String signKey, String signType) {
 		String signResult = null;
