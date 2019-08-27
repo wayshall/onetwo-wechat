@@ -7,7 +7,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.onetwo.common.exception.BaseException;
 import org.onetwo.common.log.JFishLoggerFactory;
 import org.onetwo.common.reflect.BeanToMapConvertor;
-import org.onetwo.common.reflect.BeanToMapConvertor.PropertyContext;
+import org.onetwo.common.reflect.BeanToMapConvertor.ObjectPropertyContext;
 import org.onetwo.common.spring.rest.RestUtils;
 import org.onetwo.common.spring.utils.EnhanceBeanToMapConvertor.EnhanceBeanToMapBuilder;
 import org.onetwo.common.spring.utils.EnhanceBeanToMapConvertor.JsonPropertyConvert;
@@ -42,7 +42,7 @@ public abstract class AuthSigns {
 //																							.enableFieldNameAnnotation()
 																							.propertyNameConvertor(new JsonPropertyConvert(true, true, false) {
 																								@Override
-																								public String convert(PropertyContext ctx) {
+																								public String convert(ObjectPropertyContext ctx) {
 																									String name = super.convert(ctx);
 																									name = name.replace('_', '.');
 																									return name;

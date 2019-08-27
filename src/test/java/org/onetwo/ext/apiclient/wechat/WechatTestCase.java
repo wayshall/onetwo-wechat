@@ -11,6 +11,7 @@ import org.onetwo.ext.apiclient.wechat.media.api.ImageClientTest;
 import org.onetwo.ext.apiclient.wechat.media.api.MediaClientTest;
 import org.onetwo.ext.apiclient.wechat.menu.api.MenuServiceTest;
 import org.onetwo.ext.apiclient.wechat.user.api.UserInfoClientTest;
+import org.onetwo.ext.apiclient.wechat.utils.WechatSignsTest;
 import org.onetwo.ext.apiclient.wechat.wxa.api.ContentSecurityClientTest;
 
 /**
@@ -20,6 +21,7 @@ import org.onetwo.ext.apiclient.wechat.wxa.api.ContentSecurityClientTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({
+	WechatSignsTest.class,
 	WechatServerTest.class,
 	DbStoreAccessTokenServiceTest.class,
 	MenuServiceTest.class,
