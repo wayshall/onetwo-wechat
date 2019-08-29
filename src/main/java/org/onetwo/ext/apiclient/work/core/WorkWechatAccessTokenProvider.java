@@ -7,10 +7,10 @@ import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenProvider;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenTypes;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
+import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
 import org.onetwo.ext.apiclient.work.basic.api.WorkTokenClient;
 import org.onetwo.ext.apiclient.work.basic.api.WorkTokenClient.GetTokenRequest;
-import org.onetwo.ext.apiclient.work.utils.WorkWechatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -33,11 +33,18 @@ public class WorkWechatAccessTokenProvider implements AccessTokenProvider {
 
 	@Override
 	public AccessTokenResponse getAccessToken(GetAccessTokenRequest request) {
-		String corpid = WorkWechatUtils.splitCorpid(request.getAppid());
+//		String corpid = WorkWechatUtils.splitCorpid(request.getAppid());
+		String corpid = request.getAppid();
+		WechatConfig wechatConfig = wechatConfigProvider.getWechatConfig(corpid);
 		GetTokenRequest getTokenRequest = GetTokenRequest.builder()
 														.corpid(corpid)
-														.corpsecret(request.getSecret())
+//														.corpsecret(request.getSecret())
 														.build();
+		if (request.getAccessTokenType()==AccessTokenTypes.CONTACTS) {
+			getTokenRequest.setCorpsecret(wechatConfig.getContactSecrect());
+		} else {
+			getTokenRequest.setCorpsecret(wechatConfig.getAppsecret());
+		}
 		return workTokenClient.getAccessToken(getTokenRequest);
 	}
 	

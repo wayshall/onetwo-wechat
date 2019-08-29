@@ -26,7 +26,7 @@ abstract public class WorkWechatUtils {
 	 */
 	public static final String ID_SPLITOR = ":";
 	
-	public static String joinCorpid(String appid, Long agentId) {
+	/*public static String joinCorpid(String appid, Long agentId) {
 		if (agentId==null) {
 			return appid;
 		}
@@ -37,7 +37,7 @@ abstract public class WorkWechatUtils {
 		String[] ids = GuavaUtils.split(appid, WorkWechatUtils.ID_SPLITOR);
 		String corpid = ids[0];
 		return corpid;
-	}
+	}*/
 	
 	/****
 	 * 映射通讯录的修改事件的消息类型

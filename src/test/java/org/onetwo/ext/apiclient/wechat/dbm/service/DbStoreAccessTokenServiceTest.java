@@ -46,7 +46,7 @@ public class DbStoreAccessTokenServiceTest extends WechatDbmTestsAdapter{
 		assertThat(response.getIpList()).isNotEmpty();
 		
 		// 测试自动刷新，必须等待五秒以上
-		AppidRequest appidRequest = new AppidRequest(getAccessToken().getAppid(), AccessTokenTypes.WECHAT);
+		AppidRequest appidRequest = new AppidRequest(getAccessToken().getAppid(), getAccessToken().getAgentId(), AccessTokenTypes.WECHAT);
 		accessTokenInfo.setAccessToken("error");
 		accessTokenRepository.save(accessTokenInfo, appidRequest);
 		LangUtils.await(AccessTokenInfo.UPDATE_NEWLY_DURATION_SECONDS + 1);

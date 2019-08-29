@@ -88,7 +88,7 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	
 	@Override
 	public AccessTokenInfo getOrRefreshAccessToken(GetAccessTokenRequest request) {
-		AppidRequest appidRequest = new AppidRequest(request.getAppid(), request.getAccessTokenType());
+		AppidRequest appidRequest = new AppidRequest(request.getAppid(), request.getAgentId(), request.getAccessTokenType());
 		Optional<AccessTokenInfo> atOpt = getAccessToken(appidRequest);
 		if(atOpt.isPresent() && !atOpt.get().isExpired()){
 			return atOpt.get();
@@ -99,7 +99,7 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	
 
 	public void removeAccessToken(AppidRequest appidRequest) {
-		String appid = WechatUtils.getAppidKey(appidRequest);
+		String appid = getAppidKey(appidRequest);
 		try {
 			//使用锁，防止正在更新的时候，同时又删除
 			getRedisLockRunnerByAppId(appid).tryLock(()->{
@@ -127,7 +127,7 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 
 	public AccessTokenInfo refreshAccessToken(GetAccessTokenRequest request){
 		AccessTokenInfo at = getRedisLockRunnerByAppId(request.getAppid()).tryLock(()->{
-			AppidRequest appidRequest = new AppidRequest(request.getAppid(), request.getAccessTokenType());
+			AppidRequest appidRequest = new AppidRequest(request.getAppid(), request.getAgentId(), request.getAccessTokenType());
 			Optional<AccessTokenInfo> opt = getAccessToken(appidRequest);
 			
 			//未过时且最近更新过
@@ -144,6 +144,7 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 														.appid(request.getAppid())
 														.accessToken(tokenRes.getAccessToken())
 														.expiresIn(expired)
+														.agentId(request.getAgentId())
 														.updateAt(new Date())
 														.build();
 			saveNewToken(newToken, appidRequest);
@@ -213,6 +214,10 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 
 	public void setWechatConfigProvider(WechatConfigProvider wechatConfigProvider) {
 		this.wechatConfigProvider = wechatConfigProvider;
+	}
+
+	protected String getAppidKey(AppidRequest appidRequest) {
+		return WechatUtils.getAppidKey(appidRequest);
 	}
 
 	/*public AccessTokenTypes getSupportedClientType() {

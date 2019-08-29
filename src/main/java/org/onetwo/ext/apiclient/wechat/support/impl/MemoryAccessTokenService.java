@@ -48,7 +48,7 @@ public class MemoryAccessTokenService extends AbstractAccessTokenService impleme
 	@Override
 	protected void removeByAppid(AppidRequest appid) {
 		try {
-			String key = WechatUtils.getAccessTokenKey(appid.getAppid(), appid.getAccessTokenType());
+			String key = getAppidKey(appid);
 			this.accessTokenCaches.invalidate(key);
 		} catch (Exception e) {
 			logger.error("remove appid[" + appid + "] AccessToken error: " + e.getMessage());
@@ -66,7 +66,7 @@ public class MemoryAccessTokenService extends AbstractAccessTokenService impleme
 	@Override
 	public Optional<AccessTokenInfo> getAccessToken(AppidRequest appidRequest) {
 		Assert.hasText(appidRequest.getAppid(), "appid must have length; it must not be null or empty");
-		String appidKey = WechatUtils.getAppidKey(appidRequest);
+		String appidKey = getAppidKey(appidRequest);
 		AccessTokenInfo at = accessTokenCaches.getIfPresent(appidKey);
 		return Optional.ofNullable(at);
 	}
@@ -100,7 +100,7 @@ public class MemoryAccessTokenService extends AbstractAccessTokenService impleme
 	
 	@Override
 	public synchronized AccessTokenInfo refreshAccessToken(GetAccessTokenRequest request) {
-		AppidRequest appidRequest = new AppidRequest(request.getAppid(), request.getAccessTokenType());
+		AppidRequest appidRequest = new AppidRequest(request.getAppid(), request.getAgentId(), request.getAccessTokenType());
 		Optional<AccessTokenInfo> opt = getAccessToken(appidRequest);
 		if(isUpdatedNewly(opt)){
 			if(logger.isInfoEnabled()){
@@ -110,7 +110,7 @@ public class MemoryAccessTokenService extends AbstractAccessTokenService impleme
 		}
 		
 		AccessTokenInfo token = null;
-		String key = WechatUtils.getAccessTokenKey(request.getAppid(), request.getAccessTokenType());
+		String key = getAppidKey(appidRequest);
 		if(logger.isInfoEnabled()){
 			logger.info("==========>>> get access token from wechat server...");
 		}
@@ -121,7 +121,8 @@ public class MemoryAccessTokenService extends AbstractAccessTokenService impleme
 	}
 
 	private AccessTokenInfo getAccessTokenFromCache(GetAccessTokenRequest request){
-		String key = WechatUtils.getAccessTokenKey(request.getAppid(), request.getAccessTokenType());
+		AppidRequest appidRequest = new AppidRequest(request.getAppid(), request.getAgentId(), request.getAccessTokenType());
+		String key = getAppidKey(appidRequest);
 		try {
 			return this.accessTokenCaches.get(key, ()->{
 //				AccessTokenInfo accessToken = WechatUtils.getAccessToken(wechatServer, request);

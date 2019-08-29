@@ -6,7 +6,6 @@ import java.util.concurrent.TimeUnit;
 import org.onetwo.boot.module.redis.RedisUtils;
 import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
-import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.BoundValueOperations;
@@ -43,7 +42,7 @@ public class RedisStoreAccessTokenService extends AbstractAccessTokenService {
 
 	@Override
 	protected void removeByAppid(AppidRequest appidRequest) {
-		String key = WechatUtils.getAccessTokenKey(appidRequest.getAppid(), appidRequest.getAccessTokenType());
+		String key = getAppidKey(appidRequest);
 		this.redisTemplate.delete(key);
 	}
 
@@ -75,7 +74,13 @@ public class RedisStoreAccessTokenService extends AbstractAccessTokenService {
 	}
 	
 	private BoundValueOperations<String, AccessTokenInfo> boundValueOperationsByAppId(AppidRequest appidRequest){
-		return WechatUtils.boundValueOperationsByAppId(redisTemplate, appidRequest.getAppid(), appidRequest.getAccessTokenType());
+		return boundValueOperationsByAppId(redisTemplate, appidRequest);
 	}
 
+	@SuppressWarnings("unchecked")
+	private BoundValueOperations<String, AccessTokenInfo> boundValueOperationsByAppId(RedisTemplate<String, ?> redisTemplate, AppidRequest appidRequest){
+		String key = getAppidKey(appidRequest);
+		BoundValueOperations<String, AccessTokenInfo> opt = (BoundValueOperations<String, AccessTokenInfo>)redisTemplate.boundValueOps(key);
+		return opt;
+	}
 }

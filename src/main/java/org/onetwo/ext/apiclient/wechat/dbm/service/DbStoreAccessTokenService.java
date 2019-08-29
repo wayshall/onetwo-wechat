@@ -50,7 +50,7 @@ public class DbStoreAccessTokenService extends AbstractAccessTokenService {
 	}
 	@Override
 	public AccessTokenInfo getOrRefreshAccessToken(GetAccessTokenRequest request) {
-		AppidRequest appidRequest = new AppidRequest(request.getAppid(), request.getAccessTokenType());
+		AppidRequest appidRequest = new AppidRequest(request.getAppid(), request.getAgentId(), request.getAccessTokenType());
 		Optional<AccessTokenInfo> atOpt = getAccessToken(appidRequest);
 		if(atOpt.isPresent() && !atOpt.get().isExpired()){
 			return atOpt.get();

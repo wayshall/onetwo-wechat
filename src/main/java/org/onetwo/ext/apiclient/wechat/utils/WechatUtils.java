@@ -15,18 +15,16 @@ import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.exception.ErrorTypes;
 import org.onetwo.common.jackson.JsonMapper;
 import org.onetwo.common.utils.LangUtils;
+import org.onetwo.common.utils.StringUtils;
 import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
-import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenTypes;
 import org.onetwo.ext.apiclient.wechat.basic.api.TokenApi;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.GrantTypeKeys;
 import org.onetwo.ext.apiclient.wechat.wxa.response.WxappUserInfo;
-import org.springframework.data.redis.core.BoundValueOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 
 /**
@@ -35,7 +33,8 @@ import org.springframework.http.ResponseEntity;
  */
 public class WechatUtils {
 
-	public static final String ACCESS_TOKEN_PREFIX = "WX_ACCESSTOKEN:";
+	public static final String ACCESS_TOKEN_PREFIX = "WX_ACCESSTOKEN";
+	public static final String KEY_SPLITOR = ":";
 	public static final String LOCK_KEY = "LOCKER:WX_ACESSTOKEN:";
 	static {
 		Security.addProvider(new BouncyCastleProvider());
@@ -103,17 +102,10 @@ public class WechatUtils {
 													.build();
 		return accessToken;
 	}
-	
-	@SuppressWarnings("unchecked")
-	public static BoundValueOperations<String, AccessTokenInfo> boundValueOperationsByAppId(RedisTemplate<String, ?> redisTemplate, String appid, AccessTokenTypes clientType){
-		String key = getAccessTokenKey(appid, clientType);
-		BoundValueOperations<String, AccessTokenInfo> opt = (BoundValueOperations<String, AccessTokenInfo>)redisTemplate.boundValueOps(key);
-		return opt;
-	}
 
-	public static String getAccessTokenKey(String appid, AccessTokenTypes accessTokenType){
+	/*public static String getAccessTokenKey(String appid, AccessTokenTypes accessTokenType){
 		return WechatUtils.ACCESS_TOKEN_PREFIX + getAppidKey(appid, accessTokenType);
-	}
+	}*/
 	
 	public static ApiClientException translateToApiClientException(ApiClientMethod invokeMethod, WechatResponse baseResponse, ResponseEntity<?> responseEntity){
 		return WechatErrors.byErrcode(baseResponse.getErrcode())
@@ -124,13 +116,28 @@ public class WechatUtils {
 								 									));
 	}
 	
+	/***
+	 * WX_ACCESSTOKEN:wechat:appid
+	 * WX_ACCESSTOKEN:wechat:appid:agentId
+	 * @author weishao zeng
+	 * @param appidRequest
+	 * @return
+	 */
 	public static String getAppidKey(AppidRequest appidRequest) {
-		return getAppidKey(appidRequest.getAppid(), appidRequest.getAccessTokenType());
+//		return getAppidKey(appidRequest.getAppid(), appidRequest.getAccessTokenType());
+		StringBuilder key = new StringBuilder();
+		key.append(ACCESS_TOKEN_PREFIX).append(KEY_SPLITOR)
+			.append(appidRequest.getAccessTokenType().name()).append(KEY_SPLITOR)
+			.append(appidRequest.getAppid());
+		if (StringUtils.isNotBlank(appidRequest.getAgentId())) {
+			key.append(KEY_SPLITOR).append(appidRequest.getAgentId());
+		}
+		return key.toString();
 	}
 	
-	private static String getAppidKey(String appid, AccessTokenTypes accessTokenType) {
+	/*private static String getAppidKey(String appid, AccessTokenTypes accessTokenType) {
 		return appid + ":" + accessTokenType.name();
-	}
+	}*/
 	
 	private WechatUtils(){
 	}

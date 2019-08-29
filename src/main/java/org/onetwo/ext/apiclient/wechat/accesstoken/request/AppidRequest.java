@@ -20,11 +20,12 @@ public class AppidRequest {
 	
 	@NotBlank
 	private String appid;
+	private String agentId;
 	@IgnoreField
 	private AccessTokenTypes accessTokenType;
 	
 	@Builder
-	public AppidRequest(String appid, AccessTokenTypes accessTokenType) {
+	public AppidRequest(String appid, String agentId, AccessTokenTypes accessTokenType) {
 		super();
 		if (accessTokenType==null) {
 			this.accessTokenType = AccessTokenTypes.WECHAT;
@@ -32,6 +33,7 @@ public class AppidRequest {
 			this.accessTokenType = accessTokenType;
 		}
 		this.appid = appid;
+		this.agentId = agentId;
 	}
 	
 }

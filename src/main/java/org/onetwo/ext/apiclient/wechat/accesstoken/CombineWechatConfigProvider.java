@@ -19,6 +19,10 @@ public class CombineWechatConfigProvider extends SimpleWechatConfigProvider {
 		this.workWechatConfig = workWechatConfig;
 	}
 
+	/****
+	 * 如果appid为空，并且存在默认的wechat配置，直接返回默认的wechat配置，否则返回work-wechat的默认配置（即第一个配置）
+	 * 不为空，则按顺序通过wechat.appid、work-wechat.apps.appid、work-wechat.apps.agentid, work-wechat.apps.name查找
+	 */
 	@Override
 	public WechatConfig getWechatConfig(String appid) {
 		WechatConfig config = null;

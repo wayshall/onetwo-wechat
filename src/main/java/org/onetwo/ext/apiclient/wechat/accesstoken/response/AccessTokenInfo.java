@@ -26,13 +26,17 @@ public class AccessTokenInfo implements Serializable {
 	private String accessToken;
 	private Date updateAt = null;
 	private long expiresIn;
+	/***
+	 * 企业微信有用
+	 */
+	private String agentId;
 
-	public AccessTokenInfo(String accessToken) {
-		this(null, accessToken, -1, null);
-	}
+	/*public AccessTokenInfo(String accessToken) {
+		this(null, null, accessToken, -1, null);
+	}*/
 	
 	@Builder
-	public AccessTokenInfo(String appid, String accessToken, long expiresIn, Date updateAt) {
+	public AccessTokenInfo(String appid, String agentId, String accessToken, long expiresIn, Date updateAt) {
 		super();
 		this.accessToken = accessToken;
 //		this.expireAt = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(expiresIn-SHORTER_EXPIRE_TIME_IN_SECONDS);
@@ -40,6 +44,7 @@ public class AccessTokenInfo implements Serializable {
 		this.expiresIn = expiresIn;
 		this.updateAt = updateAt;
 		this.appid = appid;
+		this.agentId = agentId;
 	}
 
 	@JsonIgnore

@@ -11,7 +11,6 @@ import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenTypes;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
 import org.onetwo.ext.apiclient.work.core.WorkWechatConfig;
-import org.onetwo.ext.apiclient.work.utils.WorkWechatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
@@ -52,7 +51,8 @@ public class WorkWechatBaseBootTests {
 		return getAccessToken(wechatConfig);
     }
 	protected AccessTokenInfo getAccessToken(WechatConfig wechatConfig){
-		String corpid = WorkWechatUtils.joinCorpid(wechatConfig.getAppid(), wechatConfig.getAgentId());
+//		String corpid = WorkWechatUtils.joinCorpid(wechatConfig.getAppid(), wechatConfig.getAgentId());
+		String corpid = wechatConfig.getAppid();
 		GetAccessTokenRequest request = GetAccessTokenRequest.builder()
 																.appid(corpid)
 																.secret(wechatConfig.getAppsecret())
