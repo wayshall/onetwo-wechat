@@ -15,7 +15,6 @@ import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.exception.ErrorTypes;
 import org.onetwo.common.jackson.JsonMapper;
 import org.onetwo.common.utils.LangUtils;
-import org.onetwo.common.utils.StringUtils;
 import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
@@ -129,7 +128,7 @@ public class WechatUtils {
 		key.append(ACCESS_TOKEN_PREFIX).append(KEY_SPLITOR)
 			.append(appidRequest.getAccessTokenType().name()).append(KEY_SPLITOR)
 			.append(appidRequest.getAppid());
-		if (StringUtils.isNotBlank(appidRequest.getAgentId())) {
+		if (appidRequest.getAgentId()!=null) {
 			key.append(KEY_SPLITOR).append(appidRequest.getAgentId());
 		}
 		return key.toString();

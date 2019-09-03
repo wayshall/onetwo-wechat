@@ -32,7 +32,7 @@ public class GetAccessTokenRequest {
 	/***
 	 * 企业微信时使用
 	 */
-	private String agentId;
+	private Long agentId;
 	/****
 	 * secret可不写，根据appid和agentid到配置里读取
 	 */
@@ -42,7 +42,7 @@ public class GetAccessTokenRequest {
 	private AccessTokenTypes accessTokenType;
 	
 	@Builder
-	public GetAccessTokenRequest(String grantType, String appid, String secret, AccessTokenTypes accessTokenType, String agentId) {
+	public GetAccessTokenRequest(String grantType, String appid, String secret, AccessTokenTypes accessTokenType, Long agentId) {
 		super();
 		if (StringUtils.isBlank(grantType)) {
 			this.grantType = GrantTypeKeys.CLIENT_CREDENTIAL;

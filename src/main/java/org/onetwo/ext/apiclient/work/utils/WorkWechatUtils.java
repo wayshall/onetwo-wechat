@@ -1,6 +1,5 @@
 package org.onetwo.ext.apiclient.work.utils;
 
-import org.onetwo.common.utils.GuavaUtils;
 import org.onetwo.ext.apiclient.wechat.serve.spi.MessageRouterService;
 import org.onetwo.ext.apiclient.work.contact.message.ContactCreateUserMessage;
 import org.onetwo.ext.apiclient.work.contact.message.ContactDeleteUserMessage;
