@@ -174,6 +174,17 @@ APP -APP支付
 	@NotBlank
 	@Length(max=32)
 	private String version = "1.0";
+	
+	/*****
+	 * https://pay.weixin.qq.com/wiki/doc/api/allocation_sl.php?chapter=24_3&index=3
+	 * 是否指定服务商分账
+	 * Y-是，需要分账
+N-否，不分账
+字母要求大写，不传默认不分账
+	 */
+	@Length(max=16)
+	@JsonProperty("profit_sharing")
+	private String profitSharing;
 
 	@Builder
 	public UnifiedOrderRequest(String appid, String mchId, String nonceStr, String sign, String signType,

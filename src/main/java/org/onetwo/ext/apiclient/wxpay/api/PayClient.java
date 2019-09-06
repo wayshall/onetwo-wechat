@@ -18,6 +18,10 @@ public interface PayClient {
 	
 	/****
 	 * 同一个商户订单号，不能修改金额、商品描述等关键字段，否则会提示：商户订单号重复
+	 * 普通支付：
+	 * https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1
+	 * 分账支付：
+	 * https://pay.weixin.qq.com/wiki/doc/api/allocation_sl.php?chapter=24_3&index=3
 	 * @author weishao zeng
 	 * @param request
 	 * @return
