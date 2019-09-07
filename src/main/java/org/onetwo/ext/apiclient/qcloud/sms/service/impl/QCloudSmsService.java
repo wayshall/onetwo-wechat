@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import org.apache.commons.lang3.StringUtils;
 import org.onetwo.common.exception.ServiceException;
 import org.onetwo.common.log.JFishLoggerFactory;
+import org.onetwo.common.utils.LangUtils;
 import org.onetwo.ext.apiclient.qcloud.sms.SmsException;
 import org.onetwo.ext.apiclient.qcloud.sms.SmsProperties;
 import org.onetwo.ext.apiclient.qcloud.sms.service.SmsService;
 import org.onetwo.ext.apiclient.qcloud.sms.vo.SendSmsRequest;
 import org.onetwo.ext.apiclient.qcloud.util.QCloudErrors.SmsErrors;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
@@ -24,6 +26,8 @@ import lombok.Getter;
  * <br/>
  */
 public class QCloudSmsService implements InitializingBean, SmsService {
+	
+	protected final Logger logger = JFishLoggerFactory.getLogger(getClass());
 	
 	private SmsSingleSender smsSingleSender;
 	@Getter
@@ -53,6 +57,23 @@ public class QCloudSmsService implements InitializingBean, SmsService {
 	@Override
 	public void sendTemplateMessage(SendSmsRequest request) {
 		this.checkRequest(request);
+		
+		String phoneNumber = request.getPhoneNumber();
+		if (LangUtils.isNotEmpty(smsProperties.getWhiteList())) {
+			// 白名单不为空，执行白名单规则
+			if (!smsProperties.getWhiteList().contains(phoneNumber)) {
+				if (logger.isWarnEnabled()) {
+					logger.warn("the phone number[{}] is not in white list, ignore send message!", phoneNumber);
+				}
+				return ;
+			}
+		}else if (isInBlackList(phoneNumber)) {
+			if (logger.isWarnEnabled()) {
+				logger.warn("the phone number[{}] is in black list, ignore send message!", phoneNumber);
+			}
+			return ;
+		}
+		
 		ArrayList<String> params = null;
 		if (request.getParams()!=null ) {
 			if (request.getParams() instanceof ArrayList) {
@@ -63,15 +84,22 @@ public class QCloudSmsService implements InitializingBean, SmsService {
 		}
 		SmsSingleSenderResult result = null;
     	try {
-    		result = this.smsSingleSender.sendWithParam(request.getNationCode(), request.getPhoneNumber(), request.getTemplId(), params, request.getSign(), request.getExtend(), request.getExt());
+    		result = this.smsSingleSender.sendWithParam(request.getNationCode(), phoneNumber, request.getTemplId(), params, request.getSign(), request.getExtend(), request.getExt());
 		} catch (Exception e) {
 			throw new SmsException(SmsErrors.ERR_SMS_SEND, e);
 		}
     	if(result.result!=0) {
-			JFishLoggerFactory.findMailLogger().error("send sms error, mobile: {},  templateId: {}, error: {}", request.getPhoneNumber(), request.getTemplId(), result);
+			JFishLoggerFactory.findMailLogger().error("send sms error, mobile: {},  templateId: {}, error: {}", phoneNumber, request.getTemplId(), result);
     		throw new SmsException(result.errMsg, String.valueOf(result.result));
     	}
     }
+	
+	private boolean isInBlackList(String phoneNumber) {
+		if (LangUtils.isEmpty(smsProperties.getBlackList())) {
+			return false;
+		}
+		return smsProperties.getBlackList().contains(phoneNumber);
+	}
 	
 }
 
