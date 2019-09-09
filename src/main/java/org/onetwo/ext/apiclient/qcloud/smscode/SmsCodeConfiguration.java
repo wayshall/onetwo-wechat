@@ -3,6 +3,7 @@ package org.onetwo.ext.apiclient.qcloud.smscode;
 import org.onetwo.ext.apiclient.qcloud.smscode.service.SmsCodeExceptionTranslator;
 import org.onetwo.ext.apiclient.qcloud.smscode.service.SmsCodeExceptionTranslator.DefaultSmsCodeExceptionTranslator;
 import org.onetwo.ext.apiclient.qcloud.smscode.service.SmsCodeService;
+import org.onetwo.ext.apiclient.qcloud.smscode.service.impl.EnhanceSmsCodeService;
 import org.onetwo.ext.apiclient.qcloud.smscode.service.impl.SmsCodeServiceImpl;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -19,8 +20,15 @@ import org.springframework.context.annotation.Configuration;
 public class SmsCodeConfiguration {
 	
 	@Bean
+	@ConditionalOnProperty(name=SmsCodeProperties.PREFIX + ".template-id")
 	public SmsCodeService smsCodeService(SmsCodeProperties smsCodeProperties, SmsCodeExceptionTranslator translator) {
 		SmsCodeService smsService = new SmsCodeServiceImpl(smsCodeProperties, translator);
+		return smsService;
+	}
+	
+	@Bean
+	public EnhanceSmsCodeService enhanceSmsCodeService(SmsCodeExceptionTranslator translator) {
+		EnhanceSmsCodeService smsService = new EnhanceSmsCodeService(translator);
 		return smsService;
 	}
 	

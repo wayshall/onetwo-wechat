@@ -4,21 +4,13 @@ import org.onetwo.common.spring.Springs;
 import org.onetwo.ext.apiclient.wechat.dbm.service.AccessTokenRepository;
 import org.onetwo.ext.apiclient.wechat.dbm.service.DbStoreAccessTokenService;
 import org.onetwo.ext.apiclient.wechat.event.WechatEventBus;
-import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.support.impl.MemoryAccessTokenService;
-import org.onetwo.ext.apiclient.wechat.support.impl.RedisStoreAccessTokenService;
-import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.WechatConfigKeys;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
@@ -36,18 +28,13 @@ public class WechatSupportConfiguration implements ApplicationContextAware {
 	}
 	
 	@Bean
-	@ConditionalOnProperty(name=WechatConfigKeys.STORER_KEY, havingValue=WechatConfigKeys.STORER_MEMORY_KEY, matchIfMissing=true)
-	public AccessTokenService memoryAccessTokenService(){
-		return new MemoryAccessTokenService();
+	public WechatAccessTokenProvider wechatAccessTokenProvider() {
+		return new WechatAccessTokenProvider();
 	}
 	
-	@Bean
-	@ConditionalOnProperty(name=WechatConfigKeys.STORER_KEY, havingValue=WechatConfigKeys.STORER_REDIS_KEY)
-	public AccessTokenService redisStoreAccessTokenService(){
-		return new RedisStoreAccessTokenService();
-	}
+	// ...
 	
-	@Configuration
+	/*@Configuration
 	@ConditionalOnProperty(name=WechatConfigKeys.STORER_KEY, havingValue=WechatConfigKeys.STORER_DATABASE_KEY)
 	protected static class DatabaseConfiguration {
 
@@ -79,9 +66,11 @@ public class WechatSupportConfiguration implements ApplicationContextAware {
 		
 		@Bean
 		public WechatConfigProvider wechatConfigProvider(){
-			return new SimpleWechatConfigProvider();
+			SimpleWechatConfigProvider provider = new SimpleWechatConfigProvider();
+			provider.setWechatConfig(wechatConfig);
+			return provider;
 		}
-	}
+	}*/
 	
 	/*@Bean
 	@ConditionalOnMissingBean(RedisRefreshAccessTokenTask.class)

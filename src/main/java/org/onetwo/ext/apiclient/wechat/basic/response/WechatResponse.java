@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder(builderMethodName="baseBuilder")
 @NoArgsConstructor
 @AllArgsConstructor
-public class WechatResponse {
+public class WechatResponse implements WechatResponsable {
 	
 	private Integer errcode;
 	private String errmsg;

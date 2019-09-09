@@ -2,18 +2,20 @@ package org.onetwo.ext.apiclient.wechat.support.impl;
 
 import java.util.Date;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import org.onetwo.boot.module.redis.RedisLockRunner;
 import org.onetwo.common.apiclient.utils.ApiClientUtils;
 import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.utils.LangUtils;
-import org.onetwo.ext.apiclient.wechat.basic.api.WechatServer;
-import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenProvider;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
-import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
-import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
 import org.slf4j.Logger;
@@ -22,8 +24,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.redis.util.RedisLockRegistry;
 import org.springframework.util.Assert;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
- * 基于redis
+ * TODO: 注意企业微信有可能存在这样的情况：同一个appid（cropid），但是使用不同应用的秘钥获取不同的accesstoken，
+	 * 此时如果根据appid来识别不同的token是无法做到的，需要另外处理。
+	 * 使用appid+secrect作为store key？或者根据两者生成唯一hash，然后保存到AccessTokenInfo，刷新的时候调用？在AppidRequest增加标识？
+	 * 
  * @author wayshall
  * <br/>
  */
@@ -31,8 +39,8 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	
 	protected final Logger logger = ApiClientUtils.getApiclientlogger();
 
-	@Autowired
-	private WechatServer wechatServer;
+	@Getter
+	private AccessTokenProvider accessTokenProvider;
 //	@Autowired
 //	private WechatConfig wechatConfig;
 	/*@Autowired
@@ -41,11 +49,14 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	@Autowired
 	private RedisLockRegistry redisLockRegistry;
 //	private RedisLockRunner redisLockRunner;
-	private int retryLockInSeconds = 1;
+	@Setter
+	private long lockWaitInSeconds = 1;
 	
-	@Autowired
+//	@Autowired
 //	protected WechatConfig wechatConfig;
 	private WechatConfigProvider wechatConfigProvider;
+	
+//	private AccessTokenTypes supportedClientType = AccessTokenTypes.WECHAT;
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -54,8 +65,10 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	}
 	
 	@Override
-	public Optional<AccessTokenInfo> refreshAccessTokenByAppid(String appid) {
+	public Optional<AccessTokenInfo> refreshAccessTokenByAppid(AppidRequest refreshTokenRequest) {
+		String appid = refreshTokenRequest.getAppid();
 		WechatConfig wechatConfig = wechatConfigProvider.getWechatConfig(appid);
+		WechatUtils.assertWechatConfigNotNull(wechatConfig, appid);
 		if (appid==null || !appid.equals(wechatConfig.getAppid())) {
 			logger.warn("appid error, ignore refresh, appid: {}, configuration appid: {}", appid, wechatConfig.getAppid());
 			return Optional.empty();
@@ -63,6 +76,7 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 		GetAccessTokenRequest request = GetAccessTokenRequest.builder()
 																.appid(appid)
 																.secret(wechatConfig.getAppsecret())
+																.accessTokenType(refreshTokenRequest.getAccessTokenType())
 															.build();
 		AccessTokenInfo tokenInfo = refreshAccessToken(request);
 		return Optional.of(tokenInfo);
@@ -74,7 +88,8 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	
 	@Override
 	public AccessTokenInfo getOrRefreshAccessToken(GetAccessTokenRequest request) {
-		Optional<AccessTokenInfo> atOpt = getAccessToken(request.getAppid());
+		AppidRequest appidRequest = new AppidRequest(request.getAppid(), request.getAgentId(), request.getAccessTokenType());
+		Optional<AccessTokenInfo> atOpt = getAccessToken(appidRequest);
 		if(atOpt.isPresent() && !atOpt.get().isExpired()){
 			return atOpt.get();
 		}
@@ -83,14 +98,15 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	}
 	
 
-	public void removeAccessToken(String appid) {
+	public void removeAccessToken(AppidRequest appidRequest) {
+		String appid = getAppidKey(appidRequest);
 		try {
 			//使用锁，防止正在更新的时候，同时又删除
 			getRedisLockRunnerByAppId(appid).tryLock(()->{
 				if(logger.isInfoEnabled()){
 					logger.info("remove accessToken from {} server...", getStoreType());
 				}
-				removeByAppid(appid);
+				removeByAppid(appidRequest);
 				return null;
 			});
 		} catch (Exception e) {
@@ -98,34 +114,47 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 		}
 	}
 
+	protected AccessTokenResponse getAccessToken(GetAccessTokenRequest request) {
+		return accessTokenProvider.getAccessToken(request);
+	}
+	
+	protected boolean isUpdatedNewly(Optional<AccessTokenInfo> opt) {
+		if(opt.isPresent() && !opt.get().isExpired() && opt.get().isUpdatedNewly()){
+			return true;
+		}
+		return false;
+	}
 
 	public AccessTokenInfo refreshAccessToken(GetAccessTokenRequest request){
 		AccessTokenInfo at = getRedisLockRunnerByAppId(request.getAppid()).tryLock(()->{
-			Optional<AccessTokenInfo> opt = getAccessToken(request.getAppid());
+			AppidRequest appidRequest = new AppidRequest(request.getAppid(), request.getAgentId(), request.getAccessTokenType());
+			Optional<AccessTokenInfo> opt = getAccessToken(appidRequest);
 			
 			//未过时且最近更新过
-			if(opt.isPresent() && !opt.get().isExpired() && opt.get().isUpdatedNewly()){
+			if(isUpdatedNewly(opt)){
 				if(logger.isInfoEnabled()){
 					logger.info("double check access token from {} server...", getStoreType());
 				}
 				return opt.get();
 			}
 			
-			AccessTokenResponse tokenRes = wechatServer.getAccessToken(request);
+			AccessTokenResponse tokenRes = getAccessToken(request);
 			int expired = getExpiresIn(tokenRes);
 			AccessTokenInfo newToken = AccessTokenInfo.builder()
 														.appid(request.getAppid())
 														.accessToken(tokenRes.getAccessToken())
 														.expiresIn(expired)
+														.agentId(request.getAgentId())
 														.updateAt(new Date())
 														.build();
-			saveNewToken(newToken);
+			saveNewToken(newToken, appidRequest);
 			if(logger.isInfoEnabled()){
 				logger.info("saved new access token : {}", newToken);
 			}
 			return newToken;
 		}, ()->{
 			//如果锁定失败，则休息1秒，然后递归……
+			int retryLockInSeconds = 1;
 			if(logger.isWarnEnabled()){
 				logger.warn("obtain redisd lock error, sleep {} seconds and retry...", retryLockInSeconds);
 			}
@@ -141,14 +170,17 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	 * @author weishao zeng
 	 * @param appid
 	 */
-	abstract protected void removeByAppid(String appid);
+	abstract protected void removeByAppid(AppidRequest appid);
 	
 	/***
 	 * 刷新后保存
+	 * TODO: 注意企业微信有可能存在这样的情况：同一个appid（cropid），但是使用不同应用的秘钥获取不同的accesstoken，
+	 * 此时如果根据appid来识别不同的token是无法做到的，需要另外处理。
+	 * 使用appid+secrect作为store key？或者根据两者生成唯一hash，然后保存到AccessTokenInfo，刷新的时候调用？在AppidRequest增加标识？
 	 * @author weishao zeng
 	 * @param newToken
 	 */
-	abstract protected void saveNewToken(AccessTokenInfo newToken);
+	abstract protected void saveNewToken(AccessTokenInfo newToken, AppidRequest appidRequest);
 	
 	/***
 	 * 获取设置redis的过期时间，比token有效时间稍短，避免过期
@@ -165,6 +197,8 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	private RedisLockRunner getRedisLockRunnerByAppId(String appid){
 		RedisLockRunner redisLockRunner = RedisLockRunner.builder()
 														 .lockKey(WechatUtils.LOCK_KEY+appid)
+														 .time(lockWaitInSeconds)
+														 .unit(TimeUnit.SECONDS)
 														 .errorHandler(e->{
 															 throw new ApiClientException(WechatClientErrors.ACCESS_TOKEN_REFRESH_ERROR, e);
 														 })
@@ -173,14 +207,26 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 		return redisLockRunner;
 	}
 	
-
-	public WechatServer getWechatServer() {
-		return wechatServer;
+	public void setAccessTokenProvider(AccessTokenProvider accessTokenProvider) {
+		this.accessTokenProvider = accessTokenProvider;
 	}
 
-	public void setRetryLockInSeconds(int retryLockInSeconds) {
-		this.retryLockInSeconds = retryLockInSeconds;
+
+	public void setWechatConfigProvider(WechatConfigProvider wechatConfigProvider) {
+		this.wechatConfigProvider = wechatConfigProvider;
 	}
+
+	protected String getAppidKey(AppidRequest appidRequest) {
+		return WechatUtils.getAppidKey(appidRequest);
+	}
+
+	/*public AccessTokenTypes getSupportedClientType() {
+		return supportedClientType;
+	}
+
+	public void setSupportedClientType(AccessTokenTypes supportedClientType) {
+		this.supportedClientType = supportedClientType;
+	}*/
 
 
 }

@@ -7,11 +7,11 @@ import javax.validation.Valid;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;
 import org.onetwo.ext.apiclient.wechat.user.request.UserInfoGetRequest;
 import org.onetwo.ext.apiclient.wechat.user.response.UserInfoGetResponse;
-import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

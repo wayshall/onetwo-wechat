@@ -13,8 +13,11 @@ import org.onetwo.common.apiclient.utils.ApiClientUtils;
 import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.spring.SpringUtils;
 import org.onetwo.common.utils.ParamUtils;
+import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenTypes;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClientFactoryBean.WechatMethod;
-import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.WechatConfigKeys;
@@ -53,10 +56,13 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 	@Value(WechatConfigKeys.ACCESSTOKEN_AUTO_REMOVE_KEY)
 	private boolean autoRemove;
 	
+	private AccessTokenTypes accessTokenType;
+	
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		super.afterPropertiesSet();
+//		Assert.notNull(accessTokenType, "accessTokenType can not be null");
 	}
 	
 	@Override
@@ -76,6 +82,12 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 			throw new ApiClientException(WechatClientErrors.ACCESS_TOKEN_SERVICE_NOT_FOUND);
 		}
 		return accessTokenService;
+//		AccessTokenService accessTokenService = SpringUtils.getBeans(applicationContext, AccessTokenService.class)
+//															.stream()
+//															.filter(ts -> ts.getSupportedClientType()==wxClientTypes)
+//															.findFirst()
+//															.orElseThrow(() -> new ApiClientException(WechatClientErrors.ACCESS_TOKEN_SERVICE_NOT_FOUND));
+//		return accessTokenService;
 	}
 	
 	final class WechatClientMethodInterceptor extends DefaultApiMethodInterceptor {
@@ -116,14 +128,19 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 		protected Object processAutoRemove(MethodInvocation invocation, WechatMethod invokeMethod, AccessTokenInfo at, ApiClientException e) {
 			if (autoRemove) {
 				String appid = at.getAppid();
-				Optional<AccessTokenInfo> refreshOpt = getAccessTokenService().refreshAccessTokenByAppid(appid);
+				Optional<AccessTokenInfo> refreshOpt = getAccessTokenService().refreshAccessTokenByAppid(
+																							AppidRequest.builder()
+																									.appid(appid)
+																									.accessTokenType(accessTokenType)
+																									.build()
+																							);
 				if (refreshOpt.isPresent()) {
 					logger.info("refreshAccessTokenByAppid success, retry invoke wechat method. token: {}", refreshOpt.get().getAccessToken());
 					at.setAccessToken(refreshOpt.get().getAccessToken());
 					return super.doInvoke(invocation, invokeMethod);
 				} else {
 					logger.warn("refreshAccessTokenByAppid faild, try to remove...");
-					getAccessTokenService().removeAccessToken(appid);
+					getAccessTokenService().removeAccessToken(new AppidRequest(appid, at.getAgentId(), accessTokenType));
 				}
 			} else {
 				logger.warn("accesstoken is invalid and disable auto remove");
@@ -175,7 +192,7 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 		}
 	}
 
-	static class WechatMethod extends ApiClientMethod {
+	public static class WechatMethod extends ApiClientMethod {
 //		private boolean autoAppendAccessToken;
 		private Optional<ApiClientMethodParameter> accessTokenParameter;
 		
@@ -213,8 +230,7 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 			return super.isSpecalPemerater(parameter) || 
 					(accessTokenParameter.isPresent() && accessTokenParameter.get().getParameterIndex()==parameter.getParameterIndex());
 		}
-		
-		
+
 		public Optional<AccessTokenInfo> getAccessToken(final Object[] args){
 			/*return accessTokenParameter.map(parameter->{
 				return (AccessTokenInfo)args[parameter.getParameterIndex()];

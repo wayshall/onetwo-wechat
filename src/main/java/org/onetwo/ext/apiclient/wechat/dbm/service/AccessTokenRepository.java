@@ -3,8 +3,10 @@ package org.onetwo.ext.apiclient.wechat.dbm.service;
 import java.util.Optional;
 
 import org.onetwo.common.db.spi.BaseEntityManager;
+import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.dbm.entity.WxAccessTokenEntity;
-import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
+import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,13 +21,14 @@ public class AccessTokenRepository {
 	private BaseEntityManager baseEntityManager;
 	
 	@Transactional(readOnly=true)
-	public Optional<AccessTokenInfo> findByAppid(String appid) {
-		WxAccessTokenEntity at = baseEntityManager.findById(WxAccessTokenEntity.class, appid);
+	public Optional<AccessTokenInfo> findByAppid(AppidRequest appidRequest) {
+		String id = getId(appidRequest);
+		WxAccessTokenEntity at = baseEntityManager.findById(WxAccessTokenEntity.class, id);
 		if (at==null) {
 			return Optional.empty();
 		}
 		AccessTokenInfo atInfo = AccessTokenInfo.builder()
-											.appid(appid)
+											.appid(appidRequest.getAppid())
 											.accessToken(at.getAccessToken())
 											.expiresIn(at.getExpiresIn())
 											.updateAt(at.getUpdateAt())
@@ -33,18 +36,25 @@ public class AccessTokenRepository {
 		return Optional.of(atInfo);
 	}
 	
-	public WxAccessTokenEntity save(AccessTokenInfo atInfo) {
+	public WxAccessTokenEntity save(AccessTokenInfo atInfo, AppidRequest appidRequest) {
+		String id = getId(appidRequest);
 		WxAccessTokenEntity tokenEntity = new WxAccessTokenEntity();
-		tokenEntity.setWxAppid(atInfo.getAppid());
+		tokenEntity.setId(id);
+		tokenEntity.setWxAppid(appidRequest.getAppid());
 		tokenEntity.setAccessToken(atInfo.getAccessToken());
 		tokenEntity.setExpiresIn(atInfo.getExpiresIn());
 		baseEntityManager.save(tokenEntity);
 		return tokenEntity;
 	}
 	
-	public void removeByAppid(String appid) {
+	public void removeByAppid(AppidRequest appidRequest) {
 //		WxAccessTokenEntity at = baseEntityManager.findById(WxAccessTokenEntity.class, appid);
+		String appid = getId(appidRequest);
 		baseEntityManager.removeById(WxAccessTokenEntity.class, appid);
+	}
+	
+	private String getId(AppidRequest appidRequest) {
+		return WechatUtils.getAppidKey(appidRequest);
 	}
 
 }

@@ -9,6 +9,9 @@ import org.onetwo.common.exception.ErrorType;
 import com.google.common.collect.Maps;
 
 /**
+ * 错误码查询工具：https://open.work.weixin.qq.com/devtool/query?e=60123
+ * 错误码文档：https://qydev.weixin.qq.com/wiki/index.php?title=%E5%85%A8%E5%B1%80%E8%BF%94%E5%9B%9E%E7%A0%81%E8%AF%B4%E6%98%8E
+ * 
  * @author wayshall
  * <br/>
  */
@@ -30,7 +33,15 @@ public enum WechatErrors implements ErrorType {
 	TEMPLATE_ID_EXPIRED(41028, "form_id不正确，或者过期"),
 	TEMPLATE_ID_HAS_USED(41029, "form_id已被使用"),
 	PAGE_ERROR(41030, "page不正确"),
-	API_CALL_EXCEEDS_QUOTA(45009, "接口调用超过限额（目前默认每个帐号日调用限额为100万）")
+	API_CALL_EXCEEDS_QUOTA(45009, "接口调用超过限额（目前默认每个帐号日调用限额为100万）"),
+	
+
+	WORK_USER_ID_INVALID(40003, "无效的UserID"),
+	WORK_USER_NOT_FOUND(60111, "用户不存在"),
+	WORK_USER_DISABLED(60120, "成员已禁用"),
+	WORK_INVALID_PARTY_ID(60123, "无效的部门id"),
+	WORK_MISS_PARTY_ID(60127, "缺少部门id"),
+	WORK_PARTY_EXCEED_MAX(81004, "部门数量超过上限")
 	;
 
 	private static final Map<Integer, WechatErrors> ERROR_MAP;

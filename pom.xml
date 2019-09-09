@@ -71,7 +71,6 @@
             <groupId>com.github.qcloudsms</groupId>
             <artifactId>sms</artifactId>
             <version>0.9.2</version>
-            <optional>true</optional>
         </dependency>
         
 	    <dependency>
@@ -95,6 +94,11 @@
         <dependency>
           <groupId>org.onetwo4j</groupId>
           <artifactId>onetwo-boot</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.onetwo4j</groupId>
+          <artifactId>onetwo-dbm</artifactId>
+          <optional>true</optional>
         </dependency>
         
         <dependency>
@@ -167,6 +171,16 @@
         </dependency>
         
         <!-- for test -->
+	    <dependency>
+	        <groupId>mysql</groupId>
+	        <artifactId>mysql-connector-java</artifactId>
+	        <!-- 
+	        5.7版本是：default_authentication_plugin=mysql_native_password
+            8.x版本就是：default_authentication_plugin=caching_sha2_password
+	        用5.x版本驱动链接8.x数据会抛错：Unable to load authentication plugin 'caching_sha2_password'
+	        <version>8.0.11</version> -->
+	        <scope>test</scope>
+	    </dependency> 
 	    <dependency>
 	      <groupId>junit</groupId>
 	      <artifactId>junit</artifactId>

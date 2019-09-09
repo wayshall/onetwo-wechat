@@ -1,9 +1,9 @@
 package org.onetwo.ext.apiclient.wechat.oauth2.request;
 
+import org.onetwo.common.annotation.FieldName;
+
 import lombok.Builder;
 import lombok.Data;
-
-import org.onetwo.common.utils.FieldName;
 
 /**
  * @author wayshall

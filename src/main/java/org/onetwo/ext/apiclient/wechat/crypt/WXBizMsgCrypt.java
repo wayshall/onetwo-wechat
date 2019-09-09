@@ -38,7 +38,7 @@ import org.apache.commons.codec.binary.Base64;
  * 	<li>如果安装了JDK，将两个jar文件放到%JDK_HOME%\jre\lib\security目录下覆盖原来文件</li>
  * </ol>
  */
-public class WXBizMsgCrypt {
+public class WXBizMsgCrypt implements WechatMsgCrypt {
 	static Charset CHARSET = Charset.forName("utf-8");
 	Base64 base64 = new Base64();
 	byte[] aesKey;
@@ -55,7 +55,7 @@ public class WXBizMsgCrypt {
 	 */
 	public WXBizMsgCrypt(String token, String encodingAesKey, String appId) throws AesException {
 		if (encodingAesKey.length() != 43) {
-			throw new AesException(AesException.IllegalAesKey);
+			throw new AesException(AesException.IllegalAesKey, null); 
 		}
 
 		this.token = token;
@@ -138,7 +138,7 @@ public class WXBizMsgCrypt {
 			return base64Encrypted;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new AesException(AesException.EncryptAESError);
+			throw new AesException(AesException.EncryptAESError, e);
 		}
 	}
 
@@ -164,8 +164,9 @@ public class WXBizMsgCrypt {
 			// 解密
 			original = cipher.doFinal(encrypted);
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new AesException(AesException.DecryptAESError);
+//			e.printStackTrace();
+			logError(e);
+			throw new AesException(AesException.DecryptAESError, e);
 		}
 
 		String xmlContent, from_appid;
@@ -182,13 +183,14 @@ public class WXBizMsgCrypt {
 			from_appid = new String(Arrays.copyOfRange(bytes, 20 + xmlLength, bytes.length),
 					CHARSET);
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new AesException(AesException.IllegalBuffer);
+//			e.printStackTrace();
+			logError(e);
+			throw new AesException(AesException.IllegalBuffer, e);
 		}
 
 		// appid不相同的情况
 		if (!from_appid.equals(appId)) {
-			throw new AesException(AesException.ValidateAppidError);
+			throw new AesException(AesException.ValidateAppidError, null);
 		}
 		return xmlContent;
 
@@ -209,6 +211,7 @@ public class WXBizMsgCrypt {
 	 * @return 加密后的可以直接回复用户的密文，包括msg_signature, timestamp, nonce, encrypt的xml格式的字符串
 	 * @throws AesException 执行失败，请查看该异常的错误码和具体的错误信息
 	 */
+	@Override
 	public String encryptMsg(String replyMsg, String timeStamp, String nonce) throws AesException {
 		// 加密
 		String encrypt = encrypt(getRandomStr(), replyMsg);
@@ -242,10 +245,12 @@ public class WXBizMsgCrypt {
 	 * @return 解密后的原文
 	 * @throws AesException 执行失败，请查看该异常的错误码和具体的错误信息
 	 */
+	@Override
 	public String decryptBody(String msgSignature, String timeStamp, String nonce, String postData) throws AesException {
 		Object[] encrypt = XMLParse.extract(postData);
 		return decryptMsg(msgSignature, timeStamp, nonce, encrypt[1].toString());
 	}
+	@Override
 	public String decryptMsg(String msgSignature, String timeStamp, String nonce, String encrypt) throws AesException {
 
 		// 密钥，公众账号的app secret
@@ -260,7 +265,7 @@ public class WXBizMsgCrypt {
 		// System.out.println("第三方收到URL中的签名：" + msg_sign);
 		// System.out.println("第三方校验签名：" + signature);
 		if (!signature.equals(msgSignature)) {
-			throw new AesException(AesException.ValidateSignatureError);
+			throw new AesException(AesException.ValidateSignatureError, null);
 		}
 
 		// 解密
@@ -279,12 +284,13 @@ public class WXBizMsgCrypt {
 	 * @return 解密之后的echostr
 	 * @throws AesException 执行失败，请查看该异常的错误码和具体的错误信息
 	 */
+	@Override
 	public String verifyUrl(String msgSignature, String timeStamp, String nonce, String echoStr)
 			throws AesException {
 		String signature = SHA1.getSHA1(token, timeStamp, nonce, echoStr);
 
 		if (!signature.equals(msgSignature)) {
-			throw new AesException(AesException.ValidateSignatureError);
+			throw new AesException(AesException.ValidateSignatureError, null);
 		}
 
 		String result = decrypt(echoStr);
