@@ -14,7 +14,7 @@
 
 
 ## maven
-当前snapshot版本：4.7.3-SNAPSHOT
+当前snapshot版本：4.7.4-SNAPSHOT
 
 若使用snapshot版本，请添加snapshotRepository仓储：
 ```xml
