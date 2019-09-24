@@ -8,17 +8,19 @@ import org.onetwo.common.apiclient.resouce.FileNameByteArrayResource;
 import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.file.FileUtils;
 import org.onetwo.ext.apiclient.wechat.WechatBaseTestsAdapter;
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
-import org.onetwo.ext.apiclient.wechat.utils.AccessTokenInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.test.context.ActiveProfiles;
 
 /**
  * @author wayshall
  * <br/>
  */
+@ActiveProfiles("product")
 public class ContentSecurityClientTest extends WechatBaseTestsAdapter {
 	@Autowired
 	private ContentSecurityClient contentSecurityClient;

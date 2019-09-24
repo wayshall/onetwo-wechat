@@ -30,7 +30,7 @@ public class WechatOauth2ClientTest extends WechatBaseTestsAdapter {
 		Oauth2AccessTokenRequest request = Oauth2AccessTokenRequest.builder()
 																	.code("test")
 																	.build();
-		Oauth2AccessTokenResponse tokenResponse = wechatOauth2Client.getAccessToken(request);
+		Oauth2AccessTokenResponse tokenResponse = wechatOauth2Client.getMaterialList(request);
 		System.out.println("authorizeData: " + tokenResponse);
 	}*/
 

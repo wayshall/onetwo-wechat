@@ -1,6 +1,6 @@
 package org.onetwo.ext.apiclient.wechat.basic.api;
 
-import org.onetwo.ext.apiclient.wechat.basic.request.GetAccessTokenRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClient;
 import org.springframework.web.bind.annotation.RequestMapping;

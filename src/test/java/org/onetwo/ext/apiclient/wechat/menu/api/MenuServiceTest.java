@@ -8,8 +8,8 @@ import org.junit.Test;
 import org.onetwo.common.file.FileUtils;
 import org.onetwo.common.spring.utils.ClassPathJsonDataBinder;
 import org.onetwo.ext.apiclient.wechat.WechatBaseTestsAdapter;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
-import org.onetwo.ext.apiclient.wechat.core.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.view.api.MenuService;
 import org.onetwo.ext.apiclient.wechat.view.request.CreateMenuRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,32 +28,28 @@ public class MenuServiceTest extends WechatBaseTestsAdapter {
 	
 	@Test
 	public void testCreateMenu() throws IOException{
-		String token = accessTokenService.getAccessToken().getAccessToken();
-		
 		String classPath = "menu_create.json";
 
 		CreateMenuRequest request = ClassPathJsonDataBinder.from(CreateMenuRequest.class, classPath);
 //		json = JsonMapper.ignoreNull().toJson(request);
-		WechatResponse res = menuService.create(token, request);
+		WechatResponse res = menuService.create(getAccessToken(), request);
 		assertThat(res.isSuccess()).isTrue();
 		
-		menuService.delete(token);
+		menuService.delete(getAccessToken());
 	}
 	
 	@Test
 	public void testCreateMenu2() throws IOException{
-		String token = accessTokenService.getAccessToken().getAccessToken();
-		
 		String classPath = "menu_create.json";
 
 		ClassPathResource cpr = new ClassPathResource(classPath);
 		String json = FileUtils.readAsString(cpr.getInputStream());
-		WechatResponse res = menuService.create(token, json);
+		WechatResponse res = menuService.create(getAccessToken(), json);
 		assertThat(res.isSuccess()).isTrue();
 		
 		
 		
-		menuService.delete(token);
+		menuService.delete(getAccessToken());
 	}
 
 }

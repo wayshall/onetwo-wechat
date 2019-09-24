@@ -9,12 +9,19 @@ import org.onetwo.common.exception.ErrorType;
 import com.google.common.collect.Maps;
 
 /**
+ * 错误码查询工具：https://open.work.weixin.qq.com/devtool/query?e=60123
+ * 错误码文档：https://qydev.weixin.qq.com/wiki/index.php?title=%E5%85%A8%E5%B1%80%E8%BF%94%E5%9B%9E%E7%A0%81%E8%AF%B4%E6%98%8E
+ * 
  * @author wayshall
  * <br/>
  */
 public enum WechatErrors implements ErrorType {
 	ACCESS_TOKEN_MISSING(41001, "access_token missing"),
-	ACCESS_TOKEN_INVALID(40001, "invalid credential, access_token is invalid or not latest"),
+	
+	ACCESS_TOKEN_INVALID_CREDENTIAL(40001, "invalid credential, access_token is invalid or not latest"),
+	ACCESS_TOKEN_EXPIRED(42001, "access_token 超时，请检查 access_token 的有效期"),
+	ACCESS_TOKEN_INVALID(40014, "不合法的 access_token ，请开发者认真比对 access_token 的有效性（如是否过期）"),
+	
 	API_UNAUTHORIZED(48001, "api功能未授权，请确认公众号已获得该接口，可以在公众平台官网-开发者中心页中查看接口权限"),
 	FORMAT_PARSE_ERROR(47001, "解析JSON/XML内容错误"),
 	USER_NOT_EXIST(46004, "不存在的用户"),
@@ -26,7 +33,15 @@ public enum WechatErrors implements ErrorType {
 	TEMPLATE_ID_EXPIRED(41028, "form_id不正确，或者过期"),
 	TEMPLATE_ID_HAS_USED(41029, "form_id已被使用"),
 	PAGE_ERROR(41030, "page不正确"),
-	API_CALL_EXCEEDS_QUOTA(45009, "接口调用超过限额（目前默认每个帐号日调用限额为100万）")
+	API_CALL_EXCEEDS_QUOTA(45009, "接口调用超过限额（目前默认每个帐号日调用限额为100万）"),
+	
+
+	WORK_USER_ID_INVALID(40003, "无效的UserID"),
+	WORK_USER_NOT_FOUND(60111, "用户不存在"),
+	WORK_USER_DISABLED(60120, "成员已禁用"),
+	WORK_INVALID_PARTY_ID(60123, "无效的部门id"),
+	WORK_MISS_PARTY_ID(60127, "缺少部门id"),
+	WORK_PARTY_EXCEED_MAX(81004, "部门数量超过上限")
 	;
 
 	private static final Map<Integer, WechatErrors> ERROR_MAP;
@@ -59,5 +74,13 @@ public enum WechatErrors implements ErrorType {
 	
 	public static Optional<WechatErrors> byErrcode(int errcode){
 		return Optional.ofNullable(ERROR_MAP.get(errcode));
+	}
+	public static boolean isNeedToRemoveToken(String errorCode) {
+		if (ACCESS_TOKEN_INVALID_CREDENTIAL.getErrorCode().equals(errorCode) || 
+				ACCESS_TOKEN_EXPIRED.getErrorCode().equals(errorCode) || 
+				ACCESS_TOKEN_INVALID.getErrorCode().equals(errorCode) ) {
+			return true;
+		}
+		return false;
 	}
 }

@@ -9,18 +9,26 @@ spring:
     jackson:
         serialization:
             indent_output: true
-    redis: 
+    redis:
         host: localhost
-        database: 0
-        pool: 
+        port: 6379
+        database: 1
+        pool:
             maxActive: 5
-jfish: 
+jfish:
     redis:
         enabled: true
         lockRegistry:
             key: defaultLock
+#    cache:
+#        redis:
+#            usePrefix: true
+#            expires:
+#                UAA-CLIENT-OPTIONS: 2h
 wechat: 
-    accessToken: 
+    appid: wx282b94857c02f65f #test
+    appsecret: 425346593be0a278ad9725504dbe009c
+    accessToken:
         storer: redis
     enableMessageServe: 
         enabled: false
