@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenProvider;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenType;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenTypes;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
@@ -49,7 +50,7 @@ public class WorkWechatAccessTokenProvider implements AccessTokenProvider {
 	}
 	
 	@Override
-	public List<AccessTokenTypes> getAccessTokenTypes() {
+	public List<AccessTokenType> getAccessTokenTypes() {
 		return Arrays.asList(AccessTokenTypes.WORK_WECHAT, AccessTokenTypes.CONTACTS);
 	}
 

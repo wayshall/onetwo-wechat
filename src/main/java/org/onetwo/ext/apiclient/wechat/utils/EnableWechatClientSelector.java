@@ -7,6 +7,7 @@ import org.onetwo.common.apiclient.impl.RestExecutorConfiguration;
 import org.onetwo.common.spring.context.AbstractImportSelector;
 import org.onetwo.ext.apiclient.wechat.EnableWechatClient;
 import org.onetwo.ext.apiclient.wechat.accesstoken.AccessTokenConfiguration;
+import org.onetwo.ext.apiclient.wechat.accesstoken.CombineWechatConfigConfiguration;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClentRegistrar;
 import org.onetwo.ext.apiclient.wechat.core.WechatSupportConfiguration;
 import org.onetwo.ext.apiclient.wechat.oauth2.WechatOAuth2Configuration;
@@ -27,6 +28,7 @@ public class EnableWechatClientSelector extends AbstractImportSelector<EnableWec
 		classNames.add(WechatApiClentRegistrar.class.getName());
 		classNames.add(RestExecutorConfiguration.class.getName());
 		classNames.add(AccessTokenConfiguration.class.getName());
+		classNames.add(CombineWechatConfigConfiguration.class.getName());
 		classNames.add(WechatSupportConfiguration.class.getName());
 		
 		

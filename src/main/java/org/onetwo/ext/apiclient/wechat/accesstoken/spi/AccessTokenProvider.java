@@ -13,7 +13,7 @@ public interface AccessTokenProvider {
 	
 	AccessTokenResponse getAccessToken(GetAccessTokenRequest request);
 	
-	List<AccessTokenTypes> getAccessTokenTypes();
+	List<AccessTokenType> getAccessTokenTypes();
 	
 }
 
