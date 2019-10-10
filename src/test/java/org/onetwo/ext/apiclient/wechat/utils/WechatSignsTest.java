@@ -27,6 +27,20 @@ public class WechatSignsTest {
 		String hashData = "75e81ceda165f4ffa64f4068af58c64b8f54b88c";
 		boolean res = WechatSigns.checkWithSha1(signKey, rawData, hashData);
 		assertThat(res).isTrue();
+
+		
+		signKey = "LT6ujkSocI+dVZU3SVRRSw==";
+		rawData = "{\"nickName\":\"Jpeng41\",\"avatarUrl\":\"http://sf1-ttcdn-tos.pstatp.com/img/mosaic-legacy/3791/5070639578~120x256.image\",\"gender\":0,\"city\":\"\",\"province\":\"\",\"country\":\"中国\",\"language\":\"\"}";
+		hashData = "f47945b505af11b96b1fe989d4d1e4537786ad8c";
+		res = WechatSigns.checkWithSha1(signKey, rawData, hashData);
+		assertThat(res).isTrue();
+		
+		
+		signKey = "9BJzsuFvPNLcub00/jRi4Q==";
+		rawData = "{\"nickName\":\"用户7642462741864\",\"avatarUrl\":\"http://sf1-ttcdn-tos.pstatp.com/img/mosaic-legacy/3795/3044413937~120x256.image\",\"gender\":0,\"city\":\"\",\"province\":\"\",\"country\":\"中国\",\"language\":\"\"}";
+		hashData = "7684e5fa81e2d82831a81eaf20de11a79ea45be8";
+		res = WechatSigns.checkWithSha1(signKey, rawData, hashData);
+		assertThat(res).isTrue();
 	}
 	
 	@Test
