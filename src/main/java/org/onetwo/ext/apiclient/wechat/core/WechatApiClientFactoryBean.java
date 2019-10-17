@@ -102,7 +102,7 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 
 		
 		@Override
-		protected Object doInvoke(MethodInvocation invocation, WechatMethod invokeMethod) {
+		protected Object doInvoke(MethodInvocation invocation, WechatMethod invokeMethod) throws Throwable {
 			try {
 				return super.doInvoke(invocation, invokeMethod);
 			} catch (ApiClientException e) {
@@ -140,7 +140,7 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 		 * @param e
 		 * @return
 		 */
-		protected Object processAutoRemove(MethodInvocation invocation, WechatMethod invokeMethod, AccessTokenInfo at, ApiClientException e) {
+		protected Object processAutoRemove(MethodInvocation invocation, WechatMethod invokeMethod, AccessTokenInfo at, ApiClientException e) throws Throwable {
 			if (autoRemove) {
 				String appid = at.getAppid();
 				Optional<AccessTokenInfo> refreshOpt = getAccessTokenService().refreshAccessTokenByAppid(
