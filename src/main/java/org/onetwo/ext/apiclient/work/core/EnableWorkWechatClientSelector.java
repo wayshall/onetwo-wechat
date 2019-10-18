@@ -22,10 +22,10 @@ public class EnableWorkWechatClientSelector extends AbstractImportSelector<Enabl
 	@Override
 	protected List<String> doSelect(AnnotationMetadata metadata, AnnotationAttributes attributes) {
 		List<String> classNames = new ArrayList<String>();
+		classNames.add(CombineWechatConfigConfiguration.class.getName());
 		classNames.add(WorkWechatApiClentRegistrar.class.getName());
 		classNames.add(RestExecutorConfiguration.class.getName());
 		classNames.add(AccessTokenConfiguration.class.getName());
-		classNames.add(CombineWechatConfigConfiguration.class.getName());
 		
 		classNames.add(WorkWechatSupportConfiguration.class.getName());
 		classNames.add(WorkWechatConfiguration.class.getName());

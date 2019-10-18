@@ -9,11 +9,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import com.google.common.collect.Maps;
 
+import lombok.Data;
+
 /**
  * @author weishao zeng
  * <br/>
  */
 @ConfigurationProperties(WorkWechatConfig.CONFIG_PREFIX)
+@Data
 public class WorkWechatConfig {
 
 	public static final String CONFIG_PREFIX  = "work-wechat";
