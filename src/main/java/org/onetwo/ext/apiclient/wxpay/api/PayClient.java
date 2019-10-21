@@ -1,8 +1,10 @@
 package org.onetwo.ext.apiclient.wxpay.api;
 
 import org.onetwo.ext.apiclient.wxpay.core.WechatPayApiClient;
+import org.onetwo.ext.apiclient.wxpay.vo.request.CloseOrderRequest;
 import org.onetwo.ext.apiclient.wxpay.vo.request.OrderQueryRequest;
 import org.onetwo.ext.apiclient.wxpay.vo.request.UnifiedOrderRequest;
+import org.onetwo.ext.apiclient.wxpay.vo.response.CloseOrderResponse;
 import org.onetwo.ext.apiclient.wxpay.vo.response.OrderQueryResponse;
 import org.onetwo.ext.apiclient.wxpay.vo.response.UnifiledOrderResponse;
 import org.springframework.http.MediaType;
@@ -37,6 +39,15 @@ public interface PayClient {
 	 */
 	@PostMapping(path="/pay/orderquery", produces=MediaType.APPLICATION_XML_VALUE, consumes=MediaType.APPLICATION_XML_VALUE)
 	OrderQueryResponse orderQuery(@RequestBody OrderQueryRequest request);
+	
+	/***
+	 * https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_3
+	 * @author weishao zeng
+	 * @param request
+	 * @return
+	 */
+	@PostMapping(path="/pay/closeorder", produces=MediaType.APPLICATION_XML_VALUE, consumes=MediaType.APPLICATION_XML_VALUE)
+	CloseOrderResponse closeOrder(@RequestBody CloseOrderRequest request);
 
 }
 
