@@ -34,9 +34,14 @@ public class WorkWechatAccessTokenProvider implements AccessTokenProvider {
 
 	@Override
 	public AccessTokenResponse getAccessToken(GetAccessTokenRequest request) {
-//		String corpid = WorkWechatUtils.splitCorpid(request.getAppid());
 		String corpid = request.getAppid();
-		WechatConfig wechatConfig = wechatConfigProvider.getWechatConfig(corpid);
+		WechatConfig wechatConfig = null;
+		if (request.getAgentId()!=null) {
+			wechatConfig = wechatConfigProvider.getWechatConfig(request.getAgentId().toString());
+		}
+		if (wechatConfig==null) {
+			wechatConfig = wechatConfigProvider.getWechatConfig(corpid);
+		}
 		GetTokenRequest getTokenRequest = GetTokenRequest.builder()
 														.corpid(corpid)
 //														.corpsecret(request.getSecret())

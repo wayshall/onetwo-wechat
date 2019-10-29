@@ -16,7 +16,13 @@ import org.onetwo.ext.apiclient.work.core.WorkWechatConfig;
  * <br/>
  */
 public class CombineWechatConfigProvider extends SimpleWechatConfigProvider {
+	/***
+	 * 企业微信
+	 */
 	private WorkWechatConfig workWechatConfig;
+	/***
+	 * 用于可扩展的其它配置
+	 */
 	private List<MultiAppConfig> appConfigs;
 	
 	public CombineWechatConfigProvider(WechatConfig wechatConfig, WorkWechatConfig workWechatConfig, List<MultiAppConfig> appConfigs) {

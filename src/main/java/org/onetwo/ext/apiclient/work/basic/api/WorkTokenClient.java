@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
+ * https://work.weixin.qq.com/api/doc#90000/90135/91039
+ * 
  * @author weishao zeng
  * <br/>
  */
