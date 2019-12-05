@@ -21,5 +21,9 @@ public class BaseResponse {
 	private String message;
 	@JsonProperty("request_id")
 	private String requestId;
+	
+	public boolean isSuccess() {
+		return status==0;
+	}
 }
 
