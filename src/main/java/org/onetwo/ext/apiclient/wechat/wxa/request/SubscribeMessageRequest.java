@@ -5,17 +5,16 @@ import java.util.LinkedHashMap;
 
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import org.hibernate.validator.constraints.NotBlank;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
- * @deprecated SubscribeMessageRequest
  * @author wayshall
  * <br/>
  */
@@ -24,8 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Deprecated
-public class MessageTemplateRequest implements Serializable {
+public class SubscribeMessageRequest implements Serializable {
 
 	@NotBlank
 	private String touser;
@@ -36,17 +34,10 @@ public class MessageTemplateRequest implements Serializable {
 
 	private String page;
 	
-	@NotBlank
-	@JsonProperty("form_id")
-	private String formId;
-
-	@JsonProperty("emphasis_keyword")
-	private String emphasisKeyword;
-
 	@NotNull
-	private LinkedHashMap<String, TemplateMessageData> data;
+	private LinkedHashMap<String, SubscribeMessageData> data;
 	
-	public MessageTemplateRequest addData(String key, TemplateMessageData value){
+	public SubscribeMessageRequest addData(String key, SubscribeMessageData value){
 		if(data==null){
 			data = new LinkedHashMap<>();
 		}
@@ -54,8 +45,8 @@ public class MessageTemplateRequest implements Serializable {
 		return this;
 	}
 	
-	public MessageTemplateRequest addData(String key, String value){
-		TemplateMessageData d = new TemplateMessageData();
+	public SubscribeMessageRequest addData(String key, String value){
+		SubscribeMessageData d = new SubscribeMessageData();
 		d.setValue(value);
 		addData(key, d);
 		return this;
@@ -65,9 +56,8 @@ public class MessageTemplateRequest implements Serializable {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	@Data
-	protected static class TemplateMessageData {
+	protected static class SubscribeMessageData {
 		private String value;
-		private String color;
 	}
 
 }

@@ -9,11 +9,14 @@ import org.onetwo.common.date.DateUtils;
 import org.onetwo.common.utils.LangUtils;
 import org.onetwo.common.utils.NetUtils;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
+import org.onetwo.ext.apiclient.wechat.utils.WechatConstants;
 import org.onetwo.ext.apiclient.wechat.utils.WechatSigns;
 import org.onetwo.ext.apiclient.wxpay.WechatPayBaseBootTests;
 import org.onetwo.ext.apiclient.wxpay.utils.WxTradeStates;
+import org.onetwo.ext.apiclient.wxpay.vo.request.CloseOrderRequest;
 import org.onetwo.ext.apiclient.wxpay.vo.request.OrderQueryRequest;
 import org.onetwo.ext.apiclient.wxpay.vo.request.UnifiedOrderRequest;
+import org.onetwo.ext.apiclient.wxpay.vo.response.CloseOrderResponse;
 import org.onetwo.ext.apiclient.wxpay.vo.response.OrderQueryResponse;
 import org.onetwo.ext.apiclient.wxpay.vo.response.UnifiledOrderResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,10 +88,15 @@ public class PayClientTest extends WechatPayBaseBootTests {
 
 	@Test
 	public void testOrderQueryCreated() {
-		this.testOrderQuery(wechatConfig, null, "1111111");
+		OrderQueryResponse res = orderQuery(wechatConfig, null, "1111111");
+		assertThat(res.isSuccess()).isTrue();
+		assertThat(res.getTradeStateDesc()).isEqualTo("订单未支付");
+		assertThat(res.getTradeState()).isEqualTo(WxTradeStates.NOTPAY);
+		
+		WechatSigns.checkSign(res, getWechatConfig().getPay().getApiKey(), res.getSign(), res.getSignType());
 	}
 
-	public void testOrderQuery(WechatConfig wechatConfig, String wxTid, String outTradeNo) {
+	public OrderQueryResponse orderQuery(WechatConfig wechatConfig, String wxTid, String outTradeNo) {
 		OrderQueryRequest request = OrderQueryRequest.builder()
 													.appid(wechatConfig.getAppid())
 													.mchId(wechatConfig.getPay().getMerchantId())
@@ -103,12 +111,34 @@ public class PayClientTest extends WechatPayBaseBootTests {
 		
 		OrderQueryResponse res = payClient.orderQuery(request);
 		System.out.println("res: " + res);
-		assertThat(res.isSuccess()).isTrue();
-		assertThat(res.getTradeStateDesc()).isEqualTo("订单未支付");
-		assertThat(res.getTradeState()).isEqualTo(WxTradeStates.NOTPAY);
-		
 		WechatSigns.checkSign(res, getWechatConfig().getPay().getApiKey(), res.getSign(), res.getSignType());
+		return res;
+	}
+	
+	@Test
+	public void testCloseOrder() {
+		CloseOrderRequest request = CloseOrderRequest.builder()
+													.appid(wechatConfig.getAppid())
+													.mchId(wechatConfig.getPay().getMerchantId())
+													.nonceStr(LangUtils.randomUUID())
+													.outTradeNo("1111111")
+													.build();
+		
+
+		String sign = WechatSigns.signMd5(wechatConfig.getPay().getApiKey(), request);
+		request.setSign(sign);
+		
+		CloseOrderResponse res = payClient.closeOrder(request);
+		System.out.println("res: " + res);
+		assertThat(res.isSuccess()).isTrue();
+		
+		WechatSigns.checkSign(res, getWechatConfig().getPay().getApiKey(), res.getSign(), WechatConstants.SIGN_MD5);
 	}
 
+	@Test
+	public void testOrderQueryClosed() {
+		OrderQueryResponse res = orderQuery(wechatConfig, null, "1111111");
+		System.out.println("res: " + res);
+	}
 }
 

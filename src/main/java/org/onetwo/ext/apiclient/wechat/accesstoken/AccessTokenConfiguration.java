@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenProvider;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
-import org.onetwo.ext.apiclient.wechat.core.DefaultWechatConfig;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.dbm.service.AccessTokenRepository;
 import org.onetwo.ext.apiclient.wechat.dbm.service.DbStoreAccessTokenService;
@@ -12,12 +11,9 @@ import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.support.impl.MemoryAccessTokenService;
 import org.onetwo.ext.apiclient.wechat.support.impl.RedisStoreAccessTokenService;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.WechatConfigKeys;
-import org.onetwo.ext.apiclient.work.core.WorkWechatConfig;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -79,28 +75,5 @@ public class AccessTokenConfiguration implements InitializingBean {
 	public AccessTokenRepository accessTokenRepository() {
 		return new AccessTokenRepository();
 	}
-	
 
-	@Configuration
-	@EnableConfigurationProperties({DefaultWechatConfig.class, WorkWechatConfig.class})
-	@ConditionalOnMissingBean(WechatConfigProvider.class)
-	protected static class CombineWechatConfigConfiguration {
-		@Autowired
-		private DefaultWechatConfig wechatConfig;
-		@Autowired
-		private WorkWechatConfig workWechatConfig;
-		
-		/*@Bean
-		@Primary
-		public WechatConfig wechatConfig(){
-			return wechatConfig;
-		}*/
-		
-		@Bean
-		public WechatConfigProvider wechatConfigProvider(){
-			CombineWechatConfigProvider provider = new CombineWechatConfigProvider(wechatConfig, workWechatConfig);
-			provider.setWechatConfig(wechatConfig);
-			return provider;
-		}
-	}
 }

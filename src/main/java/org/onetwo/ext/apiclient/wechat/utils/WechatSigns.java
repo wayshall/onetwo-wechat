@@ -26,6 +26,7 @@ import org.springframework.util.MultiValueMap;
 public abstract class WechatSigns {
 	private static final Logger logger = JFishLoggerFactory.getLogger(WechatSigns.class);
 	private static final MessageDigestHasher MD5 = Hashs.md5(false, CodeType.HEX);
+	private static final MessageDigestHasher SHA1 = Hashs.sha1(false, CodeType.HEX);
 	private static final BeanToMapConvertor BEAN_TO_MAP_CONVERTOR = EnhanceBeanToMapBuilder.enhanceBuilder()
 																							.enableJsonPropertyAnnotation()
 																							.enableFieldNameAnnotation()
@@ -38,7 +39,24 @@ public abstract class WechatSigns {
 																									)
 //																							.valueConvertor((p, v)->v.toString())
 																							.build();
-
+	/***
+	 * sha1( rawData + session_key )
+	 * @author weishao zeng
+	 * @param signKey
+	 * @param rawData
+	 * @return
+	 */
+	public static boolean checkWithSha1(String signKey, String rawData, String hashData){
+		String sourceString = rawData + signKey;
+		MessageDigestHasher hasher = SHA1;
+		String hashString = hasher.hash(sourceString).toUpperCase();
+//		boolean res = hasher.checkHash(sourceString, hashData.toUpperCase());
+		if(logger.isDebugEnabled()){
+			logger.debug("hash string: {}", hashString);
+		}
+		return hashString.equalsIgnoreCase(hashData);
+	}
+	
 	public static String signMd5(String signKey, Object request){
 		String sourceString = convertToSourceString(signKey, request);
 		MessageDigestHasher hasher = MD5;//Hashs.md5(false, CodeType.HEX);

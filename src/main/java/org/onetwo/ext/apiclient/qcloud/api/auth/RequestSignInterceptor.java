@@ -16,9 +16,9 @@ public class RequestSignInterceptor implements ApiInterceptor {
 	private NlpProperties nlpProperties;
 
 	@Override
-	public Object intercept(ApiInterceptorChain chain) {
-		RequestContextData ctx = chain.getRequestContext();
-		Object[] args = chain.getRequestContext().getMethodArgs();
+	public Object intercept(ApiInterceptorChain chain) throws Throwable {
+		RequestContextData ctx = (RequestContextData)chain.getRequestContext();
+		Object[] args = ctx.getMethodArgs();
 		if (args.length==1 && args[0] instanceof AuthableRequest) {
 			AuthableRequest request = (AuthableRequest) args[0];
 			

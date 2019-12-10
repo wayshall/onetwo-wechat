@@ -20,6 +20,10 @@ public enum WechatErrors implements ErrorType {
 	
 	ACCESS_TOKEN_INVALID_CREDENTIAL(40001, "invalid credential, access_token is invalid or not latest"),
 	ACCESS_TOKEN_EXPIRED(42001, "access_token 超时，请检查 access_token 的有效期"),
+	/***
+	 * https://open.work.weixin.qq.com/devtool/query?e=301002
+	 */
+	ACCESS_TOKEN_NOT_ALLOW_AGENT(301002, "not allow operate another agent with this accesstoken"),
 	ACCESS_TOKEN_INVALID(40014, "不合法的 access_token ，请开发者认真比对 access_token 的有效性（如是否过期）"),
 	
 	API_UNAUTHORIZED(48001, "api功能未授权，请确认公众号已获得该接口，可以在公众平台官网-开发者中心页中查看接口权限"),

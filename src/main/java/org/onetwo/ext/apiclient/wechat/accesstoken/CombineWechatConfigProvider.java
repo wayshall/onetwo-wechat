@@ -1,5 +1,9 @@
 package org.onetwo.ext.apiclient.wechat.accesstoken;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.onetwo.common.utils.LangUtils;
 import org.onetwo.common.utils.StringUtils;
 import org.onetwo.ext.apiclient.wechat.core.SimpleWechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
@@ -12,11 +16,19 @@ import org.onetwo.ext.apiclient.work.core.WorkWechatConfig;
  * <br/>
  */
 public class CombineWechatConfigProvider extends SimpleWechatConfigProvider {
+	/***
+	 * 企业微信
+	 */
 	private WorkWechatConfig workWechatConfig;
+	/***
+	 * 用于可扩展的其它配置
+	 */
+	private List<MultiAppConfig> appConfigs;
 	
-	public CombineWechatConfigProvider(WechatConfig wechatConfig, WorkWechatConfig workWechatConfig) {
+	public CombineWechatConfigProvider(WechatConfig wechatConfig, WorkWechatConfig workWechatConfig, List<MultiAppConfig> appConfigs) {
 		super(wechatConfig);
 		this.workWechatConfig = workWechatConfig;
+		this.appConfigs = appConfigs;
 	}
 
 	/****
@@ -39,6 +51,25 @@ public class CombineWechatConfigProvider extends SimpleWechatConfigProvider {
 			if (config==null) {
 				config = this.workWechatConfig.getWechatConfigByAgentId(appid);
 			}
+			
+			if (config==null) {
+				config = findInAppConfigs(appid);
+			}
+		}
+		return config;
+	}
+	
+	protected WechatConfig findInAppConfigs(String appid) {
+		WechatConfig config = null;
+		if (LangUtils.isEmpty(appConfigs)) {
+			return config;
+		}
+		Optional<MultiAppConfig> mconfigs = this.appConfigs.stream().filter(cnf -> {
+			return cnf.getWechatConfig(appid)!=null;
+		}).findFirst();
+		
+		if (mconfigs.isPresent()) {
+			config = mconfigs.get().getWechatConfig(appid);
 		}
 		return config;
 	}
