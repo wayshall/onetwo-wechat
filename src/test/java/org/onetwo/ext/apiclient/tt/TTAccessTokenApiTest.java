@@ -11,7 +11,7 @@ import org.onetwo.ext.apiclient.tt.api.TTAccessTokenApi;
 import org.onetwo.ext.apiclient.tt.request.TTGetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
-import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
+import org.onetwo.ext.apiclient.wechat.core.WechatConfigProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TTAccessTokenApiTest extends TTBaseBootTests {

@@ -1,9 +1,11 @@
-package org.onetwo.ext.apiclient.wechat.accesstoken;
+package org.onetwo.ext.apiclient.work.accesstoken;
 
 import java.util.List;
 
+import org.onetwo.ext.apiclient.wechat.accesstoken.MultiAppConfig;
 import org.onetwo.ext.apiclient.wechat.core.DefaultWechatConfig;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfigProvider;
+import org.onetwo.ext.apiclient.work.core.WorkWechatConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -15,14 +17,14 @@ import org.springframework.context.annotation.Configuration;
  * <br/>
  */
 @Configuration
-@EnableConfigurationProperties({DefaultWechatConfig.class})
+@EnableConfigurationProperties({DefaultWechatConfig.class, WorkWechatConfig.class})
 @ConditionalOnMissingBean(WechatConfigProvider.class)
-public class CombineWechatConfigConfiguration {
+public class WorkWechatConfigConfiguration {
 
 	@Autowired
 	private DefaultWechatConfig wechatConfig;
-	/*@Autowired
-	private WorkWechatConfig workWechatConfig;*/
+	@Autowired
+	private WorkWechatConfig workWechatConfig;
 	@Autowired(required=false)
 	List<MultiAppConfig> appConfigs;
 	
@@ -33,9 +35,8 @@ public class CombineWechatConfigConfiguration {
 	}*/
 	
 	@Bean
-	public WechatConfigProvider wechatConfigProvider(){
-		CombineWechatConfigProvider provider = new CombineWechatConfigProvider(wechatConfig, appConfigs);
-		provider.setWechatConfig(wechatConfig);
+	public WorkWechatConfigProvider workWechatConfigProvider(){
+		WorkWechatConfigProvider provider = new WorkWechatConfigProvider(wechatConfig, workWechatConfig, appConfigs);
 		return provider;
 	}
 }

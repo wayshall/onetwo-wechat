@@ -1,7 +1,9 @@
 package org.onetwo.ext.apiclient.wechat.oauth2;
 
 import org.onetwo.common.spring.copier.CopyUtils;
+import org.onetwo.common.utils.StringUtils;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
+import org.onetwo.ext.apiclient.wechat.core.WechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.oauth2.api.WechatOauth2Client;
 import org.onetwo.ext.apiclient.wechat.oauth2.request.OAuth2AccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.oauth2.request.OAuth2RefreshTokenRequest;
@@ -10,6 +12,8 @@ import org.onetwo.ext.apiclient.wechat.oauth2.response.OAuth2AccessTokenResponse
 import org.onetwo.ext.apiclient.wechat.oauth2.response.OAuth2RefreshTokenResponse;
 import org.onetwo.ext.apiclient.wechat.oauth2.response.OAuth2UserInfoResponse;
 import org.onetwo.ext.apiclient.wechat.serve.dto.WechatOAuth2Context;
+import org.onetwo.ext.apiclient.wechat.utils.WechatException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author wayshall
@@ -19,6 +23,20 @@ public class WechatOAuth2Hanlder extends BaseOAuth2Hanlder<OAuth2UserInfo> {
 	
 //	@Autowired
 	protected WechatOauth2Client wechatOauth2Client;
+	@Autowired
+	private WechatConfigProvider wechatConfigProvider;
+	
+	public WechatConfig getWechatConfig(WechatOAuth2Context contex) {
+		WechatConfig wechatConfig = wechatConfigProvider.getWechatConfig(contex.getAppid());
+		if (wechatConfig==null) {
+			throw new WechatException("wechet config not found!").put("wechatConfigProvider", wechatConfigProvider)
+																.put("appid", contex.getAppid());
+		}
+ 		if (StringUtils.isNotBlank(contex.getAppid()) && !contex.getAppid().equals(wechatConfig.getAppid())) {
+			throw new WechatException("config not found, error appid: " + contex.getAppid());
+		}
+		return wechatConfig;
+	}
 	
 	
 	/***

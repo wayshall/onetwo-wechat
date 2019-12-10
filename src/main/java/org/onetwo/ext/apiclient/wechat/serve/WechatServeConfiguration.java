@@ -1,8 +1,7 @@
 package org.onetwo.ext.apiclient.wechat.serve;
 
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
-import org.onetwo.ext.apiclient.wechat.serve.service.MessageRouterServiceImpl;
-import org.onetwo.ext.apiclient.wechat.serve.spi.MessageRouterService;
+import org.onetwo.ext.apiclient.wechat.serve.service.WechatMessageRouterService;
 import org.onetwo.ext.apiclient.wechat.serve.spi.ServeEndpoint;
 import org.onetwo.ext.apiclient.wechat.serve.web.EventServeController;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -29,9 +28,9 @@ public class WechatServeConfiguration  {
 	}
 	
 	@Bean
-	@ConditionalOnMissingBean(MessageRouterService.class)
-	public MessageRouterService messageRouterService(){
-		MessageRouterServiceImpl service = new MessageRouterServiceImpl();
+	@ConditionalOnMissingBean(WechatMessageRouterService.class)
+	public WechatMessageRouterService wechatMessageRouterService(){
+		WechatMessageRouterService service = new WechatMessageRouterService();
 		return service;
 	}
 	

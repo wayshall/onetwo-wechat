@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.wechat.oauth2;
+package org.onetwo.ext.apiclient.work.oauth2;
 
 import java.util.Optional;
 
@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.onetwo.common.spring.mvc.annotation.BootMvcArgumentResolver;
+import org.onetwo.ext.apiclient.wechat.oauth2.OAuth2UserInfo;
 import org.onetwo.ext.apiclient.wechat.serve.dto.WechatOAuth2Context.RequestWechatOAuth2Context;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatOAuth2UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +21,16 @@ import org.springframework.web.method.support.ModelAndViewContainer;
  * <br/>
  */
 @BootMvcArgumentResolver
-public class OAuth2UserInfoArgumentResolver implements HandlerMethodArgumentResolver {
+public class WorkOAuth2UserInfoArgumentResolver implements HandlerMethodArgumentResolver {
 
 	@Autowired
-	private WechatOAuth2Hanlder wechatOAuth2Hanlder;
+	private WorkWechatOAuth2Hanlder wechatOAuth2Hanlder;
 	@Autowired
 	private WechatOAuth2UserRepository<OAuth2UserInfo> sessionStoreService;
 	
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
-		return OAuth2UserInfo.class == parameter.getParameterType();
+		return WorkOAuth2UserInfo.class.isAssignableFrom(parameter.getParameterType());
 	}
 
 	@Override
