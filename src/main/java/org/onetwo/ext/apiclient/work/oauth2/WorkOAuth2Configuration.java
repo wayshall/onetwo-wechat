@@ -6,6 +6,7 @@ import org.onetwo.ext.apiclient.work.core.WorkConfigProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 /**
  * @author wayshall
@@ -15,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 //@ConditionalOnProperty(name=Oauth2Properties.ENABLED_KEY, havingValue="true", matchIfMissing=false)
 public class WorkOAuth2Configuration {
 
-	
+	@Primary
 	@Bean
 	@ConditionalOnMissingBean(WorkWechatOAuth2Hanlder.class)
 	public WorkWechatOAuth2Hanlder workWechatOAuth2Hanlder(WechatOAuth2UserRepository<WorkUserLoginInfo> oauth2UserRepository, WorkConfigProvider workConfigProvider){
@@ -36,13 +37,8 @@ public class WorkOAuth2Configuration {
 	
 	@Bean
 	@ConditionalOnMissingBean(WechatOAuth2UserRepository.class)
-	public WechatOAuth2UserRepository<WorkUserLoginInfo> sessionStoreService(){
+	public WechatOAuth2UserRepository<WorkUserLoginInfo> workOauth2UserStoreService(){
 		return new HttpRequestStoreService<WorkUserLoginInfo>();
-	}
-	
-	@Bean
-	public WorkOAuth2UserInfoArgumentResolver workOAuth2UserInfoArgumentResolver() {
-		return new WorkOAuth2UserInfoArgumentResolver();
 	}
 	
 }

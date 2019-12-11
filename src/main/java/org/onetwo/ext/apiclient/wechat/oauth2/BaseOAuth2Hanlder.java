@@ -88,6 +88,15 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 		}
 	}
 	
+	/****
+	 * code为空会跳转到微信oauth授权
+	 * 授权成功归后，重新跳回这里，code不为空，根据code获取用户信息
+	 * @author weishao zeng
+	 * @param oauth2Request
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	public U handleInController(OAuth2Request oauth2Request, HttpServletRequest request, HttpServletResponse response) {
 		DataWechatOAuth2Context context = new DataWechatOAuth2Context(oauth2Request, request);
 		context.setWechatConfig(getWechatConfig(context));
