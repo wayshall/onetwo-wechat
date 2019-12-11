@@ -14,6 +14,12 @@ import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
  */
 public interface WorkConfigProvider {
 	
+	/****
+	 * 
+	 * @author weishao zeng
+	 * @param clientId appid、agentId、name……
+	 * @return
+	 */
 	WechatConfig getWechatConfig(String clientId);
 	
 	default public WechatMsgCrypt getWXBizMsgCrypt(String clientId){

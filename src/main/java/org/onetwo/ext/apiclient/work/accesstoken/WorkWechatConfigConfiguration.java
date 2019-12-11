@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.onetwo.ext.apiclient.wechat.accesstoken.MultiAppConfig;
 import org.onetwo.ext.apiclient.wechat.core.DefaultWechatConfig;
-import org.onetwo.ext.apiclient.wechat.core.WechatConfigProvider;
+import org.onetwo.ext.apiclient.work.core.WorkConfigProvider;
 import org.onetwo.ext.apiclient.work.core.WorkWechatConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableConfigurationProperties({DefaultWechatConfig.class, WorkWechatConfig.class})
-@ConditionalOnMissingBean(WechatConfigProvider.class)
+@ConditionalOnMissingBean(WorkConfigProvider.class)
 public class WorkWechatConfigConfiguration {
 
 	@Autowired
@@ -35,7 +35,7 @@ public class WorkWechatConfigConfiguration {
 	}*/
 	
 	@Bean
-	public WorkWechatConfigProvider workWechatConfigProvider(){
+	public WorkConfigProvider workWechatConfigProvider(){
 		WorkWechatConfigProvider provider = new WorkWechatConfigProvider(wechatConfig, workWechatConfig, appConfigs);
 		return provider;
 	}
