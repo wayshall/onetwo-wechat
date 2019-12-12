@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import lombok.extern.slf4j.Slf4j;
-
+import org.onetwo.common.date.NiceDate;
+import org.onetwo.common.exception.BaseException;
 import org.onetwo.common.expr.Expression;
 import org.onetwo.common.expr.ExpressionFacotry;
 import org.onetwo.common.utils.ParamUtils;
@@ -13,12 +13,16 @@ import org.onetwo.common.utils.StringUtils;
 import org.onetwo.ext.apiclient.qcloud.live.LiveProperties;
 import org.onetwo.ext.apiclient.qcloud.live.service.StreamDataProvider;
 import org.onetwo.ext.apiclient.qcloud.live.service.StreamDataProvider.StreamData;
+import org.onetwo.ext.apiclient.qcloud.live.util.LiveStreamStates;
 import org.onetwo.ext.apiclient.qcloud.live.util.LiveUtils;
 import org.onetwo.ext.apiclient.qcloud.live.util.LiveUtils.PlayTypes;
 import org.onetwo.ext.apiclient.qcloud.live.vo.LivingResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
 import com.google.common.collect.Maps;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author wayshall
@@ -31,13 +35,21 @@ public class QCloudLiveService {
 	private StreamDataProvider streamDataProvider;
 	private Expression expr = ExpressionFacotry.BRACE;
 	
+	@Autowired(required=false)
+	private QCloudLiveClient qcloudLiveClient;
+	
+
+	public LiveStreamStates getLiveStatus(String streamName) {
+		return qcloudLiveClient.getLiveStatus(streamName);
+	}
+	
 	public LivingResult createLiving(){
 		return createLiving(streamDataProvider);
 	}
 	
 	public LivingResult createLiving(StreamDataProvider provider){
 		Assert.notNull(provider, "provider can not be null");
-		Assert.hasText(liveProperties.getBizId(), "bizId must not be null, empty, or blank");
+//		Assert.hasText(liveProperties.getBizId(), "bizId must not be null, empty, or blank");
 		Assert.hasText(liveProperties.getPushSafeKey(), "pushSafeKey must not be null, empty, or blank");
 		
 		StreamData streamData = provider.create();
@@ -48,7 +60,15 @@ public class QCloudLiveService {
 		
 		Map<String, Object> context = Maps.newHashMap();
 		context.put("streamId", streamId);
-		context.put("bizId", liveProperties.getBizId());
+//		context.put("bizId", liveProperties.getBizId());
+		String playDomain = streamData.getPlayDomain();
+		if (StringUtils.isBlank(playDomain)) {
+			playDomain = liveProperties.getPlayDomain();
+		}
+		if (StringUtils.isBlank(playDomain)) {
+			throw new BaseException("playDomain can not be null or blank");
+		}
+		context.put("playDomain", playDomain);
 		
 		LivingResult result = new LivingResult();
 		result.setPushUrl(pushUrl);
@@ -59,9 +79,9 @@ public class QCloudLiveService {
 	}
 	
 	protected String getStreamId(final String streamId){
-		if(!streamId.startsWith(liveProperties.getBizId()+"_")){
+		/*if(!streamId.startsWith(liveProperties.getBizId()+"_")){
 			return liveProperties.getBizId()+"_" + streamId;
-		}
+		}*/
 		return streamId;
 	}
 	protected String createPushUrl(StreamData streamData){
@@ -72,10 +92,19 @@ public class QCloudLiveService {
 		String txSecret = createTxSecret(liveProperties.getPushSafeKey(), streamId, txTime).toLowerCase();
 		
 		
-		createPushContext.put("bizId", liveProperties.getBizId());
+//		createPushContext.put("bizId", liveProperties.getBizId());
 		createPushContext.put("streamId", streamId);
 		createPushContext.put("txTime", txTime);
 		createPushContext.put("txSecret", txSecret);
+		
+		String pushDomain = streamData.getPushDomain();
+		if (StringUtils.isBlank(pushDomain)) {
+			pushDomain = liveProperties.getPushDomain();
+		}
+		if (StringUtils.isBlank(pushDomain)) {
+			throw new BaseException("pushDomain can not be null or blank");
+		}
+		createPushContext.put("pushDomain", pushDomain);
 		
 		String pushUrl = expr.parseByProvider(urlTemplate, createPushContext);
 		String record = StringUtils.firstNotBlank(streamData.getRecord(), liveProperties.getRecord());
@@ -89,6 +118,10 @@ public class QCloudLiveService {
 	}
 	
 	protected String createTxTime(Date expiredAt){
+		// 为空，则默认设置过期时间为今天的最后一刻
+		if (expiredAt==null) {
+			expiredAt = NiceDate.New().preciseAtDate().atTheEnd().getTime();
+		}
 		long txTime = TimeUnit.MILLISECONDS.toSeconds(expiredAt.getTime());
 		return Long.toHexString(txTime).toUpperCase();
 	}

@@ -26,6 +26,8 @@ public interface StreamDataProvider {
 		 * https://cloud.tencent.com/document/product/267/13373
 		 */
 		String record;
+		String playDomain;
+		String pushDomain;
 	}
 	
 	public class DefaultStreamDataProvider implements StreamDataProvider {
