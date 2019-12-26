@@ -23,12 +23,12 @@ public class QCloudLiveServiceTest extends QCloudBaseBootTests {
 		LivingResult result = this.qcloudLiveService.createLiving(() -> {
 			StreamData data = new StreamData();
 			data.setStreamId("ACTIVITY-402556534988476416");
-			data.setExpiredAt(DateUtils.parse("2019-12-26 23:59:59"));
+			data.setExpiredAt(DateUtils.parse("2020-01-02 23:59:59"));
 			data.setPushSafeKey("259754dde43b9884dcc0ab3521237ff1");
 			return data;
 		});
 		System.out.println("result: " + result);
-		assertThat(result.getPushUrl()).contains("ACTIVITY-402556534988476416?txSecret=bb74b15e36ceb3adb8473c1ccb6291b4&txTime=5E04D8FF");
+		assertThat(result.getPushUrl()).contains("ACTIVITY-402556534988476416?txSecret=d59f359278e192d76a4554096782963a&txTime=5E0E137F");
 	}
 
 }
