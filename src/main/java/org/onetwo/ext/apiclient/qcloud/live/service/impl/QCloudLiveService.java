@@ -55,6 +55,7 @@ public class QCloudLiveService {
 		StreamData streamData = provider.create();
 		String streamId = getStreamId(streamData.getStreamId());
 		
+		// 创建推流地址
 		String pushUrl = createPushUrl(streamData);
 		String urlTemplate = liveProperties.getPlayUrl();
 		
@@ -89,7 +90,11 @@ public class QCloudLiveService {
 		String urlTemplate = liveProperties.getPushUrl();
 		Map<String, Object> createPushContext = Maps.newHashMap();
 		String txTime = createTxTime(streamData.getExpiredAt());
-		String txSecret = createTxSecret(liveProperties.getPushSafeKey(), streamId, txTime).toLowerCase();
+		String pushSafeKey = streamData.getPushSafeKey();
+		if (StringUtils.isBlank(pushSafeKey)) {
+			pushSafeKey = liveProperties.getPushSafeKey();
+		}
+		String txSecret = createTxSecret(pushSafeKey, streamId, txTime).toLowerCase();
 		
 		
 //		createPushContext.put("bizId", liveProperties.getBizId());

@@ -28,6 +28,7 @@ public interface StreamDataProvider {
 		String record;
 		String playDomain;
 		String pushDomain;
+		String pushSafeKey;
 	}
 	
 	public class DefaultStreamDataProvider implements StreamDataProvider {
@@ -37,8 +38,8 @@ public interface StreamDataProvider {
 		@Override
 		public StreamData create() {
 			StreamData sdata = liveConfig.getStaticStream();
-			Assert.hasText(sdata.getStreamId());
-			Assert.notNull(sdata.getExpiredAt());
+			Assert.hasText(sdata.getStreamId(), "streamId can not be null");
+			Assert.notNull(sdata.getExpiredAt(), "expiredAt can not be null");
 			return sdata;
 		}
 		
