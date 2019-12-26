@@ -147,8 +147,8 @@ public class QCloudLiveService {
 		return Long.toHexString(txTime).toUpperCase();
 	}
 	
-	protected String createTxSecret(String key, String streamId, String txTime){
-		return LiveUtils.buildTxSecret(key, streamId, txTime);
+	protected String createTxSecret(String pushSafeKey, String streamId, String txTime){
+		return LiveUtils.buildTxSecret(pushSafeKey, streamId, txTime);
 	}
 
 	public void setStreamDataProvider(StreamDataProvider streamDataProvider) {

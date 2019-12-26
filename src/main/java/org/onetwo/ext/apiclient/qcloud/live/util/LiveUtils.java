@@ -4,6 +4,8 @@ import java.util.Map;
 
 import org.onetwo.common.expr.Expression;
 import org.onetwo.common.md.Hashs;
+import org.onetwo.common.utils.StringUtils;
+import org.onetwo.ext.apiclient.qcloud.exception.QCloudException;
 
 /**
  * @author wayshall
@@ -18,8 +20,17 @@ abstract public class LiveUtils {
 	 * @param txTime
 	 * @return
 	 */
-	static public String buildTxSecret(String key, String streamId, String txTime) {
-		String input = new StringBuilder().append(key)
+	static public String buildTxSecret(String pushSafeKey, String streamId, String txTime) {
+		if (StringUtils.isBlank(pushSafeKey)) {
+			throw new QCloudException("pushSafeKey can not be blank");
+		}
+		if (StringUtils.isBlank(streamId)) {
+			throw new QCloudException("streamId can not be blank");
+		}
+		if (StringUtils.isBlank(txTime)) {
+			throw new QCloudException("txTime can not be blank");
+		}
+		String input = new StringBuilder().append(pushSafeKey)
 											.append(streamId)
 											.append(txTime.toUpperCase())
 											.toString();
