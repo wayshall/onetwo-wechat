@@ -25,19 +25,6 @@ public class QCloudErrors {
 		
 	}
 	
-	@AllArgsConstructor
-	static public enum LiveErrors implements ErrorType {
-		ERR_LIVE_INVOKE_REMOTE("调用接口出错");
-		
-		@Getter
-		final private String errorMessage;
-
-		@Override
-		public String getErrorCode() {
-			return name();
-		}
-		
-	}
 	
 	private QCloudErrors() {
 	}

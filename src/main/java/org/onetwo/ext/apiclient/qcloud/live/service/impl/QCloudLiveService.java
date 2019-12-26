@@ -10,9 +10,11 @@ import org.onetwo.common.expr.Expression;
 import org.onetwo.common.expr.ExpressionFacotry;
 import org.onetwo.common.utils.ParamUtils;
 import org.onetwo.common.utils.StringUtils;
+import org.onetwo.ext.apiclient.qcloud.exception.QCloudException;
 import org.onetwo.ext.apiclient.qcloud.live.LiveProperties;
 import org.onetwo.ext.apiclient.qcloud.live.service.StreamDataProvider;
 import org.onetwo.ext.apiclient.qcloud.live.service.StreamDataProvider.StreamData;
+import org.onetwo.ext.apiclient.qcloud.live.util.LiveErrors.LiveBizErrors;
 import org.onetwo.ext.apiclient.qcloud.live.util.LiveStreamStates;
 import org.onetwo.ext.apiclient.qcloud.live.util.LiveUtils;
 import org.onetwo.ext.apiclient.qcloud.live.util.LiveUtils.PlayTypes;
@@ -89,7 +91,25 @@ public class QCloudLiveService {
 		String streamId = getStreamId(streamData.getStreamId());
 		String urlTemplate = liveProperties.getPushUrl();
 		Map<String, Object> createPushContext = Maps.newHashMap();
-		String txTime = createTxTime(streamData.getExpiredAt());
+		
+		Date expiredAt = streamData.getExpiredAt();
+		if (expiredAt==null) {
+    		// 精确到当天的最后时间，去掉毫秒
+			expiredAt = NiceDate.New()
+									.preciseAtDate()
+									.atTheEnd()
+									.clearMillis()
+									.getTime();
+		} else {
+			expiredAt = NiceDate.New(expiredAt)
+									.clearMillis()
+									.getTime();
+		}
+		if (expiredAt.getTime()<=new Date().getTime()) {
+			throw new QCloudException(LiveBizErrors.ERR_LIVE_STREAM_EXPIRED);
+		}
+		
+		String txTime = createTxTime(expiredAt);
 		String pushSafeKey = streamData.getPushSafeKey();
 		if (StringUtils.isBlank(pushSafeKey)) {
 			pushSafeKey = liveProperties.getPushSafeKey();
@@ -123,10 +143,6 @@ public class QCloudLiveService {
 	}
 	
 	protected String createTxTime(Date expiredAt){
-		// 为空，则默认设置过期时间为今天的最后一刻
-		if (expiredAt==null) {
-			expiredAt = NiceDate.New().preciseAtDate().atTheEnd().getTime();
-		}
 		long txTime = TimeUnit.MILLISECONDS.toSeconds(expiredAt.getTime());
 		return Long.toHexString(txTime).toUpperCase();
 	}

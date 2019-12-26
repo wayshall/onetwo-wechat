@@ -3,8 +3,8 @@ package org.onetwo.ext.apiclient.qcloud.live.service.impl;
 import org.onetwo.ext.apiclient.qcloud.auth.CredentialProvider;
 import org.onetwo.ext.apiclient.qcloud.exception.QCloudException;
 import org.onetwo.ext.apiclient.qcloud.live.LiveProperties;
+import org.onetwo.ext.apiclient.qcloud.live.util.LiveErrors.LiveBizErrors;
 import org.onetwo.ext.apiclient.qcloud.live.util.LiveStreamStates;
-import org.onetwo.ext.apiclient.qcloud.util.QCloudErrors.LiveErrors;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -41,7 +41,7 @@ public class QCloudLiveClient implements InitializingBean {
 			DescribeLiveStreamStateResponse res = liveClient.DescribeLiveStreamState(req);
 			return LiveStreamStates.of(res.getStreamState());
 		} catch (TencentCloudSDKException e) {
-			throw new QCloudException(LiveErrors.ERR_LIVE_INVOKE_REMOTE, e);
+			throw new QCloudException(LiveBizErrors.ERR_LIVE_INVOKE_REMOTE, e);
 		}
 	}
 }

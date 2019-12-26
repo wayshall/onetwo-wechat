@@ -4,6 +4,8 @@ package org.onetwo.ext.apiclient.qcloud.live.service.impl;
  * <br/>
  */
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Test;
 import org.onetwo.common.date.DateUtils;
 import org.onetwo.ext.apiclient.qcloud.QCloudBaseBootTests;
@@ -26,6 +28,7 @@ public class QCloudLiveServiceTest extends QCloudBaseBootTests {
 			return data;
 		});
 		System.out.println("result: " + result);
+		assertThat(result.getPushUrl()).contains("ACTIVITY-402556534988476416?txSecret=bb74b15e36ceb3adb8473c1ccb6291b4&txTime=5E04D8FF");
 	}
 
 }
