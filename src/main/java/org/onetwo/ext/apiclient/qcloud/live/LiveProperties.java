@@ -29,11 +29,11 @@ public class LiveProperties {
 
 	String pushDomain;
 //	String pushUrl = "rtmp://{bizId}.livepush.myqcloud.com/live/{streamId}?bizid={bizId}&txSecret={txSecret}&txTime={txTime}";
-	String pushUrl = "rtmp://{pushDomain}/live/{streamId}?txSecret={txSecret}&txTime={txTime}";
+	String pushUrl = "rtmp://{pushDomain}/{appname}/{streamId}?txSecret={txSecret}&txTime={txTime}";
 	
 	String playDomain = "liveplay.myqcloud.com";
 //	String playUrl = "{protocol}://{bizId}.liveplay.myqcloud.com/live/{streamId}{postfix}";
-	String playUrl = "{protocol}://{playDomain}/live/{streamId}{postfix}";
+	String playUrl = "{protocol}://{playDomain}/{appname}/{streamId}{postfix}";
 	/***
 	 * https://cloud.tencent.com/document/product/267/13373
 	 * 录制文件格式，如：record=mp4|flv

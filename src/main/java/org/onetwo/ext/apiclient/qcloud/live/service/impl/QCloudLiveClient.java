@@ -32,11 +32,11 @@ public class QCloudLiveClient implements InitializingBean {
 		liveClient = new LiveClient(credential, liveProperties.getRegion());
 	}
 	
-	public LiveStreamStates getLiveStatus(String streamName) {
-		DescribeLiveStreamStateRequest req = new DescribeLiveStreamStateRequest();
+	public LiveStreamStates getLiveStatus(DescribeLiveStreamStateRequest req) {
+		/*DescribeLiveStreamStateRequest req = new DescribeLiveStreamStateRequest();
 		req.setAppName(liveProperties.getAppname());
 		req.setStreamName(streamName);
-		req.setDomainName(liveProperties.getPushDomain());
+		req.setDomainName(liveProperties.getPushDomain());*/
 		try {
 			DescribeLiveStreamStateResponse res = liveClient.DescribeLiveStreamState(req);
 			return LiveStreamStates.of(res.getStreamState());

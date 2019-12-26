@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
 import com.google.common.collect.Maps;
+import com.tencentcloudapi.live.v20180801.models.DescribeLiveStreamStateRequest;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,8 +42,8 @@ public class QCloudLiveService {
 	private QCloudLiveClient qcloudLiveClient;
 	
 
-	public LiveStreamStates getLiveStatus(String streamName) {
-		return qcloudLiveClient.getLiveStatus(streamName);
+	public LiveStreamStates getLiveStatus(DescribeLiveStreamStateRequest req) {
+		return qcloudLiveClient.getLiveStatus(req);
 	}
 	
 	public LivingResult createLiving(){
@@ -64,14 +65,12 @@ public class QCloudLiveService {
 		Map<String, Object> context = Maps.newHashMap();
 		context.put("streamId", streamId);
 //		context.put("bizId", liveProperties.getBizId());
-		String playDomain = streamData.getPlayDomain();
-		if (StringUtils.isBlank(playDomain)) {
-			playDomain = liveProperties.getPlayDomain();
-		}
+		String playDomain = checkAndGetPlayDomain(streamData);
 		if (StringUtils.isBlank(playDomain)) {
 			throw new BaseException("playDomain can not be null or blank");
 		}
 		context.put("playDomain", playDomain);
+		context.put("appname", checkAndGetAppname(streamData));
 		
 		LivingResult result = new LivingResult();
 		result.setPushUrl(pushUrl);
@@ -79,6 +78,17 @@ public class QCloudLiveService {
 		result.setPlayFlv(PlayTypes.FLV.getPlayUrl(expr, urlTemplate, context));
 		result.setPlayHls(PlayTypes.HLS.getPlayUrl(expr, urlTemplate, context));
 		return result;
+	}
+
+	protected String checkAndGetPlayDomain(StreamData streamData) {
+		String playDomain = streamData.getPlayDomain();
+		if (StringUtils.isBlank(playDomain)) {
+			playDomain = liveProperties.getPlayDomain();
+		}
+		if (StringUtils.isBlank(playDomain)) {
+			throw new BaseException("playDomain can not be null or blank");
+		}
+		return playDomain;
 	}
 	
 	protected String getStreamId(final String streamId){
@@ -115,20 +125,16 @@ public class QCloudLiveService {
 			pushSafeKey = liveProperties.getPushSafeKey();
 		}
 		String txSecret = createTxSecret(pushSafeKey, streamId, txTime).toLowerCase();
-		
+
+		String appname = checkAndGetAppname(streamData);
 		
 //		createPushContext.put("bizId", liveProperties.getBizId());
 		createPushContext.put("streamId", streamId);
 		createPushContext.put("txTime", txTime);
 		createPushContext.put("txSecret", txSecret);
+		createPushContext.put("appname", appname);
 		
-		String pushDomain = streamData.getPushDomain();
-		if (StringUtils.isBlank(pushDomain)) {
-			pushDomain = liveProperties.getPushDomain();
-		}
-		if (StringUtils.isBlank(pushDomain)) {
-			throw new BaseException("pushDomain can not be null or blank");
-		}
+		String pushDomain = checkAndGetPushDomain(streamData);
 		createPushContext.put("pushDomain", pushDomain);
 		
 		String pushUrl = expr.parseByProvider(urlTemplate, createPushContext);
@@ -140,6 +146,28 @@ public class QCloudLiveService {
 			log.info("pushUrl: {}, createPushContext: {}", pushUrl, createPushContext);
 		}
 		return pushUrl;
+	}
+
+	protected String checkAndGetAppname(StreamData streamData) {
+		String appname = streamData.getAppname();
+		if (StringUtils.isBlank(appname)) {
+			appname = liveProperties.getAppname();
+		}
+		if (StringUtils.isBlank(appname)) {
+			throw new BaseException("appname can not be null or blank");
+		}
+		return appname;
+	}
+	
+	protected String checkAndGetPushDomain(StreamData streamData) {
+		String pushDomain = streamData.getPushDomain();
+		if (StringUtils.isBlank(pushDomain)) {
+			pushDomain = liveProperties.getPushDomain();
+		}
+		if (StringUtils.isBlank(pushDomain)) {
+			throw new BaseException("pushDomain can not be null or blank");
+		}
+		return pushDomain;
 	}
 	
 	protected String createTxTime(Date expiredAt){

@@ -29,6 +29,7 @@ public interface StreamDataProvider {
 		String playDomain;
 		String pushDomain;
 		String pushSafeKey;
+		String appname;
 	}
 	
 	public class DefaultStreamDataProvider implements StreamDataProvider {
