@@ -20,7 +20,7 @@ public class QCloudLiveServiceTest extends QCloudBaseBootTests {
 	public void testCreateLiving() {
 		LivingResult result = this.qcloudLiveService.createLiving(() -> {
 			StreamData data = new StreamData();
-			data.setStreamId("test");
+			data.setStreamId("ACTIVITY-402556534988476416");
 			data.setExpiredAt(DateUtils.parse("2019-12-26 23:59:59"));
 			data.setPushSafeKey("259754dde43b9884dcc0ab3521237ff1");
 			return data;

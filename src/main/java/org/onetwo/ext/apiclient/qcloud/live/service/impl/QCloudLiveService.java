@@ -50,7 +50,7 @@ public class QCloudLiveService {
 	public LivingResult createLiving(StreamDataProvider provider){
 		Assert.notNull(provider, "provider can not be null");
 //		Assert.hasText(liveProperties.getBizId(), "bizId must not be null, empty, or blank");
-		Assert.hasText(liveProperties.getPushSafeKey(), "pushSafeKey must not be null, empty, or blank");
+//		Assert.hasText(liveProperties.getPushSafeKey(), "pushSafeKey must not be null, empty, or blank");
 		
 		StreamData streamData = provider.create();
 		String streamId = getStreamId(streamData.getStreamId());
