@@ -53,6 +53,9 @@ public class UnifiedOrderRequest extends BasePayRequest {
 	@JsonSerialize(using=OrderDetailSerializer.class)
 	private OrderDetail detail;
 
+	/****
+	 * 附加数据，在查询API和支付通知中原样返回，可作为自定义参数使用。
+	 */
 	@JacksonXmlCData
 	@Length(max=127)
 	private String attach;
