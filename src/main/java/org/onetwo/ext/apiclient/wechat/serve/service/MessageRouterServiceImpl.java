@@ -28,11 +28,9 @@ import org.onetwo.ext.apiclient.wechat.serve.spi.MessageHandler;
 import org.onetwo.ext.apiclient.wechat.serve.spi.MessageInterceptor;
 import org.onetwo.ext.apiclient.wechat.serve.spi.MessageRouterService;
 import org.onetwo.ext.apiclient.wechat.serve.spi.Tenantable;
-import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.MessageType;
 import org.onetwo.ext.apiclient.wechat.utils.WechatException;
-import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +52,7 @@ import net.jodah.typetools.TypeResolver;
  * @author wayshall
  * <br/>
  */
-public class MessageRouterServiceImpl implements InitializingBean, MessageRouterService {
+abstract public class MessageRouterServiceImpl implements InitializingBean, MessageRouterService {
 	
 	private Logger logger = JFishLoggerFactory.getLogger(this.getClass());
 	
@@ -72,8 +70,8 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 //	@Autowired
 //	private WechatConfig wechatConfig;
 //	private WXBizMsgCrypt messageCrypt;
-	@Autowired
-	private WechatConfigProvider wechatConfigProvider;
+	/*@Autowired
+	private WechatConfigProvider wechatConfigProvider;*/
 	private MessageMetaExtractor messageTypeExtractor;
 	@Autowired
 	private ApplicationContext applicationContext;
@@ -84,15 +82,17 @@ public class MessageRouterServiceImpl implements InitializingBean, MessageRouter
 		this.messageTypeExtractor = messageTypeExtractor;
 	}
 
-	protected WechatMsgCrypt getMessageCrypt(String clientId){
+	abstract protected WechatMsgCrypt getMessageCrypt(String clientId);
+	/*{
 		return wechatConfigProvider.getWXBizMsgCrypt(clientId);
-	}
+	}*/
 	
-	public WechatConfig getWechatConfig(String clientId){
+	abstract public WechatConfig getWechatConfig(String clientId);
+	/*{
 		WechatConfig wechatConfig = this.wechatConfigProvider.getWechatConfig(clientId);
 		WechatUtils.assertWechatConfigNotNull(wechatConfig, clientId);
 		return wechatConfig;
-	}
+	}*/
 	
 	/*public void setMessageCrypt(WXBizMsgCrypt messageCrypt) {
 		this.messageCrypt = messageCrypt;

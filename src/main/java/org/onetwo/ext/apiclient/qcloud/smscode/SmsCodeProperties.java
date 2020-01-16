@@ -14,6 +14,8 @@ public class SmsCodeProperties {
 	
 	public static final String PREFIX = "qcloud.smsCode";
 	public static final String ENABLE_KEY = PREFIX + ".enabled";
+	
+	public static final String SMS_SERVICE_ENABLE_KEY = PREFIX + ".template-id";
 
 	private String storeKey = "smsCode";
 	private int codeLength = 4;

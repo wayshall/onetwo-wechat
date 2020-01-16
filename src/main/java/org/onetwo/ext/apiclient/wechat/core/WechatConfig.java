@@ -67,6 +67,13 @@ public interface WechatConfig {
 	
 	Long getAgentId();
 	
+	/***
+	 * for test
+	 * 
+	 * @author weishao zeng
+	 * @return
+	 */
+	@Deprecated
 	PayProperties getPay();
 	
 	/***

@@ -12,6 +12,7 @@ import org.onetwo.common.encrypt.AESCoder;
 import org.onetwo.common.encrypt.Crypts;
 import org.onetwo.common.encrypt.PKCS7Encoder;
 import org.onetwo.common.exception.ApiClientException;
+import org.onetwo.common.exception.BaseException;
 import org.onetwo.common.exception.ErrorTypes;
 import org.onetwo.common.jackson.JsonMapper;
 import org.onetwo.common.utils.LangUtils;
@@ -22,8 +23,12 @@ import org.onetwo.ext.apiclient.wechat.basic.api.TokenApi;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
+import org.onetwo.ext.apiclient.wechat.crypt.AesException;
+import org.onetwo.ext.apiclient.wechat.crypt.WXBizMsgCrypt;
+import org.onetwo.ext.apiclient.wechat.crypt.WechatMsgCrypt;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.GrantTypeKeys;
 import org.onetwo.ext.apiclient.wechat.wxa.response.WxappUserInfo;
+import org.onetwo.ext.apiclient.work.crypt.WXBizMsgCryptAdaptor;
 import org.springframework.http.ResponseEntity;
 
 /**
@@ -137,6 +142,23 @@ public class WechatUtils {
 	/*private static String getAppidKey(String appid, AccessTokenTypes accessTokenType) {
 		return appid + ":" + accessTokenType.name();
 	}*/
+	
+	public static WechatMsgCrypt createWXBizMsgCrypt(WechatConfig wechatConfig) {
+		if (wechatConfig==null) {
+			throw new IllegalArgumentException("wechat config can not be null!");
+		}
+		try {
+			WechatMsgCrypt wxbizMsgCrypt = null;
+			if (!wechatConfig.isWorkWechat()) { //普通微信
+				wxbizMsgCrypt = new WXBizMsgCrypt(wechatConfig.getToken(), wechatConfig.getEncodingAESKey(), wechatConfig.getAppid());
+			} else { // 企业微信
+				wxbizMsgCrypt = new WXBizMsgCryptAdaptor(wechatConfig.getToken(), wechatConfig.getEncodingAESKey(), wechatConfig.getAppid());
+			}
+			return wxbizMsgCrypt;
+		} catch (AesException e) {
+			throw new BaseException(e.getMessage(), e);
+		}
+	}
 	
 	private WechatUtils(){
 	}

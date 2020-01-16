@@ -1,7 +1,6 @@
-package org.onetwo.ext.apiclient.wechat.serve.spi;
+package org.onetwo.ext.apiclient.wechat.core;
 
 import org.onetwo.common.exception.BaseException;
-import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.crypt.AesException;
 import org.onetwo.ext.apiclient.wechat.crypt.WXBizMsgCrypt;
 import org.onetwo.ext.apiclient.wechat.crypt.WechatMsgCrypt;

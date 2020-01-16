@@ -23,6 +23,8 @@ public class EnableQCloudServiceSelector extends AbstractImportSelector<EnableQC
 	protected List<String> doSelect(AnnotationMetadata metadata, AnnotationAttributes attributes) {
 		List<String> classNames = new ArrayList<String>();
 		
+		classNames.add(QCloudBaseConfiguration.class.getName());
+		
 		classNames.add(RestExecutorConfiguration.class.getName());
 
 		addIfModuleEnabled(attributes, "nlp", () -> {

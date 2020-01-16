@@ -2,7 +2,7 @@ package org.onetwo.ext.apiclient.wechat.oauth2;
 
 import org.onetwo.ext.apiclient.wechat.core.DefaultWechatConfig.Oauth2Properties;
 import org.onetwo.ext.apiclient.wechat.oauth2.api.WechatOauth2CustomImpl;
-import org.onetwo.ext.apiclient.wechat.serve.service.HtppSessionStoreService;
+import org.onetwo.ext.apiclient.wechat.serve.service.HttpRequestStoreService;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatOAuth2UserRepository;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -17,10 +17,10 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(name=Oauth2Properties.ENABLED_KEY, havingValue="true", matchIfMissing=false)
 public class WechatOAuth2Configuration {
 
-	@Bean
+	/*@Bean
 	public OAuth2UserInfoArgumentResolver oauth2UserInfoArgumentResolver(){
 		return new OAuth2UserInfoArgumentResolver();
-	}
+	}*/
 
 	@Bean
 	@ConditionalOnMissingBean(WechatOAuth2Hanlder.class)
@@ -30,8 +30,9 @@ public class WechatOAuth2Configuration {
 	
 	@Bean
 	@ConditionalOnMissingBean(WechatOAuth2UserRepository.class)
-	public WechatOAuth2UserRepository<OAuth2UserInfo> sessionStoreService(){
-		return new HtppSessionStoreService<OAuth2UserInfo>();
+	public WechatOAuth2UserRepository<OAuth2UserInfo> wechatOauth2UserStoreService(){
+		return new HttpRequestStoreService<OAuth2UserInfo>();
+//		return new HtppSessionStoreService<OAuth2UserInfo>();
 	}
 	
 	@Bean

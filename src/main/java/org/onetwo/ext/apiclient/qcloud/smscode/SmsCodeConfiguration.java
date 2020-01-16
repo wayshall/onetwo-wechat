@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
 public class SmsCodeConfiguration {
 	
 	@Bean
-	@ConditionalOnProperty(name=SmsCodeProperties.PREFIX + ".template-id")
+	@ConditionalOnProperty(name=SmsCodeProperties.SMS_SERVICE_ENABLE_KEY)
 	public SmsCodeService smsCodeService(SmsCodeProperties smsCodeProperties, SmsCodeExceptionTranslator translator) {
 		SmsCodeService smsService = new SmsCodeServiceImpl(smsCodeProperties, translator);
 		return smsService;

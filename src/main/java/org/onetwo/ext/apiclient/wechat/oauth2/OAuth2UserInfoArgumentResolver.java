@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.onetwo.common.spring.mvc.annotation.BootMvcArgumentResolver;
 import org.onetwo.ext.apiclient.wechat.serve.dto.WechatOAuth2Context.RequestWechatOAuth2Context;
-import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatOAuth2UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
@@ -27,11 +26,10 @@ public class OAuth2UserInfoArgumentResolver implements HandlerMethodArgumentReso
 	private WechatOAuth2Hanlder wechatOAuth2Hanlder;
 	@Autowired
 	private WechatOAuth2UserRepository<OAuth2UserInfo> sessionStoreService;
-	private WechatConfigProvider wechatConfigProvider;
 	
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
-		return OAuth2UserInfo.class.isAssignableFrom(parameter.getParameterType());
+		return OAuth2UserInfo.class == parameter.getParameterType();
 	}
 
 	@Override
@@ -39,7 +37,7 @@ public class OAuth2UserInfoArgumentResolver implements HandlerMethodArgumentReso
 		HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
 		
 		RequestWechatOAuth2Context context = new RequestWechatOAuth2Context(request);
-		context.setWechatConfig(BaseOAuth2Hanlder.getWechatConfig(wechatConfigProvider, context));
+		context.setWechatConfig(wechatOAuth2Hanlder.getWechatConfig(context));
 		
 		Optional<OAuth2UserInfo> userOpt = sessionStoreService.getCurrentUser(context);
 		if(!userOpt.isPresent()){

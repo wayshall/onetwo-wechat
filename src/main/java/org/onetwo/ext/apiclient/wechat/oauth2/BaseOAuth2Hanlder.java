@@ -20,7 +20,6 @@ import org.onetwo.ext.apiclient.wechat.oauth2.request.OAuth2Request;
 import org.onetwo.ext.apiclient.wechat.serve.dto.WechatOAuth2Context;
 import org.onetwo.ext.apiclient.wechat.serve.dto.WechatOAuth2Context.DataWechatOAuth2Context;
 import org.onetwo.ext.apiclient.wechat.serve.dto.WechatOAuth2Context.RequestWechatOAuth2Context;
-import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatOAuth2UserRepository;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatOAuth2UserRepository.OAuth2User;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
@@ -39,10 +38,10 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 	protected final Logger logger = JFishLoggerFactory.getLogger(this.getClass());
 	
 	private WechatOAuth2UserRepository<U> wechatOAuth2UserRepository;
-	private WechatConfigProvider wechatConfigProvider;
 	
 	
-	static public WechatConfig getWechatConfig(WechatConfigProvider wechatConfigProvider, WechatOAuth2Context contex) {
+	abstract protected WechatConfig getWechatConfig(WechatOAuth2Context contex);
+	/*protected WechatConfig getWechatConfig(WechatOAuth2Context contex) {
 		WechatConfig wechatConfig = wechatConfigProvider.getWechatConfig(contex.getAppid());
 		if (wechatConfig==null) {
 			throw new WechatException("wechet config not found!").put("wechatConfigProvider", wechatConfigProvider)
@@ -52,7 +51,7 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 			throw new WechatException("config not found, error appid: " + contex.getAppid());
 		}
 		return wechatConfig;
-	}
+	}*/
 
 	protected boolean refreshToken(WechatOAuth2Context context, U userInfo){
 		/*if(userInfo.isRefreshTokenExpired()){
@@ -89,9 +88,18 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 		}
 	}
 	
+	/****
+	 * code为空会跳转到微信oauth授权
+	 * 授权成功归后，重新跳回这里，code不为空，根据code获取用户信息
+	 * @author weishao zeng
+	 * @param oauth2Request
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	public U handleInController(OAuth2Request oauth2Request, HttpServletRequest request, HttpServletResponse response) {
 		DataWechatOAuth2Context context = new DataWechatOAuth2Context(oauth2Request, request);
-		context.setWechatConfig(getWechatConfig(wechatConfigProvider, context));
+		context.setWechatConfig(getWechatConfig(context));
 		this.checkWechatBrowser(context);
 		
 		U userInfo = null;
@@ -121,7 +129,7 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 	 */
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handler) {
 		RequestWechatOAuth2Context context = new RequestWechatOAuth2Context(request);
-		context.setWechatConfig(getWechatConfig(wechatConfigProvider, context));
+		context.setWechatConfig(getWechatConfig(context));
 		
 		this.checkWechatBrowser(context);
 		
@@ -222,14 +230,6 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 
 	public void setWechatOAuth2UserRepository(WechatOAuth2UserRepository<U> wechatOAuth2UserRepository) {
 		this.wechatOAuth2UserRepository = wechatOAuth2UserRepository;
-	}
-
-	public WechatConfigProvider getWechatConfigProvider() {
-		return wechatConfigProvider;
-	}
-
-	public void setWechatConfigProvider(WechatConfigProvider wechatConfigProvider) {
-		this.wechatConfigProvider = wechatConfigProvider;
 	}
 
 }

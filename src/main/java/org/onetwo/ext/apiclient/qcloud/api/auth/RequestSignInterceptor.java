@@ -4,7 +4,7 @@ import org.onetwo.common.apiclient.RequestContextData;
 import org.onetwo.common.apiclient.interceptor.ApiInterceptor;
 import org.onetwo.common.apiclient.interceptor.ApiInterceptorChain;
 import org.onetwo.common.utils.NetUtils;
-import org.onetwo.ext.apiclient.qcloud.nlp.NlpProperties;
+import org.onetwo.ext.apiclient.qcloud.QCloudProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class RequestSignInterceptor implements ApiInterceptor {
 	@Autowired
-	private NlpProperties nlpProperties;
+	private QCloudProperties properties;
 
 	@Override
 	public Object intercept(ApiInterceptorChain chain) throws Throwable {
@@ -29,7 +29,7 @@ public class RequestSignInterceptor implements ApiInterceptor {
 												.host(domain)
 												.path(ctx.getInvokeMethod().getPath())
 												.build();
-			String signature = AuthSigns.signHmac(nlpProperties.getSecretKey(), signData);
+			String signature = AuthSigns.signHmac(properties.getSecretKey(), signData);
 			request.setSignature(signature);
 		}
 		return chain.invoke();
