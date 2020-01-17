@@ -113,7 +113,11 @@ public class WechatUtils {
 	
 	public static ApiClientException translateToApiClientException(ApiClientMethod invokeMethod, WechatResponse baseResponse, ResponseEntity<?> responseEntity){
 		return WechatErrors.byErrcode(baseResponse.getErrcode())
-						 .map(err->new ApiClientException(err, invokeMethod.getMethod(), null))
+						 .map(err-> {
+							 ApiClientException apie = new ApiClientException(err, invokeMethod.getMethod(), null);
+							 apie.put("errmsg", baseResponse.getErrmsg());
+							 return apie;
+						 })
 						 .orElse(new ApiClientException(ErrorTypes.of(baseResponse.getErrcode().toString(), 
 								 										baseResponse.getErrmsg(), 
 								 										responseEntity.getStatusCodeValue())
