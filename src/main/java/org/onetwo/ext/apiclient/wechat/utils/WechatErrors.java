@@ -33,10 +33,12 @@ public enum WechatErrors implements ErrorType {
 	
 	CONTENT_RISKY(87014, "内容含有违法违规内容"),
 
-	TEMPLATE_ID_ERROR(40037, "template_id不正确"),
+	TEMPLATE_ID_ERROR(40037, "订阅模板id为空不正确"),
 	TEMPLATE_ID_EXPIRED(41028, "form_id不正确，或者过期"),
 	TEMPLATE_ID_HAS_USED(41029, "form_id已被使用"),
-	PAGE_ERROR(41030, "page不正确"),
+	PAGE_ERROR(41030, "page路径不正确，需要保证在现网版本小程序中存在，与app.json保持一致"),
+	TEMPLATE_USER_REJECT(43101, "用户拒绝接受消息，如果用户之前曾经订阅过，则表示用户取消了订阅关系"),
+	TEMPLATE_DATA_INVALID(47003, "模板参数不准确，可能为空或者不满足规则，errmsg会提示具体是哪个字段出错"),
 	API_CALL_EXCEEDS_QUOTA(45009, "接口调用超过限额（目前默认每个帐号日调用限额为100万）"),
 	
 
