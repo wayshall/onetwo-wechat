@@ -15,6 +15,7 @@ import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.exception.BaseException;
 import org.onetwo.common.exception.ErrorTypes;
 import org.onetwo.common.jackson.JsonMapper;
+import org.onetwo.common.log.JFishLoggerFactory;
 import org.onetwo.common.utils.LangUtils;
 import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
@@ -114,8 +115,11 @@ public class WechatUtils {
 	public static ApiClientException translateToApiClientException(ApiClientMethod invokeMethod, WechatResponse baseResponse, ResponseEntity<?> responseEntity){
 		return WechatErrors.byErrcode(baseResponse.getErrcode())
 						 .map(err-> {
+							 JFishLoggerFactory.getCommonLogger().error("invoke wechat api error, errcode: {}, errmsg: {}", 
+									 					baseResponse.getErrcode(), 
+									 					baseResponse.getErrmsg());
 							 ApiClientException apie = new ApiClientException(err, invokeMethod.getMethod(), null);
-							 apie.put("errmsg", baseResponse.getErrmsg());
+//							 apie.put("errmsg", baseResponse.getErrmsg());
 							 return apie;
 						 })
 						 .orElse(new ApiClientException(ErrorTypes.of(baseResponse.getErrcode().toString(), 
