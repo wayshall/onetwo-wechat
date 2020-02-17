@@ -16,6 +16,7 @@ import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfigProvider;
+import org.onetwo.ext.apiclient.wechat.event.WechatEventBus;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
 import org.slf4j.Logger;
@@ -55,6 +56,9 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 //	@Autowired
 //	protected WechatConfig wechatConfig;
 	private WechatConfigProvider wechatConfigProvider;
+	
+	@Autowired
+	private WechatEventBus wechatEventBus;
 	
 //	private AccessTokenTypes supportedClientType = AccessTokenTypes.WECHAT;
 
@@ -148,6 +152,9 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 														.updateAt(new Date())
 														.build();
 			saveNewToken(newToken, appidRequest);
+			
+			this.wechatEventBus.postRefreshedEvent(appidRequest, newToken);
+			
 			if(logger.isInfoEnabled()){
 				logger.info("saved new access token : {}", newToken);
 			}
@@ -163,6 +170,7 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 		});
 		return at;
 	}
+	
 	
 
 	/****
