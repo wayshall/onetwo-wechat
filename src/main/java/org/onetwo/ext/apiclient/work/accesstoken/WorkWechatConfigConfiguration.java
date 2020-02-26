@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.onetwo.ext.apiclient.wechat.accesstoken.MultiAppConfig;
 import org.onetwo.ext.apiclient.wechat.core.DefaultWechatConfig;
+import org.onetwo.ext.apiclient.wechat.event.WechatEventBus;
 import org.onetwo.ext.apiclient.work.core.WorkConfigProvider;
 import org.onetwo.ext.apiclient.work.core.WorkWechatConfig;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,11 @@ public class WorkWechatConfigConfiguration {
 	public WorkConfigProvider workWechatConfigProvider(){
 		WorkWechatConfigProvider provider = new WorkWechatConfigProvider(wechatConfig, workWechatConfig, appConfigs);
 		return provider;
+	}
+	
+	@Bean
+	public WechatEventBus wechatEventBus() {
+		return new WechatEventBus();
 	}
 }
 
