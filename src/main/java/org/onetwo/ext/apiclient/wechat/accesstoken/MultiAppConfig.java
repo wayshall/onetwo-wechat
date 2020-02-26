@@ -10,6 +10,11 @@ import com.google.common.collect.Maps;
 import lombok.Data;
 
 /**
+ * 主要为了扩展其它小程序的配置，比如头条小程序
+ * toutiao: 
+ * 		apps:
+ *  		default: 
+ *  			appid: xxxx
  * @author weishao zeng
  * <br/>
  */
