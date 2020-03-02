@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.qcloud;
+package org.onetwo.ext.apiclient.qcloud.sms;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

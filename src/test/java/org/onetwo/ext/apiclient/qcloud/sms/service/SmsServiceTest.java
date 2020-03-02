@@ -3,8 +3,8 @@ package org.onetwo.ext.apiclient.qcloud.sms.service;
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.onetwo.ext.apiclient.qcloud.TestSmsProperties;
 import org.onetwo.ext.apiclient.qcloud.sms.QCloudSmsBaseBootTests;
+import org.onetwo.ext.apiclient.qcloud.sms.TestSmsProperties;
 import org.onetwo.ext.apiclient.qcloud.sms.vo.SendSmsRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 

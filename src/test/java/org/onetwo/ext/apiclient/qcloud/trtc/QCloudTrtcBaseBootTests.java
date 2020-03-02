@@ -1,16 +1,15 @@
-package org.onetwo.ext.apiclient.qcloud.sms;
+package org.onetwo.ext.apiclient.qcloud.trtc;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.onetwo.ext.apiclient.qcloud.sms.QCloudSmsBaseBootTests.QCloudSmsTestStarter;
+import org.onetwo.ext.apiclient.qcloud.trtc.QCloudTrtcBaseBootTests.QCloudTrtcTestStarter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Import;
-import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -19,9 +18,9 @@ import org.springframework.test.context.junit4.SpringRunner;
  * <br/>
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes=QCloudSmsTestStarter.class)
+@SpringBootTest(classes=QCloudTrtcTestStarter.class)
 @ActiveProfiles("product")
-public class QCloudSmsBaseBootTests {
+public class QCloudTrtcBaseBootTests {
 
 	@Autowired
 	protected ApplicationContext applicationContext;
@@ -34,10 +33,9 @@ public class QCloudSmsBaseBootTests {
 	}
 
 	@SpringBootApplication
-	@EnableConfigurationProperties({SmsProperties.class, TestSmsProperties.class})
-	@Import(SmsConfiguration.class)
-	@EnableRetry(proxyTargetClass=true)
-	static public class QCloudSmsTestStarter {
+	@EnableConfigurationProperties({TrtcProperties.class})
+	@Import(TrtcConfiguration.class)
+	static public class QCloudTrtcTestStarter {
 
 	}
 }
