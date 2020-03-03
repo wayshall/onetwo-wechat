@@ -11,6 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tencentyun.TLSSigAPIv2;
 
+/****
+ * https://cloud.tencent.com/document/product/647/17275
+ * 
+ * @author way
+ *
+ */
 public class TrtcSignService implements InitializingBean {
 	
 	@Autowired
@@ -30,8 +36,8 @@ public class TrtcSignService implements InitializingBean {
 	 * @param userId 
 	 * @param expireInSeconds 过期时间，单位：秒
 	 */
-	public String genSig(String userId, long expireInSeconds) {
-		return this.tlsSigApi.genSig(userId, expireInSeconds);
+	public String genSig(String userId, Long expireInSeconds) {
+		return this.tlsSigApi.genSig(userId, expireInSeconds!=null?expireInSeconds:trtcProperties.getDefaultExpireTime());
 	}
 	
 }
