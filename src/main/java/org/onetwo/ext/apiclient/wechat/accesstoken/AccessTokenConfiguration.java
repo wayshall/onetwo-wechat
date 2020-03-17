@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenProvider;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AppCacheKeyGenerator;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.dbm.service.AccessTokenRepository;
@@ -33,11 +34,17 @@ public class AccessTokenConfiguration implements InitializingBean {
 	public void afterPropertiesSet() throws Exception {
 		this.accessTokenProvider = combineAccessTokenProvider();
 	}
-
+	
 	public CombineAccessTokenProvider combineAccessTokenProvider() {
 		CombineAccessTokenProvider accessTokenProvider = new CombineAccessTokenProvider();
 		accessTokenProvider.setAccessTokenProviders(accessTokenProviders);
 		return accessTokenProvider;
+	}
+	
+	@Bean
+	public AppCacheKeyGenerator appCacheKeyGenerator() {
+		WechatAppCacheKeyGenerator g = new WechatAppCacheKeyGenerator();
+		return g;
 	}
 	
 	@Bean

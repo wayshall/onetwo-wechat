@@ -13,6 +13,7 @@ import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenProvider;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AppCacheKeyGenerator;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfigProvider;
@@ -59,6 +60,9 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	
 	@Autowired
 	private WechatEventBus wechatEventBus;
+	
+	@Autowired
+	private AppCacheKeyGenerator appCacheKeyGenerator;
 	
 //	private AccessTokenTypes supportedClientType = AccessTokenTypes.WECHAT;
 
@@ -225,7 +229,7 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	}
 
 	protected String getAppidKey(AppidRequest appidRequest) {
-		return WechatUtils.getAppidKey(appidRequest);
+		return appCacheKeyGenerator.generated(appidRequest);
 	}
 
 	/*public AccessTokenTypes getSupportedClientType() {

@@ -38,8 +38,8 @@ import org.springframework.http.ResponseEntity;
  */
 public class WechatUtils {
 
-	public static final String ACCESS_TOKEN_PREFIX = "WX_ACCESSTOKEN";
-	public static final String KEY_SPLITOR = ":";
+//	public static final String ACCESS_TOKEN_PREFIX = "WX_ACCESSTOKEN";
+//	public static final String KEY_SPLITOR = ":";
 	public static final String LOCK_KEY = "LOCKER:WX_ACESSTOKEN:";
 	static {
 		Security.addProvider(new BouncyCastleProvider());
@@ -134,7 +134,7 @@ public class WechatUtils {
 	 * @author weishao zeng
 	 * @param appidRequest
 	 * @return
-	 */
+	 
 	public static String getAppidKey(AppidRequest appidRequest) {
 //		return getAppidKey(appidRequest.getAppid(), appidRequest.getAccessTokenType());
 		StringBuilder key = new StringBuilder();
@@ -145,7 +145,7 @@ public class WechatUtils {
 			key.append(KEY_SPLITOR).append(appidRequest.getAgentId());
 		}
 		return key.toString();
-	}
+	}*/
 	
 	/*private static String getAppidKey(String appid, AccessTokenTypes accessTokenType) {
 		return appid + ":" + accessTokenType.name();
