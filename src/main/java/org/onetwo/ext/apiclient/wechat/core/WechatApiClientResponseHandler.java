@@ -21,6 +21,9 @@ public class WechatApiClientResponseHandler extends DefaultApiClientResponseHand
 	private static final String KEY_ERRCODE = "errcode";
 	private static final String KEY_ERRMSG = "errmsg";
 	
+	private String errcodeKey = KEY_ERRCODE;
+	private String errmsgKey = KEY_ERRMSG;
+	
 	@Override
 	public Class<?> getActualResponseType(WechatMethod invokeMethod){
 		Class<?> responseType = invokeMethod.getMethodReturnType();
@@ -42,7 +45,7 @@ public class WechatApiClientResponseHandler extends DefaultApiClientResponseHand
 			}else if(Map.class.isAssignableFrom(actualResponseType)){
 				//reponseType have not define errcode and errmsg
 				Map<String, ?> map = (Map<String, ?>) response;
-				if (map.containsKey(KEY_ERRCODE) || map.containsKey(PayResponseFields.KEY_ERRCODE)) {
+				if (map.containsKey(errcodeKey) || map.containsKey(PayResponseFields.KEY_ERRCODE)) {
 					baseResponse = createBaseResponseByMap(map);
 					if(!invokeMethod.isReturnVoid()){
 //						response = map2Bean(map, invokeMethod.getMethodReturnType());
@@ -105,8 +108,8 @@ public class WechatApiClientResponseHandler extends DefaultApiClientResponseHand
 	}
 	protected WechatResponsable createBaseResponseByMap(Map<String, ?> map) {
 		WechatResponse baseResponse = WechatResponse.baseBuilder()
-													.errcode(Integer.valueOf(map.get(KEY_ERRCODE).toString()))
-													.errmsg((String)map.get(KEY_ERRMSG))
+													.errcode(Integer.valueOf(map.get(errcodeKey).toString()))
+													.errmsg((String)map.get(errmsgKey))
 													.build();
 		return baseResponse;
 	}
@@ -114,6 +117,16 @@ public class WechatApiClientResponseHandler extends DefaultApiClientResponseHand
 
 	protected ApiClientException translateToApiClientException(ApiClientMethod invokeMethod, WechatResponsable baseResponse, ResponseEntity<?> responseEntity){
 		return WechatUtils.translateToApiClientException(invokeMethod, (WechatResponse)baseResponse, responseEntity);
+	}
+
+
+	public void setErrcodeKey(String errcodeKey) {
+		this.errcodeKey = errcodeKey;
+	}
+
+
+	public void setErrmsgKey(String errmsgKey) {
+		this.errmsgKey = errmsgKey;
 	}
 
 }

@@ -76,6 +76,8 @@ public interface WechatConfig {
 	@Deprecated
 	PayProperties getPay();
 	
+	String getConfig(String key);
+	
 	/***
 	 * 是否企业微信
 	 * @author weishao zeng

@@ -23,7 +23,10 @@ public class MultiAppConfig {
 
 	protected Map<String, DefaultWechatConfig> apps = Maps.newLinkedHashMap();
 	
-	
+	@Deprecated
+	public WechatConfig getWechatConfig(String appid) {
+		return getAppConfig(appid);
+	}
 	/****
 	 * 首先根据appid匹配配置，如果找不到，则把appid参数当做名称查找
 	 * 
@@ -31,7 +34,7 @@ public class MultiAppConfig {
 	 * @param appid
 	 * @return
 	 */
-	public WechatConfig getWechatConfig(String appid) {
+	public WechatConfig getAppConfig(String appid) {
 		return this.apps.entrySet().stream().filter(entry -> {
 			String id = entry.getValue().getAppid();
 			return id!=null && id.equals(appid);

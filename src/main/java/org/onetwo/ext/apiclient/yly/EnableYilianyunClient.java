@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.onetwo.ext.apiclient.yly.core.EnableYilianyunClientSelector;
+import org.onetwo.ext.apiclient.yly.core.EnableYlyClientSelector;
 import org.springframework.context.annotation.Import;
 
 /**
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Import;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@Import({EnableYilianyunClientSelector.class})
+@Import({EnableYlyClientSelector.class})
 public @interface EnableYilianyunClient {
 	
 	String[] basePackages() default {};

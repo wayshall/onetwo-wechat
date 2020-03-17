@@ -3,6 +3,7 @@ package org.onetwo.ext.apiclient.wechat.core;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.onetwo.common.utils.LangUtils;
 import org.onetwo.ext.apiclient.wechat.utils.WechatAppInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.AccessTokenStorers;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.Oauth2Keys;
@@ -46,6 +47,15 @@ public class DefaultWechatConfig implements WechatConfig{
 	private Map<String, WechatAppInfo> apps = Maps.newHashMap();
 	
 	private PayProperties pay = new PayProperties();
+	
+	private Map<String, String> configs = Maps.newHashMap();
+	
+	public String getConfig(String key) {
+		if (LangUtils.isEmpty(configs)) {
+			return null;
+		}
+		return configs.get(key);
+	}
 
 	public boolean isEncryptByAes(){
 		return StringUtils.isNotBlank(encodingAESKey);
