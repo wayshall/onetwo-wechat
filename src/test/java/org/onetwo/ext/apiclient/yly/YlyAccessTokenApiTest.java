@@ -6,6 +6,7 @@ package org.onetwo.ext.apiclient.yly;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
@@ -32,8 +33,7 @@ public class YlyAccessTokenApiTest extends YlyBaseBootTests {
 	
 	String accessToken = "4043ed049f5645199ac8e5c27918f500";
 	
-	@Test
-	public void testGetAccessToken() {
+	public AccessTokenInfo getAccessToken() {
 		GetAccessTokenRequest request = GetAccessTokenRequest.builder()
 											.appid("1049868864")
 											.accessTokenType(YlyAccessTokenTypes.YI_LIAN_YUN)
@@ -42,6 +42,12 @@ public class YlyAccessTokenApiTest extends YlyBaseBootTests {
 		assertThat(token).isNotNull();
 		System.out.println("token: " + token);
 		assertThat(token.getAccessToken()).isNotEmpty();
+		return token;
+	}
+
+	@Before
+	public void setup() {
+		this.accessToken = getAccessToken().getAccessToken();
 	}
 	
 	@Test
