@@ -15,7 +15,7 @@ public class TrtcSignServiceTest extends QCloudTrtcBaseBootTests {
 	
 	@Test
 	public void testSign() {
-		String sign = this.trtcSignService.genSig("way", 60);
+		String sign = this.trtcSignService.genSig("way", 60L);
 		System.out.println("sign: " + sign);
 	}
 
