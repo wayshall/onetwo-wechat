@@ -11,14 +11,17 @@ import org.junit.Test;
 import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
-import org.onetwo.ext.apiclient.yly.client.PrintClient;
-import org.onetwo.ext.apiclient.yly.client.PrintClient.PrintTextRequest;
-import org.onetwo.ext.apiclient.yly.client.PrinterClient;
-import org.onetwo.ext.apiclient.yly.client.PrinterClient.AddPrinterRequest;
+import org.onetwo.ext.apiclient.yly.api.PrintClient;
+import org.onetwo.ext.apiclient.yly.api.PrinterClient;
 import org.onetwo.ext.apiclient.yly.core.YlyAccessTokenProvider.YlyAccessTokenTypes;
 import org.onetwo.ext.apiclient.yly.core.YlyAppConfig;
-import org.onetwo.ext.apiclient.yly.core.YlyResponse;
+import org.onetwo.ext.apiclient.yly.request.AddPrinterRequest;
+import org.onetwo.ext.apiclient.yly.request.PrintTextRequest;
+import org.onetwo.ext.apiclient.yly.request.PrinterRequest;
+import org.onetwo.ext.apiclient.yly.response.PrinterStateResponse;
+import org.onetwo.ext.apiclient.yly.response.YlyResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 public class YlyAccessTokenApiTest extends YlyBaseBootTests {
 	
@@ -31,11 +34,16 @@ public class YlyAccessTokenApiTest extends YlyBaseBootTests {
 	@Autowired
 	PrinterClient printerClient;
 	
-	String accessToken = "4043ed049f5645199ac8e5c27918f500";
+	String accessToken;
+	@Value("${yilianyun.apps.default.appid}")
+	String appid;
+	
+	@Value("${yilianyun.testContent}")
+	String content;
 	
 	public AccessTokenInfo getAccessToken() {
 		GetAccessTokenRequest request = GetAccessTokenRequest.builder()
-											.appid("1049868864")
+											.appid(appid)
 											.accessTokenType(YlyAccessTokenTypes.YI_LIAN_YUN)
 											.build();
 		AccessTokenInfo token = accessTokenService.getOrRefreshAccessToken(request);
@@ -53,10 +61,10 @@ public class YlyAccessTokenApiTest extends YlyBaseBootTests {
 	@Test
 	public void testAddPrinter() {
 		AddPrinterRequest request = AddPrinterRequest.builder()
-													.clientId("1049868864")
+													.clientId(appid)
 													.accessToken(accessToken)
-													.machineCode(appConfig.getAppConfig("1049868864").getConfig("machine-code"))
-													.msign(appConfig.getAppConfig("1049868864").getConfig("machine-secrect"))
+													.machineCode(appConfig.getAppConfig(appid).getConfig("machine-code"))
+													.msign(appConfig.getAppConfig(appid).getConfig("machine-secrect"))
 													.build();
 		request.sign(appConfig);
 		YlyResponse res = printerClient.addPrinter(request);
@@ -64,13 +72,27 @@ public class YlyAccessTokenApiTest extends YlyBaseBootTests {
 	}
 	
 	@Test
+	public void testBtnprint() {
+		PrinterRequest request = PrinterRequest.builder()
+											.accessToken(accessToken)
+											.clientId(appid)
+											.machineCode(appConfig.getAppConfig(appid).getConfig("machine-code"))
+//											.responseType(ResponseTypes.btnclose.name())
+											.build();
+		request.sign(appConfig);
+		PrinterStateResponse res = printerClient.getPrintStatus(request);
+		System.out.println("state: " + res);
+		assertThat(res.isSuccess()).isTrue();
+	}
+	
+	@Test
 	public void testPrintText() {
 		PrintTextRequest request = PrintTextRequest.builder()
 											.accessToken(accessToken)
-											.clientId("1049868864")
-											.machineCode("4004646641")
-											.content("<center>test</center>")
-											.originId("test")
+											.clientId(appid)
+											.machineCode(appConfig.getAppConfig(appid).getConfig("machine-code"))
+											.content(content)
+											.originId("12")
 											.build();
 		request.sign(appConfig);
 		this.printClient.printText(request);

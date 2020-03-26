@@ -1,6 +1,8 @@
 package org.onetwo.ext.apiclient.yly.core;
 
 import org.onetwo.common.annotation.FieldName;
+import org.onetwo.ext.apiclient.yly.request.YlyRequest;
+import org.onetwo.ext.apiclient.yly.response.YlyResponse;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -32,19 +34,29 @@ public interface YlyOAuthClient {
 		@FieldName("grant_type")
 		String grantType;
 		String scope = "all";
-		String id;
 	}
 
 	@Data
 	@EqualsAndHashCode(callSuper = false)
 	public class OAuthResponse extends YlyResponse {
+		private OAuthResult body;
+	}
+
+
+	@Data
+	@EqualsAndHashCode(callSuper = false)
+	public class OAuthResult extends YlyResponse {
 		@JsonProperty("access_token")
 		String accessToken;
-		@JsonProperty("grant_type")
-		String grantType;
-		String sign;
-		String scope = "all";
-		int timestamp;
-		String id;
+
+		@JsonProperty("refresh_token")
+		String refreshToken;
+		
+		@JsonProperty("machine_code")
+		String machine_code;
+		
+		@JsonProperty("expires_in")
+		int expiresIn;
+		String scope;
 	}
 }

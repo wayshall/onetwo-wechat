@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.yly.core;
+package org.onetwo.ext.apiclient.yly.response;
 
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponsable;
 

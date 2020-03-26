@@ -4,6 +4,7 @@ import org.onetwo.common.apiclient.ApiClientMethod;
 import org.onetwo.common.apiclient.impl.DefaultApiClientResponseHandler;
 import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClientFactoryBean.WechatMethod;
+import org.onetwo.ext.apiclient.yly.response.YlyResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 

@@ -9,7 +9,7 @@ import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenType;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.yly.core.YlyOAuthClient.OAuthRequest;
-import org.onetwo.ext.apiclient.yly.core.YlyOAuthClient.OAuthResponse;
+import org.onetwo.ext.apiclient.yly.core.YlyOAuthClient.OAuthResult;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -35,11 +35,11 @@ public class YlyAccessTokenProvider implements AccessTokenProvider {
 		
 		oauthRequest.sign(appconfig.getAppsecret());
 		
-		OAuthResponse oahtResponse = ylyOAuthClient.getAccessToken(oauthRequest);
+		OAuthResult oahtResponse = ylyOAuthClient.getAccessToken(oauthRequest).getBody();
 		
 		AccessTokenResponse res = new AccessTokenResponse();
 		res.setAccessToken(oahtResponse.getAccessToken());
-		res.setExpiresIn(-1);
+		res.setExpiresIn(oahtResponse.getExpiresIn());
 		return res;
 	}
 

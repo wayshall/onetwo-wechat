@@ -1,9 +1,11 @@
-package org.onetwo.ext.apiclient.yly.core;
+package org.onetwo.ext.apiclient.yly.request;
 
 import java.util.UUID;
 
 import org.onetwo.common.annotation.FieldName;
 import org.onetwo.common.md.Hashs;
+import org.onetwo.common.utils.StringUtils;
+import org.onetwo.ext.apiclient.yly.core.YlyAppConfig;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,8 +39,8 @@ public class YlyRequest {
 		this.timestamp = (int)(System.currentTimeMillis() / 1000);
 		String signSource = getClientId() + timestamp + appsecret;
 		sign  = Hashs.MD5.hash(signSource).toLowerCase();
-		if (id==null) {
-			id = UUID.randomUUID().toString();
+		if (StringUtils.isBlank(id)) {
+			setId(UUID.randomUUID().toString());
 		}
 	}
 }
