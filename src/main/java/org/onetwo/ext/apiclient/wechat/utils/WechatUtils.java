@@ -14,10 +14,10 @@ import org.onetwo.common.encrypt.PKCS7Encoder;
 import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.exception.BaseException;
 import org.onetwo.common.exception.ErrorTypes;
+import org.onetwo.common.exception.ServiceException;
 import org.onetwo.common.jackson.JsonMapper;
 import org.onetwo.common.log.JFishLoggerFactory;
 import org.onetwo.common.utils.LangUtils;
-import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.basic.api.TokenApi;
@@ -51,6 +51,15 @@ public class WechatUtils {
 		}
 	}
 	public static WxappUserInfo decrypt(String sessionKey, String iv, String encryptedData){
+		try {
+			return decrypt0(sessionKey, iv, encryptedData);
+		} catch (Exception e) {
+			throw new ServiceException("解密错误", e).put("iv", iv)
+													.put("encryptedData", encryptedData);
+		}
+	}
+	
+	public static WxappUserInfo decrypt0(String sessionKey, String iv, String encryptedData){
 		AESCoder aes = AESCoder.pkcs7Padding(Base64.decodeBase64(sessionKey))
 								.initer((cipher, mode, keySpec)->{
 									AlgorithmParameters params = AlgorithmParameters.getInstance(Crypts.AES_KEY);  
@@ -64,6 +73,15 @@ public class WechatUtils {
 	}
 	
 	public static <T> T decrypt(String sessionKey, String iv, String encryptedData, Class<T> messageType){
+		try {
+			return decrypt0(sessionKey, iv, encryptedData, messageType);
+		} catch (Exception e) {
+			throw new ServiceException("解密错误", e).put("iv", iv)
+													.put("encryptedData", encryptedData);
+		}
+	}
+	
+	public static <T> T decrypt0(String sessionKey, String iv, String encryptedData, Class<T> messageType){
 		AESCoder aes = AESCoder.pkcs7Padding(Base64.decodeBase64(sessionKey))
 								.initer((cipher, mode, keySpec)->{
 									AlgorithmParameters params = AlgorithmParameters.getInstance(Crypts.AES_KEY);  
