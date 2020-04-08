@@ -126,7 +126,7 @@ public class MemoryAccessTokenService extends AbstractAccessTokenService impleme
 		try {
 			return this.accessTokenCaches.get(key, ()->{
 //				AccessTokenInfo accessToken = WechatUtils.getAccessToken(wechatServer, request);
-				AccessTokenResponse response = this.getAccessTokenProvider().getAccessToken(request);
+				AccessTokenResponse response = this.getAccessTokenProvider().getAccessToken(appidRequest);
 				AccessTokenInfo at = WechatUtils.toAccessTokenInfo(request.getAppid(), response);
 				at.setUpdateAt(new Date());
 				return at;

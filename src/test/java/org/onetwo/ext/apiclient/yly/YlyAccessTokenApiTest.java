@@ -34,7 +34,7 @@ public class YlyAccessTokenApiTest extends YlyBaseBootTests {
 	@Autowired
 	PrinterClient printerClient;
 	
-	String accessToken;
+	AccessTokenInfo accessToken;
 	@Value("${yilianyun.apps.default.appid}")
 	String appid;
 	
@@ -55,14 +55,14 @@ public class YlyAccessTokenApiTest extends YlyBaseBootTests {
 
 	@Before
 	public void setup() {
-		this.accessToken = getAccessToken().getAccessToken();
+		this.accessToken = getAccessToken();
 	}
 	
 	@Test
 	public void testAddPrinter() {
 		AddPrinterRequest request = AddPrinterRequest.builder()
 													.clientId(appid)
-													.accessToken(accessToken)
+													.accessToken(accessToken.getAccessToken())
 													.machineCode(appConfig.getAppConfig(appid).getConfig("machine-code"))
 													.msign(appConfig.getAppConfig(appid).getConfig("machine-secrect"))
 													.build();
@@ -74,7 +74,7 @@ public class YlyAccessTokenApiTest extends YlyBaseBootTests {
 	@Test
 	public void testBtnprint() {
 		PrinterRequest request = PrinterRequest.builder()
-											.accessToken(accessToken)
+											.accessToken(accessToken.getAccessToken())
 											.clientId(appid)
 											.machineCode(appConfig.getAppConfig(appid).getConfig("machine-code"))
 //											.responseType(ResponseTypes.btnclose.name())
@@ -88,14 +88,14 @@ public class YlyAccessTokenApiTest extends YlyBaseBootTests {
 	@Test
 	public void testPrintText() {
 		PrintTextRequest request = PrintTextRequest.builder()
-											.accessToken(accessToken)
+											.accessToken(accessToken.getAccessToken())
 											.clientId(appid)
 											.machineCode(appConfig.getAppConfig(appid).getConfig("machine-code"))
 											.content(content)
 											.originId("12")
 											.build();
 		request.sign(appConfig);
-		this.printClient.printText(request);
+		this.printClient.printText(accessToken, request);
 	}
 
 }
