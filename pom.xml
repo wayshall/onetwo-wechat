@@ -371,13 +371,6 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-        <repository>
-            <id>microcloud</id>
-            <url>https://test.micro-cloud-tech.cn/nexus/repository/maven-snapshots/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>

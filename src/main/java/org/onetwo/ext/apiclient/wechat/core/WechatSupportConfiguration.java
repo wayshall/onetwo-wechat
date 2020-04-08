@@ -4,6 +4,7 @@ import org.onetwo.common.spring.Springs;
 import org.onetwo.ext.apiclient.wechat.event.WechatEventBus;
 import org.onetwo.ext.apiclient.wechat.support.impl.MemoryAccessTokenService;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
@@ -26,8 +27,11 @@ public class WechatSupportConfiguration implements ApplicationContextAware {
 	}
 	
 	@Bean
-	public WechatAccessTokenProvider wechatAccessTokenProvider() {
-		return new WechatAccessTokenProvider();
+	@Autowired
+	public WechatAccessTokenProvider wechatAccessTokenProvider(WechatConfigProvider wechatConfigProvider) {
+		WechatAccessTokenProvider provider = new WechatAccessTokenProvider();
+		provider.setWechatConfigProvider(wechatConfigProvider);
+		return provider;
 	}
 	
 	// ...

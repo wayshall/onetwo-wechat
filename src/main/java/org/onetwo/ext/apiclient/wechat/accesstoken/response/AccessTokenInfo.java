@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import org.onetwo.common.date.DateUtils;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -30,6 +31,9 @@ public class AccessTokenInfo implements Serializable {
 	 * 企业微信有用
 	 */
 	private Long agentId;
+	
+	private boolean autoAppendToUrl = true;
+	private AccessTokenType accessTokenType;
 
 	/*public AccessTokenInfo(String accessToken) {
 		this(null, null, accessToken, -1, null);

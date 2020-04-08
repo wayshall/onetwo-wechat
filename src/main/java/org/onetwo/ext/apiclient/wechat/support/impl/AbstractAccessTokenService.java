@@ -15,8 +15,6 @@ import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenProvider;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AppCacheKeyGenerator;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
-import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
-import org.onetwo.ext.apiclient.wechat.core.WechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.event.WechatEventBus;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
@@ -56,7 +54,7 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	
 //	@Autowired
 //	protected WechatConfig wechatConfig;
-	private WechatConfigProvider wechatConfigProvider;
+//	private WechatConfigProvider wechatConfigProvider;
 	
 	@Autowired
 	private WechatEventBus wechatEventBus;
@@ -74,20 +72,27 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	
 	@Override
 	public Optional<AccessTokenInfo> refreshAccessTokenByAppid(AppidRequest refreshTokenRequest) {
-		String appid = refreshTokenRequest.getAppid();
-		WechatConfig wechatConfig = wechatConfigProvider.getWechatConfig(appid);
-		WechatUtils.assertWechatConfigNotNull(wechatConfig, appid);
-		if (appid==null || !appid.equals(wechatConfig.getAppid())) {
-			logger.warn("appid error, ignore refresh, appid: {}, configuration appid: {}", appid, wechatConfig.getAppid());
-			return Optional.empty();
-		}
-		GetAccessTokenRequest request = GetAccessTokenRequest.builder()
-																.appid(appid)
-																.secret(wechatConfig.getAppsecret())
-																.accessTokenType(refreshTokenRequest.getAccessTokenType())
-															.build();
-		AccessTokenInfo tokenInfo = refreshAccessToken(request);
-		return Optional.of(tokenInfo);
+		AccessTokenResponse res = accessTokenProvider.getAccessToken(refreshTokenRequest);
+		AccessTokenInfo token = new AccessTokenInfo();
+		token.setExpiresIn(res.getExpiresIn());
+		token.setAccessToken(res.getAccessToken());
+		token.setUpdateAt(new Date());
+		return Optional.of(token);
+		
+//		String appid = refreshTokenRequest.getAppid();
+//		WechatConfig wechatConfig = wechatConfigProvider.getWechatConfig(appid);
+//		WechatUtils.assertWechatConfigNotNull(wechatConfig, appid);
+//		if (appid==null || !appid.equals(wechatConfig.getAppid())) {
+//			logger.warn("appid error, ignore refresh, appid: {}, configuration appid: {}", appid, wechatConfig.getAppid());
+//			return Optional.empty();
+//		}
+//		GetAccessTokenRequest request = GetAccessTokenRequest.builder()
+//																.appid(appid)
+//																.secret(wechatConfig.getAppsecret())
+//																.accessTokenType(refreshTokenRequest.getAccessTokenType())
+//															.build();
+//		AccessTokenInfo tokenInfo = refreshAccessToken(request);
+//		return Optional.of(tokenInfo);
 	}
 
 
@@ -123,7 +128,11 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	}
 
 	protected AccessTokenResponse getAccessToken(GetAccessTokenRequest request) {
-		return accessTokenProvider.getAccessToken(request);
+		AppidRequest appidRequest = new AppidRequest();
+		appidRequest.setAppid(request.getAppid());
+		appidRequest.setAccessTokenType(request.getAccessTokenType());
+		appidRequest.setAgentId(request.getAgentId());
+		return accessTokenProvider.getAccessToken(appidRequest);
 	}
 	
 	protected boolean isUpdatedNewly(Optional<AccessTokenInfo> opt) {
@@ -224,9 +233,9 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	}
 
 
-	public void setWechatConfigProvider(WechatConfigProvider wechatConfigProvider) {
-		this.wechatConfigProvider = wechatConfigProvider;
-	}
+//	public void setWechatConfigProvider(WechatConfigProvider wechatConfigProvider) {
+//		this.wechatConfigProvider = wechatConfigProvider;
+//	}
 
 	protected String getAppidKey(AppidRequest appidRequest) {
 		return appCacheKeyGenerator.generated(appidRequest);

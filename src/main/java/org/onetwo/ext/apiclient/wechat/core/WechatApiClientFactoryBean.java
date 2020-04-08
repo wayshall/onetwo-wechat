@@ -15,8 +15,9 @@ import org.onetwo.common.spring.SpringUtils;
 import org.onetwo.common.utils.ParamUtils;
 import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
-import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenTypes;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenType;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClientFactoryBean.WechatMethod;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants;
@@ -56,8 +57,9 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 	@Value(WechatConfigKeys.ACCESSTOKEN_AUTO_REMOVE_KEY)
 	private boolean autoRemove;
 	
-	private AccessTokenTypes accessTokenType;
+	private AccessTokenType accessTokenType;
 //	private AccessTokenServiceStrategy accessTokenServiceStrategy;
+	private RemovableTokenError removableTokenError;
 	
 
 	@Override
@@ -67,6 +69,10 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 			this.accessTokenServiceStrategy = DEFAULT_TOKEN_STRATEGY;
 		} */
 //		Assert.notNull(accessTokenType, "accessTokenType can not be null");
+	}
+	
+	public void setRemovableTokenError(RemovableTokenError removableTokenError) {
+		this.removableTokenError = removableTokenError;
 	}
 	
 	@Override
@@ -128,7 +134,11 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 		 * @return
 		 */
 		protected boolean isNeedToRemoveToken(String errorCode) {
-			return WechatErrors.isNeedToRemoveToken(errorCode);
+			if (removableTokenError!=null) {
+				return removableTokenError.isNeedToRemoveToken(errorCode);
+			} else {
+				return WechatErrors.isNeedToRemoveToken(errorCode);
+			}
 		}
 		
 		/***
@@ -143,19 +153,24 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 		protected Object processAutoRemove(MethodInvocation invocation, WechatMethod invokeMethod, AccessTokenInfo at, ApiClientException e) throws Throwable {
 			if (autoRemove) {
 				String appid = at.getAppid();
+				AccessTokenType att = accessTokenType!=null?accessTokenType:at.getAccessTokenType();
 				Optional<AccessTokenInfo> refreshOpt = getAccessTokenService().refreshAccessTokenByAppid(
 																							AppidRequest.builder()
 																									.appid(appid)
-																									.accessTokenType(accessTokenType)
+																									.accessTokenType(att)
 																									.build()
 																							);
 				if (refreshOpt.isPresent()) {
 					logger.info("refreshAccessTokenByAppid success, retry invoke wechat method. token: {}", refreshOpt.get().getAccessToken());
 					at.setAccessToken(refreshOpt.get().getAccessToken());
+					invokeMethod.<AccessTokenRequest>getParameterValue(invocation.getArguments(), invokeMethod.getAccessTokenRequest())
+								.ifPresent(request -> {
+									request.setAccessToken(at.getAccessToken());
+								});;
 					return super.doInvoke(invocation, invokeMethod);
 				} else {
 					logger.warn("refreshAccessTokenByAppid faild, try to remove...");
-					getAccessTokenService().removeAccessToken(new AppidRequest(appid, at.getAgentId(), accessTokenType));
+					getAccessTokenService().removeAccessToken(new AppidRequest(appid, at.getAgentId(), att));
 				}
 			} else {
 				logger.warn("accesstoken is invalid and disable auto remove");
@@ -200,7 +215,10 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 			}*/
 			Optional<AccessTokenInfo> at = method.getAccessToken(context.getMethodArgs());
 			if(at.isPresent()){
-				newUrl = ParamUtils.appendParam(newUrl, WechatConstants.PARAMS_ACCESS_TOKEN, at.get().getAccessToken());
+				AccessTokenInfo token = at.get();
+				if (token.isAutoAppendToUrl()) {
+					newUrl = ParamUtils.appendParam(newUrl, WechatConstants.PARAMS_ACCESS_TOKEN, token.getAccessToken());
+				}
 			}
 			newUrl = super.processUrlBeforeRequest(newUrl, method, context);
 			return newUrl;
@@ -210,6 +228,7 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 	public static class WechatMethod extends ApiClientMethod {
 //		private boolean autoAppendAccessToken;
 		private Optional<ApiClientMethodParameter> accessTokenParameter;
+		private Optional<ApiClientMethodParameter> accessTokenRequest;
 		
 		public WechatMethod(Method method) {
 			super(method);
@@ -225,6 +244,7 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 			});*/
 
 			accessTokenParameter = findParameterByType(AccessTokenInfo.class);
+			accessTokenRequest = findParameterByType(AccessTokenRequest.class);
 		}
 		
 		@Override
@@ -238,6 +258,10 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 
 		public Optional<ApiClientMethodParameter> getAccessTokenParameter() {
 			return accessTokenParameter;
+		}
+
+		public Optional<ApiClientMethodParameter> getAccessTokenRequest() {
+			return accessTokenRequest;
 		}
 
 		@Override
@@ -264,6 +288,23 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 			}
 			return Optional.ofNullable(at);
 		}
-		
+
+
+		@SuppressWarnings("unchecked")
+		public <T> Optional<T> getParameterValue(final Object[] args, Optional<ApiClientMethodParameter> parameter){
+			Logger logger = ApiClientUtils.getApiclientlogger();
+			T at = null;
+			if(parameter.isPresent()){
+				at = (T)args[parameter.get().getParameterIndex()];
+				if(at==null){
+					throw new WechatException("parameter value not found: " + parameter.get().getParameterName());
+				}
+			}else{
+				if(logger.isDebugEnabled()){
+					logger.debug("Parameter not found!");
+				}
+			}
+			return Optional.ofNullable(at);
+		}
 	}
 }

@@ -3,7 +3,7 @@ package org.onetwo.ext.apiclient.yly.core;
 import java.util.Arrays;
 import java.util.List;
 
-import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenProvider;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenType;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
@@ -24,7 +24,7 @@ public class YlyAccessTokenProvider implements AccessTokenProvider {
 	private YlyAppConfig appConfig;
 
 	@Override
-	public AccessTokenResponse getAccessToken(GetAccessTokenRequest request) {
+	public AccessTokenResponse getAccessToken(AppidRequest request) {
 		WechatConfig appconfig = appConfig.getAppConfig(request.getAppid());
 		
 		OAuthRequest oauthRequest = new OAuthRequest();

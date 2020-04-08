@@ -16,5 +16,5 @@ public @interface YlyApiClient {
 	String name() default "";
 	String path() default "";
 	String url() default "";
-//	AccessTokenTypes accessTokenType() default AccessTokenTypes.WECHAT;
+//	AccessTokenTypes accessTokenType() default YlyAccessTokenTypes.YI_LIAN_YUN;
 }

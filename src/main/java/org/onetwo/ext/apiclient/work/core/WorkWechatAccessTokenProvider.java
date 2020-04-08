@@ -3,7 +3,7 @@ package org.onetwo.ext.apiclient.work.core;
 import java.util.Arrays;
 import java.util.List;
 
-import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenProvider;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenType;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenTypes;
@@ -32,7 +32,7 @@ public class WorkWechatAccessTokenProvider implements AccessTokenProvider {
 	private WorkConfigProvider workConfigProvider;
 
 	@Override
-	public AccessTokenResponse getAccessToken(GetAccessTokenRequest request) {
+	public AccessTokenResponse getAccessToken(AppidRequest request) {
 		String corpid = request.getAppid();
 		WechatConfig wechatConfig = null;
 		if (request.getAgentId()!=null) {

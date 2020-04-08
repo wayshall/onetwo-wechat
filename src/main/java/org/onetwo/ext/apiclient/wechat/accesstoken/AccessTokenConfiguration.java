@@ -52,7 +52,7 @@ public class AccessTokenConfiguration implements InitializingBean {
 	public AccessTokenService memoryAccessTokenService(WechatConfigProvider wechatConfigProvider){
 		MemoryAccessTokenService service = new MemoryAccessTokenService();
 		service.setAccessTokenProvider(accessTokenProvider);
-		service.setWechatConfigProvider(wechatConfigProvider);
+//		service.setWechatConfigProvider(wechatConfigProvider);
 		return service;
 	}
 	
@@ -61,7 +61,7 @@ public class AccessTokenConfiguration implements InitializingBean {
 	public AccessTokenService redisStoreAccessTokenService(WechatConfigProvider wechatConfigProvider){
 		RedisStoreAccessTokenService tokenService = new RedisStoreAccessTokenService();
 		tokenService.setAccessTokenProvider(accessTokenProvider);
-		tokenService.setWechatConfigProvider(wechatConfigProvider);
+//		tokenService.setWechatConfigProvider(wechatConfigProvider);
 		return tokenService;
 	}
 	
@@ -73,7 +73,7 @@ public class AccessTokenConfiguration implements InitializingBean {
 														WechatConfigProvider wechatConfigProvider){
 		DbStoreAccessTokenService tokenService = new DbStoreAccessTokenService(accessTokenRepository);
 		tokenService.setAccessTokenProvider(accessTokenProvider);
-		tokenService.setWechatConfigProvider(wechatConfigProvider);
+//		tokenService.setWechatConfigProvider(wechatConfigProvider);
 		return tokenService;
 	}
 	
