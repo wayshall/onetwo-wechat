@@ -27,9 +27,8 @@ import org.onetwo.ext.apiclient.wechat.utils.WechatException;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 
+import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -43,15 +42,15 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<WechatMethod> {
 
-	final protected static LoadingCache<Method, WechatMethod> API_METHOD_CACHES = CacheBuilder.newBuilder()
-																.build(new CacheLoader<Method, WechatMethod>() {
-																	@Override
-																	public WechatMethod load(Method method) throws Exception {
-																		WechatMethod wechatMethod = new WechatMethod(method);
-																		wechatMethod.initialize();
-																		return wechatMethod;
-																	}
-																});
+	final protected static Cache<Method, WechatMethod> API_METHOD_CACHES = CacheBuilder.newBuilder().<Method, WechatMethod>build();
+//																.build(new CacheLoader<Method, WechatMethod>() {
+//																	@Override
+//																	public WechatMethod load(Method method) throws Exception {
+//																		WechatMethod wechatMethod = new WechatMethod(method);
+//																		wechatMethod.initialize();
+//																		return wechatMethod;
+//																	}
+//																});
 
 
 	@Value(WechatConfigKeys.ACCESSTOKEN_AUTO_REMOVE_KEY)
@@ -60,6 +59,7 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 	private AccessTokenType accessTokenType;
 //	private AccessTokenServiceStrategy accessTokenServiceStrategy;
 	private RemovableTokenError removableTokenError;
+	private boolean autoThrowIfErrorCode;
 	
 
 	@Override
@@ -102,7 +102,7 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 	}
 	
 	final class WechatClientMethodInterceptor extends DefaultApiMethodInterceptor {
-		public WechatClientMethodInterceptor(LoadingCache<Method, WechatMethod> methodCache) {
+		public WechatClientMethodInterceptor(Cache<Method, WechatMethod> methodCache) {
 			super(methodCache);
 		}
 
@@ -127,6 +127,15 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 			}
 		}
 		
+		@Override
+		protected WechatMethod createMethod(Method method) {
+			WechatMethod wechatMethod = new WechatMethod(method);
+			wechatMethod.setAutoThrowIfErrorCode(autoThrowIfErrorCode);
+			wechatMethod.initialize();
+			return wechatMethod;
+		}
+
+
 		/***
 		 * 根据错误代码判断是否需要移除token
 		 * @author weishao zeng

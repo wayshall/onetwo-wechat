@@ -19,4 +19,5 @@ public @interface WechatApiClient {
 	String path() default "";
 	String url() default "";
 	AccessTokenTypes accessTokenType() default AccessTokenTypes.WECHAT;
+	boolean autoThrowIfErrorCode() default true;
 }

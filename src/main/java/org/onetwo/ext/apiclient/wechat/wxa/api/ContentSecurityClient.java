@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
  * @author wayshall
  * <br/>
  */
-@WechatApiClient(url=UrlConst.API_DOMAIN_URL)
+@WechatApiClient(url=UrlConst.API_DOMAIN_URL, autoThrowIfErrorCode = false)
 public interface ContentSecurityClient {
 
 	/***
