@@ -20,7 +20,6 @@ import lombok.ToString;
  * @author weishao zeng
  * <br/>
  */
-@SuppressWarnings("serial")
 @Data
 @EqualsAndHashCode(callSuper=true)
 @NoArgsConstructor
@@ -146,8 +145,11 @@ public class OrderNotifyResponse extends WechatPayResponse implements CustomizeM
 	@JsonProperty("settlement_total_fee")
 	private Integer settlementTotalFee;
 
-//	@JsonProperty("promotion_detail")
-//	String promotionDetail;
+	/****
+	 * 若需要用到此数据，需要自行反序列化
+	 */
+	@JsonProperty("promotion_detail")
+	String promotionDetail;
 //	@JsonIgnore
 //	private PromotionDetailWrapper promotionDetail;
 	
@@ -175,9 +177,13 @@ public class OrderNotifyResponse extends WechatPayResponse implements CustomizeM
 				this.coupon.add(coupon);
 			}
 		}
-		if (!responseMap.isEmpty()) {
-			this.putAll(responseMap);
-		}
+//		if (!responseMap.isEmpty()) {
+//			// 移动所有已设置到bean的值，避免重复
+//			SpringUtils.toFlatMap(this).keySet().forEach(key -> {
+//				responseMap.remove(key);
+//			});
+//			this.putAll(responseMap);
+//		}
 	}
 	
 
