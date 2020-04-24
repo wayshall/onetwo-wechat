@@ -1,5 +1,7 @@
 package org.onetwo.ext.apiclient.wxpay.vo.response;
 
+import java.util.HashMap;
+
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponsable;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants;
 import org.onetwo.ext.apiclient.wxpay.utils.WechatPayUtils.PayResponseFields;
@@ -10,18 +12,23 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
+ * 修改：
+ * 继承hashmap，防止微信增加字段后签名验证错误
  * @author wayshall
  * <br/>
  */
+@SuppressWarnings("serial")
 @Data
+@EqualsAndHashCode(callSuper=false)
 @Builder(builderMethodName="baseBuilder")
 @NoArgsConstructor
 @AllArgsConstructor
 @JacksonXmlRootElement(localName="xml")
-public class WechatPayResponse implements WechatResponsable {
+public class WechatPayResponse extends HashMap<String, Object> implements WechatResponsable {
 	@JsonProperty(PayResponseFields.KEY_ERRCODE)
 	private String returnCode;
 	@JsonProperty(PayResponseFields.KEY_ERRMSG)
