@@ -47,7 +47,7 @@ public class YlyApiClentRegistrar extends AbstractApiClentRegistrar<EnableYilian
 //		definition.addPropertyValue("accessTokenType", attributes.getEnum("accessTokenType"));
 		definition.addPropertyValue("url", resolveUrl(attributes));
 		definition.addPropertyValue("path", resolvePath(attributes));
-//		definition.addPropertyValue("name", name);
+		definition.addPropertyValue("autoThrowIfErrorCode", true);
 		definition.addPropertyValue("interfaceClass", className);
 		definition.addPropertyValue("responseHandler", responseHandler);
 		// 错误处理

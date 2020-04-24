@@ -59,7 +59,7 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 	private AccessTokenType accessTokenType;
 //	private AccessTokenServiceStrategy accessTokenServiceStrategy;
 	private RemovableTokenError removableTokenError;
-	private boolean autoThrowIfErrorCode;
+	private boolean autoThrowIfErrorCode = true;
 	
 
 	@Override
