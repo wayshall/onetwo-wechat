@@ -1,6 +1,7 @@
 package org.onetwo.ext.apiclient.qcloud.trtc;
 
 import org.onetwo.ext.apiclient.qcloud.trtc.service.TrtcSignService;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 public class TrtcConfiguration {
 	
 	@Bean
+	@ConditionalOnMissingBean(TrtcSignService.class)
 	public TrtcSignService trtcSignService() {
 		return new TrtcSignService();
 	}

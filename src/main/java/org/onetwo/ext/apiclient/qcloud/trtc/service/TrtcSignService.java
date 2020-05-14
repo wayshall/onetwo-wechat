@@ -22,13 +22,17 @@ public class TrtcSignService implements InitializingBean {
 	
 	@Autowired
 	private TrtcProperties trtcProperties;
-	private TLSSigAPIv2 tlsSigApi;
+	protected TLSSigAPIv2 tlsSigApi;
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		Assert.notNull(trtcProperties.getSdkAppId(), "sdkAppId must not be null");
 		Assert.hasText(trtcProperties.getSecretKey(), "secretKey must not be blank");
 		tlsSigApi = new TLSSigAPIv2(trtcProperties.getSdkAppId(), trtcProperties.getSecretKey());
+	}
+	
+	protected TLSSigAPIv2 getTlsSigApi() {
+		return tlsSigApi;
 	}
 	
 	/***
@@ -38,7 +42,7 @@ public class TrtcSignService implements InitializingBean {
 	 * @param expireInSeconds 过期时间，单位：秒
 	 */
 	public String genSig(String userId, Long expireInSeconds) {
-		return this.tlsSigApi.genSig(userId, expireInSeconds!=null?expireInSeconds:trtcProperties.getDefaultExpireTime());
+		return this.getTlsSigApi().genSig(userId, expireInSeconds!=null?expireInSeconds:trtcProperties.getDefaultExpireTime());
 	}
 	
 	/***

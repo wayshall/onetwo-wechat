@@ -60,6 +60,7 @@ public class QCloudLiveService {
 		
 		// 创建推流地址
 		String pushUrl = createPushUrl(streamData);
+//		String accelerateUrl = RequestUtils.appendParam(pushUrl, "bizid", value);
 		String urlTemplate = liveProperties.getPlayUrl();
 		
 		Map<String, Object> context = Maps.newHashMap();
