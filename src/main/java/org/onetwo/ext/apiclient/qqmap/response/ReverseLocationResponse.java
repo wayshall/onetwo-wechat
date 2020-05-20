@@ -15,12 +15,12 @@ import lombok.ToString;
 @ToString(callSuper=true)
 public class ReverseLocationResponse extends BaseResponse {
 
-	private ReverseResult result;
+	private ReverseLocationResult result;
 
 	@Data
-	public static class ReverseResult {
+	public static class ReverseLocationResult {
 		private String address;
-		@JsonProperty("address_component")
+		@JsonProperty("address_components")
 		private AddressComponent addressComponent;
 		
 		// address_reference
@@ -63,6 +63,11 @@ public class ReverseLocationResponse extends BaseResponse {
 	public static class LocationInfo {
 		private float lat;
 		private float lng;
+	}
+
+	@Data
+	public static class AdInfo {
+		private String adcode;
 	}
 }
 

@@ -1,5 +1,6 @@
 package org.onetwo.ext.apiclient.qqmap.response;
 
+import org.onetwo.ext.apiclient.qqmap.response.ReverseLocationResponse.AdInfo;
 import org.onetwo.ext.apiclient.qqmap.response.ReverseLocationResponse.AddressComponent;
 import org.onetwo.ext.apiclient.qqmap.response.ReverseLocationResponse.LocationInfo;
 
@@ -18,14 +19,14 @@ import lombok.ToString;
 @ToString(callSuper=true)
 public class ReverseAddressResponse extends BaseResponse {
 
-	private ReverseResult result;
+	private ReverseAddressResult result;
 
 	@Data
-	public static class ReverseResult {
+	public static class ReverseAddressResult {
 		private String title;
 		
 		private String address;
-		@JsonProperty("address_component")
+		@JsonProperty("address_components")
 		private AddressComponent addressComponent;
 		
 		@JsonProperty("location")
@@ -35,6 +36,9 @@ public class ReverseAddressResponse extends BaseResponse {
 		 * 解析精度级别，分为11个级别，一般>=9即可采用（定位到点，精度较高） 也可根据实际业务需求自行调整，完整取值表见下文。
 		 */
 		int level;
+		
+		@JsonProperty("ad_info")
+		AdInfo adInfo;
 		
 	}
 
