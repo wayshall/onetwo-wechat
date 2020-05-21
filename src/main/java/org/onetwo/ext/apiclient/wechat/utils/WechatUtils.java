@@ -77,7 +77,8 @@ public class WechatUtils {
 			return decrypt0(sessionKey, iv, encryptedData, messageType);
 		} catch (Exception e) {
 			throw new ServiceException("解密错误", e).put("iv", iv)
-													.put("encryptedData", encryptedData);
+												.put("encryptedData", encryptedData)
+												.put("sessionKey", sessionKey);
 		}
 	}
 	
