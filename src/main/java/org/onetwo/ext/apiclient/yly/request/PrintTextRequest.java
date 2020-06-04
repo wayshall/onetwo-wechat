@@ -39,4 +39,9 @@ public class PrintTextRequest extends YlyRequest implements AccessTokenRequest {
 		this.content = content;
 	}
 
+	@Override
+	public String obtainAppId() {
+		return clientId;
+	}
+
 }

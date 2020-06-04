@@ -1,5 +1,7 @@
 package org.onetwo.ext.apiclient.yly.request;
 
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenRequest;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Builder;
@@ -13,7 +15,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class AddPrinterRequest extends YlyRequest {
+public class AddPrinterRequest extends YlyRequest implements AccessTokenRequest {
 	@JsonProperty("access_token")
 	String accessToken;
 	/****
@@ -42,6 +44,11 @@ public class AddPrinterRequest extends YlyRequest {
 		this.printName = printName;
 		this.phone = phone;
 		this.machineCode = machineCode;
+	}
+
+	@Override
+	public String obtainAppId() {
+		return clientId;
 	}
 
 }

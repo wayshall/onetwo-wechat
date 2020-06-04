@@ -112,11 +112,18 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 			try {
 				return super.doInvoke(invocation, invokeMethod);
 			} catch (ApiClientException e) {
-				if(isNeedToRemoveToken(e.getCode()) && 
-						invokeMethod.getAccessTokenParameter().isPresent()){
-					Optional<AccessTokenInfo> at = invokeMethod.getAccessToken(invocation.getArguments());
-					if(at.isPresent() && StringUtils.isNotBlank(at.get().getAppid())){
-						return this.processAutoRemove(invocation, invokeMethod, at.get(), e);
+				if(isNeedToRemoveToken(e.getCode())){
+					if (invokeMethod.getAccessTokenParameter().isPresent()) {
+						Optional<AccessTokenInfo> at = invokeMethod.getAccessToken(invocation.getArguments());
+						if(at.isPresent() && StringUtils.isNotBlank(at.get().getAppid())){
+							return this.processAutoRemove(invocation, invokeMethod, at.get(), e);
+						}
+					} else if (invokeMethod.getAccessTokenRequest().isPresent()) {
+						logger.info("AccessToken not found, but AccessTokenRequest found!");
+						AccessTokenRequest atRequest = invokeMethod.<AccessTokenRequest>getParameterValue(invocation.getArguments(), invokeMethod.getAccessTokenRequest()).get();
+						AccessTokenInfo at = new AccessTokenInfo(atRequest.obtainAppId(), null, atRequest.getAccessToken(), 0, null);
+						at.setAccessTokenType(accessTokenType);
+						return this.processAutoRemove(invocation, invokeMethod, at, e);
 					} else {
 						logger.warn("accesstoken is invalid and AccessTokenInfo not found");
 					}
