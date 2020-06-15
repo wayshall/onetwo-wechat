@@ -72,6 +72,10 @@ public class WechatUtils {
 		return wxUser;
 	}
 	
+	public static WechatMobileVO decryptMobile(String sessionKey, String iv, String encryptedData){
+		return decrypt0(sessionKey, iv, encryptedData, WechatMobileVO.class);
+	}
+	
 	public static <T> T decrypt(String sessionKey, String iv, String encryptedData, Class<T> messageType){
 		try {
 			return decrypt0(sessionKey, iv, encryptedData, messageType);
