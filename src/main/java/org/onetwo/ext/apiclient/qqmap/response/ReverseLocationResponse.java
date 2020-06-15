@@ -20,7 +20,7 @@ public class ReverseLocationResponse extends BaseResponse {
 	@Data
 	public static class ReverseLocationResult {
 		private String address;
-		@JsonProperty("address_components")
+		@JsonProperty("address_component")
 		private AddressComponent addressComponent;
 		
 		// address_reference
@@ -45,6 +45,7 @@ public class ReverseLocationResponse extends BaseResponse {
 		private AddressRefPart town;
 		private AddressRefPart street;
 		private AddressRefPart crossroad;
+		private AddressRefPart landmark_l1;
 		private AddressRefPart landmark_l2;
 	}
 
