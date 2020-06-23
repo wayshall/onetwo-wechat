@@ -15,6 +15,7 @@ public class TestSmsProperties {
 	
 	private String phone;
 	private int templateId1;
+	private String sign;
 
 }
 

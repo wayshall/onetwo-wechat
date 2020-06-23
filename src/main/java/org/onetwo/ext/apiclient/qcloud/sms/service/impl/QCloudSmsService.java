@@ -60,16 +60,16 @@ public class QCloudSmsService implements InitializingBean, SmsService {
 		
 		String phoneNumber = request.getPhoneNumber();
 		if (LangUtils.isNotEmpty(smsProperties.getWhiteList())) {
-			// 白名单不为空，执行白名单规则
+			// 白名单不为空时，只有在白名单里的电话号码才允许发送短信
 			if (!smsProperties.getWhiteList().contains(phoneNumber)) {
 				if (logger.isWarnEnabled()) {
-					logger.warn("the phone number[{}] is not in white list, ignore send message!", phoneNumber);
+					logger.warn("该电话号码[{}] 不在白名单里，忽略发送短信!", phoneNumber);
 				}
 				return ;
 			}
-		}else if (isInBlackList(phoneNumber)) {
+		}else if (isInBlackList(phoneNumber)) { // 黑名单里的电话号码不允许发送短信
 			if (logger.isWarnEnabled()) {
-				logger.warn("the phone number[{}] is in black list, ignore send message!", phoneNumber);
+				logger.warn("该电话号码[{}] 在黑单里，忽略发送短信!", phoneNumber);
 			}
 			return ;
 		}

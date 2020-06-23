@@ -8,6 +8,8 @@ import org.onetwo.ext.apiclient.qcloud.sms.TestSmsProperties;
 import org.onetwo.ext.apiclient.qcloud.sms.vo.SendSmsRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.google.common.collect.Lists;
+
 /**
  * @author weishao zeng
  * <br/>
@@ -23,8 +25,8 @@ public class SmsServiceTest extends QCloudSmsBaseBootTests {
 		SendSmsRequest request = SendSmsRequest.builder()
 											.phoneNumber(testSmsProperties.getPhone())
 											.templId(testSmsProperties.getTemplateId1())
-											.params(Arrays.asList("test1", "2019-92-18"))
-//											.sign("wechat")
+											.params(Lists.newArrayList("123456", "2")) // 注意：验证码只能是数字
+											.sign(testSmsProperties.getSign())
 											.build();
 		this.smsService.sendTemplateMessage(request);
 	}
