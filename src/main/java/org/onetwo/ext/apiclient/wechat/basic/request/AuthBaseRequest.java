@@ -4,10 +4,9 @@ import java.io.Serializable;
 
 import javax.validation.constraints.NotNull;
 
-import lombok.Data;
-
 import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.beans.factory.annotation.Value;
+
+import lombok.Data;
 
 /**
  * @author wayshall
@@ -24,11 +23,11 @@ public class AuthBaseRequest implements Serializable {
 
 	@NotNull
 	@NotBlank
-	@Value("#{wechatConfig.appid}")
+//	@Value("#{wechatConfig.appid}")
 	private String appid;
 	@NotNull
 	@NotBlank
-	@Value("#{wechatConfig.appsecret}")
+//	@Value("#{wechatConfig.appsecret}")
 	private String secret;
 	
 	public AuthBaseRequest(String appid, String secret) {

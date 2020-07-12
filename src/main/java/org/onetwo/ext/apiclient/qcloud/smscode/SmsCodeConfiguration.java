@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableConfigurationProperties(SmsCodeProperties.class)
-@ConditionalOnProperty(name=SmsCodeProperties.ENABLE_KEY, matchIfMissing=true)
+@ConditionalOnProperty(name=SmsCodeProperties.ENABLE_KEY, matchIfMissing=false)
 public class SmsCodeConfiguration {
 	
 	@Bean

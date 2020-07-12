@@ -70,6 +70,8 @@ public class WechatOAuth2Hanlder extends BaseOAuth2Hanlder<OAuth2UserInfo> {
 	protected OAuth2UserInfo getOAuth2UserInfo(WechatOAuth2Context context) {
 		OAuth2AccessTokenRequest tokenRequest = OAuth2AccessTokenRequest.builder()
 																		.code(context.getCode())
+																		.appid(context.getWechatConfig().getAppid())
+																		.secret(context.getWechatConfig().getAppsecret())
 																		.build();
 		OAuth2AccessTokenResponse tokenRespose = this.wechatOauth2Client.getAccessToken(tokenRequest);
 		if(logger.isInfoEnabled()){

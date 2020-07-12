@@ -24,7 +24,7 @@ public class AuthorizeData {
 	private String state;
 	
 	public String toAuthorizeUrl(){
-		String url = UrlConst.OAUTH2_AUTHORIZE + "?" + ParamUtils.objectToParamString(this);
+		String url = UrlConst.OAUTH2_AUTHORIZE + "?" + ParamUtils.objectToParamString(this) + UrlConst.WECHAT_REDIRECT;
 		return url;
 	}
 

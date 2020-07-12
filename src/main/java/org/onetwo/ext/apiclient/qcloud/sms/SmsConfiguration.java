@@ -17,7 +17,7 @@ import org.springframework.retry.annotation.RetryConfiguration;
  */
 @Configuration
 @EnableConfigurationProperties(SmsProperties.class)
-@ConditionalOnProperty(name=SmsProperties.ENABLE_KEY, matchIfMissing=true)
+@ConditionalOnProperty(name=SmsProperties.ENABLE_KEY, matchIfMissing=false)
 public class SmsConfiguration {
 	
 	@Bean

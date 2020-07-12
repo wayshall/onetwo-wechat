@@ -100,7 +100,7 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 	public U handleInController(OAuth2Request oauth2Request, HttpServletRequest request, HttpServletResponse response) {
 		DataWechatOAuth2Context context = new DataWechatOAuth2Context(oauth2Request, request);
 		context.setWechatConfig(getWechatConfig(context));
-		this.checkWechatBrowser(context);
+//		this.checkWechatBrowser(context);
 		
 		U userInfo = null;
 		if (StringUtils.isNotBlank(oauth2Request.getCode())) {
