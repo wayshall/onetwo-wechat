@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.work.basic;
+package org.onetwo.ext.apiclient.wechat.basic;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -14,10 +14,8 @@ import org.onetwo.common.spring.SpringUtils;
 import org.onetwo.common.spring.copier.CopyUtils;
 import org.onetwo.common.utils.StringUtils;
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
-import org.onetwo.ext.apiclient.wechat.event.AccessTokenRefreshedEvent;
-import org.onetwo.ext.apiclient.wechat.event.WechatEventListener;
-import org.onetwo.ext.apiclient.work.basic.api.TicketClient;
-import org.onetwo.ext.apiclient.work.basic.api.TicketClient.JsApiTicketResponse;
+import org.onetwo.ext.apiclient.wechat.basic.api.JsApiTicketApi;
+import org.onetwo.ext.apiclient.wechat.basic.api.JsApiTicketApi.JsApiTicketResponse;
 import org.onetwo.ext.apiclient.work.basic.request.JsApiSignatureRequest;
 import org.onetwo.ext.apiclient.work.basic.response.JsApiSignatureResponse;
 import org.slf4j.Logger;
@@ -25,22 +23,20 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
-import com.google.common.eventbus.Subscribe;
-
 /**
  * @author weishao zeng
  * <br/>
  */
-@WechatEventListener
-public class TicketService implements InitializingBean {
+//@WechatEventListener
+public class JsApiTicketService implements InitializingBean {
 	private static final String SIGNATURE_TEMPLATE = "jsapi_ticket=${ticket}&noncestr=${noncestr}&timestamp=${timestamp}&url=${url}";
-	static private final Logger logger = JFishLoggerFactory.getLogger(TicketService.class);
+	static private final Logger logger = JFishLoggerFactory.getLogger(JsApiTicketService.class);
 	
 	@Autowired
-	private TicketClient ticketClient;
+	private JsApiTicketApi ticketApi;
 	@Autowired
 	private RedisOperationService redisOperationService;
-	private String keyPrefix = "JsApiTicket:workWechat";
+	private String keyPrefix = "JsApiTicket:wechat";
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -50,54 +46,16 @@ public class TicketService implements InitializingBean {
 		return keyPrefix + key;
 	}
 	
-	/****
-	 * accesstoken 刷新时，移除js ticket
-	 * @author weishao zeng
-	 * @param event
-	 */
-	@Subscribe
-	public void onAccessTokenRefreshed(AccessTokenRefreshedEvent event) {
-		String configKey = getConfigKey(event.getAppid());
-		this.redisOperationService.clear(configKey);
-		String agentConfigKey = getAgentConfigKey(event.getAppid());
-		this.redisOperationService.clear(agentConfigKey);
-	}
-
-	/***
-	 * 获取企业jsapi ticket
-	 * @author weishao zeng
-	 * @param accessToken
-	 * @return
-	 */
-	public JsApiTicketResponse getCropJsApiTicket(AccessTokenInfo accessToken) {
-		String key = getConfigKey(accessToken.getAppid());
-		return redisOperationService.getCache(key, () -> {
-			JsApiTicketResponse res = ticketClient.getJsApiTicket(accessToken);
-			long expireIn = res.getExpiresIn() - 20; //减去一个大概的网络调用等消耗时间
-			return CacheData.<JsApiTicketResponse>builder().
-												value(res)
-												.expire(expireIn)
-												.timeUnit(TimeUnit.SECONDS)
-												.build();
-		});
-	}
-
-	private String getConfigKey(String appid) {
-		return getKey("config:" + appid);
-	}
-	private String getAgentConfigKey(String appid) {
-		return getKey(TicketClient.TYPE_AGENT_CONFIG + ":" + appid);
-	}
 	/***
 	 * 获取应用jsapi ticket
 	 * @author weishao zeng
 	 * @param accessToken
 	 * @return
 	 */
-	public JsApiTicketResponse getAgentJsApiTicket(AccessTokenInfo accessToken) {
-		String key = getAgentConfigKey(accessToken.getAppid());
+	public JsApiTicketResponse getJsApiTicket(AccessTokenInfo accessToken) {
+		String key = getKey(accessToken.getAppid());
 		return redisOperationService.getCache(key, () -> {
-			JsApiTicketResponse res = ticketClient.getAgentJsApiTicket(accessToken, TicketClient.TYPE_AGENT_CONFIG);
+			JsApiTicketResponse res = ticketApi.getticket(accessToken, JsApiTicketApi.TYPE_CONFIG);
 			return CacheData.<JsApiTicketResponse>builder().
 												value(res)
 												.expire(res.getExpiresIn())
@@ -106,13 +64,15 @@ public class TicketService implements InitializingBean {
 		});
 	}
 	
-	public JsApiSignatureResponse getCropSignature(AccessTokenInfo accessToken, JsApiSignatureRequest request) {
-		JsApiTicketResponse ticketRes = getCropJsApiTicket(accessToken);
-		return signature(ticketRes.getTicket(), request);
-	}
-	
-	public JsApiSignatureResponse getAgentSignature(AccessTokenInfo accessToken, JsApiSignatureRequest request) {
-		JsApiTicketResponse ticketRes = getAgentJsApiTicket(accessToken);
+	/***
+	 * 计算jsapi ticket 签名
+	 * @author weishao zeng
+	 * @param accessToken
+	 * @param request
+	 * @return
+	 */
+	public JsApiSignatureResponse getJsApiSignature(AccessTokenInfo accessToken, JsApiSignatureRequest request) {
+		JsApiTicketResponse ticketRes = getJsApiTicket(accessToken);
 		return signature(ticketRes.getTicket(), request);
 	}
 	

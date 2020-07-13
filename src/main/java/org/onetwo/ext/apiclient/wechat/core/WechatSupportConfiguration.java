@@ -1,6 +1,7 @@
 package org.onetwo.ext.apiclient.wechat.core;
 
 import org.onetwo.common.spring.Springs;
+import org.onetwo.ext.apiclient.wechat.basic.JsApiTicketService;
 import org.onetwo.ext.apiclient.wechat.event.WechatEventBus;
 import org.onetwo.ext.apiclient.wechat.support.impl.MemoryAccessTokenService;
 import org.springframework.beans.BeansException;
@@ -67,6 +68,11 @@ public class WechatSupportConfiguration implements ApplicationContextAware {
 	@Bean
 	public WechatEventBus wechatEventBus() {
 		return new WechatEventBus();
+	}
+	
+	@Bean
+	public JsApiTicketService jsApiTicketService() {
+		return new JsApiTicketService();
 	}
 	
 }
