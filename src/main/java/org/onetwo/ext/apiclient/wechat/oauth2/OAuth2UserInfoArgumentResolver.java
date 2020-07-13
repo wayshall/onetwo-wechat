@@ -25,11 +25,11 @@ public class OAuth2UserInfoArgumentResolver implements HandlerMethodArgumentReso
 	@Autowired
 	private WechatOAuth2Hanlder wechatOAuth2Hanlder;
 	@Autowired
-	private WechatOAuth2UserRepository<OAuth2UserInfo> sessionStoreService;
+	private WechatOAuth2UserRepository<OAuth2LoginInfo> sessionStoreService;
 	
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
-		return OAuth2UserInfo.class == parameter.getParameterType();
+		return OAuth2LoginInfo.class == parameter.getParameterType();
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class OAuth2UserInfoArgumentResolver implements HandlerMethodArgumentReso
 		RequestWechatOAuth2Context context = new RequestWechatOAuth2Context(request);
 		context.setWechatConfig(wechatOAuth2Hanlder.getWechatConfig(context));
 		
-		Optional<OAuth2UserInfo> userOpt = sessionStoreService.getCurrentUser(context);
+		Optional<OAuth2LoginInfo> userOpt = sessionStoreService.getCurrentUser(context);
 		if(!userOpt.isPresent()){
 			wechatOAuth2Hanlder.preHandle(request, webRequest.getNativeResponse(HttpServletResponse.class), null);
 			userOpt = sessionStoreService.getCurrentUser(context);

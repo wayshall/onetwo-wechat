@@ -9,6 +9,7 @@ import lombok.Data;
 @Data
 public class JsApiSignatureResponse {
 	
+	private String appid;
     private Long timestamp;// 必填，生成签名的时间戳
     private String noncestr; // 必填，生成签名的随机串
     private String signature;

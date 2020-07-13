@@ -34,8 +34,8 @@ public class WechatOAuth2Configuration {
 	
 	@Bean
 	@ConditionalOnMissingBean(WechatOAuth2UserRepository.class)
-	public WechatOAuth2UserRepository<OAuth2UserInfo> wechatOauth2UserStoreService(){
-		return new HttpRequestStoreService<OAuth2UserInfo>();
+	public WechatOAuth2UserRepository<OAuth2LoginInfo> wechatOauth2UserStoreService(){
+		return new HttpRequestStoreService<OAuth2LoginInfo>();
 //		return new HtppSessionStoreService<OAuth2UserInfo>();
 	}
 	

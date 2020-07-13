@@ -103,7 +103,9 @@ public class WorkJsApiTicketService implements InitializingBean {
 	
 	public JsApiSignatureResponse getAgentSignature(AccessTokenInfo accessToken, JsApiSignatureRequest request) {
 		JsApiTicketResponse ticketRes = getAgentJsApiTicket(accessToken);
-		return signature(ticketRes.getTicket(), request);
+		JsApiSignatureResponse sign = signature(ticketRes.getTicket(), request);
+		sign.setAppid(accessToken.getAppid());
+		return sign;
 	}
 	
 	static public JsApiSignatureResponse signature(String ticket, JsApiSignatureRequest request) {

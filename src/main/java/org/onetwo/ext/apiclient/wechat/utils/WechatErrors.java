@@ -29,7 +29,7 @@ public enum WechatErrors implements ErrorType {
 	API_UNAUTHORIZED(48001, "api功能未授权，请确认公众号已获得该接口，可以在公众平台官网-开发者中心页中查看接口权限"),
 	FORMAT_PARSE_ERROR(47001, "解析JSON/XML内容错误"),
 	USER_NOT_EXIST(46004, "不存在的用户"),
-	WXAPP_LOGIN_ERROR(40029, "微信小程序登录错误，无效的code！"),
+	WXAPP_LOGIN_ERROR(40029, "微信小程序（公众号）登录错误，无效的code！"),
 	
 	CONTENT_RISKY(87014, "内容含有违法违规内容"),
 

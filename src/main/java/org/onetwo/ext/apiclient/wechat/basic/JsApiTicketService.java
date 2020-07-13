@@ -16,6 +16,8 @@ import org.onetwo.common.utils.StringUtils;
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.basic.api.JsApiTicketApi;
 import org.onetwo.ext.apiclient.wechat.basic.api.JsApiTicketApi.JsApiTicketResponse;
+import org.onetwo.ext.apiclient.wechat.event.AccessTokenRefreshedEvent;
+import org.onetwo.ext.apiclient.wechat.event.WechatEventListener;
 import org.onetwo.ext.apiclient.work.basic.request.JsApiSignatureRequest;
 import org.onetwo.ext.apiclient.work.basic.response.JsApiSignatureResponse;
 import org.slf4j.Logger;
@@ -23,11 +25,13 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
+import com.google.common.eventbus.Subscribe;
+
 /**
  * @author weishao zeng
  * <br/>
  */
-//@WechatEventListener
+@WechatEventListener
 public class JsApiTicketService implements InitializingBean {
 	private static final String SIGNATURE_TEMPLATE = "jsapi_ticket=${ticket}&noncestr=${noncestr}&timestamp=${timestamp}&url=${url}";
 	static private final Logger logger = JFishLoggerFactory.getLogger(JsApiTicketService.class);
@@ -44,6 +48,17 @@ public class JsApiTicketService implements InitializingBean {
 
 	protected String getKey(String key) {
 		return keyPrefix + key;
+	}
+
+	/****
+	 * accesstoken 刷新时，移除js ticket
+	 * @author weishao zeng
+	 * @param event
+	 */
+	@Subscribe
+	public void onAccessTokenRefreshed(AccessTokenRefreshedEvent event) {
+		String configKey = getKey(event.getAppid());
+		this.redisOperationService.clear(configKey);
 	}
 	
 	/***
@@ -73,7 +88,9 @@ public class JsApiTicketService implements InitializingBean {
 	 */
 	public JsApiSignatureResponse getJsApiSignature(AccessTokenInfo accessToken, JsApiSignatureRequest request) {
 		JsApiTicketResponse ticketRes = getJsApiTicket(accessToken);
-		return signature(ticketRes.getTicket(), request);
+		JsApiSignatureResponse sign = signature(ticketRes.getTicket(), request);
+		sign.setAppid(accessToken.getAppid());
+		return sign;
 	}
 	
 	static public JsApiSignatureResponse signature(String ticket, JsApiSignatureRequest request) {

@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.onetwo.common.log.JFishLoggerFactory;
-import org.onetwo.ext.apiclient.wechat.oauth2.OAuth2UserInfo;
+import org.onetwo.ext.apiclient.wechat.oauth2.OAuth2LoginInfo;
 import org.onetwo.ext.apiclient.wechat.oauth2.WechatOAuth2Hanlder;
 import org.onetwo.ext.apiclient.wechat.oauth2.request.OAuth2Request;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ abstract public class WechatLoginBaseController<LoginData> {
 	
 	@RequestMapping(value="/oauth2",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public LoginData oauth2(OAuth2Request oauth2Request, HttpServletRequest request, HttpServletResponse response){
-		OAuth2UserInfo userLoginInfo = wechatOAuth2Hanlder.handleInController(oauth2Request, request, response);
+		OAuth2LoginInfo userLoginInfo = wechatOAuth2Hanlder.handleInController(oauth2Request, request, response);
 //		logger.info("userInfoResponse: {}", workUserLoginInfo);
 		if (userLoginInfo==null) {
 			return null;
@@ -55,6 +55,6 @@ abstract public class WechatLoginBaseController<LoginData> {
 	 * @param workUserLoginInfo
 	 * @return
 	 */
-	abstract protected LoginData loginByWechatUser(OAuth2UserInfo userLoginInfo);
+	abstract protected LoginData loginByWechatUser(OAuth2LoginInfo userLoginInfo);
 
 }
