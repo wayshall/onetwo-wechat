@@ -15,7 +15,7 @@ import lombok.Data;
 @ConfigurationProperties(SmsProperties.KEY)
 public class SmsProperties {
 	public static final String KEY = "qcloud.sms";
-	public static final String ENABLE_KEY = KEY + ".enabled";
+	public static final String ENABLE_KEY = KEY + ".appId";
 	public static final String RETRYABLE_ENABLE = KEY + ".retryable";
 	
 	private int appId;

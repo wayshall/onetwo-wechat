@@ -40,7 +40,7 @@ public class TicketService implements InitializingBean {
 	private TicketClient ticketClient;
 	@Autowired
 	private RedisOperationService redisOperationService;
-	private String keyPrefix = "JsApiTicket:";
+	private String keyPrefix = "JsApiTicket:workWechat";
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {

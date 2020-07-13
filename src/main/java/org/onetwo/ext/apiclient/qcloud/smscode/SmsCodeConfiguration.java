@@ -16,11 +16,11 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableConfigurationProperties(SmsCodeProperties.class)
-@ConditionalOnProperty(name=SmsCodeProperties.ENABLE_KEY, matchIfMissing=false)
+//@ConditionalOnProperty(name=SmsCodeProperties.ENABLE_KEY, matchIfMissing=false)
+@ConditionalOnProperty(name=SmsCodeProperties.SMS_SERVICE_ENABLE_KEY)
 public class SmsCodeConfiguration {
 	
 	@Bean
-	@ConditionalOnProperty(name=SmsCodeProperties.SMS_SERVICE_ENABLE_KEY)
 	public SmsCodeService smsCodeService(SmsCodeProperties smsCodeProperties, SmsCodeExceptionTranslator translator) {
 		SmsCodeService smsService = new SmsCodeServiceImpl(smsCodeProperties, translator);
 		return smsService;
