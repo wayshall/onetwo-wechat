@@ -6,6 +6,7 @@ import java.security.Security;
 import javax.crypto.spec.IvParameterSpec;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.onetwo.common.apiclient.ApiClientMethod;
 import org.onetwo.common.encrypt.AESCoder;
@@ -60,6 +61,9 @@ public class WechatUtils {
 	}
 	
 	public static WxappUserInfo decrypt0(String sessionKey, String iv, String encryptedData){
+		if (StringUtils.isBlank(encryptedData)) {
+			return null;
+		}
 		AESCoder aes = AESCoder.pkcs7Padding(Base64.decodeBase64(sessionKey))
 								.initer((cipher, mode, keySpec)->{
 									AlgorithmParameters params = AlgorithmParameters.getInstance(Crypts.AES_KEY);  
@@ -73,7 +77,13 @@ public class WechatUtils {
 	}
 	
 	public static WechatMobileVO decryptMobile(String sessionKey, String iv, String encryptedData){
-		return decrypt0(sessionKey, iv, encryptedData, WechatMobileVO.class);
+		try {
+			return decrypt0(sessionKey, iv, encryptedData, WechatMobileVO.class);
+		} catch (Exception e) {
+			throw new ServiceException("手机号码解密错误", e).put("iv", iv)
+												.put("encryptedData", encryptedData)
+												.put("sessionKey", sessionKey);
+		}
 	}
 	
 	public static <T> T decrypt(String sessionKey, String iv, String encryptedData, Class<T> messageType){
@@ -87,6 +97,9 @@ public class WechatUtils {
 	}
 	
 	public static <T> T decrypt0(String sessionKey, String iv, String encryptedData, Class<T> messageType){
+		if (StringUtils.isBlank(encryptedData)) {
+			return null;
+		}
 		AESCoder aes = AESCoder.pkcs7Padding(Base64.decodeBase64(sessionKey))
 								.initer((cipher, mode, keySpec)->{
 									AlgorithmParameters params = AlgorithmParameters.getInstance(Crypts.AES_KEY);  
