@@ -35,6 +35,7 @@ public interface MessageTemplateClient {
 	
 
 	/***
+	 * 提示：argument invalid! data.thing1.value invalid 时，可能对应的参数字符超过长度（20个字符）了
 	 * 发送订阅式模板消息，用于取代以前基于formid的模板消息
 	 * @author weishao zeng
 	 * @param accessToken
