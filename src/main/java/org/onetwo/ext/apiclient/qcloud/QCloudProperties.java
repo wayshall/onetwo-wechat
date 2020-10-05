@@ -17,6 +17,7 @@ import lombok.Data;
 public class QCloudProperties {
 
 	final public static String PREFIX = "qcloud";
+	public static final String ENABLE_KEY = PREFIX + ".secretKey";
 	
 	//腾讯云账户secretId，secretKey
 	String secretId;
@@ -49,4 +50,5 @@ public class QCloudProperties {
         
         return clientProfile;
 	}
+	
 }

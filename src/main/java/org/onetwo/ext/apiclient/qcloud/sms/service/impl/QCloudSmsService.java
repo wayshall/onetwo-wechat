@@ -2,8 +2,6 @@ package org.onetwo.ext.apiclient.qcloud.sms.service.impl;
 
 import java.util.ArrayList;
 
-import org.apache.commons.lang3.StringUtils;
-import org.onetwo.common.exception.ServiceException;
 import org.onetwo.common.log.JFishLoggerFactory;
 import org.onetwo.common.utils.LangUtils;
 import org.onetwo.ext.apiclient.qcloud.sms.SmsException;
@@ -11,31 +9,24 @@ import org.onetwo.ext.apiclient.qcloud.sms.SmsProperties;
 import org.onetwo.ext.apiclient.qcloud.sms.service.SmsService;
 import org.onetwo.ext.apiclient.qcloud.sms.vo.SendSmsRequest;
 import org.onetwo.ext.apiclient.qcloud.util.QCloudErrors.SmsErrors;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
 import com.github.qcloudsms.SmsSingleSender;
 import com.github.qcloudsms.SmsSingleSenderResult;
 
-import lombok.Getter;
-
 /**
  * https://cloud.tencent.com/document/product/382/3771#.E7.9F.AD.E4.BF.A1.E5.8F.91.E9.80.81.E9.94.99.E8.AF.AF.E7.A0.81
  * @author weishao zeng
  * <br/>
  */
-public class QCloudSmsService implements InitializingBean, SmsService {
+public class QCloudSmsService extends BaseSmsService implements InitializingBean, SmsService {
 	
-	protected final Logger logger = JFishLoggerFactory.getLogger(getClass());
 	
 	private SmsSingleSender smsSingleSender;
-	@Getter
-	private SmsProperties smsProperties;
 	
 	public QCloudSmsService(SmsProperties smsProperties) {
-		super();
-		this.smsProperties = smsProperties;
+		super(smsProperties);
 	}
 
 	@Override
@@ -45,12 +36,6 @@ public class QCloudSmsService implements InitializingBean, SmsService {
 	}
 	
 
-	protected void checkRequest(SendSmsRequest request) {
-		if (StringUtils.isBlank(request.getPhoneNumber()) || request.getPhoneNumber().length()!=11) {
-			throw new ServiceException(SmsErrors.ERR_MOBILE_LENTH);
-		}
-	}
-
 	/* (non-Javadoc)
 	 * @see org.onetwo.ext.apiclient.qcloud.sms.service.SmsService#sendTemplateMessage(org.onetwo.ext.apiclient.qcloud.sms.vo.SendSmsRequest)
 	 */
@@ -58,19 +43,12 @@ public class QCloudSmsService implements InitializingBean, SmsService {
 	public void sendTemplateMessage(SendSmsRequest request) {
 		this.checkRequest(request);
 		
+		if (!LangUtils.isEmpty(request.getPhoneNumbers())) {
+			throw new SmsException(SmsErrors.ERR_NOT_SUPPORT_BATCH);
+		}
+		
 		String phoneNumber = request.getPhoneNumber();
-		if (LangUtils.isNotEmpty(smsProperties.getWhiteList())) {
-			// 白名单不为空时，只有在白名单里的电话号码才允许发送短信
-			if (!smsProperties.getWhiteList().contains(phoneNumber)) {
-				if (logger.isWarnEnabled()) {
-					logger.warn("该电话号码[{}] 不在白名单里，忽略发送短信!", phoneNumber);
-				}
-				return ;
-			}
-		}else if (isInBlackList(phoneNumber)) { // 黑名单里的电话号码不允许发送短信
-			if (logger.isWarnEnabled()) {
-				logger.warn("该电话号码[{}] 在黑单里，忽略发送短信!", phoneNumber);
-			}
+		if (!checkWhiteBlackList(phoneNumber)) {
 			return ;
 		}
 		
@@ -93,13 +71,6 @@ public class QCloudSmsService implements InitializingBean, SmsService {
     		throw new SmsException(result.errMsg, String.valueOf(result.result));
     	}
     }
-	
-	private boolean isInBlackList(String phoneNumber) {
-		if (LangUtils.isEmpty(smsProperties.getBlackList())) {
-			return false;
-		}
-		return smsProperties.getBlackList().contains(phoneNumber);
-	}
 	
 }
 

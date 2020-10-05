@@ -13,6 +13,10 @@ public class SmsException extends ServiceException {
 	public SmsException(String msg, String code) {
 		super(msg, code);
 	}
+
+	public SmsException(ErrorType exceptionType) {
+		super(exceptionType.getErrorMessage(), exceptionType.getErrorCode());
+	}
 	
 	public SmsException(ErrorType exceptionType, Throwable cause) {
 		super(exceptionType, cause);
