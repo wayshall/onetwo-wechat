@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.onetwo.common.utils.LangUtils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -47,7 +48,8 @@ public class SubscribeMessageRequest implements Serializable {
 	
 	public SubscribeMessageRequest addData(String key, String value){
 		SubscribeMessageData d = new SubscribeMessageData();
-		d.setValue(value);
+		// 模板消息的字段一般不能超过20个字符,否则会抛奇怪的错误：argument invalid! data.thing1.value invalid
+		d.setValue(LangUtils.ellipsis(value, 20));
 		addData(key, d);
 		return this;
 	}
