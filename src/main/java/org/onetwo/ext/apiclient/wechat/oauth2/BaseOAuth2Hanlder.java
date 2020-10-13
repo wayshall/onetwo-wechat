@@ -29,6 +29,9 @@ import org.slf4j.Logger;
 import org.springframework.web.method.HandlerMethod;
 
 /**
+ * 微信公众号网页授权文档：
+ * https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html
+ * 
  * @author wayshall
  * <br/>
  */
@@ -181,6 +184,14 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 		return false;
 	}
 	
+	/****
+	 * 
+ * 微信公众号网页授权文档：
+ * https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html
+	 * @author weishao zeng
+	 * @param context
+	 * @param response
+	 */
 	public void redirect(WechatOAuth2Context context, HttpServletResponse response) {
 		try {
 //			AuthorizeData authorizeData = getWechatAuthorizeData(request);
