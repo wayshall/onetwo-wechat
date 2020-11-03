@@ -36,6 +36,7 @@ public class WorkWechatConfigConfiguration {
 	}*/
 	
 	@Bean
+	@ConditionalOnMissingBean(WorkConfigProvider.class)
 	public WorkConfigProvider workWechatConfigProvider(){
 		WorkWechatConfigProvider provider = new WorkWechatConfigProvider(wechatConfig, workWechatConfig, appConfigs);
 		return provider;

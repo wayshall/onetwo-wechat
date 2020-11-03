@@ -6,8 +6,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.onetwo.common.utils.LangUtils;
 import org.onetwo.ext.apiclient.wechat.utils.WechatAppInfo;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.AccessTokenStorers;
-import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.Oauth2Keys;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.WechatConfigKeys;
+import org.onetwo.ext.apiclient.wechat.utils.WechatOAuthScopes;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import com.google.common.collect.Maps;
@@ -68,7 +68,10 @@ public class DefaultWechatConfig implements WechatConfig{
 
 	@Override
 	public String getOauth2Scope() {
-		return oauth2.getScope();
+		if (oauth2.getScope()==null) {
+			return null;
+		}
+		return oauth2.getScope().getEnumMappingValue();
 	}
 
 	@Override
@@ -92,7 +95,7 @@ public class DefaultWechatConfig implements WechatConfig{
 		private String redirectUri = "";
 		private String qrConnectRedirectUri;
 //		@Value("${wechat.oauth2.scope:"+Oauth2Keys.SCOPE_SNSAPI_USERINFO+"}")
-		private String scope = Oauth2Keys.SCOPE_SNSAPI_USERINFO;
+		private WechatOAuthScopes scope = WechatOAuthScopes.SNSAPI_USERINFO; // Oauth2Keys.SCOPE_SNSAPI_USERINFO;
 //		@Value("${wechat.oauth2.intercept.urls:}")
 		private String[] interceptUrls;
 //		@Value("${wechat.oauth2.errorInBrowser:true}")

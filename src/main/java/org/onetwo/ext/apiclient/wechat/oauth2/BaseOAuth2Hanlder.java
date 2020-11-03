@@ -101,7 +101,8 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 	 * @return
 	 */
 	public U handleInController(OAuth2Request oauth2Request, HttpServletRequest request, HttpServletResponse response) {
-		return handleInController(oauth2Request, request, response);
+		DataWechatOAuth2Context ctx = new DataWechatOAuth2Context(oauth2Request, request);
+		return handleInController(ctx, response);
 	}
 	
 	protected U handleInController(DataWechatOAuth2Context context, HttpServletResponse response) {
