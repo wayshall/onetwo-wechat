@@ -50,6 +50,8 @@ public class DefaultWechatConfig implements WechatConfig{
 	
 	private Map<String, String> configs = Maps.newHashMap();
 	
+	private boolean debug;
+	
 	public String getConfig(String key) {
 		if (LangUtils.isEmpty(configs)) {
 			return null;

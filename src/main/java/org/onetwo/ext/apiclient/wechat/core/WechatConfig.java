@@ -78,9 +78,7 @@ public interface WechatConfig {
 	
 	String getConfig(String key);
 	
-	default public boolean isDebug() {
-		return true;
-	}
+	boolean isDebug();
 	
 	/***
 	 * 是否企业微信
