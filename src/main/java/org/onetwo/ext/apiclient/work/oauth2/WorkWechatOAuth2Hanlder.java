@@ -42,7 +42,7 @@ public class WorkWechatOAuth2Hanlder extends BaseOAuth2Hanlder<WorkUserLoginInfo
 	}
 	
 	@Override
-	public WorkUserLoginInfo getOAuth2UserInfo(WechatOAuth2Context context) {
+	public WorkUserLoginInfo fetchOAuth2UserInfoFromServerWithCode(WechatOAuth2Context context) {
 		WechatConfig wechatConfig = context.getWechatConfig();
 		GetAccessTokenRequest getRequest = GetAccessTokenRequest.builder()
 																.appid(wechatConfig.getAppid())
@@ -69,6 +69,9 @@ public class WorkWechatOAuth2Hanlder extends BaseOAuth2Hanlder<WorkUserLoginInfo
 		String state = getWechatOAuth2UserRepository().generateAndStoreOauth2State(context);
 		AuthorizeData authorize = createAuthorize(wechatConfig.getAppid(), wechatConfig.getOauth2Scope(), redirectUrl, state);
 		String authorizeUrl = authorize.toAuthorizeUrl();
+		if (logger.isInfoEnabled()) {
+			logger.info("[wechat oauth2] authorizeUrl url: {}", authorizeUrl);
+		}
 		return authorizeUrl;
 	}
 

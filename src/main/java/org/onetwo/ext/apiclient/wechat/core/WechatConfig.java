@@ -78,6 +78,10 @@ public interface WechatConfig {
 	
 	String getConfig(String key);
 	
+	default public boolean isDebug() {
+		return true;
+	}
+	
 	/***
 	 * 是否企业微信
 	 * @author weishao zeng

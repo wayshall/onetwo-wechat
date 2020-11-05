@@ -40,7 +40,7 @@ public class WechatOAuth2Hanlder extends BaseOAuth2Hanlder<OAuth2LoginInfo> {
 	}
 	
 	@Override
-	public OAuth2LoginInfo getOAuth2UserInfo(WechatOAuth2Context context) {
+	public OAuth2LoginInfo fetchOAuth2UserInfoFromServerWithCode(WechatOAuth2Context context) {
 		OAuth2AccessTokenRequest tokenRequest = OAuth2AccessTokenRequest.builder()
 				.code(context.getCode())
 				.appid(context.getWechatConfig().getAppid())
