@@ -6,6 +6,7 @@ import org.onetwo.ext.apiclient.wechat.event.WechatEventBus;
 import org.onetwo.ext.apiclient.wechat.support.impl.MemoryAccessTokenService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +21,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @Configuration
 @ComponentScan(basePackageClasses=MemoryAccessTokenService.class)
 @EnableScheduling
+@ConditionalOnProperty(value = WechatConfig.ENABLED_KEY, matchIfMissing = true)
 public class WechatSupportConfiguration implements ApplicationContextAware {
 	
 	@Override

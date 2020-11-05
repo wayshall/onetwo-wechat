@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 //@ComponentScan(basePackageClasses=MessageRouterServiceImpl.class)
-@ConditionalOnProperty(name=WechatConfig.ENABLE_MESSAGE_SERVE_KEY, matchIfMissing=true)
+@ConditionalOnProperty(name= {WechatConfig.ENABLE_MESSAGE_SERVE_KEY, WechatConfig.ENABLED_KEY}, matchIfMissing=true)
 //@EnableConfigurationProperties(DefaultWechatConfig.class)
 public class WechatServeConfiguration  {
 	

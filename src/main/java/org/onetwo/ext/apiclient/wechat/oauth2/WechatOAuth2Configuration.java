@@ -1,5 +1,6 @@
 package org.onetwo.ext.apiclient.wechat.oauth2;
 
+import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.core.DefaultWechatConfig.Oauth2Properties;
 import org.onetwo.ext.apiclient.wechat.oauth2.api.WechatOauth2Client;
 import org.onetwo.ext.apiclient.wechat.oauth2.api.WechatOauth2CustomImpl;
@@ -15,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
  * <br/>
  */
 @Configuration
-@ConditionalOnProperty(name=Oauth2Properties.ENABLED_KEY, havingValue="true", matchIfMissing=false)
+@ConditionalOnProperty(name= {Oauth2Properties.ENABLED_KEY, WechatConfig.ENABLED_KEY}, havingValue="true", matchIfMissing=false)
 public class WechatOAuth2Configuration {
 
 	/*@Bean

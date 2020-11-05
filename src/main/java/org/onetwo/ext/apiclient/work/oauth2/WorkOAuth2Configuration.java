@@ -3,7 +3,9 @@ package org.onetwo.ext.apiclient.work.oauth2;
 import org.onetwo.ext.apiclient.wechat.serve.service.HttpRequestStoreService;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatOAuth2UserRepository;
 import org.onetwo.ext.apiclient.work.core.WorkConfigProvider;
+import org.onetwo.ext.apiclient.work.core.WorkWechatConfig;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -13,7 +15,7 @@ import org.springframework.context.annotation.Primary;
  * <br/>
  */
 @Configuration
-//@ConditionalOnProperty(name=Oauth2Properties.ENABLED_KEY, havingValue="true", matchIfMissing=false)
+@ConditionalOnProperty(value = WorkWechatConfig.ENABLED_KEY, matchIfMissing = true)
 public class WorkOAuth2Configuration {
 
 	@Primary

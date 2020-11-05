@@ -8,6 +8,7 @@ import org.onetwo.ext.apiclient.wechat.EnableWechatClient;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.util.ClassUtils;
@@ -16,6 +17,7 @@ import org.springframework.util.ClassUtils;
  * @author wayshall
  * <br/>
  */
+@ConditionalOnProperty(value = WechatConfig.ENABLED_KEY, matchIfMissing = true)
 public class WechatApiClentRegistrar extends AbstractApiClentRegistrar<EnableWechatClient, WechatApiClient> {
 	
 	private WechatApiClientResponseHandler responseHandler = new WechatApiClientResponseHandler();
