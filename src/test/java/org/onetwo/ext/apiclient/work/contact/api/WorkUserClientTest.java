@@ -26,9 +26,11 @@ public class WorkUserClientTest extends WorkWechatBaseBootTests {
 	
 	@Test
 	public void testGetUser() {
+		WorkUserInfoResponse res = workUserClient.getUser(getContactAccessToken(), "ZengWeiShao");
+		System.out.println("WorkUserInfoResponse :" + res);
 		assertThatExceptionOfType(ApiClientException.class).isThrownBy(() -> {
-			WorkUserInfoResponse res = workUserClient.getUser(getContactAccessToken(), "");
-			System.out.println("res:" + res);
+			WorkUserInfoResponse res2 = workUserClient.getUser(getContactAccessToken(), "");
+			System.out.println("res2:" + res2);
 		})
 		.withMessageContaining("用户不存在");
 	}

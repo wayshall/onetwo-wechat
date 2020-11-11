@@ -51,7 +51,7 @@ public class WorkUserInfoResponse extends WechatResponse {
      * 主部门
      */
     @JsonProperty("main_department")
-    private String mainDepartment;
+    private Long mainDepartment;
     
     /****
      * 激活状态: 1=已激活，2=已禁用，4=未激活。
