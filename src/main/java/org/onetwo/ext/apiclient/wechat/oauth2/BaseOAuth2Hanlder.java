@@ -233,6 +233,8 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 		WechatConfig wechatConfig = context.getWechatConfig();
 		
 		String redirectUrl = buildRedirectUrl(context);
+		// trim一下，避免隐藏空格
+		redirectUrl = StringUtils.trim(redirectUrl);
 		
 		String state = wechatOAuth2UserRepository.generateAndStoreOauth2State(context);
 //		AuthorizeData authorize = wechatOauth2Client.createAuthorize(redirectUrl, state);
