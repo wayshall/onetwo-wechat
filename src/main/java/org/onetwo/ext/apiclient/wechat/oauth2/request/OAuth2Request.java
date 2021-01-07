@@ -14,6 +14,7 @@ public class OAuth2Request {
 	private String appid;
 	private String code;
 	private String state;
+	private String redirectUrl;
 
 }
 

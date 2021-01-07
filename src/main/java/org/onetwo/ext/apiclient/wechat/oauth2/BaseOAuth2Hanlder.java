@@ -249,7 +249,12 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 	
 	protected String buildRedirectUrl(WechatOAuth2Context context){
 		boolean isDeubg = context.getWechatConfig()!=null && context.getWechatConfig().isDebug();
-		String redirectUrl = context.getWechatConfig().getOauth2RedirectUri();
+		String redirectUrl = context.getRedirectUrl();
+		if (StringUtils.isBlank(redirectUrl)) {
+			redirectUrl = context.getWechatConfig().getOauth2RedirectUri();
+			// 从配置文件里获取的url需要encode一下
+			redirectUrl = LangUtils.encodeUrl(redirectUrl);
+		}
 		if (isDeubg) {
 			logger.info("[wechat oauth2] wechat config redirect url: {}", redirectUrl);
 		}
@@ -262,7 +267,6 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 				logger.info("[wechat oauth2] use default redirect url: {}", redirectUrl);
 			}
 		}
-		redirectUrl = LangUtils.encodeUrl(redirectUrl);
 		return redirectUrl;
 	}
 	
