@@ -81,12 +81,23 @@ public enum WechatErrors implements ErrorType {
 	public static Optional<WechatErrors> byErrcode(int errcode){
 		return Optional.ofNullable(ERROR_MAP.get(errcode));
 	}
-	public static boolean isNeedToRemoveToken(String errorCode) {
+	
+	/***
+	 * 是否api token过期等相关错误
+	 * @author weishao zeng
+	 * @param errorCode
+	 * @return
+	 */
+	public static boolean isTokenError(String errorCode) {
 		if (ACCESS_TOKEN_INVALID_CREDENTIAL.getErrorCode().equals(errorCode) || 
 				ACCESS_TOKEN_EXPIRED.getErrorCode().equals(errorCode) || 
 				ACCESS_TOKEN_INVALID.getErrorCode().equals(errorCode) ) {
 			return true;
 		}
 		return false;
+	}
+	
+	public static boolean isNeedToRemoveToken(String errorCode) {
+		return isTokenError(errorCode);
 	}
 }

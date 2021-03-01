@@ -182,7 +182,7 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 					invokeMethod.<AccessTokenRequest>getParameterValue(invocation.getArguments(), invokeMethod.getAccessTokenRequest())
 								.ifPresent(request -> {
 									request.setAccessToken(at.getAccessToken());
-								});;
+								});
 					return super.doInvoke(invocation, invokeMethod);
 				} else {
 					logger.warn("refreshAccessTokenByAppid faild, try to remove...");
