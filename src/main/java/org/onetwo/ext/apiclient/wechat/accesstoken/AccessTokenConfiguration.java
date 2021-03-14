@@ -14,6 +14,7 @@ import org.onetwo.ext.apiclient.wechat.support.impl.RedisStoreAccessTokenService
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.WechatConfigKeys;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,6 +43,7 @@ public class AccessTokenConfiguration implements InitializingBean {
 	}
 	
 	@Bean
+	@ConditionalOnMissingBean(AppCacheKeyGenerator.class)
 	public AppCacheKeyGenerator appCacheKeyGenerator() {
 		WechatAppCacheKeyGenerator g = new WechatAppCacheKeyGenerator();
 		return g;

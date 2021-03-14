@@ -60,7 +60,11 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 //	private AccessTokenServiceStrategy accessTokenServiceStrategy;
 	private RemovableTokenError removableTokenError;
 	private boolean autoThrowIfErrorCode = true;
+	private String accessTokenParameterName = WechatConstants.PARAMS_ACCESS_TOKEN;
 	
+	public void setAccessTokenParameterName(String accessTokenParameterName) {
+		this.accessTokenParameterName = accessTokenParameterName;
+	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -171,11 +175,12 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 				String appid = at.getAppid();
 				AccessTokenType att = accessTokenType!=null?accessTokenType:at.getAccessTokenType();
 				Optional<AccessTokenInfo> refreshOpt = getAccessTokenService().refreshAccessTokenByAppid(
-																							AppidRequest.builder()
-																									.appid(appid)
-																									.accessTokenType(att)
-																									.build()
-																							);
+					new AppidRequest(appid, at.getAgentId(), att)
+//					AppidRequest.builder()
+//							.appid(appid)
+//							.accessTokenType(att)
+//							.build()
+				);
 				if (refreshOpt.isPresent()) {
 					logger.info("refreshAccessTokenByAppid success, retry invoke wechat method. token: {}", refreshOpt.get().getAccessToken());
 					at.setAccessToken(refreshOpt.get().getAccessToken());
@@ -233,7 +238,7 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 			if(at.isPresent()){
 				AccessTokenInfo token = at.get();
 				if (token.isAutoAppendToUrl()) {
-					newUrl = ParamUtils.appendParam(newUrl, WechatConstants.PARAMS_ACCESS_TOKEN, token.getAccessToken());
+					newUrl = ParamUtils.appendParam(newUrl, accessTokenParameterName, token.getAccessToken());
 				}
 			}
 			newUrl = super.processUrlBeforeRequest(newUrl, method, context);
@@ -286,6 +291,18 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 					(accessTokenParameter.isPresent() && accessTokenParameter.get().getParameterIndex()==parameter.getParameterIndex());
 		}
 
+//		public Optional<AccessTokenArgs> getAccessTokenArgs(final Object[] args){
+//			return getAccessToken(args).map(at -> {
+//				RequestParam param = accessTokenParameter.get().getParameterAnnotation(RequestParam.class);
+//				String paramName = WechatConstants.PARAMS_ACCESS_TOKEN;
+//				if (param!=null) {
+//					paramName = param.name();
+//				}
+//				AccessTokenArgs arg = new AccessTokenArgs(at, paramName);
+//				return arg;
+//			});
+//		}
+		
 		public Optional<AccessTokenInfo> getAccessToken(final Object[] args){
 			/*return accessTokenParameter.map(parameter->{
 				return (AccessTokenInfo)args[parameter.getParameterIndex()];

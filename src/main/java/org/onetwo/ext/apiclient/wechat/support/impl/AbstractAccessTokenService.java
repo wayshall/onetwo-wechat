@@ -103,11 +103,20 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	public AccessTokenInfo getOrRefreshAccessToken(GetAccessTokenRequest request) {
 		AppidRequest appidRequest = new AppidRequest(request.getAppid(), request.getAgentId(), request.getAccessTokenType());
 		Optional<AccessTokenInfo> atOpt = getAccessToken(appidRequest);
-		if(atOpt.isPresent() && !atOpt.get().isExpired()){
-			return atOpt.get();
+//		if(atOpt.isPresent() && !atOpt.get().isExpired()){
+//			return atOpt.get();
+//		}
+		if (!atOpt.isPresent()) {
+			AccessTokenResponse tokenRes = getAccessToken(request);
+			AccessTokenInfo at = toAccessTokenInfo(request, tokenRes);
+			return at;
+		} else {
+			AccessTokenInfo at = atOpt.get();
+			if (at.isExpired()) {
+				at = refreshAccessToken(request);
+			}
+			return at;
 		}
-		AccessTokenInfo at = refreshAccessToken(request);
-		return at;
 	}
 	
 
@@ -128,12 +137,17 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	}
 
 	protected AccessTokenResponse getAccessToken(GetAccessTokenRequest request) {
-		AppidRequest appidRequest = new AppidRequest();
-		appidRequest.setAppid(request.getAppid());
-		appidRequest.setAccessTokenType(request.getAccessTokenType());
-		appidRequest.setAgentId(request.getAgentId());
-		return accessTokenProvider.getAccessToken(appidRequest);
+//		AppidRequest appidRequest = new AppidRequest();
+//		appidRequest.setAppid(request.getAppid());
+//		appidRequest.setAccessTokenType(request.getAccessTokenType());
+//		appidRequest.setAgentId(request.getAgentId());
+		return accessTokenProvider.getAccessToken(request);
 	}
+	
+	/***
+	 * 根据appid获取缓存的token
+	 */
+	abstract public Optional<AccessTokenInfo> getAccessToken(AppidRequest appidRequest);
 	
 	protected boolean isUpdatedNewly(Optional<AccessTokenInfo> opt) {
 		if(opt.isPresent() && !opt.get().isExpired() && opt.get().isUpdatedNewly()){
@@ -155,15 +169,8 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 				return opt.get();
 			}
 			
-			AccessTokenResponse tokenRes = getAccessToken(request);
-			int expired = getExpiresIn(tokenRes);
-			AccessTokenInfo newToken = AccessTokenInfo.builder()
-														.appid(request.getAppid())
-														.accessToken(tokenRes.getAccessToken())
-														.expiresIn(expired)
-														.agentId(request.getAgentId())
-														.updateAt(new Date())
-														.build();
+			AccessTokenResponse tokenRes = accessTokenProvider.refreshAccessToken(request);
+			AccessTokenInfo newToken = toAccessTokenInfo(request, tokenRes);
 			saveNewToken(newToken, appidRequest);
 			
 			this.wechatEventBus.postRefreshedEvent(appidRequest, newToken);
@@ -184,10 +191,21 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 		return at;
 	}
 	
+	protected AccessTokenInfo toAccessTokenInfo(GetAccessTokenRequest request, AccessTokenResponse tokenRes) {
+		int expired = getExpiresIn(tokenRes);
+		AccessTokenInfo newToken = AccessTokenInfo.builder()
+													.appid(request.getAppid())
+													.accessToken(tokenRes.getAccessToken())
+													.expiresIn(expired)
+													.agentId(request.getAgentId())
+													.updateAt(new Date())
+													.build();
+		return newToken;
+	}
 	
 
 	/****
-	 * 移除
+	 * 从缓存中移除accessToken
 	 * @author weishao zeng
 	 * @param appid
 	 */

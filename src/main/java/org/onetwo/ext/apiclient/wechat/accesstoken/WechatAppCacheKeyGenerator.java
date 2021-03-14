@@ -12,8 +12,18 @@ public class WechatAppCacheKeyGenerator implements AppCacheKeyGenerator {
 	public static final String ACCESS_TOKEN_PREFIX = "WX_ACCESSTOKEN";
 	public static final String KEY_SPLITOR = ":";
 	
-	private String prefix = ACCESS_TOKEN_PREFIX;
+	private String prefix;
 	
+
+	public WechatAppCacheKeyGenerator() {
+		this(ACCESS_TOKEN_PREFIX);
+	}
+	
+	public WechatAppCacheKeyGenerator(String prefix) {
+		super();
+		this.prefix = prefix;
+	}
+
 	@Override
 	public String generated(AppidRequest appidRequest) {
 		StringBuilder key = new StringBuilder();

@@ -3,7 +3,7 @@ package org.onetwo.ext.apiclient.wechat.core;
 import java.util.List;
 
 import org.onetwo.common.apiclient.RestExecutorFactory;
-import org.onetwo.common.apiclient.impl.AbstractApiClentRegistrar;
+import org.onetwo.common.apiclient.simple.GenericApiClentRegistrar;
 import org.onetwo.ext.apiclient.wechat.EnableWechatClient;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
@@ -18,7 +18,7 @@ import org.springframework.util.ClassUtils;
  * <br/>
  */
 @ConditionalOnProperty(value = WechatConfig.ENABLED_KEY, matchIfMissing = true)
-public class WechatApiClentRegistrar extends AbstractApiClentRegistrar<EnableWechatClient, WechatApiClient> {
+public class WechatApiClentRegistrar extends GenericApiClentRegistrar<EnableWechatClient, WechatApiClient> {
 	
 	private WechatApiClientResponseHandler responseHandler = new WechatApiClientResponseHandler();
 

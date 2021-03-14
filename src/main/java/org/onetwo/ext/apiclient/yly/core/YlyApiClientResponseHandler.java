@@ -39,7 +39,7 @@ public class YlyApiClientResponseHandler extends DefaultApiClientResponseHandler
 			
 			return response;
 		}
-		throw new RestClientException("error response: " + responseEntity.getStatusCodeValue());
+		throw new ApiClientException("error response: " + responseEntity.getStatusCodeValue());
 	}
 	
 	protected ApiClientException translateToApiClientException(ApiClientMethod invokeMethod, YlyResponse baseResponse, ResponseEntity<?> responseEntity){

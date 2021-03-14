@@ -112,7 +112,7 @@ public class MemoryAccessTokenService extends AbstractAccessTokenService impleme
 		AccessTokenInfo token = null;
 		String key = getAppidKey(appidRequest);
 		if(logger.isInfoEnabled()){
-			logger.info("==========>>> get access token from wechat server...");
+			logger.info("get access token from wechat server...");
 		}
 		this.accessTokenCaches.invalidate(key);
 		token = getAccessTokenFromCache(request);

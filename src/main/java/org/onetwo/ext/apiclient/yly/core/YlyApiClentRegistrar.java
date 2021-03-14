@@ -3,15 +3,14 @@ package org.onetwo.ext.apiclient.yly.core;
 import java.util.List;
 
 import org.onetwo.common.apiclient.RestExecutorFactory;
-import org.onetwo.common.apiclient.impl.AbstractApiClentRegistrar;
 import org.onetwo.common.apiclient.impl.DefaultApiClientResponseHandler;
+import org.onetwo.common.apiclient.simple.GenericApiClentRegistrar;
 import org.onetwo.ext.apiclient.wechat.core.RemovableTokenError;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClientFactoryBean;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClientFactoryBean.WechatMethod;
 import org.onetwo.ext.apiclient.yly.EnableYilianyunClient;
 import org.onetwo.ext.apiclient.yly.core.YlyAccessTokenProvider.YlyAccessTokenTypes;
 import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
@@ -21,7 +20,7 @@ import org.springframework.util.ClassUtils;
  * @author wayshall
  * <br/>
  */
-public class YlyApiClentRegistrar extends AbstractApiClentRegistrar<EnableYilianyunClient, YlyApiClient> {
+public class YlyApiClentRegistrar extends GenericApiClentRegistrar<EnableYilianyunClient, YlyApiClient> {
 	
 	static private DefaultApiClientResponseHandler<WechatMethod> responseHandler = new YlyApiClientResponseHandler();
 	static private RemovableTokenError removableTokenError = new RemovableTokenError() {
@@ -57,7 +56,7 @@ public class YlyApiClentRegistrar extends AbstractApiClentRegistrar<EnableYilian
 		definition.addPropertyReference("restExecutor", RestExecutorFactory.REST_EXECUTOR_FACTORY_BEAN_NAME);
 //		definition.addPropertyValue("decode404", attributes.get("decode404"));
 //		definition.addPropertyValue("fallback", attributes.get("fallback"));
-		definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
+//		definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
 		
 		return definition;
 	}

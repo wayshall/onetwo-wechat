@@ -3,7 +3,7 @@ package org.onetwo.ext.apiclient.wxpay.core;
 import java.util.List;
 
 import org.onetwo.common.apiclient.RestExecutorFactory;
-import org.onetwo.common.apiclient.impl.AbstractApiClentRegistrar;
+import org.onetwo.common.apiclient.simple.GenericApiClentRegistrar;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClientFactoryBean;
 import org.onetwo.ext.apiclient.wxpay.EnableWechatPayClient;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -17,7 +17,7 @@ import org.springframework.util.ClassUtils;
  * @author wayshall
  * <br/>
  */
-public class WechatPayApiClentRegistrar extends AbstractApiClentRegistrar<EnableWechatPayClient, WechatPayApiClient> {
+public class WechatPayApiClentRegistrar extends GenericApiClentRegistrar<EnableWechatPayClient, WechatPayApiClient> {
 	
 	private WechatPayApiClientResponseHandler responseHandler = new WechatPayApiClientResponseHandler();
 

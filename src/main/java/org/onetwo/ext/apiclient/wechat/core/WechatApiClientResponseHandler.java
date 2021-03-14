@@ -24,6 +24,16 @@ public class WechatApiClientResponseHandler extends DefaultApiClientResponseHand
 	private String errcodeKey = KEY_ERRCODE;
 	private String errmsgKey = KEY_ERRMSG;
 	
+	public WechatApiClientResponseHandler() {
+	}
+	
+	public WechatApiClientResponseHandler(String errcodeKey, String errmsgKey) {
+		super();
+		this.errcodeKey = errcodeKey;
+		this.errmsgKey = errmsgKey;
+	}
+
+
 	@Override
 	public Class<?> getActualResponseType(WechatMethod invokeMethod){
 		Class<?> responseType = invokeMethod.getMethodReturnType();
