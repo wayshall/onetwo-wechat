@@ -2,6 +2,7 @@ package org.onetwo.ext.apiclient.wechat.utils;
 
 import java.security.AlgorithmParameters;
 import java.security.Security;
+import java.util.Date;
 
 import javax.crypto.spec.IvParameterSpec;
 
@@ -140,6 +141,8 @@ public class WechatUtils {
 													.accessToken(response.getAccessToken())
 													.expiresIn(response.getExpiresIn())
 													.appid(appid)
+													.updateAt(new Date())
+													.expireAt(response.getExpireAt())
 													.build();
 		return accessToken;
 	}

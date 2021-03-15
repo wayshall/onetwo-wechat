@@ -12,6 +12,7 @@ import org.onetwo.common.apiclient.simple.SimpleApiClientResponseHandler;
 import org.onetwo.common.reflect.ReflectUtils;
 import org.onetwo.common.spring.context.AnnotationMetadataHelper;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenType;
+import org.onetwo.ext.apiclient.wechat.core.AccessTokenParameterTypes;
 import org.onetwo.ext.apiclient.wechat.core.RemovableTokenError;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClientFactoryBean;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClientFactoryBean.WechatMethod;
@@ -55,6 +56,9 @@ public class TokenableApiClentRegistrar extends AbstractApiClentRegistrar {
 	 */
 	protected String getAccessTokenParameterName() {
 		return WechatConstants.PARAMS_ACCESS_TOKEN;
+	}
+	protected AccessTokenParameterTypes getAccessTokenParameterTypes() {
+		return AccessTokenParameterTypes.URL;
 	}
 	
 	/***
@@ -105,6 +109,7 @@ public class TokenableApiClentRegistrar extends AbstractApiClentRegistrar {
 		
 		definition.addPropertyValue("accessTokenType", accessTokenType);
 		definition.addPropertyValue("accessTokenParameterName", getAccessTokenParameterName());
+		definition.addPropertyValue("accessTokenParameterTypes", getAccessTokenParameterTypes());
 //		definition.addPropertyValue("accessTokenType", attributes.getEnum("accessTokenType"));
 		definition.addPropertyValue("url", resolveUrl(attributes));
 		definition.addPropertyValue("path", resolvePath(attributes));

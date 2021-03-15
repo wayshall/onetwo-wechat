@@ -11,6 +11,7 @@ import org.onetwo.common.apiclient.RequestContextData;
 import org.onetwo.common.apiclient.impl.AbstractApiClientFactoryBean;
 import org.onetwo.common.apiclient.utils.ApiClientUtils;
 import org.onetwo.common.exception.ApiClientException;
+import org.onetwo.common.exception.BaseException;
 import org.onetwo.common.spring.SpringUtils;
 import org.onetwo.common.utils.ParamUtils;
 import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
@@ -61,9 +62,14 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 	private RemovableTokenError removableTokenError;
 	private boolean autoThrowIfErrorCode = true;
 	private String accessTokenParameterName = WechatConstants.PARAMS_ACCESS_TOKEN;
+	private AccessTokenParameterTypes accessTokenParameterTypes = AccessTokenParameterTypes.URL;
 	
 	public void setAccessTokenParameterName(String accessTokenParameterName) {
 		this.accessTokenParameterName = accessTokenParameterName;
+	}
+	
+	public void setAccessTokenParameterTypes(AccessTokenParameterTypes accessTokenParameterTypes) {
+		this.accessTokenParameterTypes = accessTokenParameterTypes;
 	}
 
 	@Override
@@ -125,7 +131,7 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 					} else if (invokeMethod.getAccessTokenRequest().isPresent()) {
 						logger.info("AccessToken not found, but AccessTokenRequest found!");
 						AccessTokenRequest atRequest = invokeMethod.<AccessTokenRequest>getParameterValue(invocation.getArguments(), invokeMethod.getAccessTokenRequest()).get();
-						AccessTokenInfo at = new AccessTokenInfo(atRequest.obtainAppId(), null, atRequest.getAccessToken(), 0, null);
+						AccessTokenInfo at = new AccessTokenInfo(atRequest.obtainAppId(), null, atRequest.getAccessToken(), 0, null, null);
 						at.setAccessTokenType(accessTokenType);
 						return this.processAutoRemove(invocation, invokeMethod, at, e);
 					} else {
@@ -237,8 +243,13 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 			Optional<AccessTokenInfo> at = method.getAccessToken(context.getMethodArgs());
 			if(at.isPresent()){
 				AccessTokenInfo token = at.get();
-				if (token.isAutoAppendToUrl()) {
+//				if (token.isAutoAppendToUrl()) {
+				if (accessTokenParameterTypes==null || accessTokenParameterTypes==AccessTokenParameterTypes.URL) {
 					newUrl = ParamUtils.appendParam(newUrl, accessTokenParameterName, token.getAccessToken());
+				} else if (accessTokenParameterTypes==AccessTokenParameterTypes.HEADER) {
+					context.getHeaders().add(accessTokenParameterName, token.getAccessToken());
+				} else {
+					throw new BaseException("unsupported AccessTokenParamTypes : " + accessTokenParameterTypes);
 				}
 			}
 			newUrl = super.processUrlBeforeRequest(newUrl, method, context);

@@ -29,6 +29,15 @@ public class CombineAccessTokenProvider implements AccessTokenProvider {
 	}
 
 	@Override
+	public AccessTokenResponse refreshAccessToken(AppidRequest request) {
+		AccessTokenProvider accessTokenProvider = accessTokenProviders.stream()
+						.filter(atp -> atp.getAccessTokenTypes().contains(request.getAccessTokenType()))
+						.findFirst()
+						.orElseThrow(() -> new ApiClientException(WechatClientErrors.ACCESS_TOKEN_SERVICE_NOT_FOUND));
+		return accessTokenProvider.refreshAccessToken(request);
+	}
+
+	@Override
 	public List<AccessTokenType> getAccessTokenTypes() {
 		return accessTokenProviders.stream()
 								.flatMap(atp -> atp.getAccessTokenTypes().stream())

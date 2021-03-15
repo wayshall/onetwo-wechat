@@ -34,6 +34,7 @@ public class WechatApiClentRegistrar extends GenericApiClentRegistrar<EnableWech
 		BeanDefinitionBuilder definition = BeanDefinitionBuilder.genericBeanDefinition(WechatApiClientFactoryBean.class);
 
 		definition.addPropertyValue("accessTokenType", attributes.getEnum("accessTokenType"));
+//		definition.addPropertyValue("accessTokenAppendToUrl", true);
 		definition.addPropertyValue("autoThrowIfErrorCode", attributes.getBoolean("autoThrowIfErrorCode"));
 		definition.addPropertyValue("url", resolveUrl(attributes));
 		definition.addPropertyValue("path", resolvePath(attributes));

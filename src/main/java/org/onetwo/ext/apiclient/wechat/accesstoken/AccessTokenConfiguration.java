@@ -6,7 +6,6 @@ import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenProvider;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AppCacheKeyGenerator;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
-import org.onetwo.ext.apiclient.wechat.core.WechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.dbm.service.AccessTokenRepository;
 import org.onetwo.ext.apiclient.wechat.dbm.service.DbStoreAccessTokenService;
 import org.onetwo.ext.apiclient.wechat.support.impl.MemoryAccessTokenService;
@@ -50,8 +49,9 @@ public class AccessTokenConfiguration implements InitializingBean {
 	}
 	
 	@Bean
-	@ConditionalOnProperty(name=WechatConfigKeys.STORER_KEY, havingValue=WechatConfigKeys.STORER_MEMORY_KEY, matchIfMissing=true)
-	public AccessTokenService memoryAccessTokenService(WechatConfigProvider wechatConfigProvider){
+	@ConditionalOnMissingBean(AccessTokenService.class)
+	@ConditionalOnProperty(name=WechatConfigKeys.STORER_KEY, havingValue=WechatConfigKeys.STORER_MEMORY_KEY)
+	public AccessTokenService memoryAccessTokenService(){
 		MemoryAccessTokenService service = new MemoryAccessTokenService();
 		service.setAccessTokenProvider(accessTokenProvider);
 //		service.setWechatConfigProvider(wechatConfigProvider);
@@ -60,7 +60,7 @@ public class AccessTokenConfiguration implements InitializingBean {
 	
 	@Bean
 	@ConditionalOnProperty(name=WechatConfigKeys.STORER_KEY, havingValue=WechatConfigKeys.STORER_REDIS_KEY)
-	public AccessTokenService redisStoreAccessTokenService(WechatConfigProvider wechatConfigProvider){
+	public AccessTokenService redisStoreAccessTokenService(){
 		RedisStoreAccessTokenService tokenService = new RedisStoreAccessTokenService();
 		tokenService.setAccessTokenProvider(accessTokenProvider);
 //		tokenService.setWechatConfigProvider(wechatConfigProvider);
@@ -70,9 +70,7 @@ public class AccessTokenConfiguration implements InitializingBean {
 	@Bean
 	@ConditionalOnProperty(name=WechatConfigKeys.STORER_KEY, havingValue=WechatConfigKeys.STORER_DATABASE_KEY)
 	public AccessTokenService dbStoreAccessTokenService(WechatConfig wechatConfig, 
-														AccessTokenRepository accessTokenRepository,
-//														WechatAccessTokenProvider accessTokenProvider,
-														WechatConfigProvider wechatConfigProvider){
+														AccessTokenRepository accessTokenRepository){
 		DbStoreAccessTokenService tokenService = new DbStoreAccessTokenService(accessTokenRepository);
 		tokenService.setAccessTokenProvider(accessTokenProvider);
 //		tokenService.setWechatConfigProvider(wechatConfigProvider);

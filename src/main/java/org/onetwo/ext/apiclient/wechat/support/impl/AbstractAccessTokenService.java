@@ -56,7 +56,7 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 //	protected WechatConfig wechatConfig;
 //	private WechatConfigProvider wechatConfigProvider;
 	
-	@Autowired
+	@Autowired(required=false)
 	private WechatEventBus wechatEventBus;
 	
 	@Autowired
@@ -73,10 +73,11 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	@Override
 	public Optional<AccessTokenInfo> refreshAccessTokenByAppid(AppidRequest refreshTokenRequest) {
 		AccessTokenResponse res = accessTokenProvider.getAccessToken(refreshTokenRequest);
-		AccessTokenInfo token = new AccessTokenInfo();
-		token.setExpiresIn(res.getExpiresIn());
-		token.setAccessToken(res.getAccessToken());
-		token.setUpdateAt(new Date());
+		AccessTokenInfo token = AccessTokenInfo.builder()
+											.accessToken(res.getAccessToken())
+											.expiresIn(res.getExpiresIn())
+											.updateAt(new Date())
+										.build();
 		return Optional.of(token);
 		
 //		String appid = refreshTokenRequest.getAppid();
@@ -101,22 +102,26 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	
 	@Override
 	public AccessTokenInfo getOrRefreshAccessToken(GetAccessTokenRequest request) {
+		this.removeByAppid(request);
 		AppidRequest appidRequest = new AppidRequest(request.getAppid(), request.getAgentId(), request.getAccessTokenType());
 		Optional<AccessTokenInfo> atOpt = getAccessToken(appidRequest);
 //		if(atOpt.isPresent() && !atOpt.get().isExpired()){
 //			return atOpt.get();
 //		}
+		AccessTokenInfo at = null;
 		if (!atOpt.isPresent()) {
+			// 若缓存里返回到accessToken为null，则调用 accessTokenProvider#getAccessToken 方法
 			AccessTokenResponse tokenRes = getAccessToken(request);
-			AccessTokenInfo at = toAccessTokenInfo(request, tokenRes);
-			return at;
-		} else {
-			AccessTokenInfo at = atOpt.get();
-			if (at.isExpired()) {
-				at = refreshAccessToken(request);
+			if (tokenRes!=null) {
+				at = toAccessTokenInfo(request, tokenRes);
 			}
-			return at;
+		} else {
+			at = atOpt.get();
 		}
+		if (at==null || at.isExpired()) {
+			at = refreshAccessToken(request);
+		}
+		return at;
 	}
 	
 
@@ -173,7 +178,9 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 			AccessTokenInfo newToken = toAccessTokenInfo(request, tokenRes);
 			saveNewToken(newToken, appidRequest);
 			
-			this.wechatEventBus.postRefreshedEvent(appidRequest, newToken);
+			if (this.wechatEventBus!=null) {
+				wechatEventBus.postRefreshedEvent(appidRequest, newToken);
+			}
 			
 			if(logger.isInfoEnabled()){
 				logger.info("saved new access token : {}", newToken);
@@ -199,6 +206,7 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 													.expiresIn(expired)
 													.agentId(request.getAgentId())
 													.updateAt(new Date())
+													.expireAt(tokenRes.getExpireAt())
 													.build();
 		return newToken;
 	}
