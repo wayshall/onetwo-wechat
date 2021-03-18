@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.onetwo.common.exception.ApiClientException;
-import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenProvider;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenType;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
@@ -20,12 +20,21 @@ public class CombineAccessTokenProvider implements AccessTokenProvider {
 	private List<AccessTokenProvider> accessTokenProviders;
 
 	@Override
-	public AccessTokenResponse getAccessToken(GetAccessTokenRequest request) {
+	public AccessTokenResponse getAccessToken(AppidRequest request) {
 		AccessTokenProvider accessTokenProvider = accessTokenProviders.stream()
 																	.filter(atp -> atp.getAccessTokenTypes().contains(request.getAccessTokenType()))
 																	.findFirst()
 																	.orElseThrow(() -> new ApiClientException(WechatClientErrors.ACCESS_TOKEN_SERVICE_NOT_FOUND));
 		return accessTokenProvider.getAccessToken(request);
+	}
+
+	@Override
+	public AccessTokenResponse refreshAccessToken(AppidRequest request) {
+		AccessTokenProvider accessTokenProvider = accessTokenProviders.stream()
+						.filter(atp -> atp.getAccessTokenTypes().contains(request.getAccessTokenType()))
+						.findFirst()
+						.orElseThrow(() -> new ApiClientException(WechatClientErrors.ACCESS_TOKEN_SERVICE_NOT_FOUND));
+		return accessTokenProvider.refreshAccessToken(request);
 	}
 
 	@Override

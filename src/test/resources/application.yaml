@@ -26,8 +26,8 @@ jfish:
 #            expires:
 #                UAA-CLIENT-OPTIONS: 2h
 wechat: 
-    appid: wx282b94857c02f65f #test
-    appsecret: 425346593be0a278ad9725504dbe009c
+    appid: 
+    appsecret: 
     accessToken:
         storer: redis
     enableMessageServe: 

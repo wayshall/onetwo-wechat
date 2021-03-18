@@ -13,9 +13,9 @@ import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenProvider;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AppCacheKeyGenerator;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
-import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
-import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
+import org.onetwo.ext.apiclient.wechat.event.WechatEventBus;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
 import org.slf4j.Logger;
@@ -54,7 +54,13 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	
 //	@Autowired
 //	protected WechatConfig wechatConfig;
-	private WechatConfigProvider wechatConfigProvider;
+//	private WechatConfigProvider wechatConfigProvider;
+	
+	@Autowired(required=false)
+	private WechatEventBus wechatEventBus;
+	
+	@Autowired
+	private AppCacheKeyGenerator appCacheKeyGenerator;
 	
 //	private AccessTokenTypes supportedClientType = AccessTokenTypes.WECHAT;
 
@@ -66,20 +72,28 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	
 	@Override
 	public Optional<AccessTokenInfo> refreshAccessTokenByAppid(AppidRequest refreshTokenRequest) {
-		String appid = refreshTokenRequest.getAppid();
-		WechatConfig wechatConfig = wechatConfigProvider.getWechatConfig(appid);
-		WechatUtils.assertWechatConfigNotNull(wechatConfig, appid);
-		if (appid==null || !appid.equals(wechatConfig.getAppid())) {
-			logger.warn("appid error, ignore refresh, appid: {}, configuration appid: {}", appid, wechatConfig.getAppid());
-			return Optional.empty();
-		}
-		GetAccessTokenRequest request = GetAccessTokenRequest.builder()
-																.appid(appid)
-																.secret(wechatConfig.getAppsecret())
-																.accessTokenType(refreshTokenRequest.getAccessTokenType())
-															.build();
-		AccessTokenInfo tokenInfo = refreshAccessToken(request);
-		return Optional.of(tokenInfo);
+		AccessTokenResponse res = accessTokenProvider.getAccessToken(refreshTokenRequest);
+		AccessTokenInfo token = AccessTokenInfo.builder()
+											.accessToken(res.getAccessToken())
+											.expiresIn(res.getExpiresIn())
+											.updateAt(new Date())
+										.build();
+		return Optional.of(token);
+		
+//		String appid = refreshTokenRequest.getAppid();
+//		WechatConfig wechatConfig = wechatConfigProvider.getWechatConfig(appid);
+//		WechatUtils.assertWechatConfigNotNull(wechatConfig, appid);
+//		if (appid==null || !appid.equals(wechatConfig.getAppid())) {
+//			logger.warn("appid error, ignore refresh, appid: {}, configuration appid: {}", appid, wechatConfig.getAppid());
+//			return Optional.empty();
+//		}
+//		GetAccessTokenRequest request = GetAccessTokenRequest.builder()
+//																.appid(appid)
+//																.secret(wechatConfig.getAppsecret())
+//																.accessTokenType(refreshTokenRequest.getAccessTokenType())
+//															.build();
+//		AccessTokenInfo tokenInfo = refreshAccessToken(request);
+//		return Optional.of(tokenInfo);
 	}
 
 
@@ -88,12 +102,25 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	
 	@Override
 	public AccessTokenInfo getOrRefreshAccessToken(GetAccessTokenRequest request) {
+		this.removeByAppid(request);
 		AppidRequest appidRequest = new AppidRequest(request.getAppid(), request.getAgentId(), request.getAccessTokenType());
 		Optional<AccessTokenInfo> atOpt = getAccessToken(appidRequest);
-		if(atOpt.isPresent() && !atOpt.get().isExpired()){
-			return atOpt.get();
+//		if(atOpt.isPresent() && !atOpt.get().isExpired()){
+//			return atOpt.get();
+//		}
+		AccessTokenInfo at = null;
+		if (!atOpt.isPresent()) {
+			// 若缓存里返回到accessToken为null，则调用 accessTokenProvider#getAccessToken 方法
+			AccessTokenResponse tokenRes = getAccessToken(request);
+			if (tokenRes!=null) {
+				at = toAccessTokenInfo(request, tokenRes);
+			}
+		} else {
+			at = atOpt.get();
 		}
-		AccessTokenInfo at = refreshAccessToken(request);
+		if (at==null || at.isExpired()) {
+			at = refreshAccessToken(request);
+		}
 		return at;
 	}
 	
@@ -115,8 +142,17 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	}
 
 	protected AccessTokenResponse getAccessToken(GetAccessTokenRequest request) {
+//		AppidRequest appidRequest = new AppidRequest();
+//		appidRequest.setAppid(request.getAppid());
+//		appidRequest.setAccessTokenType(request.getAccessTokenType());
+//		appidRequest.setAgentId(request.getAgentId());
 		return accessTokenProvider.getAccessToken(request);
 	}
+	
+	/***
+	 * 根据appid获取缓存的token
+	 */
+	abstract public Optional<AccessTokenInfo> getAccessToken(AppidRequest appidRequest);
 	
 	protected boolean isUpdatedNewly(Optional<AccessTokenInfo> opt) {
 		if(opt.isPresent() && !opt.get().isExpired() && opt.get().isUpdatedNewly()){
@@ -138,16 +174,14 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 				return opt.get();
 			}
 			
-			AccessTokenResponse tokenRes = getAccessToken(request);
-			int expired = getExpiresIn(tokenRes);
-			AccessTokenInfo newToken = AccessTokenInfo.builder()
-														.appid(request.getAppid())
-														.accessToken(tokenRes.getAccessToken())
-														.expiresIn(expired)
-														.agentId(request.getAgentId())
-														.updateAt(new Date())
-														.build();
+			AccessTokenResponse tokenRes = accessTokenProvider.refreshAccessToken(request);
+			AccessTokenInfo newToken = toAccessTokenInfo(request, tokenRes);
 			saveNewToken(newToken, appidRequest);
+			
+			if (this.wechatEventBus!=null) {
+				wechatEventBus.postRefreshedEvent(appidRequest, newToken);
+			}
+			
 			if(logger.isInfoEnabled()){
 				logger.info("saved new access token : {}", newToken);
 			}
@@ -164,9 +198,22 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 		return at;
 	}
 	
+	protected AccessTokenInfo toAccessTokenInfo(GetAccessTokenRequest request, AccessTokenResponse tokenRes) {
+		int expired = getExpiresIn(tokenRes);
+		AccessTokenInfo newToken = AccessTokenInfo.builder()
+													.appid(request.getAppid())
+													.accessToken(tokenRes.getAccessToken())
+													.expiresIn(expired)
+													.agentId(request.getAgentId())
+													.updateAt(new Date())
+													.expireAt(tokenRes.getExpireAt())
+													.build();
+		return newToken;
+	}
+	
 
 	/****
-	 * 移除
+	 * 从缓存中移除accessToken
 	 * @author weishao zeng
 	 * @param appid
 	 */
@@ -212,12 +259,12 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	}
 
 
-	public void setWechatConfigProvider(WechatConfigProvider wechatConfigProvider) {
-		this.wechatConfigProvider = wechatConfigProvider;
-	}
+//	public void setWechatConfigProvider(WechatConfigProvider wechatConfigProvider) {
+//		this.wechatConfigProvider = wechatConfigProvider;
+//	}
 
 	protected String getAppidKey(AppidRequest appidRequest) {
-		return WechatUtils.getAppidKey(appidRequest);
+		return appCacheKeyGenerator.generated(appidRequest);
 	}
 
 	/*public AccessTokenTypes getSupportedClientType() {

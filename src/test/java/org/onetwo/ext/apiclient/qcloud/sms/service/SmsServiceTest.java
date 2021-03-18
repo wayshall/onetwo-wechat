@@ -1,12 +1,12 @@
 package org.onetwo.ext.apiclient.qcloud.sms.service;
 
-import java.util.Arrays;
-
 import org.junit.Test;
-import org.onetwo.ext.apiclient.qcloud.TestSmsProperties;
 import org.onetwo.ext.apiclient.qcloud.sms.QCloudSmsBaseBootTests;
+import org.onetwo.ext.apiclient.qcloud.sms.TestSmsProperties;
 import org.onetwo.ext.apiclient.qcloud.sms.vo.SendSmsRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.google.common.collect.Lists;
 
 /**
  * @author weishao zeng
@@ -21,10 +21,11 @@ public class SmsServiceTest extends QCloudSmsBaseBootTests {
 	@Test
 	public void testSend() {
 		SendSmsRequest request = SendSmsRequest.builder()
-											.phoneNumber(testSmsProperties.getPhone())
+//											.phoneNumber(testSmsProperties.getPhone())
+											.phoneNumbers(new String[] {testSmsProperties.getPhone()})
 											.templId(testSmsProperties.getTemplateId1())
-											.params(Arrays.asList("test1", "2019-92-18"))
-//											.sign("wechat")
+											.params(Lists.newArrayList("123456", "2")) // 注意：验证码只能是数字
+											.sign(testSmsProperties.getSign())
 											.build();
 		this.smsService.sendTemplateMessage(request);
 	}

@@ -52,8 +52,9 @@ public class SmsCodeServiceImpl implements SmsCodeService {
 	}
 	
 	
-	/* (non-Javadoc)
-	 * @see org.onetwo.ext.apiclient.qcloud.smscode.service.impl.SmsCodeService#obtain(java.lang.String, org.onetwo.ext.apiclient.qcloud.smscode.SmsCodeModule)
+	/****
+	 * 模板必须有两个参数，例如：
+	 * 你的验证码为：{1}，{2}分钟内有效。如非本人操作，请忽略本短信
 	 */
 	@Override
 	public String obtain(String mobile, SmsCodeModule bizType) {

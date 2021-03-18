@@ -16,9 +16,11 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * 小程序formid收集拦截器
  * @author weishao zeng
+ * @deprecated 小程序已废弃formid机制 
  * <br/>
  */
 @Slf4j
+@Deprecated
 public class CollectFormIdMvcInterceptor extends MvcInterceptorAdapter {
 	
 	private static final String FORM_ID = "collectFormId";

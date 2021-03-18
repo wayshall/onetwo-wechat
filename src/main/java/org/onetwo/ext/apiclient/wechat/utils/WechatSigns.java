@@ -88,6 +88,9 @@ public abstract class WechatSigns {
 	
 	public static String convertToSourceString(String signKey, Object request){
 		Assert.hasText(signKey, "signKey can not blank");
+		if (request instanceof String) {
+			return request.toString();
+		}
 		final MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
 		BEAN_TO_MAP_CONVERTOR.flatObject("", request, (key, value, ctx)->{
 			String name = key;

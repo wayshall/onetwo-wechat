@@ -41,6 +41,18 @@ public class WorkUserInfoResponse extends WechatResponse {
     private String address; //": "广州市海珠区新港中路",
     private ExtattrData extattr;
     
+    // 接口新增的字段
+    /***
+     * 全局唯一。对于同一个服务商，不同应用获取到企业内同一个成员的open_userid是相同的，最多64个字节。仅第三方应用可获取
+     */
+    @JsonProperty("open_userid")
+    private String openUserid;
+    /***
+     * 主部门
+     */
+    @JsonProperty("main_department")
+    private Long mainDepartment;
+    
     /****
      * 激活状态: 1=已激活，2=已禁用，4=未激活。
 已激活代表已激活企业微信或已关注微工作台（原企业号）。未激活代表既未激活企业微信又未关注微工作台（原企业号）。

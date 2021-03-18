@@ -2,28 +2,36 @@ package org.onetwo.ext.apiclient.wechat.utils;
 
 import java.security.AlgorithmParameters;
 import java.security.Security;
+import java.util.Date;
 
 import javax.crypto.spec.IvParameterSpec;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.onetwo.common.apiclient.ApiClientMethod;
 import org.onetwo.common.encrypt.AESCoder;
 import org.onetwo.common.encrypt.Crypts;
 import org.onetwo.common.encrypt.PKCS7Encoder;
 import org.onetwo.common.exception.ApiClientException;
+import org.onetwo.common.exception.BaseException;
 import org.onetwo.common.exception.ErrorTypes;
+import org.onetwo.common.exception.ServiceException;
 import org.onetwo.common.jackson.JsonMapper;
+import org.onetwo.common.log.JFishLoggerFactory;
 import org.onetwo.common.utils.LangUtils;
-import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.basic.api.TokenApi;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
+import org.onetwo.ext.apiclient.wechat.crypt.AesException;
+import org.onetwo.ext.apiclient.wechat.crypt.WXBizMsgCrypt;
+import org.onetwo.ext.apiclient.wechat.crypt.WechatMsgCrypt;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.GrantTypeKeys;
 import org.onetwo.ext.apiclient.wechat.wxa.response.WxappUserInfo;
+import org.onetwo.ext.apiclient.work.crypt.WXBizMsgCryptAdaptor;
 import org.springframework.http.ResponseEntity;
 
 /**
@@ -32,8 +40,8 @@ import org.springframework.http.ResponseEntity;
  */
 public class WechatUtils {
 
-	public static final String ACCESS_TOKEN_PREFIX = "WX_ACCESSTOKEN";
-	public static final String KEY_SPLITOR = ":";
+//	public static final String ACCESS_TOKEN_PREFIX = "WX_ACCESSTOKEN";
+//	public static final String KEY_SPLITOR = ":";
 	public static final String LOCK_KEY = "LOCKER:WX_ACESSTOKEN:";
 	static {
 		Security.addProvider(new BouncyCastleProvider());
@@ -45,6 +53,18 @@ public class WechatUtils {
 		}
 	}
 	public static WxappUserInfo decrypt(String sessionKey, String iv, String encryptedData){
+		try {
+			return decrypt0(sessionKey, iv, encryptedData);
+		} catch (Exception e) {
+			throw new ServiceException("解密错误", e).put("iv", iv)
+													.put("encryptedData", encryptedData);
+		}
+	}
+	
+	public static WxappUserInfo decrypt0(String sessionKey, String iv, String encryptedData){
+		if (StringUtils.isBlank(encryptedData)) {
+			return null;
+		}
 		AESCoder aes = AESCoder.pkcs7Padding(Base64.decodeBase64(sessionKey))
 								.initer((cipher, mode, keySpec)->{
 									AlgorithmParameters params = AlgorithmParameters.getInstance(Crypts.AES_KEY);  
@@ -57,7 +77,30 @@ public class WechatUtils {
 		return wxUser;
 	}
 	
+	public static WechatMobileVO decryptMobile(String sessionKey, String iv, String encryptedData){
+		try {
+			return decrypt0(sessionKey, iv, encryptedData, WechatMobileVO.class);
+		} catch (Exception e) {
+			throw new ServiceException("手机号码解密错误", e).put("iv", iv)
+												.put("encryptedData", encryptedData)
+												.put("sessionKey", sessionKey);
+		}
+	}
+	
 	public static <T> T decrypt(String sessionKey, String iv, String encryptedData, Class<T> messageType){
+		try {
+			return decrypt0(sessionKey, iv, encryptedData, messageType);
+		} catch (Exception e) {
+			throw new ServiceException("解密错误", e).put("iv", iv)
+												.put("encryptedData", encryptedData)
+												.put("sessionKey", sessionKey);
+		}
+	}
+	
+	public static <T> T decrypt0(String sessionKey, String iv, String encryptedData, Class<T> messageType){
+		if (StringUtils.isBlank(encryptedData)) {
+			return null;
+		}
 		AESCoder aes = AESCoder.pkcs7Padding(Base64.decodeBase64(sessionKey))
 								.initer((cipher, mode, keySpec)->{
 									AlgorithmParameters params = AlgorithmParameters.getInstance(Crypts.AES_KEY);  
@@ -98,6 +141,8 @@ public class WechatUtils {
 													.accessToken(response.getAccessToken())
 													.expiresIn(response.getExpiresIn())
 													.appid(appid)
+													.updateAt(new Date())
+													.expireAt(response.getExpireAt())
 													.build();
 		return accessToken;
 	}
@@ -108,7 +153,14 @@ public class WechatUtils {
 	
 	public static ApiClientException translateToApiClientException(ApiClientMethod invokeMethod, WechatResponse baseResponse, ResponseEntity<?> responseEntity){
 		return WechatErrors.byErrcode(baseResponse.getErrcode())
-						 .map(err->new ApiClientException(err, invokeMethod.getMethod(), null))
+						 .map(err-> {
+							 JFishLoggerFactory.getCommonLogger().error("invoke wechat api error, errcode: {}, errmsg: {}", 
+									 					baseResponse.getErrcode(), 
+									 					baseResponse.getErrmsg());
+							 ApiClientException apie = new ApiClientException(err, invokeMethod.getMethod(), null);
+//							 apie.put("errmsg", baseResponse.getErrmsg());
+							 return apie;
+						 })
 						 .orElse(new ApiClientException(ErrorTypes.of(baseResponse.getErrcode().toString(), 
 								 										baseResponse.getErrmsg(), 
 								 										responseEntity.getStatusCodeValue())
@@ -121,7 +173,7 @@ public class WechatUtils {
 	 * @author weishao zeng
 	 * @param appidRequest
 	 * @return
-	 */
+	 
 	public static String getAppidKey(AppidRequest appidRequest) {
 //		return getAppidKey(appidRequest.getAppid(), appidRequest.getAccessTokenType());
 		StringBuilder key = new StringBuilder();
@@ -132,11 +184,28 @@ public class WechatUtils {
 			key.append(KEY_SPLITOR).append(appidRequest.getAgentId());
 		}
 		return key.toString();
-	}
+	}*/
 	
 	/*private static String getAppidKey(String appid, AccessTokenTypes accessTokenType) {
 		return appid + ":" + accessTokenType.name();
 	}*/
+	
+	public static WechatMsgCrypt createWXBizMsgCrypt(WechatConfig wechatConfig) {
+		if (wechatConfig==null) {
+			throw new IllegalArgumentException("wechat config can not be null!");
+		}
+		try {
+			WechatMsgCrypt wxbizMsgCrypt = null;
+			if (!wechatConfig.isWorkWechat()) { //普通微信
+				wxbizMsgCrypt = new WXBizMsgCrypt(wechatConfig.getToken(), wechatConfig.getEncodingAESKey(), wechatConfig.getAppid());
+			} else { // 企业微信
+				wxbizMsgCrypt = new WXBizMsgCryptAdaptor(wechatConfig.getToken(), wechatConfig.getEncodingAESKey(), wechatConfig.getAppid());
+			}
+			return wxbizMsgCrypt;
+		} catch (AesException e) {
+			throw new BaseException(e.getMessage(), e);
+		}
+	}
 	
 	private WechatUtils(){
 	}

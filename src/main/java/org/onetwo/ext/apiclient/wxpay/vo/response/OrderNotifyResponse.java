@@ -24,6 +24,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper=true)
 @NoArgsConstructor
 @ToString(callSuper=true)
+//@JsonIgnoreProperties({"promotionDetail"})
 public class OrderNotifyResponse extends WechatPayResponse implements CustomizeMappingField {
 	
 	// 以下字段在return_code为SUCCESS的时候有返回
@@ -144,21 +145,45 @@ public class OrderNotifyResponse extends WechatPayResponse implements CustomizeM
 	@JsonProperty("settlement_total_fee")
 	private Integer settlementTotalFee;
 
+	/****
+	 * 若需要用到此数据，需要自行反序列化
+	 */
+	@JsonProperty("promotion_detail")
+	String promotionDetail;
+//	@JsonIgnore
+//	private PromotionDetailWrapper promotionDetail;
+	
+	/****
+	 * 增加version
+	 * 参考：https://pay.weixin.qq.com/wiki/doc/api/danpin.php?chapter=9_202&index=7
+	 */
+	String version;
+
 
 	@Override
 	public void mappingFields(Map<String, ?> responseMap) {
-		if (this.couponCount==null || this.couponCount<1) {
-			return ;
+//		if (responseMap.containsKey("promotion_detail")) {
+//			String data = (String)responseMap.get("promotion_detail");
+//			this.promotionDetail = JsonMapper.ignoreNull().fromJson(data, PromotionDetailWrapper.class);
+//		}
+		if (this.couponCount!=null && this.couponCount>0) {
+			this.coupon = new ArrayList<>(this.couponCount);
+			for (int i = 0; i < couponCount; i++) {
+				CouponData coupon = new CouponData();
+//				coupon.setIndex(i);
+				coupon.setId((String)responseMap.remove("coupon_id_" + i));
+				coupon.setType((String)responseMap.remove("coupon_type_" + i));
+				coupon.setFee(Types.asValue(responseMap.remove("coupon_fee_" + i), Integer.class));
+				this.coupon.add(coupon);
+			}
 		}
-		this.coupon = new ArrayList<>(this.couponCount);
-		for (int i = 0; i < couponCount; i++) {
-			CouponData coupon = new CouponData();
-//			coupon.setIndex(i);
-			coupon.setId((String)responseMap.get("coupon_id_" + i));
-			coupon.setType((String)responseMap.get("coupon_type_" + i));
-			coupon.setFee(Types.asValue(responseMap.get("coupon_fee_" + i), Integer.class));
-			this.coupon.add(coupon);
-		}
+//		if (!responseMap.isEmpty()) {
+//			// 移动所有已设置到bean的值，避免重复
+//			SpringUtils.toFlatMap(this).keySet().forEach(key -> {
+//				responseMap.remove(key);
+//			});
+//			this.putAll(responseMap);
+//		}
 	}
 	
 

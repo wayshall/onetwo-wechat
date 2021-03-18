@@ -4,6 +4,7 @@ import org.onetwo.common.utils.LangUtils;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.oauth2.OAuth2SpringMvcInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @author wayshall
  * <br/>
  */
+@ConditionalOnProperty(value = WechatConfig.ENABLED_KEY, matchIfMissing = true)
 public class WechatMvcConfigurerAdapter extends WebMvcConfigurerAdapter {
 
 	@Autowired

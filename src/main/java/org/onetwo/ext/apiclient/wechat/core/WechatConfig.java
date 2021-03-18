@@ -9,6 +9,7 @@ import lombok.Data;
 public interface WechatConfig {
 
 	String PREFIX  = "wechat";
+	String ENABLED_KEY  = "wechat.enabled";
 	String ENABLE_MESSAGE_SERVE_KEY = PREFIX+".enableMessageServe.enabled";
 
 	String getToken();
@@ -67,7 +68,18 @@ public interface WechatConfig {
 	
 	Long getAgentId();
 	
+	/***
+	 * for test
+	 * 
+	 * @author weishao zeng
+	 * @return
+	 */
+	@Deprecated
 	PayProperties getPay();
+	
+	String getConfig(String key);
+	
+	boolean isDebug();
 	
 	/***
 	 * 是否企业微信

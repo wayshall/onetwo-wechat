@@ -13,7 +13,6 @@ import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatException;
-import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
 import org.slf4j.Logger;
 import org.springframework.util.Assert;
 
@@ -112,7 +111,7 @@ public class MemoryAccessTokenService extends AbstractAccessTokenService impleme
 		AccessTokenInfo token = null;
 		String key = getAppidKey(appidRequest);
 		if(logger.isInfoEnabled()){
-			logger.info("==========>>> get access token from wechat server...");
+			logger.info("get access token from wechat server...");
 		}
 		this.accessTokenCaches.invalidate(key);
 		token = getAccessTokenFromCache(request);
@@ -126,8 +125,9 @@ public class MemoryAccessTokenService extends AbstractAccessTokenService impleme
 		try {
 			return this.accessTokenCaches.get(key, ()->{
 //				AccessTokenInfo accessToken = WechatUtils.getAccessToken(wechatServer, request);
-				AccessTokenResponse response = this.getAccessTokenProvider().getAccessToken(request);
-				AccessTokenInfo at = WechatUtils.toAccessTokenInfo(request.getAppid(), response);
+				AccessTokenResponse response = this.getAccessTokenProvider().getAccessToken(appidRequest);
+//				AccessTokenInfo at = WechatUtils.toAccessTokenInfo(request.getAppid(), response);
+				AccessTokenInfo at = toAccessTokenInfo(request, response);
 				at.setUpdateAt(new Date());
 				return at;
 			});

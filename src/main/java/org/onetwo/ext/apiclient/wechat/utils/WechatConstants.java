@@ -62,10 +62,11 @@ public abstract class WechatConstants {
 		public static final String API_BASE_URL = API_DOMAIN_URL + "/cgi-bin";
 		public static final String OAUTH2_AUTHORIZE = "https://open.weixin.qq.com/connect/oauth2/authorize";
 		public static final String OAUTH2_QR_CONNECT_AUTHORIZE = "https://open.work.weixin.qq.com/wwopen/sso/qrConnect";
+		public static final String WECHAT_REDIRECT = "#wechat_redirect";
 		public static final String OAUTH2_AUTHORIZE_TEMPLATE = OAUTH2_AUTHORIZE+
 																"?appid=${appid}&redirect_uri=${redirectUri}"
 																+ "&response_type=${responseType}&scope=${scope}"
-																+ "&state=${state}#wechat_redirect";
+																+ "&state=${state}" + WECHAT_REDIRECT;
 		
 	}
 	public static abstract class Oauth2Keys {

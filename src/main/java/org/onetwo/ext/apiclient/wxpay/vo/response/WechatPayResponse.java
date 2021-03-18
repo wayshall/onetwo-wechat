@@ -10,13 +10,17 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
+ * 修改：
+ * 继承hashmap，防止微信增加字段后签名验证错误
  * @author wayshall
  * <br/>
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 @Builder(builderMethodName="baseBuilder")
 @NoArgsConstructor
 @AllArgsConstructor

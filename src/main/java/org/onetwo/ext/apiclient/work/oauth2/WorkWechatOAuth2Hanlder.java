@@ -12,6 +12,8 @@ import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.oauth2.BaseOAuth2Hanlder;
 import org.onetwo.ext.apiclient.wechat.serve.dto.WechatOAuth2Context;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
+import org.onetwo.ext.apiclient.wechat.utils.WechatException;
+import org.onetwo.ext.apiclient.work.core.WorkConfigProvider;
 import org.onetwo.ext.apiclient.work.oauth2.WorkOauth2Client.UserInfoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -25,9 +27,22 @@ public class WorkWechatOAuth2Hanlder extends BaseOAuth2Hanlder<WorkUserLoginInfo
 	private WorkOauth2Client workOauth2Client;
 	@Autowired
 	private AccessTokenService accessTokenService;
+	private WorkConfigProvider workConfigProvider;
+	
+	public WechatConfig getWechatConfig(WechatOAuth2Context contex) {
+		WechatConfig wechatConfig = workConfigProvider.getWechatConfig(contex.getAppid());
+		if (wechatConfig==null) {
+			throw new WechatException("wechet config not found!").put("workConfigProvider", workConfigProvider)
+																.put("appid", contex.getAppid());
+		}
+ 		if (StringUtils.isNotBlank(contex.getAppid()) && !contex.getAppid().equals(wechatConfig.getAppid())) {
+			throw new WechatException("config not found, error appid: " + contex.getAppid());
+		}
+		return wechatConfig;
+	}
 	
 	@Override
-	protected WorkUserLoginInfo getOAuth2UserInfo(WechatOAuth2Context context) {
+	public WorkUserLoginInfo fetchOAuth2UserInfoFromServerWithCode(WechatOAuth2Context context) {
 		WechatConfig wechatConfig = context.getWechatConfig();
 		GetAccessTokenRequest getRequest = GetAccessTokenRequest.builder()
 																.appid(wechatConfig.getAppid())
@@ -52,9 +67,17 @@ public class WorkWechatOAuth2Hanlder extends BaseOAuth2Hanlder<WorkUserLoginInfo
 		WechatConfig wechatConfig = context.getWechatConfig();
 		String redirectUrl = buildRedirectUrl(context);
 		String state = getWechatOAuth2UserRepository().generateAndStoreOauth2State(context);
-		AuthorizeData authorize = createAuthorize(wechatConfig, redirectUrl, state);
-		String authorizeUrl = authorize.toAuthorizeUrl() + "#wechat_redirect";
+		AuthorizeData authorize = createAuthorize(wechatConfig.getAppid(), wechatConfig.getOauth2Scope(), redirectUrl, state);
+		String authorizeUrl = authorize.toAuthorizeUrl();
+		if (logger.isInfoEnabled()) {
+			logger.info("[wechat oauth2] authorizeUrl url: {}", authorizeUrl);
+		}
 		return authorizeUrl;
+	}
+
+
+	public void setWorkConfigProvider(WorkConfigProvider workConfigProvider) {
+		this.workConfigProvider = workConfigProvider;
 	}
 	
 }

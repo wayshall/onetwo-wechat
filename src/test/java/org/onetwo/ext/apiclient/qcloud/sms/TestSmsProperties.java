@@ -1,4 +1,4 @@
-package org.onetwo.ext.apiclient.qcloud;
+package org.onetwo.ext.apiclient.qcloud.sms;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -15,6 +15,7 @@ public class TestSmsProperties {
 	
 	private String phone;
 	private int templateId1;
+	private String sign;
 
 }
 

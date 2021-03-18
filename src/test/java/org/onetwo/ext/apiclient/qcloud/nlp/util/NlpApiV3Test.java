@@ -2,7 +2,7 @@ package org.onetwo.ext.apiclient.qcloud.nlp.util;
 
 import org.junit.Test;
 import org.onetwo.ext.apiclient.qcloud.QCloudBaseBootTests;
-import org.onetwo.ext.apiclient.qcloud.nlp.NlpProperties;
+import org.onetwo.ext.apiclient.qcloud.QCloudProperties;
 import org.onetwo.ext.apiclient.qcloud.nlp.api.NlpApiV3;
 import org.onetwo.ext.apiclient.qcloud.nlp.request.SensitiveWordsRecognitionRequest;
 import org.onetwo.ext.apiclient.qcloud.nlp.response.SensitiveWordsRecognitionResponse;
@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class NlpApiV3Test extends QCloudBaseBootTests {
 	@Autowired
-	NlpProperties nlpProperties;
+	QCloudProperties nlpProperties;
 	
 	@Autowired
 	NlpApiV3 nlpApi;

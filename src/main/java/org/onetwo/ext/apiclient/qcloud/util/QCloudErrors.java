@@ -13,6 +13,8 @@ public class QCloudErrors {
 	@AllArgsConstructor
 	static public enum SmsErrors implements ErrorType {
 		ERR_MOBILE_LENTH("手机号错误"),
+		ERR_NOT_SUPPORT_BATCH("不支持批量发送"),
+		ERR_NOT_IN_WHITE_BLACK_LIST("手机号码没有配置黑/白名单"),
 		ERR_SMS_SEND("发送短信错误");
 		
 		@Getter
@@ -24,6 +26,7 @@ public class QCloudErrors {
 		}
 		
 	}
+	
 	
 	private QCloudErrors() {
 	}

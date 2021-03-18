@@ -15,6 +15,7 @@ import org.onetwo.common.md.CodeType;
 import org.onetwo.common.md.Hashs;
 import org.onetwo.common.spring.SpringUtils;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClientResponseHandler;
+import org.onetwo.ext.apiclient.wxpay.vo.response.OrderNotifyResponse;
 import org.onetwo.ext.apiclient.wxpay.vo.response.OrderQueryResponse;
 import org.springframework.core.io.Resource;
 
@@ -71,6 +72,26 @@ public class WechatSignsTest {
 		String sign = WechatSigns.signMd5(signKey, orderQuery);
 		System.out.println("sign:" + sign);
 		assertThat(sign).isEqualTo("CE80E9FBE27E59F793F8DC44FFE449DF");
+	}
+	
+
+	@Test
+	public void testWxpayNotifyOrderSign() throws Exception {
+		Resource res = SpringUtils.classpath("data/wxpay_notify.xml");
+		String xml = FileUtils.readAsString(res.getInputStream());
+		System.out.println("xml:" + xml);
+		
+		Map<String, Object> dataMap = JacksonXmlMapper.defaultMapper().fromXml(xml, Map.class);
+		WechatApiClientResponseHandler handler = new WechatApiClientResponseHandler();
+		OrderNotifyResponse orderNotifyResponse = (OrderNotifyResponse)handler.handleResponseMap(dataMap, OrderNotifyResponse.class);
+		System.out.println("OrderNotifyResponse:" + orderNotifyResponse);
+
+		String signKey = "test";
+		
+		String sourceString = WechatSigns.convertToSourceString(signKey, orderNotifyResponse);
+		System.out.println("sourceString:" + sourceString);
+		
+		WechatSigns.checkSign(orderNotifyResponse, signKey, orderNotifyResponse.getSign(), orderNotifyResponse.getSignType());
 	}
 
 }

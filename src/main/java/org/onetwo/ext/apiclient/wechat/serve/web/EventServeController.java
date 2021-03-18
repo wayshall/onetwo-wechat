@@ -8,7 +8,7 @@ import org.onetwo.common.spring.copier.UnderlineInitBinder;
 import org.onetwo.ext.apiclient.wechat.serve.dto.MessageContext;
 import org.onetwo.ext.apiclient.wechat.serve.dto.MessageParam;
 import org.onetwo.ext.apiclient.wechat.serve.dto.ServeAuthParam;
-import org.onetwo.ext.apiclient.wechat.serve.spi.MessageRouterService;
+import org.onetwo.ext.apiclient.wechat.serve.service.WechatMessageRouterService;
 import org.onetwo.ext.apiclient.wechat.serve.spi.ServeEndpoint;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class EventServeController implements UnderlineInitBinder, ServeEndpoint 
 	protected Logger logger = JFishLoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
-	private MessageRouterService messageRouterService;
+	private WechatMessageRouterService messageRouterService;
 
 	@Override
 	public String auth(@PathVariable("clientId") String clientId, @Valid ServeAuthParam authRequet){

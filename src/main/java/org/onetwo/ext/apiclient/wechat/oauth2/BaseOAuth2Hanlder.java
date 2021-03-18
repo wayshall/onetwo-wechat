@@ -20,7 +20,6 @@ import org.onetwo.ext.apiclient.wechat.oauth2.request.OAuth2Request;
 import org.onetwo.ext.apiclient.wechat.serve.dto.WechatOAuth2Context;
 import org.onetwo.ext.apiclient.wechat.serve.dto.WechatOAuth2Context.DataWechatOAuth2Context;
 import org.onetwo.ext.apiclient.wechat.serve.dto.WechatOAuth2Context.RequestWechatOAuth2Context;
-import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatOAuth2UserRepository;
 import org.onetwo.ext.apiclient.wechat.serve.spi.WechatOAuth2UserRepository.OAuth2User;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
@@ -30,6 +29,9 @@ import org.slf4j.Logger;
 import org.springframework.web.method.HandlerMethod;
 
 /**
+ * 微信公众号网页授权文档：
+ * https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html
+ * 
  * @author wayshall
  * <br/>
  */
@@ -39,10 +41,10 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 	protected final Logger logger = JFishLoggerFactory.getLogger(this.getClass());
 	
 	private WechatOAuth2UserRepository<U> wechatOAuth2UserRepository;
-	private WechatConfigProvider wechatConfigProvider;
 	
 	
-	static public WechatConfig getWechatConfig(WechatConfigProvider wechatConfigProvider, WechatOAuth2Context contex) {
+	abstract protected WechatConfig getWechatConfig(WechatOAuth2Context contex);
+	/*protected WechatConfig getWechatConfig(WechatOAuth2Context contex) {
 		WechatConfig wechatConfig = wechatConfigProvider.getWechatConfig(contex.getAppid());
 		if (wechatConfig==null) {
 			throw new WechatException("wechet config not found!").put("wechatConfigProvider", wechatConfigProvider)
@@ -52,7 +54,7 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 			throw new WechatException("config not found, error appid: " + contex.getAppid());
 		}
 		return wechatConfig;
-	}
+	}*/
 
 	protected boolean refreshToken(WechatOAuth2Context context, U userInfo){
 		/*if(userInfo.isRefreshTokenExpired()){
@@ -89,25 +91,54 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 		}
 	}
 	
+	/****
+	 * code为空会跳转到微信oauth授权
+	 * 授权成功归后，重新跳回这里，code不为空，根据code获取用户信息
+	 * @author weishao zeng
+	 * @param oauth2Request
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	public U handleInController(OAuth2Request oauth2Request, HttpServletRequest request, HttpServletResponse response) {
-		DataWechatOAuth2Context context = new DataWechatOAuth2Context(oauth2Request, request);
-		context.setWechatConfig(getWechatConfig(wechatConfigProvider, context));
+		DataWechatOAuth2Context ctx = new DataWechatOAuth2Context(oauth2Request, request);
+		return handleInController(ctx, response);
+	}
+	
+	protected U handleInController(DataWechatOAuth2Context context, HttpServletResponse response) {
+		context.setWechatConfig(getWechatConfig(context));
 		this.checkWechatBrowser(context);
 		
 		U userInfo = null;
-		if (StringUtils.isNotBlank(oauth2Request.getCode())) {
-			if(!wechatOAuth2UserRepository.checkOauth2State(context)){
-				throw new WechatException(WechatClientErrors.OAUTH2_STATE_ERROR);
-			}
-			userInfo = getOAuth2UserInfo(context);
-		} else if (StringUtils.isNotBlank(oauth2Request.getState())) {
+		if (StringUtils.isNotBlank(context.getCode())) {
+			// 第二步：登录
+			userInfo = loginByCode(context);
+		} else if (StringUtils.isNotBlank(context.getState())) {
 			//只有state参数，表示拒绝
 			throw new WechatException(WechatClientErrors.OAUTH2_REJECTED);
 		} else {
-			// 跳转
+			// 第一步：跳转
 			this.redirect(context, response);
 		}
 		
+		return userInfo;
+	}
+	
+	/***
+	 * 从oauth服务器跳回后，验证state，并通过code获取用户信息
+	 * @author weishao zeng
+	 * @param context
+	 * @return
+	 */
+	public U loginByCode(DataWechatOAuth2Context context) {
+		if (context.getWechatConfig()==null) {
+			context.setWechatConfig(getWechatConfig(context));
+		}
+		if(!wechatOAuth2UserRepository.checkOauth2State(context)){
+			// 默认为 HttpRequestStoreService 实现，基于redis
+			throw new WechatException(WechatClientErrors.OAUTH2_STATE_ERROR);
+		}
+		U userInfo = fetchOAuth2UserInfoFromServerWithCode(context);
 		return userInfo;
 	}
 	
@@ -121,7 +152,7 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 	 */
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handler) {
 		RequestWechatOAuth2Context context = new RequestWechatOAuth2Context(request);
-		context.setWechatConfig(getWechatConfig(wechatConfigProvider, context));
+		context.setWechatConfig(getWechatConfig(context));
 		
 		this.checkWechatBrowser(context);
 		
@@ -141,7 +172,7 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 			if(!wechatOAuth2UserRepository.checkOauth2State(context)){
 				throw new WechatException(WechatClientErrors.OAUTH2_STATE_ERROR);
 			}
-			U userInfo = getOAuth2UserInfo(context);
+			U userInfo = fetchOAuth2UserInfoFromServerWithCode(context);
 			this.wechatOAuth2UserRepository.saveCurrentUser(context, userInfo, false);
 			return true;
 		} else {
@@ -149,7 +180,13 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 		}
 	}
 	
-	abstract protected U getOAuth2UserInfo(WechatOAuth2Context context);
+	/***
+	 * 通过code从oauth服务器获取用户信息
+	 * @author weishao zeng
+	 * @param context
+	 * @return
+	 */
+	abstract public U fetchOAuth2UserInfoFromServerWithCode(WechatOAuth2Context context);
 
 	protected boolean handleWithoutCodeRequest(WechatOAuth2Context context, HttpServletResponse response, HandlerMethod handler) {
 		ErrorType error = null;
@@ -170,12 +207,21 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 		return false;
 	}
 	
-	protected void redirect(WechatOAuth2Context context, HttpServletResponse response) {
+	/****
+	 * 
+ * 微信公众号网页授权文档：
+ * https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html
+	 * @author weishao zeng
+	 * @param context
+	 * @param response
+	 */
+	public void redirect(WechatOAuth2Context context, HttpServletResponse response) {
 		try {
 //			AuthorizeData authorizeData = getWechatAuthorizeData(request);
 			String authorizeUrl = getAuthorizeUrl(context);
-			if(logger.isInfoEnabled()){
-				logger.info("redirect to authorizeUrl : {}", authorizeUrl);
+			boolean isDeubg = context.getWechatConfig()!=null && context.getWechatConfig().isDebug();
+			if(isDeubg){
+				logger.info("[wechat oauth2] redirect to authorizeUrl : {}", authorizeUrl);
 			}
 			response.sendRedirect(authorizeUrl);
 		} catch (IOException e) {
@@ -187,29 +233,48 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 		WechatConfig wechatConfig = context.getWechatConfig();
 		
 		String redirectUrl = buildRedirectUrl(context);
+		// trim一下，避免隐藏空格
+		redirectUrl = StringUtils.trim(redirectUrl);
 		
 		String state = wechatOAuth2UserRepository.generateAndStoreOauth2State(context);
 //		AuthorizeData authorize = wechatOauth2Client.createAuthorize(redirectUrl, state);
-		AuthorizeData authorize = createAuthorize(wechatConfig, redirectUrl, state);
-		return authorize.toAuthorizeUrl();
+		AuthorizeData authorize = createAuthorize(wechatConfig.getAppid(), wechatConfig.getOauth2Scope(), redirectUrl, state);
+		String authorizeUrl = authorize.toAuthorizeUrl();
+		boolean isDeubg = context.getWechatConfig()!=null && context.getWechatConfig().isDebug();
+		if (isDeubg) {
+			logger.info("[wechat oauth2] authorizeUrl url: {}", authorizeUrl);
+		}
+		return authorizeUrl;
 	}
 	
 	protected String buildRedirectUrl(WechatOAuth2Context context){
-		String redirectUrl = context.getWechatConfig().getOauth2RedirectUri();
+		boolean isDeubg = context.getWechatConfig()!=null && context.getWechatConfig().isDebug();
+		String redirectUrl = context.getRedirectUrl();
+		if (StringUtils.isBlank(redirectUrl)) {
+			redirectUrl = context.getWechatConfig().getOauth2RedirectUri();
+			// 从配置文件里获取的url需要encode一下
+//			redirectUrl = LangUtils.encodeUrl(redirectUrl);
+		}
+		if (isDeubg) {
+			logger.info("[wechat oauth2] wechat config redirect url: {}", redirectUrl);
+		}
 		//check redirectUri?
 		if(StringUtils.isBlank(redirectUrl)){
 //			throw new ApiClientException(WechatClientError.OAUTH2_REDIRECT_URL_BLANK);
 			HttpServletRequest request = context.getRequest();
 			redirectUrl = RequestUtils.buildFullRequestUrl(request.getScheme(), request.getServerName(), 80, request.getRequestURI(), request.getQueryString());
+			if (isDeubg) {
+				logger.info("[wechat oauth2] use default redirect url: {}", redirectUrl);
+			}
 		}
 		redirectUrl = LangUtils.encodeUrl(redirectUrl);
 		return redirectUrl;
 	}
 	
-	static public AuthorizeData createAuthorize(WechatConfig wechatConfig, String redirectUrl, String state){
+	static public AuthorizeData createAuthorize(String appid, String scope, String redirectUrl, String state){
 		return AuthorizeData.builder()
-							.appid(wechatConfig.getAppid())
-							.scope(wechatConfig.getOauth2Scope())
+							.appid(appid)
+							.scope(scope)
 							.responseType(Oauth2Keys.RESPONSE_TYPE_CODE)
 							.state(state)
 							.redirectUri(redirectUrl)
@@ -222,14 +287,6 @@ abstract public class BaseOAuth2Hanlder<U extends OAuth2User> {
 
 	public void setWechatOAuth2UserRepository(WechatOAuth2UserRepository<U> wechatOAuth2UserRepository) {
 		this.wechatOAuth2UserRepository = wechatOAuth2UserRepository;
-	}
-
-	public WechatConfigProvider getWechatConfigProvider() {
-		return wechatConfigProvider;
-	}
-
-	public void setWechatConfigProvider(WechatConfigProvider wechatConfigProvider) {
-		this.wechatConfigProvider = wechatConfigProvider;
 	}
 
 }

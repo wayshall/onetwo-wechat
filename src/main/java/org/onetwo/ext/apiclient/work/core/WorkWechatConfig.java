@@ -20,6 +20,7 @@ import lombok.Data;
 public class WorkWechatConfig {
 
 	public static final String CONFIG_PREFIX  = "work-wechat";
+	public static final String ENABLED_KEY  = CONFIG_PREFIX + ".enabled";
 	
 	protected Map<String, DefaultWechatConfig> apps = Maps.newLinkedHashMap();
 

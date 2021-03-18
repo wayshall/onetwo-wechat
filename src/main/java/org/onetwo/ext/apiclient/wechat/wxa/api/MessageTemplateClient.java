@@ -35,6 +35,7 @@ public interface MessageTemplateClient {
 	
 
 	/***
+	 * 提示：argument invalid! data.thing1.value invalid 时，可能对应的参数字符超过长度（20个字符）了
 	 * 发送订阅式模板消息，用于取代以前基于formid的模板消息
 	 * @author weishao zeng
 	 * @param accessToken
@@ -46,7 +47,7 @@ public interface MessageTemplateClient {
 	
 	/****
 	 * 下发小程序和公众号统一的服务消息
-	 * https://developers.weixin.qq.com/miniprogram/dev/api/sendUniformMessage.html
+	 * https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/uniform-message/uniformMessage.send.html
 	 * 
 	 * @author weishao zeng
 	 * @param accessToken 小程序的accesstoken，不能使用公众号的，因为这个接口的初衷就是想大家在开发小程序的时候，如果要发送公众号消息直接使用这个接口就可以了，无需再去调用公众号的模板消息接口。

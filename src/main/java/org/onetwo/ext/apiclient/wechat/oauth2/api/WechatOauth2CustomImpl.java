@@ -16,7 +16,7 @@ public class WechatOauth2CustomImpl implements WechatOauth2Custom {
 	@Override
 	public AuthorizeData createAuthorize(String redirectUrl, String state){
 		WechatConfig wechatConfig = Springs.getInstance().getBean(WechatConfig.class, true);
-		return WechatOAuth2Hanlder.createAuthorize(wechatConfig, redirectUrl, state);
+		return WechatOAuth2Hanlder.createAuthorize(wechatConfig.getAppid(), wechatConfig.getOauth2Scope(), redirectUrl, state);
 	}
 
 }

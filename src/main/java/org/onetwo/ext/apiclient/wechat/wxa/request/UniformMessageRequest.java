@@ -2,6 +2,8 @@ package org.onetwo.ext.apiclient.wechat.wxa.request;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotBlank;
 import org.onetwo.ext.apiclient.wechat.message.request.MpTemplateMessge;
 
@@ -33,11 +35,16 @@ public class UniformMessageRequest implements Serializable {
 	@NotBlank
 	private String touser;
 
-	@NotBlank
+	/***
+	 * 小程序模板消息相关的信息，可以参考小程序模板消息接口; 有此节点则优先发送小程序模板消息
+	 */
 	@JsonProperty("weapp_template_msg")
-	private MessageTemplateRequest weappTemplateMsg;
+	private WxappMessage weappTemplateMsg;
 
-	@NotBlank
+	/***
+	 * 公众号模板消息相关的信息，可以参考公众号模板消息接口；有此节点并且没有weapp_template_msg节点时，发送公众号模板消息
+	 */
+	@NotNull
 	@JsonProperty("mp_template_msg")
 	private MpTemplateMessgeVO mpTemplateMsg;
 
