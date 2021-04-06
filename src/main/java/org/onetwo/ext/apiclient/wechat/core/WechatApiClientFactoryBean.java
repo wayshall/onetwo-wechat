@@ -22,11 +22,9 @@ import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenType;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClientFactoryBean.WechatMethod;
 import org.onetwo.ext.apiclient.wechat.utils.WechatClientErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants;
-import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.WechatConfigKeys;
 import org.onetwo.ext.apiclient.wechat.utils.WechatErrors;
 import org.onetwo.ext.apiclient.wechat.utils.WechatException;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -54,8 +52,8 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 //																});
 
 
-	@Value(WechatConfigKeys.ACCESSTOKEN_AUTO_REMOVE_KEY)
-	private boolean autoRemove;
+//	@Value(WechatConfigKeys.ACCESSTOKEN_AUTO_REMOVE_KEY)
+	private boolean autoRemove = true;
 	
 	private AccessTokenType accessTokenType;
 //	private AccessTokenServiceStrategy accessTokenServiceStrategy;
@@ -122,7 +120,7 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 			try {
 				return super.doInvoke(invocation, invokeMethod);
 			} catch (ApiClientException e) {
-				if(isNeedToRemoveToken(e.getCode())){
+				if(isNeedToRemoveToken(e)){
 					if (invokeMethod.getAccessTokenParameter().isPresent()) {
 						Optional<AccessTokenInfo> at = invokeMethod.getAccessToken(invocation.getArguments());
 						if(at.isPresent() && StringUtils.isNotBlank(at.get().getAppid())){
@@ -138,7 +136,7 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 						logger.warn("accesstoken is invalid and AccessTokenInfo not found");
 					}
 				} else {
-					logger.warn("accesstoken autoRemove has disabled");
+					logger.warn("not removable token exception...");
 				}
 				throw e;
 			}
@@ -159,16 +157,16 @@ public class WechatApiClientFactoryBean extends AbstractApiClientFactoryBean<Wec
 		 * @param errorCode
 		 * @return
 		 */
-		protected boolean isNeedToRemoveToken(String errorCode) {
+		protected boolean isNeedToRemoveToken(ApiClientException e) {
 			if (removableTokenError!=null) {
-				return removableTokenError.isNeedToRemoveToken(errorCode);
+				return removableTokenError.isNeedToRemoveToken(e);
 			} else {
-				return WechatErrors.isNeedToRemoveToken(errorCode);
+				return WechatErrors.isNeedToRemoveToken(e.getCode());
 			}
 		}
 		
 		/***
-		 * 处理自动删除……
+		 * 处理自动删除accessToken，并重试
 		 * @author weishao zeng
 		 * @param invocation
 		 * @param invokeMethod
