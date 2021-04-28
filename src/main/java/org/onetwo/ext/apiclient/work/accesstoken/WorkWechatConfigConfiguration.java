@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableConfigurationProperties({DefaultWechatConfig.class, WorkWechatConfig.class})
 @ConditionalOnMissingBean(WorkConfigProvider.class)
-@ConditionalOnProperty(value = WorkWechatConfig.ENABLED_KEY, matchIfMissing = true)
+@ConditionalOnProperty(value = WorkWechatConfig.ENABLED_KEY, matchIfMissing = false)
 public class WorkWechatConfigConfiguration {
 
 	@Autowired
