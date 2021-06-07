@@ -1,16 +1,18 @@
 package org.onetwo.ext.apiclient.wechat.basic.response;
 
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author wayshall
  * <br/>
  */
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper=false)
 @Data
 @ToString
 public class AccessTokenResponse extends WechatResponse {
@@ -19,4 +21,23 @@ public class AccessTokenResponse extends WechatResponse {
 	
 	@JsonProperty("expires_in")
 	private int expiresIn;
+	
+
+	private Date expireAt;
+	
+
+	public AccessTokenResponse() {
+		super();
+	}
+
+	public AccessTokenResponse(String accessToken, int expiresIn) {
+		super();
+		this.accessToken = accessToken;
+		this.expiresIn = expiresIn;
+	}
+
+	public int getExpiresIn() {
+		return expiresIn;
+	}
+
 }

@@ -10,7 +10,7 @@ import org.springframework.retry.annotation.EnableRetry;
  */
 
 @SpringBootApplication
-@EnableQCloudService(nlp=true)
+@EnableQCloudService(nlp=true, live=true)
 @EnableRetry(proxyTargetClass=true)
 public class QCloudBaseTestStarter {
 

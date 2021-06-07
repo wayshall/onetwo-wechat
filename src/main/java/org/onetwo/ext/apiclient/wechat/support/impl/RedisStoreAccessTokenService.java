@@ -51,7 +51,12 @@ public class RedisStoreAccessTokenService extends AbstractAccessTokenService {
 	protected void saveNewToken(AccessTokenInfo newToken, AppidRequest appidRequest) {
 		BoundValueOperations<String, AccessTokenInfo> opt = boundValueOperationsByAppId(appidRequest);
 		long expired = newToken.getExpiresIn();
-		opt.set(newToken, expired, TimeUnit.SECONDS);
+		if (expired > 0) {
+			opt.set(newToken, expired, TimeUnit.SECONDS);
+		} else {
+			// 不过期
+			opt.set(newToken);
+		}
 	}
 
 

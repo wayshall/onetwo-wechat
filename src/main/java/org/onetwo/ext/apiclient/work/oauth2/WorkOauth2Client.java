@@ -37,7 +37,7 @@ public interface WorkOauth2Client {
 		@JsonProperty("DeviceId")
 		private String deviceId;
 		@JsonProperty("OpenId")
-		private String OopenId;
+		private String openId;
 	}
 
 }

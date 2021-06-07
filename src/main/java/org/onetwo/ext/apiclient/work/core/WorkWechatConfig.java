@@ -17,16 +17,13 @@ import lombok.Data;
  */
 @ConfigurationProperties(WorkWechatConfig.CONFIG_PREFIX)
 @Data
-public class WorkWechatConfig /*extends DefaultWechatConfig*/ {
+public class WorkWechatConfig {
 
 	public static final String CONFIG_PREFIX  = "work-wechat";
+	public static final String ENABLED_KEY  = CONFIG_PREFIX + ".enabled";
 	
-	private Map<String, DefaultWechatConfig> apps = Maps.newLinkedHashMap();
-	
-	public WechatConfig getDefaultWechatConfig() {
-		return LangUtils.getFirst(apps);
-	}
-	
+	protected Map<String, DefaultWechatConfig> apps = Maps.newLinkedHashMap();
+
 	/****
 	 * 首先根据appid匹配配置，如果找不到，则把appid参数当做名称查找
 	 * 
@@ -45,6 +42,15 @@ public class WorkWechatConfig /*extends DefaultWechatConfig*/ {
 		.orElseGet(() -> this.getWechatConfigByName(appid));
 	}
 	
+	
+	public WechatConfig getWechatConfigByName(String appName) {
+		return this.apps.get(appName);
+	}
+	
+	public WechatConfig getDefaultWechatConfig() {
+		return LangUtils.getFirst(apps);
+	}
+	
 	public WechatConfig getWechatConfigByAgentId(String agentId) {
 		return this.apps.entrySet().stream().filter(entry -> {
 			return agentId.equals(entry.getValue().getAgentId().toString());
@@ -54,8 +60,5 @@ public class WorkWechatConfig /*extends DefaultWechatConfig*/ {
 		.orElseGet(() -> this.getWechatConfigByName(agentId));
 	}
 	
-	public WechatConfig getWechatConfigByName(String appName) {
-		return this.apps.get(appName);
-	}
 }
 

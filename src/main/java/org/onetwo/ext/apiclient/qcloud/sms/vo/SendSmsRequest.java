@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 public class SendSmsRequest {
 	String nationCode;
 	String phoneNumber;
+	String[] phoneNumbers;
 	int templId;
 	List<String> params;
 	/***
@@ -28,7 +29,7 @@ public class SendSmsRequest {
 	
 	@Builder
 	public SendSmsRequest(String nationCode, String phoneNumber, int templId, String sign,
-			String extend, String ext, List<String> params) {
+			String extend, String ext, List<String> params, String[] phoneNumbers) {
 		super();
 		if (StringUtils.isBlank(nationCode)) {
 			this.nationCode = "86";
@@ -41,6 +42,7 @@ public class SendSmsRequest {
 		this.sign = sign;
 		this.extend = extend;
 		this.ext = ext;
+		this.phoneNumbers = phoneNumbers;
 	}
 	
 }

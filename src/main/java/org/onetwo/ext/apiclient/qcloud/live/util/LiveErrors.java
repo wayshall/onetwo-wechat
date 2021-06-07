@@ -4,12 +4,30 @@ import java.util.stream.Stream;
 
 import org.onetwo.common.exception.ErrorType;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * @author wayshall
  * <br/>
  */
 public class LiveErrors {
 
+	@AllArgsConstructor
+	static public enum LiveBizErrors implements ErrorType {
+		ERR_LIVE_STREAM_EXPIRED("直播流有效时间错误，不能少于当前时间"),
+		ERR_LIVE_INVOKE_REMOTE("调用接口出错");
+		
+		@Getter
+		final private String errorMessage;
+
+		@Override
+		public String getErrorCode() {
+			return name();
+		}
+		
+	}
+	
 	public static enum CutoffErrors implements ErrorType {
 
 		DELETE_STREAM(1, "[recv rtmp deleteStream]主播端主动断流"),

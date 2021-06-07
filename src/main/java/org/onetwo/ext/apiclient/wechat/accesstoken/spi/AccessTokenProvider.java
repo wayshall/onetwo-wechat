@@ -2,7 +2,7 @@ package org.onetwo.ext.apiclient.wechat.accesstoken.spi;
 
 import java.util.List;
 
-import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 
 /**
@@ -11,9 +11,20 @@ import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
  */
 public interface AccessTokenProvider {
 	
-	AccessTokenResponse getAccessToken(GetAccessTokenRequest request);
+//	AccessTokenResponse getAccessToken(GetAccessTokenRequest request);
+	AccessTokenResponse getAccessToken(AppidRequest request);
 	
-	List<AccessTokenTypes> getAccessTokenTypes();
+	/****
+	 * 默认实现是直接重新获取accessToken
+	 * @author weishao zeng
+	 * @param request
+	 * @return
+	 */
+	default AccessTokenResponse refreshAccessToken(AppidRequest request) {
+		return getAccessToken(request);
+	}
+	
+	List<AccessTokenType> getAccessTokenTypes();
 	
 }
 

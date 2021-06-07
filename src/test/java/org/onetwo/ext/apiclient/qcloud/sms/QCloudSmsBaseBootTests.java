@@ -3,7 +3,6 @@ package org.onetwo.ext.apiclient.qcloud.sms;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.onetwo.ext.apiclient.qcloud.TestSmsProperties;
 import org.onetwo.ext.apiclient.qcloud.sms.QCloudSmsBaseBootTests.QCloudSmsTestStarter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

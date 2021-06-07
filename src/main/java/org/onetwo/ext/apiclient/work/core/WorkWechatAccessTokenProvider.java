@@ -3,12 +3,12 @@ package org.onetwo.ext.apiclient.work.core;
 import java.util.Arrays;
 import java.util.List;
 
-import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenProvider;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenType;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenTypes;
 import org.onetwo.ext.apiclient.wechat.basic.response.AccessTokenResponse;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
-import org.onetwo.ext.apiclient.wechat.serve.spi.WechatConfigProvider;
 import org.onetwo.ext.apiclient.work.basic.api.WorkTokenClient;
 import org.onetwo.ext.apiclient.work.basic.api.WorkTokenClient.GetTokenRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +29,18 @@ public class WorkWechatAccessTokenProvider implements AccessTokenProvider {
 	@Autowired
 	private WorkTokenClient workTokenClient;
 	@Autowired
-	private WechatConfigProvider wechatConfigProvider;
+	private WorkConfigProvider workConfigProvider;
 
 	@Override
-	public AccessTokenResponse getAccessToken(GetAccessTokenRequest request) {
-//		String corpid = WorkWechatUtils.splitCorpid(request.getAppid());
+	public AccessTokenResponse getAccessToken(AppidRequest request) {
 		String corpid = request.getAppid();
-		WechatConfig wechatConfig = wechatConfigProvider.getWechatConfig(corpid);
+		WechatConfig wechatConfig = null;
+		if (request.getAgentId()!=null) {
+			wechatConfig = workConfigProvider.getWechatConfig(request.getAgentId().toString());
+		}
+		if (wechatConfig==null) {
+			wechatConfig = workConfigProvider.getWechatConfig(corpid);
+		}
 		GetTokenRequest getTokenRequest = GetTokenRequest.builder()
 														.corpid(corpid)
 //														.corpsecret(request.getSecret())
@@ -49,7 +54,7 @@ public class WorkWechatAccessTokenProvider implements AccessTokenProvider {
 	}
 	
 	@Override
-	public List<AccessTokenTypes> getAccessTokenTypes() {
+	public List<AccessTokenType> getAccessTokenTypes() {
 		return Arrays.asList(AccessTokenTypes.WORK_WECHAT, AccessTokenTypes.CONTACTS);
 	}
 

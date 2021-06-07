@@ -2,6 +2,8 @@ package org.onetwo.ext.apiclient.wechat.event;
 
 import java.util.Map;
 
+import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
+import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -35,6 +37,15 @@ public class WechatEventBus implements InitializingBean {
 
 	final protected EventBus getEventBus() {
 		return eventBus;
+	}
+	
+
+	public void postRefreshedEvent(AppidRequest appidRequest, AccessTokenInfo newToken) {
+		AccessTokenRefreshedEvent event = new AccessTokenRefreshedEvent();
+		event.setAccessToken(newToken.getAccessToken());
+		event.setAgentId(appidRequest.getAgentId());
+		event.setAppid(newToken.getAppid());
+		post(event);
 	}
 
 }

@@ -20,7 +20,10 @@ public enum WechatPayErrors implements ErrorType {
 	ORDER_NOT_EXIST("ORDERNOTEXIST", "此交易订单号不存在"),
 	SYSTEM_ERROR("SYSTEMERROR", "系统错误"),
 	ORDERPAID("ORDERPAID", "该订单已支付"),
-	
+	ORDERCLOSED("ORDERCLOSED", "订单已关闭，无法重复关闭"),
+	SIGNERROR("SIGNERROR", "参数签名结果不正确"),
+	REQUIRE_POST_METHOD("REQUIRE_POST_METHOD", "未使用post传递参数"),
+	XML_FORMAT_ERROR("XML_FORMAT_ERROR", "XML格式错误"),
 	;
 
 	private static final Map<String, WechatPayErrors> ERROR_MAP;

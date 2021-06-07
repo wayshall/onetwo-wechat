@@ -21,10 +21,17 @@ public class WorkQRConnectHandler extends WorkWechatOAuth2Hanlder {
 	}
 	
 	protected String buildRedirectUrl(HttpServletRequest request, WechatConfig wechatConfig){
+		boolean isDeubg = wechatConfig!=null && wechatConfig.isDebug();
 		String redirectUrl = wechatConfig.getQrConnectRedirectUri();
+		if (isDeubg) {
+			logger.info("[wechat oauth2] wechat config QrConnect Redirect url: {}", redirectUrl);
+		}
 		//check redirectUri?
 		if(StringUtils.isBlank(redirectUrl)){
 			redirectUrl = RequestUtils.buildFullRequestUrl(request.getScheme(), request.getServerName(), 80, request.getRequestURI(), request.getQueryString());
+			if (isDeubg) {
+				logger.info("[wechat oauth2] use default QrConnect Redirect url: {}", redirectUrl);
+			}
 		}
 		redirectUrl = LangUtils.encodeUrl(redirectUrl);
 		return redirectUrl;
@@ -42,6 +49,10 @@ public class WorkQRConnectHandler extends WorkWechatOAuth2Hanlder {
 													"redirectUri", redirectUrl, 
 													"state", state
 												);
+		boolean isDeubg = context.getWechatConfig()!=null && context.getWechatConfig().isDebug();
+		if (isDeubg) {
+			logger.info("[wechat oauth2] QrConnect authorizeUrl url: {}", authorizeUrl);
+		}
 		return authorizeUrl;
 	}
 	

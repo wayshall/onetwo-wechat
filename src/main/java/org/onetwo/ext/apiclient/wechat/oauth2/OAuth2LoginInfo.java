@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OAuth2UserInfo implements Serializable, OAuth2User {
+public class OAuth2LoginInfo implements Serializable, OAuth2User {
 	/***
 	 * 
 	 */
@@ -39,16 +39,7 @@ public class OAuth2UserInfo implements Serializable, OAuth2User {
 	private String openid;
 	private String scope;
 	
-
-	private String nickname;
-	private String sex;
-	private String province;
-	private String city;
-	private String country;
-	private String headimgurl;
-	private List<String> privilege;
-	private String unionid;
-	
+	private OAuth2UserInfoBody userinfo;
 
 	private Long accessAt;
 	private Long refreshAt;
@@ -67,6 +58,18 @@ public class OAuth2UserInfo implements Serializable, OAuth2User {
 		}
 		long duration = System.currentTimeMillis() - refreshAt;
 		return TimeUnit.MILLISECONDS.toDays(duration) > 30;
+	}
+	
+	@Data
+	public static class OAuth2UserInfoBody {
+		private String nickname;
+		private Integer sex;
+		private String province;
+		private String city;
+		private String country;
+		private String headimgurl;
+		private List<String> privilege;
+		private String unionid;
 	}
 	
 }

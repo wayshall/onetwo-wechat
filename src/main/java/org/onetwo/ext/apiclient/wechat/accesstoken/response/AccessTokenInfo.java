@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import org.onetwo.common.date.DateUtils;
+import org.onetwo.common.date.NiceDate;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -26,41 +28,57 @@ public class AccessTokenInfo implements Serializable {
 	private String accessToken;
 	private Date updateAt = null;
 	private long expiresIn;
+	private Date expireAt;
 	/***
 	 * 企业微信有用
 	 */
 	private Long agentId;
+	
+//	private boolean autoAppendToUrl = true;
+	private AccessTokenType accessTokenType;
 
-	/*public AccessTokenInfo(String accessToken) {
-		this(null, null, accessToken, -1, null);
-	}*/
+	/***
+	 * 必须有默认构造函数，json反序列化时需要
+	 */
+	public AccessTokenInfo() {
+	}
 	
 	@Builder
-	public AccessTokenInfo(String appid, Long agentId, String accessToken, long expiresIn, Date updateAt) {
+	public AccessTokenInfo(String appid, Long agentId, String accessToken, long expiresIn, Date updateAt, Date expireAt) {
 		super();
 		this.accessToken = accessToken;
 //		this.expireAt = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(expiresIn-SHORTER_EXPIRE_TIME_IN_SECONDS);
 		//expiresIn 调用方已减
 		this.expiresIn = expiresIn;
 		this.updateAt = updateAt;
+		if (expireAt!=null) {
+			this.expireAt = expireAt;
+		}else if (updateAt!=null) {
+			this.expireAt = DateUtils.addSeconds(updateAt, (int)expiresIn);
+		}
 		this.appid = appid;
 		this.agentId = agentId;
 	}
 
 	@JsonIgnore
 	public Date getExpireAt() {
-		if (updateAt==null) {
-			return null;
-		}
-		Date expireAt = DateUtils.addSeconds(updateAt, Long.valueOf(expiresIn).intValue());
+//		if (updateAt==null) {
+//			return null;
+//		}
+//		Date expireAt = DateUtils.addSeconds(updateAt, Long.valueOf(expiresIn).intValue());
 		return expireAt;
 	}
 	
 	@JsonIgnore
 	public boolean isExpired(){
-		if(updateAt==null || expiresIn == -1){
-			//没有设置则不过期
-			return false;
+		Date expireAt = getExpireAt();
+		if (expireAt==null) {
+			if(updateAt!=null && expiresIn > 0){
+				expireAt = NiceDate.New(updateAt).nextSecond((int)expiresIn).getTime();
+			} else {
+				// 如果时间相关的字段为null，则视为不会过期
+				return false;
+			}
 		}
 		long current = System.currentTimeMillis();
 		return current > getExpireAt().getTime();
@@ -91,9 +109,12 @@ public class AccessTokenInfo implements Serializable {
 	public String getAccessToken() {
 		return accessToken;
 	}
+	
+	public long getExpiresIn() {
+		return expiresIn;
+	}
 
-
-	public AccessTokenInfo() {
-		super();
+	public void setExpiresIn(long expiresIn) {
+		this.expiresIn = expiresIn;
 	}
 }

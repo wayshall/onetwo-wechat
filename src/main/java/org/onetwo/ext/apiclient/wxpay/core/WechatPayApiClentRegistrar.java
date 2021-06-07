@@ -3,11 +3,10 @@ package org.onetwo.ext.apiclient.wxpay.core;
 import java.util.List;
 
 import org.onetwo.common.apiclient.RestExecutorFactory;
-import org.onetwo.common.apiclient.impl.AbstractApiClentRegistrar;
+import org.onetwo.common.apiclient.simple.GenericApiClentRegistrar;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClientFactoryBean;
 import org.onetwo.ext.apiclient.wxpay.EnableWechatPayClient;
 import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
@@ -17,7 +16,7 @@ import org.springframework.util.ClassUtils;
  * @author wayshall
  * <br/>
  */
-public class WechatPayApiClentRegistrar extends AbstractApiClentRegistrar<EnableWechatPayClient, WechatPayApiClient> {
+public class WechatPayApiClentRegistrar extends GenericApiClentRegistrar<EnableWechatPayClient, WechatPayApiClient> {
 	
 	private WechatPayApiClientResponseHandler responseHandler = new WechatPayApiClientResponseHandler();
 
@@ -33,6 +32,7 @@ public class WechatPayApiClentRegistrar extends AbstractApiClentRegistrar<Enable
 		BeanDefinitionBuilder definition = BeanDefinitionBuilder.genericBeanDefinition(WechatApiClientFactoryBean.class);
 
 		definition.addPropertyValue("accessTokenType", null);
+//		definition.addPropertyValue("accessTokenAppendToUrl", true);
 		definition.addPropertyValue("url", resolveUrl(attributes));
 		definition.addPropertyValue("path", resolvePath(attributes));
 //		definition.addPropertyValue("name", name);
@@ -41,7 +41,7 @@ public class WechatPayApiClentRegistrar extends AbstractApiClentRegistrar<Enable
 		definition.addPropertyReference("restExecutor", RestExecutorFactory.REST_EXECUTOR_FACTORY_BEAN_NAME);
 //		definition.addPropertyValue("decode404", attributes.get("decode404"));
 //		definition.addPropertyValue("fallback", attributes.get("fallback"));
-		definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
+//		definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
 		
 		return definition;
 	}

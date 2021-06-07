@@ -15,6 +15,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
+ * @deprecated SubscribeMessageRequest
  * @author wayshall
  * <br/>
  */
@@ -23,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Deprecated
 public class MessageTemplateRequest implements Serializable {
 
 	@NotBlank

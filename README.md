@@ -14,7 +14,7 @@
 
 
 ## maven
-当前snapshot版本：4.7.3-SNAPSHOT
+当前snapshot版本：4.7.4-SNAPSHOT
 
 若使用snapshot版本，请添加snapshotRepository仓储：
 ```xml
@@ -33,7 +33,7 @@
 <dependency>
     <groupId>org.onetwo4j</groupId>
     <artifactId>onetwo-wechat</artifactId>
-    <version>4.7.3-SNAPSHOT</version>
+    <version>4.7.4-SNAPSHOT</version>
 </dependency>
 
 ```

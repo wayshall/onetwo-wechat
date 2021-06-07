@@ -1,9 +1,12 @@
 package org.onetwo.ext.apiclient.qcloud.sms;
 
+import org.onetwo.ext.apiclient.qcloud.QCloudProperties;
 import org.onetwo.ext.apiclient.qcloud.sms.service.SmsService;
 import org.onetwo.ext.apiclient.qcloud.sms.service.impl.QCloudSmsService;
 import org.onetwo.ext.apiclient.qcloud.sms.service.impl.RetryableSmsService;
+import org.onetwo.ext.apiclient.qcloud.sms.service.impl.TencentSdkSmsService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -16,13 +19,21 @@ import org.springframework.retry.annotation.RetryConfiguration;
  * <br/>
  */
 @Configuration
-@EnableConfigurationProperties(SmsProperties.class)
-@ConditionalOnProperty(name=SmsProperties.ENABLE_KEY, matchIfMissing=true)
+@EnableConfigurationProperties({QCloudProperties.class, SmsProperties.class})
 public class SmsConfiguration {
 	
 	@Bean
-	public SmsService smsService(SmsProperties smsProperties) {
+	@ConditionalOnProperty(name=SmsProperties.ENABLE_KEY, matchIfMissing=false)
+	public SmsService qcloudSmsService(SmsProperties smsProperties) {
 		SmsService smsService = new QCloudSmsService(smsProperties);
+		return smsService;
+	}
+	
+	@Bean
+	@ConditionalOnProperty(name= {QCloudProperties.ENABLE_KEY}, matchIfMissing=false)
+	@ConditionalOnMissingBean(SmsService.class)
+	public SmsService tencentSdkSmsService(SmsProperties smsProperties) {
+		SmsService smsService = new TencentSdkSmsService(smsProperties);
 		return smsService;
 	}
 	
@@ -30,8 +41,8 @@ public class SmsConfiguration {
 	@Primary
 	@ConditionalOnClass(RetryConfiguration.class)
 	@ConditionalOnProperty(name=SmsProperties.RETRYABLE_ENABLE, havingValue="true", matchIfMissing=true)
-	public SmsService retryableSmsService(SmsProperties smsProperties) {
-		RetryableSmsService retryable = new RetryableSmsService(smsService(smsProperties));
+	public SmsService retryableSmsService(SmsService smsService) {
+		RetryableSmsService retryable = new RetryableSmsService(smsService);
 		return retryable;
 	}
 

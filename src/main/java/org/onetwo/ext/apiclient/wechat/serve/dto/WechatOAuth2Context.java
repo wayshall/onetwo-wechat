@@ -25,6 +25,8 @@ public interface WechatOAuth2Context {
 	HttpServletRequest getRequest();
 	WechatConfig getWechatConfig();
 	
+	String getRedirectUrl();
+	
 
 	default boolean isSsnUserInfoScope(){
 		WechatConfig wechatConfig = getWechatConfig();
@@ -44,7 +46,8 @@ public interface WechatOAuth2Context {
 		
 
 		public String getAppid() {
-			return request.getParameter("appid");
+			String appid = request.getParameter("appid");
+			return appid;
 		}
 		
 		public String getCode() {
@@ -54,7 +57,6 @@ public interface WechatOAuth2Context {
 		public String getState() {
 			return request.getParameter(Oauth2ClientKeys.PARAMS_STATE);
 		}
-
 
 		@Override
 		public HttpServletRequest getRequest() {
@@ -66,7 +68,10 @@ public interface WechatOAuth2Context {
 		public WechatConfig getWechatConfig() {
 			return wechatConfig;
 		}
-		
+
+		public String getRedirectUrl() {
+			return request.getParameter("redirectUrl");
+		}
 		
 	}
 	
@@ -85,7 +90,8 @@ public interface WechatOAuth2Context {
 		
 
 		public String getAppid() {
-			return oauth2Request.getAppid();
+			String appid = oauth2Request.getAppid();
+			return appid;
 		}
 		
 		public String getCode() {
@@ -96,11 +102,15 @@ public interface WechatOAuth2Context {
 			return oauth2Request.getState();
 		}
 
+		public String getRedirectUrl() {
+			return oauth2Request.getRedirectUrl();
+		}
 
 		@Override
 		public HttpServletRequest getRequest() {
 			return request;
 		}
+		
 		@Override
 		public WechatConfig getWechatConfig() {
 			return wechatConfig;

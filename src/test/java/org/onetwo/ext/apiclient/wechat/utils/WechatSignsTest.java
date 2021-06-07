@@ -15,10 +15,34 @@ import org.onetwo.common.md.CodeType;
 import org.onetwo.common.md.Hashs;
 import org.onetwo.common.spring.SpringUtils;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClientResponseHandler;
+import org.onetwo.ext.apiclient.wxpay.vo.response.OrderNotifyResponse;
 import org.onetwo.ext.apiclient.wxpay.vo.response.OrderQueryResponse;
 import org.springframework.core.io.Resource;
 
 public class WechatSignsTest {
+	
+	@Test
+	public void testCheckWithSha1() {
+		String signKey = "HyVFkGl5F5OQWJZZaNzBBg==";
+		String rawData = "{\"nickName\":\"Band\",\"gender\":1,\"language\":\"zh_CN\",\"city\":\"Guangzhou\",\"province\":\"Guangdong\",\"country\":\"CN\",\"avatarUrl\":\"http://wx.qlogo.cn/mmopen/vi_32/1vZvI39NWFQ9XM4LtQpFrQJ1xlgZxx3w7bQxKARol6503Iuswjjn6nIGBiaycAjAtpujxyzYsrztuuICqIM5ibXQ/0\"}";
+		String hashData = "75e81ceda165f4ffa64f4068af58c64b8f54b88c";
+		boolean res = WechatSigns.checkWithSha1(signKey, rawData, hashData);
+		assertThat(res).isTrue();
+
+		
+		signKey = "LT6ujkSocI+dVZU3SVRRSw==";
+		rawData = "{\"nickName\":\"Jpeng41\",\"avatarUrl\":\"http://sf1-ttcdn-tos.pstatp.com/img/mosaic-legacy/3791/5070639578~120x256.image\",\"gender\":0,\"city\":\"\",\"province\":\"\",\"country\":\"中国\",\"language\":\"\"}";
+		hashData = "f47945b505af11b96b1fe989d4d1e4537786ad8c";
+		res = WechatSigns.checkWithSha1(signKey, rawData, hashData);
+		assertThat(res).isTrue();
+		
+		
+		signKey = "9BJzsuFvPNLcub00/jRi4Q==";
+		rawData = "{\"nickName\":\"用户7642462741864\",\"avatarUrl\":\"http://sf1-ttcdn-tos.pstatp.com/img/mosaic-legacy/3795/3044413937~120x256.image\",\"gender\":0,\"city\":\"\",\"province\":\"\",\"country\":\"中国\",\"language\":\"\"}";
+		hashData = "7684e5fa81e2d82831a81eaf20de11a79ea45be8";
+		res = WechatSigns.checkWithSha1(signKey, rawData, hashData);
+		assertThat(res).isTrue();
+	}
 	
 	@Test
 	public void testSign() {
@@ -48,6 +72,26 @@ public class WechatSignsTest {
 		String sign = WechatSigns.signMd5(signKey, orderQuery);
 		System.out.println("sign:" + sign);
 		assertThat(sign).isEqualTo("CE80E9FBE27E59F793F8DC44FFE449DF");
+	}
+	
+
+	@Test
+	public void testWxpayNotifyOrderSign() throws Exception {
+		Resource res = SpringUtils.classpath("data/wxpay_notify.xml");
+		String xml = FileUtils.readAsString(res.getInputStream());
+		System.out.println("xml:" + xml);
+		
+		Map<String, Object> dataMap = JacksonXmlMapper.defaultMapper().fromXml(xml, Map.class);
+		WechatApiClientResponseHandler handler = new WechatApiClientResponseHandler();
+		OrderNotifyResponse orderNotifyResponse = (OrderNotifyResponse)handler.handleResponseMap(dataMap, OrderNotifyResponse.class);
+		System.out.println("OrderNotifyResponse:" + orderNotifyResponse);
+
+		String signKey = "test";
+		
+		String sourceString = WechatSigns.convertToSourceString(signKey, orderNotifyResponse);
+		System.out.println("sourceString:" + sourceString);
+		
+		WechatSigns.checkSign(orderNotifyResponse, signKey, orderNotifyResponse.getSign(), orderNotifyResponse.getSignType());
 	}
 
 }

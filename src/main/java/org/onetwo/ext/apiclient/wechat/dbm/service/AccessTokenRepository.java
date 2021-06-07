@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.onetwo.common.db.spi.BaseEntityManager;
 import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
+import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AppCacheKeyGenerator;
 import org.onetwo.ext.apiclient.wechat.dbm.entity.WxAccessTokenEntity;
-import org.onetwo.ext.apiclient.wechat.utils.WechatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +19,9 @@ public class AccessTokenRepository {
 	
 	@Autowired
 	private BaseEntityManager baseEntityManager;
+	
+	@Autowired
+	private AppCacheKeyGenerator appCacheKeyGenerator;
 	
 	@Transactional(readOnly=true)
 	public Optional<AccessTokenInfo> findByAppid(AppidRequest appidRequest) {
@@ -54,7 +57,7 @@ public class AccessTokenRepository {
 	}
 	
 	private String getId(AppidRequest appidRequest) {
-		return WechatUtils.getAppidKey(appidRequest);
+		return appCacheKeyGenerator.generated(appidRequest);
 	}
 
 }

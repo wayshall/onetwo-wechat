@@ -16,5 +16,10 @@ public class LivingResult implements Serializable {
 	String playRtmp;
 	String playFlv;
 	String playHls;
+	
+	/***
+	 * 低延时播放地址（播放会有更低的时延，主要用于实时音视频和连麦场景）
+	 */
+//	String accelerateUrl;
 
 }
