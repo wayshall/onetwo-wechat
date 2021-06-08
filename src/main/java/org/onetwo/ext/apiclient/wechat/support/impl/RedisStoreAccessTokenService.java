@@ -7,7 +7,7 @@ import org.onetwo.boot.module.redis.RedisUtils;
 import org.onetwo.ext.apiclient.wechat.accesstoken.request.AppidRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.SerializationException;
@@ -23,7 +23,7 @@ public class RedisStoreAccessTokenService extends AbstractAccessTokenService {
 //	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
 	@Autowired
-	private JedisConnectionFactory jedisConnectionFactory;
+	private RedisConnectionFactory jedisConnectionFactory;
 	
 	
 	@Override
