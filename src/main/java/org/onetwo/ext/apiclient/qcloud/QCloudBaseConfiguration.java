@@ -16,6 +16,7 @@ import com.tencentcloudapi.common.Credential;
  */
 @Configuration
 @EnableConfigurationProperties(QCloudProperties.class)
+@ConditionalOnClass(name=QCloudProperties.QCLOUD_CREDENTIAL_CLASS)
 public class QCloudBaseConfiguration {
 	
 	@Configuration
