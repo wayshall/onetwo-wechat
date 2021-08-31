@@ -5,8 +5,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.onetwo.boot.core.web.mvc.interceptor.MvcInterceptorAdapter;
+import org.onetwo.common.web.userdetails.GenericUserDetail;
 import org.onetwo.common.web.userdetails.SessionUserManager;
-import org.onetwo.common.web.userdetails.UserDetail;
 import org.onetwo.ext.apiclient.wechat.event.WechatEventBus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
@@ -25,7 +25,7 @@ public class CollectFormIdMvcInterceptor extends MvcInterceptorAdapter {
 	
 	private static final String FORM_ID = "collectFormId";
 	@Autowired
-	private SessionUserManager<UserDetail> sessionUserManager;
+	private SessionUserManager<GenericUserDetail<?>> sessionUserManager;
 	@Autowired
 	private WechatEventBus wechatEventBus;
 
@@ -47,7 +47,7 @@ public class CollectFormIdMvcInterceptor extends MvcInterceptorAdapter {
 			return ;
 		}
 		
-		UserDetail userDetail = (UserDetail)sessionUserManager.getCurrentUser();
+		GenericUserDetail<?> userDetail = sessionUserManager.getCurrentUser();
 		CollectFormIdEvent collectFormIdEvent = new CollectFormIdEvent(userDetail, formId, System.currentTimeMillis());
 		this.wechatEventBus.post(collectFormIdEvent);
 	}
