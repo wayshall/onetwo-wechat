@@ -13,12 +13,17 @@ import lombok.Data;
 public class SmsCodeProperties {
 	
 	public static final String PREFIX = "qcloud.smsCode";
-//	public static final String ENABLE_KEY = PREFIX + ".enabled";
+	/***
+	 * 恢复使用 qcloud.smsCode.enabled 来控制是否启用sms相关服务，因为有时候 template-id 并不是静态配置的，不是使用通过此属性来判断是否启用
+	 */
+	public static final String ENABLE_KEY = PREFIX + ".enabled";
 	
 	/***
 	 * 配置 qcloud.smsCode.template-id 启动
+	 * 
 	 */
-	public static final String SMS_SERVICE_ENABLE_KEY = PREFIX + ".template-id";
+	// @Deprecated 有时候 template-id 并不是静态配置的，不是使用通过此属性来判断是否启用
+//	public static final String SMS_SERVICE_ENABLE_KEY = PREFIX + ".template-id";
 
 	private String storeKey = "smsCode";
 	private int codeLength = 4;
