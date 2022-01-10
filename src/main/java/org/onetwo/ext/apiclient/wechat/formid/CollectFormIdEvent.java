@@ -6,22 +6,22 @@ package org.onetwo.ext.apiclient.wechat.formid;
 
 import java.io.Serializable;
 
-import org.onetwo.common.web.userdetails.UserDetail;
+import org.onetwo.common.web.userdetails.GenericUserDetail;
 
 @SuppressWarnings("serial")
 public class CollectFormIdEvent implements Serializable {
-	private UserDetail loginUser;
+	private GenericUserDetail<?> loginUser;
     private String formId;
     private Long timestamp;
     
-	public CollectFormIdEvent(UserDetail loginUser, String formId, Long timestamp) {
+	public CollectFormIdEvent(GenericUserDetail<?> loginUser, String formId, Long timestamp) {
 		super();
 		this.formId = formId;
 		this.timestamp = timestamp;
 		this.loginUser = loginUser;
 	}
 
-	public UserDetail getLoginUser() {
+	public GenericUserDetail<?> getLoginUser() {
 		return loginUser;
 	}
 
