@@ -1,11 +1,11 @@
 package org.onetwo.ext.apiclient.wechat.accesstoken.request;
 
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
+
 import org.onetwo.common.annotation.IgnoreField;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenType;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenTypes;
 
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 //@AllArgsConstructor
 //@Builder
 public class AppidRequest {
-	
+
 	@NotBlank
 	private String appid;
 	/***
