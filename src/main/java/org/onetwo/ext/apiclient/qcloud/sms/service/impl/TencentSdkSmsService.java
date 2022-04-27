@@ -13,7 +13,6 @@ import org.onetwo.ext.apiclient.qcloud.sms.service.SmsService;
 import org.onetwo.ext.apiclient.qcloud.sms.vo.SendSmsRequest;
 import org.onetwo.ext.apiclient.qcloud.util.QCloudErrors.SmsErrors;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.util.Assert;
 
 import com.google.common.collect.Lists;
@@ -27,7 +26,6 @@ import com.tencentcloudapi.sms.v20190711.models.SendStatus;
  * @author weishao zeng
  * <br/>
  */
-@Primary
 public class TencentSdkSmsService extends BaseSmsService implements InitializingBean, SmsService {
 	
 	private SmsClient smsClient;

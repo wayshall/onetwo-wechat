@@ -2,7 +2,6 @@ package org.onetwo.ext.apiclient.qcloud.sms;
 
 import org.onetwo.ext.apiclient.qcloud.QCloudProperties;
 import org.onetwo.ext.apiclient.qcloud.sms.service.SmsService;
-import org.onetwo.ext.apiclient.qcloud.sms.service.impl.QCloudSmsService;
 import org.onetwo.ext.apiclient.qcloud.sms.service.impl.RetryableSmsService;
 import org.onetwo.ext.apiclient.qcloud.sms.service.impl.TencentSdkSmsService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -22,15 +21,15 @@ import org.springframework.retry.annotation.RetryConfiguration;
 @EnableConfigurationProperties({QCloudProperties.class, SmsProperties.class})
 public class SmsConfiguration {
 	
-	@Bean
-	@ConditionalOnProperty(name=SmsProperties.ENABLE_KEY, matchIfMissing=false)
-	public SmsService qcloudSmsService(SmsProperties smsProperties) {
-		SmsService smsService = new QCloudSmsService(smsProperties);
-		return smsService;
-	}
+//	@Bean
+//	@ConditionalOnProperty(name=SmsProperties.ENABLE_KEY, matchIfMissing=false)
+//	public SmsService qcloudSmsService(SmsProperties smsProperties) {
+//		SmsService smsService = new QCloudSmsService(smsProperties);
+//		return smsService;
+//	}
 	
 	@Bean
-	@ConditionalOnProperty(name= {QCloudProperties.ENABLE_KEY}, matchIfMissing=false)
+	@ConditionalOnProperty(name= {SmsProperties.ENABLE_KEY}, matchIfMissing=false)
 	@ConditionalOnMissingBean(SmsService.class)
 	public SmsService tencentSdkSmsService(SmsProperties smsProperties) {
 		SmsService smsService = new TencentSdkSmsService(smsProperties);
@@ -40,9 +39,9 @@ public class SmsConfiguration {
 	@Bean
 	@Primary
 	@ConditionalOnClass(RetryConfiguration.class)
-	@ConditionalOnProperty(name=SmsProperties.RETRYABLE_ENABLE, havingValue="true", matchIfMissing=true)
-	public SmsService retryableSmsService(SmsService smsService) {
-		RetryableSmsService retryable = new RetryableSmsService(smsService);
+	@ConditionalOnProperty(name=SmsProperties.RETRYABLE_ENABLE, havingValue="true", matchIfMissing=false)
+	public SmsService retryableSmsService(SmsProperties smsProperties) {
+		RetryableSmsService retryable = new RetryableSmsService(tencentSdkSmsService(smsProperties));
 		return retryable;
 	}
 

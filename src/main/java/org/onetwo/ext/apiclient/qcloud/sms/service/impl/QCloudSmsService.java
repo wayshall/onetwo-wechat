@@ -18,6 +18,7 @@ import com.github.qcloudsms.SmsSingleSenderResult;
 /**
  * https://cloud.tencent.com/document/product/382/3771#.E7.9F.AD.E4.BF.A1.E5.8F.91.E9.80.81.E9.94.99.E8.AF.AF.E7.A0.81
  * @author weishao zeng
+ * @deprecated use TencentSdkSmsService instead of
  * <br/>
  */
 public class QCloudSmsService extends BaseSmsService implements InitializingBean, SmsService {
