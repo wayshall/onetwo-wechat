@@ -23,13 +23,13 @@ public class RedisStoreAccessTokenService extends AbstractAccessTokenService {
 //	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
 	@Autowired
-	private RedisConnectionFactory jedisConnectionFactory;
+	private RedisConnectionFactory redisConnectionFactory;
 	
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		super.afterPropertiesSet();
-		this.redisTemplate = RedisUtils.createJsonValueRedisTemplate(jedisConnectionFactory);
+		this.redisTemplate = RedisUtils.createJsonValueRedisTemplate(redisConnectionFactory);
 		Assert.notNull(redisTemplate, "redisTemplate not found");
 //		Assert.notNull(wechatConfig, "wechat config can not be null");
 	}
