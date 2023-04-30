@@ -53,6 +53,9 @@ public class TencentSdkSmsService extends BaseSmsService implements Initializing
 	 */
 	@Override
 	public void sendTemplateMessage(SendSmsRequest request) {
+		if (request.getTemplId()<=0) {
+			throw new ServiceException(SmsErrors.ERR_SMS_TEMPLATE).put("templateId", request.getTemplId());
+		}
 		List<String> phoneNumbers = null;
 		if (!LangUtils.isEmpty(request.getPhoneNumbers())) {
 			phoneNumbers = new ArrayList<>(request.getPhoneNumbers().length);
