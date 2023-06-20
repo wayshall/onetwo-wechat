@@ -102,7 +102,6 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	
 	@Override
 	public AccessTokenInfo getOrRefreshAccessToken(GetAccessTokenRequest request) {
-		this.removeByAppid(request);
 		AppidRequest appidRequest = new AppidRequest(request.getAppid(), request.getAgentId(), request.getAccessTokenType());
 		Optional<AccessTokenInfo> atOpt = getAccessToken(appidRequest);
 		
