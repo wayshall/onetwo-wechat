@@ -42,11 +42,11 @@ public class MultiAppConfig {
 		.findFirst()
 		.map(entry -> (WechatConfig)entry.getValue())
 //		.orElse(null);
-		.orElseGet(() -> this.getWechatConfigByName(appid));
+		.orElseGet(() -> this.getConfigByAppName(appid));
 	}
 	
 	
-	public WechatConfig getWechatConfigByName(String appName) {
+	public WechatConfig getConfigByAppName(String appName) {
 		return this.apps.get(appName);
 	}
 }

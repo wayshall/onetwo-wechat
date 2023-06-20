@@ -28,7 +28,7 @@ public class LicensePlateResponse extends BaiduBaseResponse {
 		/***
 		 * 前7个数字为车牌中每个字符的置信度，第8个数字为平均置信度，区间为0-1
 		 */
-		List<String> probability;
+		List<Double> probability;
 		
 		/****
 		 * 返回文字外接多边形顶点位置
