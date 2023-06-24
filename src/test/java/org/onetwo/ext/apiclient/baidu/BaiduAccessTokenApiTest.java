@@ -13,6 +13,7 @@ import org.onetwo.ext.apiclient.baidu.core.BaiduAccessTokenProvider.BaiduAccessT
 import org.onetwo.ext.apiclient.baidu.core.BaiduAppConfig;
 import org.onetwo.ext.apiclient.baidu.request.LicensePlateRequest;
 import org.onetwo.ext.apiclient.baidu.response.LicensePlateResponse;
+import org.onetwo.ext.apiclient.baidu.util.BaiduUtils;
 import org.onetwo.ext.apiclient.wechat.accesstoken.request.GetAccessTokenRequest;
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenService;
@@ -55,6 +56,19 @@ public class BaiduAccessTokenApiTest extends BaiduBaseBootTests {
 		LicensePlateRequest request = new LicensePlateRequest();
 		request.setUrl("https://static.ai-parking.cn/parkingiot/roadtooth/8b05d030-10d2-4c6c-b17f-1ed11f5346ce.jpg");
 		LicensePlateResponse res = ocrClient.licensePlate(accessToken, request);
+		System.out.println("res: " + res);
+	}
+
+	@Test
+	public void testLicensePlateWithImage() {
+		LicensePlateRequest request = new LicensePlateRequest();
+		request.setImage(BaiduUtils.encodeImage("/Users/way/mydev/测试数据/车位设备/image1.png"));
+		LicensePlateResponse res = ocrClient.licensePlate(accessToken, request);
+		System.out.println("res: " + res);
+		
+		request = new LicensePlateRequest();
+		request.setImage(BaiduUtils.encodeImage("/Users/way/mydev/测试数据/车位设备/image2.png"));
+		res = ocrClient.licensePlate(accessToken, request);
 		System.out.println("res: " + res);
 	}
 	
