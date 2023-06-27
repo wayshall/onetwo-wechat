@@ -5,8 +5,10 @@ import org.onetwo.common.utils.StringUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
+import lombok.ToString;
 
 @Data
+@ToString
 public class BaiduBaseResponse {
 	/***
 	 * 唯一的log id，用于问题定位

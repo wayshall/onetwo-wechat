@@ -3,9 +3,11 @@ package org.onetwo.ext.apiclient.baidu.request;
 import org.onetwo.common.annotation.FieldName;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class LicensePlateRequest {
+@EqualsAndHashCode(callSuper = true)
+public class LicensePlateRequest extends BaiduBaseRequest {
 	
 	/****
 	 * 和url二选一

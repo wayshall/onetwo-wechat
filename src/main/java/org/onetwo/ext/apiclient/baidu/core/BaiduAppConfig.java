@@ -4,6 +4,9 @@ import org.onetwo.ext.apiclient.wechat.accesstoken.MultiAppConfig;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
+ * baidu: 
+ * 	   default: 
+ * 			appid: appsecrect
  * @author weishao zeng
  * <br/>
  */

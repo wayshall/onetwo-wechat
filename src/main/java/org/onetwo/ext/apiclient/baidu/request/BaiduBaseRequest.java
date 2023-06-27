@@ -1,5 +1,8 @@
 package org.onetwo.ext.apiclient.baidu.request;
 
+import org.onetwo.common.apiclient.ApiClientMethodConfig;
+import org.onetwo.common.apiclient.ApiClientMethodConfigProvider;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,5 +12,12 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-public class BaiduBaseRequest {
+public class BaiduBaseRequest implements ApiClientMethodConfigProvider {
+	ApiClientMethodConfig apiConfig;
+
+	@Override
+	public ApiClientMethodConfig toApiClientMethodConfig() {
+		return apiConfig;
+	}
+	
 }

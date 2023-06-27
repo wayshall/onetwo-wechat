@@ -16,5 +16,6 @@ public @interface BaiduApiClient {
 	String name() default "";
 	String path() default "";
 	String url() default "";
+//	boolean throwIfError() default true;
 //	AccessTokenTypes accessTokenType() default YlyAccessTokenTypes.YI_LIAN_YUN;
 }

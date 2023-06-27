@@ -23,5 +23,5 @@ public interface OcrClient {
 	 */
 	@PostMapping(value = "/rest/2.0/ocr/v1/license_plate", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	LicensePlateResponse licensePlate(AccessTokenInfo accessToken, LicensePlateRequest request);
-
+	
 }
