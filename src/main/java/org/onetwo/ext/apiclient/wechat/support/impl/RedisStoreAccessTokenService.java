@@ -21,16 +21,20 @@ import org.springframework.util.Assert;
 public class RedisStoreAccessTokenService extends AbstractAccessTokenService {
 	
 //	@Autowired
-	private RedisTemplate<String, Object> redisTemplate;
+	private RedisTemplate<String, AccessTokenInfo> redisTemplate;
 	@Autowired
 	private RedisConnectionFactory redisConnectionFactory;
+//	@Autowired
+//	private SimpleRedisOperationService redisOperationService;
 	
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		super.afterPropertiesSet();
 		this.redisTemplate = RedisUtils.createJsonValueRedisTemplate(redisConnectionFactory);
-		Assert.notNull(redisTemplate, "redisTemplate not found");
+//		redisTemplate.afterPropertiesSet();
+//		this.redisTemplate = RedisUtils.createJsonRedisTemplate(redisConnectionFactory);
+//		Assert.notNull(redisTemplate, "redisTemplate not found");
 //		Assert.notNull(wechatConfig, "wechat config can not be null");
 	}
 	
@@ -68,7 +72,7 @@ public class RedisStoreAccessTokenService extends AbstractAccessTokenService {
 			logger.debug("get accessToken from redis server...");
 		}
 		try {
-			at = opt.get();
+			at = (AccessTokenInfo)opt.get();
 		} catch (SerializationException e) {
 			//序列化错误的时候直接移除
 			logger.error("getAccessToken error: " + e.getMessage());
@@ -82,8 +86,7 @@ public class RedisStoreAccessTokenService extends AbstractAccessTokenService {
 		return boundValueOperationsByAppId(redisTemplate, appidRequest);
 	}
 
-	@SuppressWarnings("unchecked")
-	private BoundValueOperations<String, AccessTokenInfo> boundValueOperationsByAppId(RedisTemplate<String, ?> redisTemplate, AppidRequest appidRequest){
+	private BoundValueOperations<String, AccessTokenInfo> boundValueOperationsByAppId(RedisTemplate<String, AccessTokenInfo> redisTemplate, AppidRequest appidRequest){
 		String key = getAppidKey(appidRequest);
 		BoundValueOperations<String, AccessTokenInfo> opt = (BoundValueOperations<String, AccessTokenInfo>)redisTemplate.boundValueOps(key);
 		return opt;

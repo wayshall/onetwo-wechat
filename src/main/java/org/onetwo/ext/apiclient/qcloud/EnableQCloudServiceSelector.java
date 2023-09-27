@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.onetwo.common.apiclient.impl.RestExecutorConfiguration;
 import org.onetwo.common.spring.context.AbstractImportSelector;
+import org.onetwo.ext.apiclient.qcloud.aiart.AiartConfiguration;
 import org.onetwo.ext.apiclient.qcloud.live.QCloudLiveConfiguration;
 import org.onetwo.ext.apiclient.qcloud.nlp.NlpApiClentRegistrar;
 import org.onetwo.ext.apiclient.qcloud.nlp.NlpConfiguration;
@@ -26,6 +27,8 @@ public class EnableQCloudServiceSelector extends AbstractImportSelector<EnableQC
 		classNames.add(QCloudBaseConfiguration.class.getName());
 		
 		classNames.add(RestExecutorConfiguration.class.getName());
+		
+		classNames.add(AiartConfiguration.class.getName());
 
 		addIfModuleEnabled(attributes, "nlp", () -> {
 			classNames.add(NlpApiClentRegistrar.class.getName());

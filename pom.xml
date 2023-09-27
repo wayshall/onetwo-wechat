@@ -84,7 +84,7 @@
 		    <artifactId>tencentcloud-sdk-java</artifactId>
 		    <!-- go to https://search.maven.org/search?q=tencentcloud-sdk-java and get the latest version. -->
 		    <!-- 请到https://search.maven.org/search?q=tencentcloud-sdk-java查询最新版本 -->
-		    <version>3.1.67</version>
+		    <version>3.1.852</version>
 		    <optional>true</optional>
 		</dependency>
 		
