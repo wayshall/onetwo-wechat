@@ -27,7 +27,7 @@ public class RequestSignInterceptor implements ApiInterceptor {
 												.request(request)
 												.method(ctx.getInvokeMethod().getRequestMethod().name())
 												.host(domain)
-												.path(ctx.getInvokeMethod().getPath())
+												.path(ctx.getInvokeMethod().getApiRequestPath(args))
 												.build();
 			String signature = AuthSigns.signHmac(properties.getSecretKey(), signData);
 			request.setSignature(signature);
