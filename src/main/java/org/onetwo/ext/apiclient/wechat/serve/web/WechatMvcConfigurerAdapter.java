@@ -8,14 +8,14 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * @author wayshall
  * <br/>
  */
 @ConditionalOnProperty(value = WechatConfig.ENABLED_KEY, matchIfMissing = true)
-public class WechatMvcConfigurerAdapter extends WebMvcConfigurerAdapter {
+public class WechatMvcConfigurerAdapter implements WebMvcConfigurer {
 
 	@Autowired
 	WechatConfig wechatConfig;

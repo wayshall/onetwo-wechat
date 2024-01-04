@@ -8,7 +8,7 @@ import org.onetwo.ext.apiclient.qcloud.aiart.vo.AiartTxt2ImageResponse;
 import org.onetwo.ext.apiclient.qcloud.auth.CredentialProvider;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
+import org.onetwo.common.utils.Assert;
 
 import com.tencentcloudapi.aiart.v20221229.AiartClient;
 import com.tencentcloudapi.aiart.v20221229.models.TextToImageRequest;

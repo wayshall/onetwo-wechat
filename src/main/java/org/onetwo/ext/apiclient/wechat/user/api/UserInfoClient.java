@@ -2,7 +2,7 @@ package org.onetwo.ext.apiclient.wechat.user.api;
 
 import java.util.List;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -2,7 +2,7 @@ package org.onetwo.ext.apiclient.wechat.message.request;
 
 import java.util.LinkedHashMap;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

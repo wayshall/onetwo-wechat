@@ -2,7 +2,7 @@ package org.onetwo.ext.apiclient.work.contact.response;
 
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.onetwo.ext.apiclient.wechat.basic.response.WechatResponse;

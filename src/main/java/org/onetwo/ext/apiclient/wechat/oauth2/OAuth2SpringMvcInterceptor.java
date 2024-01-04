@@ -1,17 +1,17 @@
 package org.onetwo.ext.apiclient.wechat.oauth2;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * @author wayshall
  * <br/>
  */
-public class OAuth2SpringMvcInterceptor extends HandlerInterceptorAdapter {
+public class OAuth2SpringMvcInterceptor implements HandlerInterceptor {
 	
 	@Autowired
 	private WechatOAuth2Hanlder wechatOAuth2Hanlder;

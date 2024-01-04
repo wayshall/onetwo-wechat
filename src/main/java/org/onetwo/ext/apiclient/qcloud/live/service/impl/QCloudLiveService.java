@@ -20,7 +20,7 @@ import org.onetwo.ext.apiclient.qcloud.live.util.LiveUtils;
 import org.onetwo.ext.apiclient.qcloud.live.util.LiveUtils.PlayTypes;
 import org.onetwo.ext.apiclient.qcloud.live.vo.LivingResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
+import org.onetwo.common.utils.Assert;
 
 import com.google.common.collect.Maps;
 import com.tencentcloudapi.live.v20180801.models.DescribeLiveStreamStateRequest;

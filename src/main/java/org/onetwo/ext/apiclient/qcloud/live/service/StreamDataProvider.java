@@ -6,7 +6,7 @@ import lombok.Data;
 
 import org.onetwo.ext.apiclient.qcloud.live.LiveProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
+import org.onetwo.common.utils.Assert;
 
 /**
  * @author wayshall

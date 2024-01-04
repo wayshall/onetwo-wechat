@@ -2,7 +2,7 @@ package org.onetwo.ext.apiclient.work.message.request;
 
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import org.onetwo.common.jackson.serializer.ListToStringSerializer.ListToVerticalJoinerStringSerializer;
 import org.onetwo.common.jackson.serializer.StringToListDerializer.VerticalSplitorToListDerializer;

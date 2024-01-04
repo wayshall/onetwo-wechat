@@ -1,6 +1,6 @@
 package org.onetwo.ext.apiclient.qcloud.live.api.message;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import org.onetwo.ext.apiclient.qcloud.live.util.LiveUtils.EventTypes;
 

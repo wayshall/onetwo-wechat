@@ -1,6 +1,6 @@
 package org.onetwo.ext.apiclient.wechat.serve.dto;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 import org.onetwo.ext.apiclient.wechat.oauth2.request.OAuth2Request;

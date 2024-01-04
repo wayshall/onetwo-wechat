@@ -1,6 +1,6 @@
 package org.onetwo.ext.apiclient.wechat.wxa.api;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.onetwo.common.apiclient.annotation.ResponseHandler;
 import org.onetwo.ext.apiclient.wechat.accesstoken.response.AccessTokenInfo;

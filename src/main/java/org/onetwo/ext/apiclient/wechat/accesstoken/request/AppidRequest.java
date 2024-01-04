@@ -1,6 +1,6 @@
 package org.onetwo.ext.apiclient.wechat.accesstoken.request;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 import org.onetwo.common.annotation.IgnoreField;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenType;

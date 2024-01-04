@@ -2,7 +2,7 @@ package org.onetwo.ext.apiclient.wechat.wxa.request;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.onetwo.ext.apiclient.wechat.message.request.MpTemplateMessge;

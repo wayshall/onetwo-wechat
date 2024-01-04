@@ -1,6 +1,6 @@
 package org.onetwo.ext.apiclient.work.serve.web;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.onetwo.common.log.JFishLoggerFactory;
 import org.onetwo.common.spring.copier.UnderlineInitBinder;

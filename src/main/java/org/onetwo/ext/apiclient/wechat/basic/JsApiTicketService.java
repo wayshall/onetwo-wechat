@@ -23,7 +23,7 @@ import org.onetwo.ext.apiclient.work.basic.response.JsApiSignatureResponse;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
+import org.onetwo.common.utils.Assert;
 
 import com.google.common.eventbus.Subscribe;
 

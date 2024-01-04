@@ -2,7 +2,7 @@ package org.onetwo.ext.apiclient.wxpay.vo.request;
 
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;

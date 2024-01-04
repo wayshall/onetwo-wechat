@@ -13,7 +13,7 @@ import org.onetwo.ext.apiclient.qcloud.smscode.SmsCodeProperties;
 import org.onetwo.ext.apiclient.qcloud.smscode.service.SmsCodeExceptionTranslator;
 import org.onetwo.ext.apiclient.qcloud.smscode.service.SmsCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
+import org.onetwo.common.utils.Assert;
 
 /**
  * @author weishao zeng

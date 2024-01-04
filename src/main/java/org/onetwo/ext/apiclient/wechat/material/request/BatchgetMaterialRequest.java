@@ -2,7 +2,7 @@ package org.onetwo.ext.apiclient.wechat.material.request;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * @author LeeKITMAN

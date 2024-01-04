@@ -1,6 +1,6 @@
 package org.onetwo.ext.apiclient.wechat.serve.web;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.onetwo.boot.core.web.api.WebApi;
 import org.onetwo.common.log.JFishLoggerFactory;

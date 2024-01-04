@@ -1,6 +1,6 @@
 package org.onetwo.ext.apiclient.wechat.wxa.request;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import lombok.Builder;
 import lombok.Data;

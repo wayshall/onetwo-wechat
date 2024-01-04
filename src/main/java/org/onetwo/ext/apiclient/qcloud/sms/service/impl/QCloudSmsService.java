@@ -10,7 +10,7 @@ import org.onetwo.ext.apiclient.qcloud.sms.service.SmsService;
 import org.onetwo.ext.apiclient.qcloud.sms.vo.SendSmsRequest;
 import org.onetwo.ext.apiclient.qcloud.util.QCloudErrors.SmsErrors;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.util.Assert;
+import org.onetwo.common.utils.Assert;
 
 import com.github.qcloudsms.SmsSingleSender;
 import com.github.qcloudsms.SmsSingleSenderResult;
