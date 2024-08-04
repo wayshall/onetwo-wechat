@@ -1,6 +1,6 @@
 package org.onetwo.ext.apiclient.work.basic.request;
 
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 import org.onetwo.common.annotation.IgnoreField;
 
 import lombok.AllArgsConstructor;

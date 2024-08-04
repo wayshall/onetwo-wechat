@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 import org.onetwo.ext.apiclient.wechat.message.request.MpTemplateMessge;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
