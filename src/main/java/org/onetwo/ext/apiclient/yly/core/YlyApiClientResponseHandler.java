@@ -1,12 +1,13 @@
 package org.onetwo.ext.apiclient.yly.core;
 
+import java.lang.reflect.Type;
+
 import org.onetwo.common.apiclient.ApiClientMethod;
 import org.onetwo.common.apiclient.impl.DefaultApiClientResponseHandler;
 import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClientFactoryBean.WechatMethod;
 import org.onetwo.ext.apiclient.yly.response.YlyResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestClientException;
 
 /**
  * @author wayshall
@@ -21,7 +22,7 @@ public class YlyApiClientResponseHandler extends DefaultApiClientResponseHandler
 	}
 	
 	@Override
-	public Object handleResponse(WechatMethod invokeMethod, ResponseEntity<?> responseEntity, Class<?> actualResponseType){
+	public Object handleResponse(WechatMethod invokeMethod, ResponseEntity<?> responseEntity, Type actualResponseType){
 		Object response = responseEntity.getBody();
 		if(responseEntity.getStatusCode().is2xxSuccessful()){
 			YlyResponse baseResponse = (YlyResponse)response;
@@ -39,7 +40,7 @@ public class YlyApiClientResponseHandler extends DefaultApiClientResponseHandler
 			
 			return response;
 		}
-		throw new ApiClientException("error response: " + responseEntity.getStatusCodeValue());
+		throw new ApiClientException("error response: " + responseEntity.getStatusCode());
 	}
 	
 	protected ApiClientException translateToApiClientException(ApiClientMethod invokeMethod, YlyResponse baseResponse, ResponseEntity<?> responseEntity){

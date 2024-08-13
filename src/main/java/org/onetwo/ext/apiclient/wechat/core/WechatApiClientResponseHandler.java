@@ -1,5 +1,6 @@
 package org.onetwo.ext.apiclient.wechat.core;
 
+import java.lang.reflect.Type;
 import java.util.Map;
 
 import org.onetwo.common.apiclient.ApiClientMethod;
@@ -46,13 +47,13 @@ public class WechatApiClientResponseHandler extends DefaultApiClientResponseHand
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object handleResponse(WechatMethod invokeMethod, ResponseEntity<?> responseEntity, Class<?> actualResponseType){
+	public Object handleResponse(WechatMethod invokeMethod, ResponseEntity<?> responseEntity, Type actualResponseType){
 		Object response = responseEntity.getBody();
 		if(responseEntity.getStatusCode().is2xxSuccessful()){
 			WechatResponsable baseResponse = null;
 			if(WechatResponsable.class.isInstance(response)){
 				baseResponse = (WechatResponsable) response;
-			}else if(Map.class.isAssignableFrom(actualResponseType)){
+			}else if(Map.class.isAssignableFrom((Class<?>)actualResponseType)){
 				//reponseType have not define errcode and errmsg
 				Map<String, ?> map = (Map<String, ?>) response;
 				if (map.containsKey(errcodeKey) || map.containsKey(PayResponseFields.KEY_ERRCODE)) {
