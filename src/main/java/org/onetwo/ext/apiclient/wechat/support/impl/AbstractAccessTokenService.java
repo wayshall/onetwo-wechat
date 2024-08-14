@@ -102,26 +102,29 @@ abstract public class AbstractAccessTokenService implements AccessTokenService, 
 	
 	@Override
 	public AccessTokenInfo getOrRefreshAccessToken(GetAccessTokenRequest request) {
-		this.removeByAppid(request);
 		AppidRequest appidRequest = new AppidRequest(request.getAppid(), request.getAgentId(), request.getAccessTokenType());
 		Optional<AccessTokenInfo> atOpt = getAccessToken(appidRequest);
-//		if(atOpt.isPresent() && !atOpt.get().isExpired()){
-//			return atOpt.get();
-//		}
-		AccessTokenInfo at = null;
-		if (!atOpt.isPresent()) {
-			// 若缓存里返回到accessToken为null，则调用 accessTokenProvider#getAccessToken 方法
-			AccessTokenResponse tokenRes = getAccessToken(request);
-			if (tokenRes!=null) {
-				at = toAccessTokenInfo(request, tokenRes);
-			}
-		} else {
-			at = atOpt.get();
+		
+		if(atOpt.isPresent() && !atOpt.get().isExpired()){
+			return atOpt.get();
 		}
-		if (at==null || at.isExpired()) {
-			at = refreshAccessToken(request);
-		}
+		AccessTokenInfo at = refreshAccessToken(request);
 		return at;
+		
+//		AccessTokenInfo at = null;
+//		if (!atOpt.isPresent()) {
+//			// 若缓存里返回到accessToken为null，则调用 accessTokenProvider#getAccessToken 方法
+//			AccessTokenResponse tokenRes = getAccessToken(request);
+//			if (tokenRes!=null) {
+//				at = toAccessTokenInfo(request, tokenRes);
+//			}
+//		} else {
+//			at = atOpt.get();
+//		}
+//		if (at==null || at.isExpired()) {
+//			at = refreshAccessToken(request);
+//		}
+//		return at;
 	}
 	
 

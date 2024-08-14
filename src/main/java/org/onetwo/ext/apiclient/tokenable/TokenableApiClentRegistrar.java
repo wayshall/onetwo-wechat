@@ -9,6 +9,7 @@ import org.onetwo.common.apiclient.RestExecutorFactory;
 import org.onetwo.common.apiclient.impl.AbstractApiClentRegistrar;
 import org.onetwo.common.apiclient.impl.AbstractApiClientFactoryBean;
 import org.onetwo.common.apiclient.simple.SimpleApiClientResponseHandler;
+import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.common.reflect.ReflectUtils;
 import org.onetwo.common.spring.context.AnnotationMetadataHelper;
 import org.onetwo.ext.apiclient.wechat.accesstoken.spi.AccessTokenType;
@@ -45,6 +46,11 @@ public class TokenableApiClentRegistrar extends AbstractApiClentRegistrar {
 		super(importingAnnotationClass, componentAnnotationClass);
 	}
 	
+	/****
+	 * 默认的accessToken类型，根据不同的类型选择不同的acessToken获取实现类
+	 * @author weishao zeng
+	 * @return
+	 */
 	protected AccessTokenType getAccessTokenType() {
 		return null;
 	}
@@ -98,9 +104,13 @@ public class TokenableApiClentRegistrar extends AbstractApiClentRegistrar {
 		String className = annotationMetadata.getClassName();
 		BeanDefinitionBuilder definition = BeanDefinitionBuilder.genericBeanDefinition(getApiClientFactoryBeanClass());
  
-		AccessTokenType accessTokenType = getAccessTokenType();
+		AccessTokenType accessTokenType = (AccessTokenType)annotationMetadataHelper.getAttributes().getEnum("accessTokenType");
 		if (accessTokenType==null) {
-			accessTokenType = (AccessTokenType)annotationMetadataHelper.getAttributes().getEnum("accessTokenType");
+			// 若注解没有定义AccessTokenType，则使用默认的
+			accessTokenType = getAccessTokenType();
+			if (accessTokenType==null) {
+				throw new ApiClientException("the AccessTokenType of api client can not be null on importing class: " + this.getImportingAnnotationClass().getName());
+			}
 		}
 		Boolean autoThrowIfErrorCode = (Boolean)annotationMetadataHelper.getAttributes().get("autoThrowIfErrorCode");
 		if (autoThrowIfErrorCode==null) {
@@ -116,6 +126,8 @@ public class TokenableApiClentRegistrar extends AbstractApiClentRegistrar {
 		definition.addPropertyValue("autoThrowIfErrorCode", autoThrowIfErrorCode);
 		definition.addPropertyValue("interfaceClass", className);
 		definition.addPropertyValue("responseHandler", responseHandler);
+		// accessToken无效时，是否自动移除并重新获取
+		definition.addPropertyValue("autoRemove", true);
 		// 错误处理
 //		definition.addPropertyValue("apiErrorHandler", apiErrorHandler);
 		// 是否需要刷新token

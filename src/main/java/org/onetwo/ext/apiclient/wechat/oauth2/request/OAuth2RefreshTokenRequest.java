@@ -3,7 +3,7 @@ package org.onetwo.ext.apiclient.wechat.oauth2.request;
 import lombok.Builder;
 import lombok.Data;
 
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 import org.onetwo.common.annotation.FieldName;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.GrantTypeKeys;
 

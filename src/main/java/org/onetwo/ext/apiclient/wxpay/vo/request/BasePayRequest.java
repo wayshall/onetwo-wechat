@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants;
 
 import com.fasterxml.jackson.annotation.JsonProperty;

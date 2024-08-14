@@ -1,4 +1,7 @@
 package org.onetwo.ext.apiclient.wechat.core;
+
+import org.onetwo.common.exception.ApiClientException;
+
 /**
  * @author weishao zeng
  * <br/>
@@ -6,6 +9,6 @@ package org.onetwo.ext.apiclient.wechat.core;
 
 public interface RemovableTokenError {
 	
-	boolean isNeedToRemoveToken(String errorCode);
+	boolean isNeedToRemoveToken(ApiClientException e);
 
 }

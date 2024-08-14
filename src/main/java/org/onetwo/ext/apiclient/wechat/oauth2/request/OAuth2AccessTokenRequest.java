@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 import org.onetwo.common.annotation.FieldName;
 import org.onetwo.ext.apiclient.wechat.basic.request.AuthBaseRequest;
 import org.onetwo.ext.apiclient.wechat.utils.WechatConstants.GrantTypeKeys;

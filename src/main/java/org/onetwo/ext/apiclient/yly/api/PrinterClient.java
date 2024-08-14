@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 @YlyApiClient
 public interface PrinterClient {
 
-	@PostMapping(value = "/printer/addprinter", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@PostMapping(value = "/printer/addprinter", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	YlyResponse addPrinter(AddPrinterRequest request);
 
 
-	@PostMapping(value = "/printer/btnprint", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@PostMapping(value = "/printer/btnprint", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	YlyResponse btnprint(BtnPrintRequest request);
 	
-	@PostMapping(value = "/printer/getprintstatus", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@PostMapping(value = "/printer/getprintstatus", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	PrinterStateResponse getPrintStatus(PrinterRequest request);
 	
 

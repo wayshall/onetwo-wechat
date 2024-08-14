@@ -5,6 +5,7 @@ import java.util.List;
 import org.onetwo.common.apiclient.RestExecutorFactory;
 import org.onetwo.common.apiclient.impl.DefaultApiClientResponseHandler;
 import org.onetwo.common.apiclient.simple.GenericApiClentRegistrar;
+import org.onetwo.common.exception.ApiClientException;
 import org.onetwo.ext.apiclient.wechat.core.RemovableTokenError;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClientFactoryBean;
 import org.onetwo.ext.apiclient.wechat.core.WechatApiClientFactoryBean.WechatMethod;
@@ -26,8 +27,8 @@ public class YlyApiClentRegistrar extends GenericApiClentRegistrar<EnableYiliany
 	static private RemovableTokenError removableTokenError = new RemovableTokenError() {
 		
 		@Override
-		public boolean isNeedToRemoveToken(String errorCode) {
-			return YlyErrors.ACCESS_TOKEN_EXPIRED.getErrorCode().equals(errorCode);
+		public boolean isNeedToRemoveToken(ApiClientException e) {
+			return YlyErrors.ACCESS_TOKEN_EXPIRED.getErrorCode().equals(e.getCode());
 		}
 	};
 

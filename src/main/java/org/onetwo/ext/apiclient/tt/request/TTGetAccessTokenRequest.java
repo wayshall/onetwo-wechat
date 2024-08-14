@@ -1,6 +1,6 @@
 package org.onetwo.ext.apiclient.tt.request;
 
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 import org.onetwo.common.annotation.FieldName;
 import org.onetwo.common.annotation.IgnoreField;
 import org.onetwo.common.utils.StringUtils;

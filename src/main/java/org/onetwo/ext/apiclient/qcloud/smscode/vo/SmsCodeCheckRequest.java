@@ -1,6 +1,6 @@
 package org.onetwo.ext.apiclient.qcloud.smscode.vo;
 
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 
 import lombok.Builder;
 import lombok.Data;

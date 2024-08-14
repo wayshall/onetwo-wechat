@@ -2,7 +2,7 @@ package org.onetwo.ext.apiclient.work.contact.request;
 
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 import org.onetwo.ext.apiclient.work.contact.response.WorkUserInfoResponse.ExtattrData;
 import org.onetwo.ext.apiclient.work.contact.response.WorkUserInfoResponse.ExternalProfileData;
 

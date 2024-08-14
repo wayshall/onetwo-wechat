@@ -5,7 +5,7 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 import org.onetwo.ext.apiclient.wxpay.utils.OrderDetailSerializer;
 
 import com.fasterxml.jackson.annotation.JsonProperty;

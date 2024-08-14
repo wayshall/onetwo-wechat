@@ -16,6 +16,8 @@ import lombok.Data;
 @Data
 public class QCloudProperties {
 
+	public static final String QCLOUD_CREDENTIAL_CLASS = "com.tencentcloudapi.common.Credential";
+	
 	final public static String PREFIX = "qcloud";
 	public static final String ENABLE_KEY = PREFIX + ".secretKey";
 	
