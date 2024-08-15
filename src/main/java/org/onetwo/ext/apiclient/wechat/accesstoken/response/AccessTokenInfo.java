@@ -81,7 +81,7 @@ public class AccessTokenInfo implements Serializable {
 			}
 		}
 		long current = System.currentTimeMillis();
-		return current > getExpireAt().getTime();
+		return current > expireAt.getTime();
 	}
 	
 	/***

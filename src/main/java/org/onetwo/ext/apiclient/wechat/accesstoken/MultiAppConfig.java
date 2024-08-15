@@ -2,6 +2,7 @@ package org.onetwo.ext.apiclient.wechat.accesstoken;
 
 import java.util.Map;
 
+import org.onetwo.common.exception.BaseException;
 import org.onetwo.ext.apiclient.wechat.core.DefaultWechatConfig;
 import org.onetwo.ext.apiclient.wechat.core.WechatConfig;
 
@@ -42,12 +43,16 @@ public class MultiAppConfig {
 		.findFirst()
 		.map(entry -> (WechatConfig)entry.getValue())
 //		.orElse(null);
-		.orElseGet(() -> this.getWechatConfigByName(appid));
+		.orElseGet(() -> this.getConfigByAppName(appid));
 	}
 	
 	
-	public WechatConfig getWechatConfigByName(String appName) {
-		return this.apps.get(appName);
+	public WechatConfig getConfigByAppName(String appName) {
+		WechatConfig config = this.apps.get(appName);
+		if (config==null) {
+			throw new BaseException("app config not found: " + appName);
+		}
+		return config;
 	}
 }
 
