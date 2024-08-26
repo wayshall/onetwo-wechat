@@ -23,6 +23,13 @@ public class JsApiSignatureResponse {
 	public void setNonceStr(String nonceStr) {
 		this.noncestr = nonceStr;
 	}
-
+	
+	public String getNoncestr() {
+		return noncestr;
+	}
+	public void setNoncestr(String noncestr) {
+		this.noncestr = noncestr;
+	}
+	
 }
 
