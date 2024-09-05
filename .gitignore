@@ -35,3 +35,5 @@ application-product*.yaml
 src/test/resources/application-product-zy.yaml
 PayClientZYTest.java
 D:/
+/.apt_generated/
+/.apt_generated_tests/
