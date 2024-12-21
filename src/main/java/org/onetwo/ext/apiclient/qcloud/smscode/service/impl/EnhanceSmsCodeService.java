@@ -4,9 +4,12 @@ import java.util.Arrays;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.onetwo.boot.module.redis.TokenValidator;
+import org.onetwo.common.exception.BaseException;
 import org.onetwo.common.exception.ServiceException;
+import org.onetwo.common.utils.StringUtils;
 import org.onetwo.ext.apiclient.qcloud.sms.service.SmsService;
 import org.onetwo.ext.apiclient.qcloud.sms.vo.SendSmsRequest;
+import org.onetwo.ext.apiclient.qcloud.smscode.SmsCodeProperties;
 import org.onetwo.ext.apiclient.qcloud.smscode.service.SmsCodeExceptionTranslator;
 import org.onetwo.ext.apiclient.qcloud.smscode.vo.SmsCodeBaseRequest;
 import org.onetwo.ext.apiclient.qcloud.smscode.vo.SmsCodeCheckRequest;
@@ -25,6 +28,9 @@ public class EnhanceSmsCodeService {
 	private TokenValidator tokenValidator;
 	
 	private SmsCodeExceptionTranslator exceptionTranslator;
+	
+	@Autowired
+	private SmsCodeProperties properties;
 	
 	public EnhanceSmsCodeService(SmsCodeExceptionTranslator exceptionTranslator) {
 		super();
@@ -45,6 +51,12 @@ public class EnhanceSmsCodeService {
 	
 	
 	public String obtain(SmsCodeRequest request) {
+		if (StringUtils.isBlank(request.getSign())) {
+			if (StringUtils.isBlank(properties.getSign())) {
+				throw new BaseException("sms sign can not be blank!");
+			}
+			request.setSign(properties.getSign());
+		}
 		String code = null;
 		try {
 			code = tokenValidator.save(getStoreKey(request), request.getValidInMinutes()*60, () -> {
